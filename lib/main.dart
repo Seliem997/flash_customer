@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/contact/contact_us.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white,
           ),
+          // home: const ContactUs(),
           home: const AppSplash(),
         );
       }

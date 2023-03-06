@@ -29,7 +29,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
           padding: EdgeInsets.only(top: 4.0.h),
           child: ExpandableContainer(
             expanded: expandLocationFlag,
-            expandedHeight: 20.h,
+            expandedHeight: 25.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
               child: Column(
@@ -69,7 +69,8 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     labelText: 'School',
                     textColor: AppColor.black,
                   ),
-
+                  Spacer(),
+                  SvgPicture.asset('assets/svg/plus.svg'),
                 ],
               ),
             ),

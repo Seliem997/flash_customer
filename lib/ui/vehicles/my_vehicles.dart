@@ -78,7 +78,7 @@ class MyVehicles extends StatelessWidget {
                                           fontWeight: MyFontWeight.medium,
                                           textSize: MyFontSize.size10,
                                           maxLines: 1,
-                                          color: const Color(0xFF5A5A5A),
+                                          color: AppColor.textGrey,
                                         ),
                                       ],
                                     )
@@ -141,7 +141,7 @@ class MyVehicles extends StatelessWidget {
                                           fontWeight: MyFontWeight.medium,
                                           textSize: MyFontSize.size10,
                                           maxLines: 1,
-                                          color: const Color(0xFF5A5A5A),
+                                          color: AppColor.textGrey,
                                         ),
                                       ],
                                     )
@@ -204,7 +204,7 @@ class MyVehicles extends StatelessWidget {
                                           fontWeight: MyFontWeight.medium,
                                           textSize: MyFontSize.size10,
                                           maxLines: 1,
-                                          color: const Color(0xFF5A5A5A),
+                                          color: AppColor.textGrey,
                                         ),
                                       ],
                                     )
@@ -267,7 +267,7 @@ class MyVehicles extends StatelessWidget {
                                           fontWeight: MyFontWeight.medium,
                                           textSize: MyFontSize.size10,
                                           maxLines: 1,
-                                          color: const Color(0xFF5A5A5A),
+                                          color: AppColor.textGrey,
                                         ),
                                       ],
                                     )
@@ -286,7 +286,7 @@ class MyVehicles extends StatelessWidget {
             DefaultButton(
               text: 'Add new Vehicle',
               onPressed: () {
-                navigateTo(context, const VehicleInfo());
+                // navigateTo(context, const VehicleInfo());
               },
               fontWeight: MyFontWeight.bold,
               fontSize: 21,

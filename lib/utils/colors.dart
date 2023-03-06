@@ -5,8 +5,10 @@ class AppColor {
   static const Color secondary = Color(0xFF1D0E55);
 
   static const Color attributeColor = Color(0xFF148BF4);
+  static const Color selectedColor = Color(0xFFEDF6FD);
   static const Color buttonGrey = Color(0xFFD9D9D9);
   static const Color subTitleGrey = Color(0xFF484850);
+  static const Color textGrey = Color(0xFF5A5A5A);
   static const Color borderGrey = Color(0xffECECEC);
   static const Color borderBlue = Color(0xff0285E0);
   static const Color acceptGreen = Color(0xffCBFFAB);

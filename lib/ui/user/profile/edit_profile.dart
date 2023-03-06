@@ -47,10 +47,21 @@ class EditProfile extends StatelessWidget {
                       controller: TextEditingController(text: 'FWC1'),
                     )),
                 verticalSpace(27),
-                TextWidget(
-                    text: 'Name',
-                    textSize: MyFontSize.size18,
-                    fontWeight: MyFontWeight.medium),
+                Row(
+                  children: [
+                    TextWidget(
+                        text: 'Name',
+                        textSize: MyFontSize.size18,
+                        fontWeight: MyFontWeight.medium),
+                    horizontalSpace(3),
+                    TextWidget(
+                        text: '(Optional)',
+                        textSize: MyFontSize.size8,
+                        fontWeight: MyFontWeight.regular,
+                       color: AppColor.lightGrey,
+                    ),
+                  ],
+                ),
                 verticalSpace(10),
                 CustomSizedBox(
                   height: 40,
@@ -65,10 +76,21 @@ class EditProfile extends StatelessWidget {
                   ),
                 ),
                 verticalSpace(27),
-                TextWidget(
-                    text: 'Email',
-                    textSize: MyFontSize.size18,
-                    fontWeight: MyFontWeight.medium),
+                Row(
+                  children: [
+                    TextWidget(
+                        text: 'Email',
+                        textSize: MyFontSize.size18,
+                        fontWeight: MyFontWeight.medium),
+                    horizontalSpace(3),
+                    TextWidget(
+                      text: '(Optional)',
+                      textSize: MyFontSize.size8,
+                      fontWeight: MyFontWeight.regular,
+                      color: AppColor.lightGrey,
+                    ),
+                  ],
+                ),
                 verticalSpace(10),
                 CustomSizedBox(
                   height: 40,
@@ -113,11 +135,21 @@ class EditProfile extends StatelessWidget {
                     builder: (BuildContext context) {
                       return Expanded(
                         child: AlertDialog(
-                          title: Text('Delete'),
-                          content: Text('Are You Sure?'),
+                          content: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: TextWidget(text: 'Are you sure to delete the account?',),
+                          ),
                           actions: [
-                            DefaultButton(text: 'Cancel', onPressed: (){Navigator.pop(context);},backgroundColor: Colors.redAccent),
-                            DefaultButton(text: 'Remove', onPressed: (){Navigator.pop(context);},backgroundColor: AppColor.primary,),
+                            Padding(
+                              padding: symmetricEdgeInsets(vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  DefaultButton(width: 130,height: 30,text: 'Cancel', onPressed: (){Navigator.pop(context);},backgroundColor: Color(0xFF6BB85F),),
+                                  DefaultButton(width: 130,height: 30,text: 'Delete', onPressed: (){Navigator.pop(context);},backgroundColor: Color(0xFFB85F66),),
+                                ],
+                              ),
+                            ),
 
                           ],
                         ),

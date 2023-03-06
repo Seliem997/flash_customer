@@ -7,6 +7,7 @@ import '../../utils/colors.dart';
 import '../../utils/font_styles.dart';
 import '../about/about.dart';
 import '../addresses/addresses.dart';
+import '../monthly_pkg/monthly_pkg.dart';
 import '../user/profile/edit_profile.dart';
 import '../user/register/register.dart';
 import '../vehicles/my_vehicles.dart';
@@ -201,6 +202,7 @@ class SidebarDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
+              navigateTo(context, const MonthlyPkg(),);
             },
           ),
           ListTile(
@@ -242,6 +244,31 @@ class SidebarDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          verticalSpace(100),
+          ListTile(
+            leading: CustomSizedBox(
+              width: 20,
+              height: 20,
+              child: SvgPicture.asset(
+                'assets/svg/logout.svg',
+              ),
+            ),
+            minLeadingWidth: 2.w,
+            title: TextWidget(
+              text: 'LogOut',
+              color: Color(0xFFCC4A50),
+              textSize: MyFontSize.size16,
+              fontWeight: MyFontWeight.medium,
+            ),
+            onTap: () {
+              // showDialog(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return const LogOutDialog();
+              //   },
+              // );
+            },
+          )
         ],
       ),
     );

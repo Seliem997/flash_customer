@@ -16,7 +16,9 @@ class CustomContainer extends StatelessWidget {
     this.onTap,
     this.borderColor = Colors.transparent,
     this.image,
-    this.clipBehavior = Clip.none, this.borderRadius,
+    this.clipBehavior = Clip.none,
+    this.borderRadius,
+    this.isCircle = false,
   }) : super(key: key);
 
   final double? width, height ;
@@ -29,6 +31,7 @@ class CustomContainer extends StatelessWidget {
   final DecorationImage? image;
   final Clip clipBehavior;
   final BorderRadiusGeometry? borderRadius;
+  final bool isCircle;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,8 @@ class CustomContainer extends StatelessWidget {
             image: image,
             color: backgroundColor ?? Colors.white,
             borderRadius: borderRadius ?? BorderRadius.circular(radiusCircular),
-            border: Border.all(color: borderColor!)
+            border: Border.all(color: borderColor!),
+            shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
             /*boxShadow: const [
             BoxShadow(
               color: AppColor.tertiary,
