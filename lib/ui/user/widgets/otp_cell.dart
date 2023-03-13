@@ -1,12 +1,13 @@
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../providers/user_provider.dart';
 import '../../../utils/colors.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/custom_text_form.dart';
-
 
 class OtpCell extends StatelessWidget {
   final int index;
@@ -14,6 +15,7 @@ class OtpCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userDataProvider = Provider.of<UserProvider>(context);
 
     return CustomContainer(
       width: 48,
@@ -33,6 +35,7 @@ class OtpCell extends StatelessWidget {
           ],
           onChanged: (value) {
             if (value.length == 1) {
+              userDataProvider.otp[index] = value;
               FocusScope.of(context).nextFocus();
             }
           },

@@ -6,30 +6,37 @@ import 'package:sizer/sizer.dart';
 import '../../utils/colors.dart';
 
 class DefaultFormField extends StatelessWidget {
-  const DefaultFormField(
-      {Key? key,
-      this.controller,
-      this.height,
-      this.keyboardType,
-      this.onChanged,
-      required this.hintText,
-      this.isPassword = false,
-      this.validator,
-      this.suffixIcon,
-      this.enabled = true,
-      this.filled = false,
-      this.fillColor,
-      this.textColor,
-      this.padding,
-      this.textInputAction,
-      this.hintStyle,
-      this.textAlign = TextAlign.start,
-      this.inputFormatters = const [], this.radiusCircular= 5, this.textSize, this.fontWeight,})
-      : super(key: key);
+  const DefaultFormField({
+    Key? key,
+    this.controller,
+    this.height,
+    this.keyboardType,
+    this.onChanged,
+    required this.hintText,
+    this.isPassword = false,
+    this.validator,
+    this.suffixIcon,
+    this.enabled = true,
+    this.filled = false,
+    this.fillColor,
+    this.textColor,
+    this.padding,
+    this.letterSpacing,
+    this.textHeight,
+    this.textInputAction,
+    this.hintStyle,
+    this.textAlign = TextAlign.start,
+    this.inputFormatters = const [],
+    this.radiusCircular = 5,
+    this.textSize,
+    this.fontWeight,
+  }) : super(key: key);
 
   final TextEditingController? controller;
   final double? height, textSize;
   final double radiusCircular;
+  final double? letterSpacing;
+  final double? textHeight;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
@@ -44,7 +51,6 @@ class DefaultFormField extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final TextStyle? hintStyle;
   final FontWeight? fontWeight;
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +73,12 @@ class DefaultFormField extends StatelessWidget {
         validator: validator,
         obscureText: isPassword,
         keyboardType: keyboardType,
-        style: TextStyle(color: textColor,fontSize: textSize,fontWeight: fontWeight),
+        style: TextStyle(
+            color: textColor,
+            fontSize: textSize,
+            fontWeight: fontWeight,
+            letterSpacing: letterSpacing,
+            height: textHeight),
         textInputAction: textInputAction,
         textAlign: textAlign,
         decoration: InputDecoration(

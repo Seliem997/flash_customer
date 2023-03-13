@@ -4,6 +4,9 @@ enum Status {
   loading('loading'),
   codeSent('codeSent'),
   emailAlreadyInUse('emailAlreadyInUse'),
+  invalidEmailOrPass('invalidEmailOrPass'),
+  emailNotRegistered('emailNotRegistered'),
+  codeNotCorrect('codeNotCorrect'),
   phoneAlreadyInUse('phoneAlreadyInUse');
 
   const Status(this.key);
