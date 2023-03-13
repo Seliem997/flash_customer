@@ -7,6 +7,7 @@ import '../../utils/colors.dart';
 import '../../utils/font_styles.dart';
 import '../about/about.dart';
 import '../addresses/addresses.dart';
+import '../contact/contact_us.dart';
 import '../monthly_pkg/monthly_pkg.dart';
 import '../user/profile/edit_profile.dart';
 import '../user/register/register.dart';
@@ -242,6 +243,7 @@ class SidebarDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
+              navigateTo(context, const ContactUs(),);
             },
           ),
           verticalSpace(100),

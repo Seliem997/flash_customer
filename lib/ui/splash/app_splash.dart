@@ -26,12 +26,7 @@ class _AppSplashState extends State<AppSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: CustomSizedBox(
-          width: 279,
-            height: 258,
-            child: Center(child: Image.asset('assets/images/logo.png'))),
-      ),
+      body: Center(child: Image.asset('assets/images/flash_splash.gif')),
     );
   }
 }

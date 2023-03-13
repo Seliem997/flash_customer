@@ -26,6 +26,7 @@ class MonthlyPkg extends StatelessWidget {
               children: [
                 CustomContainer(
                   backgroundColor: Color(0xFFCCCCCC),
+                  borderColor: Color(0xFF55B9FE),
                   width: 162,
                   height: 112,
                   radiusCircular: 6,
@@ -45,9 +46,41 @@ class MonthlyPkg extends StatelessWidget {
                 ),
                 horizontalSpace(21),
                 CustomContainer(
-                  backgroundColor: Color(0xFFCCCCCC),
+                  backgroundColor: Color(0xFFECECEC),
                   width: 162,
                   height: 112,
+                  onTap: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Padding(
+                            padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
+                            child: TextWidget(
+                              textAlign: TextAlign.center,
+                              text: 'Management will edit vehicle size as price will depends on the vehicle size',
+                              textSize: MyFontSize.size17,
+                              fontWeight: MyFontWeight.semiBold,
+                            ),
+                          ),
+                          actions: [
+                            Padding(
+                              padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
+                              child: DefaultButton(
+                                width: 225,
+                                height: 32,
+                                text: 'Ok',
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                  },
+                              ),
+                            ),
+
+                          ],
+                        );
+                      },
+                    );
+                  },
                   radiusCircular: 6,
                   child: Column(
                     children: [
@@ -82,6 +115,30 @@ class MonthlyPkg extends StatelessWidget {
               ],
             ),
             verticalSpace(10),
+            CustomContainer(
+              width: double.infinity,
+              height: 40,
+              radiusCircular: 3,
+              borderColor: Color(0xFF979797),
+              backgroundColor: Color(0xFFECECEC),
+              child: Padding(
+                padding: symmetricEdgeInsets(horizontal: 4),
+                child: Row(
+                  children: [
+                    TextWidget(
+                      text: 'Select',
+                      fontWeight: MyFontWeight.medium,
+                      textSize: MyFontSize.size10,
+                      color: Color(0xFF909090),
+                    ),
+                    Spacer(),
+                    SvgPicture.asset(
+                      'assets/svg/arrow_down.svg',
+                    )
+                  ],
+                ),
+              ),
+            ),
             // CustomSizedBox(
             //   height: 40,
             //   width: double.infinity,
@@ -103,6 +160,30 @@ class MonthlyPkg extends StatelessWidget {
               ],
             ),
             verticalSpace(10),
+            CustomContainer(
+              width: double.infinity,
+              height: 40,
+              radiusCircular: 3,
+              borderColor: Color(0xFF979797),
+              backgroundColor: Color(0xFFECECEC),
+              child: Padding(
+                padding: symmetricEdgeInsets(horizontal: 4),
+                child: Row(
+                  children: [
+                    TextWidget(
+                      text: 'Select',
+                      fontWeight: MyFontWeight.medium,
+                      textSize: MyFontSize.size10,
+                      color: Color(0xFF909090),
+                    ),
+                    Spacer(),
+                    SvgPicture.asset(
+                      'assets/svg/arrow_down.svg',
+                    )
+                  ],
+                ),
+              ),
+            ),
             // CustomSizedBox(
             //   height: 40,
             //   width: double.infinity,
@@ -178,14 +259,14 @@ class MonthlyPkg extends StatelessWidget {
                                 height: 32,
                                 text: 'Back',
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  navigateTo(context, MonthlyPlans());
                                 },
                               ),
                               verticalSpace(12),
                               TextButton(
-                                  onPressed: () {
-                                    navigateTo(context, MonthlyPlans());
-                                  },
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  } ,
                                   child: TextWidget(
                                     text: 'Contact us',
                                     textSize: MyFontSize.size14,
