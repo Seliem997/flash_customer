@@ -22,7 +22,11 @@ class HomeScreen extends StatelessWidget {
       key: globalKey,
       body: Stack(
         children: [
-          Image.asset('assets/images/home_mapping.png'),
+          CustomContainer(
+              width: double.infinity,
+              padding: EdgeInsets.zero,
+              child: Image.asset('assets/images/home_mapping.png',
+                  fit: BoxFit.cover)),
           Column(
             children: [
               Padding(

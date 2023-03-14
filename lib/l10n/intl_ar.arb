@@ -1,0 +1,13 @@
+{
+  "enterYourPhoneNumber": "Enter Your Phone Number",
+  "confirm": "Confirm",
+  "registerOrLogin": "Register Or Login",
+  "youWillReceiveA4DigitalCodeToVerifyNext": "You will receive a 4 digital code to verify next.",
+  "required": "Required",
+  "phoneNumberLengthCanNotBeLessThan9Digits": "Phone number length can not be less than 9 digits",
+  "phoneNumberCannotBeEmpty": "Phone number cannot be empty",
+  "continueText": "Continue",
+  "areYouSureYouWantToLogout": "Are you sure you want to logout?",
+  "logout": "Logout",
+  "cancel": "Cancel"
+}

@@ -1,4 +1,3 @@
-
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
           padding: EdgeInsets.only(top: 4.0.h),
           child: ExpandableContainer(
             expanded: expandLocationFlag,
-            expandedHeight: 25.h,
+            expandedHeight: 27.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
               child: Column(
@@ -40,8 +39,10 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     padding: symmetricEdgeInsets(horizontal: 28),
                     borderRadius: BorderRadius.circular(8),
                     backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset('assets/svg/home.svg',),
-                    onPressed: (){},
+                    icon: SvgPicture.asset(
+                      'assets/svg/home.svg',
+                    ),
+                    onPressed: () {},
                     labelText: 'Home',
                     textColor: AppColor.black,
                   ),
@@ -52,8 +53,10 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     padding: symmetricEdgeInsets(horizontal: 28),
                     borderRadius: BorderRadius.circular(8),
                     backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset('assets/svg/work.svg',),
-                    onPressed: (){},
+                    icon: SvgPicture.asset(
+                      'assets/svg/work.svg',
+                    ),
+                    onPressed: () {},
                     labelText: 'Work',
                     textColor: AppColor.black,
                   ),
@@ -64,13 +67,24 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     padding: symmetricEdgeInsets(horizontal: 28),
                     borderRadius: BorderRadius.circular(8),
                     backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset('assets/svg/school.svg',),
-                    onPressed: (){},
+                    icon: SvgPicture.asset(
+                      'assets/svg/school.svg',
+                    ),
+                    onPressed: () {},
                     labelText: 'School',
                     textColor: AppColor.black,
                   ),
                   Spacer(),
-                  SvgPicture.asset('assets/svg/plus.svg'),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: AppColor.primary),
+                    child: Icon(
+                      Icons.add,
+                      size: 25,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),

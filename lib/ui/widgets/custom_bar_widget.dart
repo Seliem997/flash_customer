@@ -11,11 +11,14 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final String title;
+  final bool withArrow;
   final Color? backgroundColor;
 
   CustomAppBar({
     Key? key,
-    required this.title, this.backgroundColor,
+    this.withArrow = true,
+    required this.title,
+    this.backgroundColor,
   })  : preferredSize = const Size.fromHeight(50.0),
         super(key: key);
 
@@ -29,12 +32,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         fontWeight: FontWeight.bold,
       ),
       backgroundColor: backgroundColor ?? Colors.white,
-      leading: IconButton(
-        icon: SvgPicture.asset('assets/svg/arrow-left.svg',color: Colors.black, width: 5.w, ),
-        onPressed: () => Navigator.pop(context),
-        color: Colors.black,
-        iconSize: 20.0,
-      ),
+      leading: withArrow
+          ? IconButton(
+              icon: SvgPicture.asset(
+                'assets/svg/arrow-left.svg',
+                color: Colors.black,
+                width: 5.w,
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Colors.black,
+              iconSize: 20.0,
+            )
+          : Container(),
       centerTitle: true,
       titleSpacing: 0,
       elevation: 0,

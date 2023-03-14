@@ -7,7 +7,9 @@ enum CacheKey {
   userImage('userImage'),
   userId('userId'),
   email('email'),
+  token('token'),
   phoneNumber('phoneNumber'),
+  countryCode('countryCode'),
   address('address'),
   hasAddress('hasAddress'),
   rentalBalance('rentalBalance');

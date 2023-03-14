@@ -32,17 +32,13 @@ class ServicesItem extends StatelessWidget {
       margin: onlyEdgeInsets(end: 11),
       radiusCircular: 5,
       backgroundColor: AppColor.borderGrey,
-      padding: symmetricEdgeInsets(horizontal: 8),
+      padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
       onTap: onTap,
       child: Column(
         children: [
           Align(
             alignment: AlignmentDirectional.topEnd,
-            child: CustomSizedBox(
-              width: 16,
-              height: 16,
-              child: SvgPicture.asset('assets/svg/Info.svg'),
-            ),
+            child: Icon(Icons.info, size: 20, color: AppColor.primary),
           ),
           CustomSizedBox(
             width: 56,
@@ -58,42 +54,43 @@ class ServicesItem extends StatelessWidget {
           verticalSpace(8),
           seeMore
               ? TextWidget(
-            text: 'See more',
-            fontWeight: MyFontWeight.medium,
-            textSize: MyFontSize.size8,
-            color: const Color(0xFF636363),
-          )
+                  text: 'See more',
+                  fontWeight: MyFontWeight.medium,
+                  textSize: MyFontSize.size8,
+                  color: const Color(0xFF636363),
+                )
               : onlyValue
-              ? TextWidget(
-            text: serviceValue!,
-            fontWeight: MyFontWeight.medium,
-            textSize: MyFontSize.size10,
-            color: AppColor.attributeColor,
-          )
-              : Row(
-            children: [
-              TextWidget(
-                text: serviceValue!,
-                fontWeight: MyFontWeight.medium,
-                textSize: MyFontSize.size10,
-                color: AppColor.attributeColor,
-              ),
-              horizontalSpace(5),
-              TextWidget(
-                text: 'per',
-                fontWeight: MyFontWeight.medium,
-                textSize: MyFontSize.size8,
-                color: const Color(0xFF575757),
-              ),
-              horizontalSpace(5),
-              TextWidget(
-                text: serviceUnit!,
-                fontWeight: MyFontWeight.medium,
-                textSize: MyFontSize.size10,
-                color: AppColor.attributeColor,
-              ),
-            ],
-          )
+                  ? TextWidget(
+                      text: serviceValue!,
+                      fontWeight: MyFontWeight.medium,
+                      textSize: MyFontSize.size10,
+                      color: AppColor.attributeColor,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextWidget(
+                          text: serviceValue!,
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size10,
+                          color: AppColor.attributeColor,
+                        ),
+                        horizontalSpace(5),
+                        TextWidget(
+                          text: 'per',
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size8,
+                          color: const Color(0xFF575757),
+                        ),
+                        horizontalSpace(5),
+                        TextWidget(
+                          text: serviceUnit!,
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size10,
+                          color: AppColor.attributeColor,
+                        ),
+                      ],
+                    )
         ],
       ),
     );
@@ -102,7 +99,10 @@ class ServicesItem extends StatelessWidget {
 
 class WaxingServicesItem extends StatelessWidget {
   const WaxingServicesItem({
-    super.key, required this.title, required this.imageName, required this.serviceValue,
+    super.key,
+    required this.title,
+    required this.imageName,
+    required this.serviceValue,
   });
   final String title, imageName, serviceValue;
   @override
@@ -113,7 +113,7 @@ class WaxingServicesItem extends StatelessWidget {
       backgroundColor: AppColor.borderGrey,
       radiusCircular: 5,
       margin: onlyEdgeInsets(bottom: 12),
-      padding: symmetricEdgeInsets(horizontal: 15,vertical: 12),
+      padding: symmetricEdgeInsets(horizontal: 15, vertical: 12),
       child: Row(
         children: [
           Column(

@@ -81,12 +81,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (Intl.getCurrentLocale() == 'ar') {
                             // MyApp.setLocale(context, const Locale("en"));
                             CacheHelper.saveData(
-                                key: CacheKey.language.key,
+                                key: CacheKey.language,
                                 value: LanguageKey.en.key);
                           } else {
                             // MyApp.setLocale(context, const Locale("ar"));
                             CacheHelper.saveData(
-                                key: CacheKey.language.key,
+                                key: CacheKey.language,
                                 value: LanguageKey.ar.key);
                           }
                         },
