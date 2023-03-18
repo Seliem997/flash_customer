@@ -1,3 +1,5 @@
+import 'package:flash_customer/providers/about_provider.dart';
+import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/contact/contact_us.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
@@ -60,7 +62,13 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OtherServicesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AboutProvider(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(

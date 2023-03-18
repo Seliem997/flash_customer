@@ -1,14 +1,21 @@
+import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/loginModel.dart';
+import '../models/profileModel.dart';
+import '../models/requestResult.dart';
+import '../services/authentication_service.dart';
+import '../utils/enum/shared_preference_keys.dart';
+import '../utils/enum/statuses.dart';
 
 class UserProvider extends ChangeNotifier {
-  String? userName;
+  String? userName= CacheHelper.returnData(key: CacheKey.userName);
   String? userImage;
-  String? phone;
-  String? email;
+  String phone= CacheHelper.returnData(key: CacheKey.phoneNumber);
+  String? userEmail= CacheHelper.returnData(key: CacheKey.email);
+  String? userId= CacheHelper.returnData(key: CacheKey.userId);
 
-  List<String> otp = ['', '', '', '', '', ''];
+  List<String> otp = ['', '', '', '',];
 
   String otpToString() {
     String otpString = '';
@@ -17,4 +24,40 @@ class UserProvider extends ChangeNotifier {
     }
     return otpString;
   }
+
+
+  Future<Status> updateUserProfile({required String name,required String email,}) async {
+    Status status = Status.error;
+    AuthenticationService authenticationService = AuthenticationService();
+    await authenticationService.updateProfile(name: name, email: email)
+        .then((value) {
+         if( value.status == Status.success){
+           status = Status.success;
+           userName = (value.data as ProfileData).name;
+           userImage = (value.data as ProfileData).image;
+           userEmail = (value.data as ProfileData).email;
+           userId = (value.data as ProfileData).fwId;
+         }
+         notifyListeners();
+    });
+    return status;
+  }
+
+  // Future<Status> deleteAccount() async {
+  //   AuthenticationService authenticationService = AuthenticationService();
+  //   Status status=Status.error;
+  //   await authenticationService
+  //       .deleteAccount()
+  //       .then((value) {
+  //     status = value;
+  //     if(status==Status.success){
+  //       CacheHelper.saveData(key: "loggedIn", value: false);
+  //       CacheHelper.signOut();
+  //     }
+  //   });
+  //
+  //   return status;
+  // }
+
+
 }

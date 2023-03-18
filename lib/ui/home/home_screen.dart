@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../utils/colors.dart';
-import '../services/our_services.dart';
+import '../services/other_services.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       navigateTo(
                         context,
-                        const OurServices(),
+                        const OtherServices(),
                       );
                     },
                     fontWeight: MyFontWeight.medium,

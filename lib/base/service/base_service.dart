@@ -27,6 +27,7 @@ class BaseService {
 
     try {
       if (withToken) {
+        print('With token error ${CacheHelper.returnData(key: CacheKey.token)}');
         headerWithToken.addEntries({
           "Authorization": CacheHelper.returnData(key: CacheKey.token) as String
         }.entries);

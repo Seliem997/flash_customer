@@ -40,7 +40,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     borderRadius: BorderRadius.circular(8),
                     backgroundButton: AppColor.white,
                     icon: SvgPicture.asset(
-                      'assets/svg/home.svg',
+                      'assets/svg/home_n.svg',
                     ),
                     onPressed: () {},
                     labelText: 'Home',
