@@ -16,13 +16,14 @@ class ServicesItem extends StatelessWidget {
     this.serviceUnit,
     this.seeMore = false,
     this.onlyValue = false,
-    this.onTap,
+    this.onTap, this.infoOnPressed,
   });
 
   final String title, imageName;
   final String? serviceValue, serviceUnit;
   final bool seeMore, onlyValue;
   final GestureTapCallback? onTap;
+  final VoidCallback? infoOnPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +39,16 @@ class ServicesItem extends StatelessWidget {
         children: [
           Align(
             alignment: AlignmentDirectional.topEnd,
-            child: Icon(Icons.info, size: 20, color: AppColor.primary),
+            child: IconButton(
+              icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
+              onPressed: infoOnPressed,
+            ),
+            // child: Icon(Icons.info, size: 20, color: AppColor.primary),
           ),
           CustomSizedBox(
             width: 56,
             height: 56,
-            child: Image.asset(imageName),
+            child: Image.network(imageName),
           ),
           verticalSpace(11),
           TextWidget(
@@ -66,31 +71,33 @@ class ServicesItem extends StatelessWidget {
                       textSize: MyFontSize.size10,
                       color: AppColor.attributeColor,
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: serviceValue!,
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size10,
-                          color: AppColor.attributeColor,
-                        ),
-                        horizontalSpace(5),
-                        TextWidget(
-                          text: 'per',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size8,
-                          color: const Color(0xFF575757),
-                        ),
-                        horizontalSpace(5),
-                        TextWidget(
-                          text: serviceUnit!,
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size10,
-                          color: AppColor.attributeColor,
-                        ),
-                      ],
-                    )
+                  : FittedBox(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextWidget(
+                            text: serviceValue!,
+                            fontWeight: MyFontWeight.medium,
+                            textSize: MyFontSize.size10,
+                            color: AppColor.attributeColor,
+                          ),
+                          horizontalSpace(5),
+                          TextWidget(
+                            text: 'per',
+                            fontWeight: MyFontWeight.medium,
+                            textSize: MyFontSize.size8,
+                            color: const Color(0xFF575757),
+                          ),
+                          horizontalSpace(5),
+                          TextWidget(
+                            text: serviceUnit!,
+                            fontWeight: MyFontWeight.medium,
+                            textSize: MyFontSize.size10,
+                            color: AppColor.attributeColor,
+                          ),
+                        ],
+                      ),
+                  )
         ],
       ),
     );

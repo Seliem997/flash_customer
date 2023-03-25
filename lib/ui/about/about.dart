@@ -44,24 +44,24 @@ class _AboutUsState extends State<AboutUs> {
       appBar: CustomAppBar(
         title: 'About us',
       ),
-      body: aboutProvider.aboutDataList.isEmpty
+      body: aboutProvider.aboutDataList.isEmpty || aboutProvider.aboutImagesDataList.isEmpty
           ? const DataLoader()
           : Column(
               children: [
                 CarouselSlider(
                   items: List<Widget>.generate(
-                    4,
+                    aboutProvider.aboutImagesDataList.length,
                     (index) {
                       return CustomContainer(
-                        width: 305,
+                        width: 325,
                         height: 144,
-                        padding: symmetricEdgeInsets(horizontal: 8),
+                        padding: symmetricEdgeInsets(horizontal: 4),
                         clipBehavior: Clip.hardEdge,
                         backgroundColor: Colors.transparent,
                         child: Stack(
                           children: [
-                            Image.asset(
-                              'assets/images/car_blue.png',
+                            Image.network(
+                              aboutProvider.aboutImagesDataList[index].image!,
                               fit: BoxFit.fill,
                               height: 170,
                               width: 315,
@@ -71,6 +71,28 @@ class _AboutUsState extends State<AboutUs> {
                               height: 144,
                               clipBehavior: Clip.hardEdge,
                               backgroundColor: Color.fromRGBO(22, 22, 22, 0.41),
+                            ),
+                            Padding(
+                              padding: symmetricEdgeInsets(horizontal: 16,vertical: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextWidget(
+                                    text: aboutProvider.aboutImagesDataList[index].title!,
+                                    fontWeight: MyFontWeight.semiBold,
+                                    textSize: MyFontSize.size14,
+                                    color: AppColor.white,
+                                  ),
+                                  verticalSpace(6),
+                                  TextWidget(
+                                    text: aboutProvider.aboutImagesDataList[index].description!,
+                                    fontWeight: MyFontWeight.regular,
+                                    textSize: MyFontSize.size8,
+                                    color: AppColor.white,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -97,7 +119,7 @@ class _AboutUsState extends State<AboutUs> {
                 ),
                 verticalSpace(12),
                 DotsIndicator(
-                  dotsCount: 4,
+                  dotsCount: aboutProvider.aboutImagesDataList.length,
                   position: currentIndex,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),

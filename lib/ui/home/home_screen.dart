@@ -27,6 +27,7 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.zero,
               child: Image.asset('assets/images/home_mapping.png',
                   fit: BoxFit.cover)),
+          // GoogleMap(),
           Column(
             children: [
               Padding(

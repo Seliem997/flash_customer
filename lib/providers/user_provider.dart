@@ -1,19 +1,31 @@
-import 'package:flash_customer/utils/cache_helper.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
 
-import '../models/loginModel.dart';
+import 'package:flash_customer/utils/cache_helper.dart';
+import 'package:flutter/material.dart';
+
 import '../models/profileModel.dart';
-import '../models/requestResult.dart';
 import '../services/authentication_service.dart';
 import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
 
 class UserProvider extends ChangeNotifier {
   String? userName= CacheHelper.returnData(key: CacheKey.userName);
+  String? userBalance= CacheHelper.returnData(key: CacheKey.balance);
   String? userImage;
   String phone= CacheHelper.returnData(key: CacheKey.phoneNumber);
   String? userEmail= CacheHelper.returnData(key: CacheKey.email);
   String? userId= CacheHelper.returnData(key: CacheKey.userId);
+
+
+
+  Timer? _timer;
+
+  Timer? get timer => _timer;
+
+  set timer(Timer? value) {
+    _timer = value;
+    notifyListeners();
+  }
 
   List<String> otp = ['', '', '', '',];
 

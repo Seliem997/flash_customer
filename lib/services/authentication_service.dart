@@ -56,6 +56,7 @@ class AuthenticationService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               print("Bearer ${response["data"]["token"]}");
+              CacheHelper.saveData(key: CacheKey.balance, value: response["data"]["user"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
               CacheHelper.saveData(
                   key: CacheKey.token,

@@ -1,5 +1,9 @@
 import 'package:flash_customer/providers/about_provider.dart';
+import 'package:flash_customer/providers/addresses_provider.dart';
+import 'package:flash_customer/providers/myVehicles_provider.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
+import 'package:flash_customer/providers/package_provider.dart';
+import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/contact/contact_us.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
@@ -68,6 +72,18 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => AboutProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddressesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PackageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionHistoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MyVehiclesProvider(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

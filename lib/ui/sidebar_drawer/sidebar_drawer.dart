@@ -17,6 +17,7 @@ import '../user/profile/edit_profile.dart';
 import '../user/register/register.dart';
 import '../vehicles/my_vehicles.dart';
 import '../wallet/wallet.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/custom_container.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
@@ -33,7 +34,7 @@ class SidebarDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildHeader(userDataProvider),
+            buildHeader(context,userDataProvider),
             buildMenuItems(context),
           ],
         ),
@@ -41,7 +42,7 @@ class SidebarDrawer extends StatelessWidget {
     );
   }
 
-  Widget buildHeader(UserProvider userDataProvider) {
+  Widget buildHeader(context,UserProvider userDataProvider) {
     return CustomContainer(
       backgroundColor: AppColor.babyBlue,
       width: 272,
@@ -63,14 +64,14 @@ class SidebarDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: userDataProvider.userName ?? "No Name",
+                    text: userDataProvider.userName == "" ? "User Name" : userDataProvider.userName ?? "User Name",
                     color: AppColor.black,
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size15,
                   ),
                   verticalSpace(6),
                   TextWidget(
-                    text: userDataProvider.phone ?? '01234567890',
+                    text: userDataProvider.phone ?? 'phone Number',
                     color: const Color(0xff1E1E1E),
                     fontWeight: MyFontWeight.regular,
                     textSize: MyFontSize.size12,
@@ -78,6 +79,51 @@ class SidebarDrawer extends StatelessWidget {
                 ],
               ),
               const Spacer(),
+              IconButton(onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: const Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: TextWidget(
+                          text: 'Want to Switch Dark Mode?',
+                        ),
+                      ),
+                      actions: [
+                        Padding(
+                          padding: symmetricEdgeInsets(vertical: 5),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceAround,
+                            children: [
+                              DefaultButton(
+                                width: 130,
+                                height: 30,
+                                text: 'Cancel',
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                backgroundColor: const Color(0xFF6BB85F),
+                              ),
+                              DefaultButton(
+                                width: 130,
+                                height: 30,
+                                text: 'Switch',
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                backgroundColor: const Color(0xFFB85F66),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }, icon: Icon(Icons.dark_mode_outlined)),
+              horizontalSpace(5),
               SvgPicture.asset('assets/svg/translate.svg'),
             ],
           ),

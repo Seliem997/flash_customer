@@ -7,8 +7,10 @@ import 'package:sizer/sizer.dart';
 
 import '../../providers/otherServices_provider.dart';
 import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/navigate.dart';
+import '../widgets/text_widget.dart';
 
 class OtherServices extends StatefulWidget {
   const OtherServices({Key? key}) : super(key: key);
@@ -87,9 +89,44 @@ class _OtherServicesState extends State<OtherServices> {
             itemBuilder: (context, index) {
               return  ServicesItem(
                 title: otherServicesProvider.otherServicesList[index].name!,
-                imageName: 'assets/images/oil.png',
-                serviceValue: '50 SR',
-                serviceUnit: 'Hour',
+                imageName: otherServicesProvider.otherServicesList[index].image!,
+                serviceValue: '${otherServicesProvider.otherServicesList[index].cities![index].price!.value} ${otherServicesProvider.otherServicesList[index].cities![index].price!.unit}',
+                serviceUnit: otherServicesProvider.otherServicesList[index].deal,
+                infoOnPressed: (){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: TextWidget(
+                            text: otherServicesProvider.otherServicesList[index].info!,
+                          ),
+                        ),
+                        actions: [
+                          Padding(
+                            padding: symmetricEdgeInsets(vertical: 5),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                DefaultButton(
+                                  width: 130,
+                                  height: 30,
+                                  text: 'Cancel',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  backgroundColor: const Color(0xFF6BB85F),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               );
             },
             gridDelegate:

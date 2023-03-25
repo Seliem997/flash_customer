@@ -46,7 +46,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
     return Scaffold(
       appBar: CustomAppBar(
         title: S.of(context).registerOrLogin,
-        withArrow: false,
+        // withArrow: false,
       ),
       body: Form(
         key: formKey,
@@ -90,10 +90,11 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                             alignment: Alignment.center,
                             borderColor: AppColor.borderBlue,
                             onTap: () async {
-                              final code = await countryPicker.showPicker(
-                                  context: context);
+                              /*final code = await countryPicker.showPicker(
+                                  context: context);*/
                               setState(() {
-                                countryCode = code;
+                                countryCode = const CountryCode(name: "Saudi Arabia", code: "SA", dialCode: "+966");
+                                // countryCode = code;
                               });
                             },
                             child: Row(

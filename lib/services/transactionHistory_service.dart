@@ -2,23 +2,24 @@
 import 'dart:developer';
 
 import '../base/service/base_service.dart';
-import '../models/otherServicesModel.dart';
+
 import '../models/requestResult.dart';
+import '../models/transactionHistoryModel.dart';
 import '../utils/apis.dart';
 import '../utils/enum/request_types.dart';
 import '../utils/enum/statuses.dart';
 
-class OtherServicesService extends BaseService {
+class TransactionHistoryService extends BaseService {
 
-  Future<ResponseResult> getOtherServices() async {
+  Future<ResponseResult> getTransactionHistory () async {
     Status result = Status.error;
     /*Map<String, String> headers = const {
       'Content-Type': 'application/json'};*/
 
-    List<OtherServicesData> otherServicesData = [];
+    TransactionData? transactionData;
     try {
       await requestFutureData(
-          api: Api.getOtherServices,
+          api: Api.getTransactionHistory,
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
@@ -26,16 +27,16 @@ class OtherServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              otherServicesData = OtherServicesModel.fromJson(response).data!;
+              transactionData = TransactionHistoryModel.fromJson(response).data!;
 
             } catch (e) {
-              logger.e("Error getting response Other Services Data\n$e");
+              logger.e("Error getting response transaction Data\n$e");
             }
           });
     } catch (e) {
       result = Status.error;
-      log("Error in getting Other Services Data$e");
+      log("Error in getting transaction Data$e");
     }
-    return ResponseResult(result, otherServicesData);
+    return ResponseResult(result, transactionData);
   }
 }

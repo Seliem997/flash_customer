@@ -12,7 +12,7 @@ enum CacheKey {
   countryCode('countryCode'),
   address('address'),
   hasAddress('hasAddress'),
-  rentalBalance('rentalBalance');
+  balance('balance');
 
   const CacheKey(this.key);
   final String key;

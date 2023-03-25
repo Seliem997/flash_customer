@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         Padding(
           padding: onlyEdgeInsets(end: 24),
-          child: SvgPicture.asset('assets/svg/home_bold.svg'),
+          child: CustomSizedBox(
+            height: 26,
+              width: 26,
+              child: Image.asset('assets/images/home_icon.png')),
         ),
       ],
     );

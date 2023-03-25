@@ -10,6 +10,7 @@ class MyFontWeight {
 }
 
 class MyFontSize {
+  static double size6 = 5.2.sp;
   static double size8 = 6.6.sp;
   static double size9 = 6.9.sp;
   static double size10 = 7.3.sp;

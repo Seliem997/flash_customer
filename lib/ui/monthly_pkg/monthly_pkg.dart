@@ -1,3 +1,5 @@
+import 'package:flash_customer/models/manufacturersModel.dart';
+import 'package:flash_customer/models/vehiclesModelsModel.dart';
 import 'package:flash_customer/ui/monthly_pkg/plan.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
@@ -6,27 +8,54 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
+import '../../providers/package_provider.dart';
+import '../../utils/app_loader.dart';
 import '../../utils/colors.dart';
+import '../../utils/enum/statuses.dart';
 import '../widgets/custom_bar_widget.dart';
+import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 
-class MonthlyPkg extends StatelessWidget {
+class MonthlyPkg extends StatefulWidget {
   const MonthlyPkg({Key? key}) : super(key: key);
 
   @override
+  State<MonthlyPkg> createState() => _MonthlyPkgState();
+}
+
+class _MonthlyPkgState extends State<MonthlyPkg> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    final PackageProvider packageProvider=Provider.of<PackageProvider>(context, listen: false);
+
+    await packageProvider.getManufacturers();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final PackageProvider packageProvider=Provider.of<PackageProvider>(context);
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Monthly pkg'),
-      body: Padding(
+      body: packageProvider.manufacturerDataList.isEmpty
+          ? const DataLoader()
+          : Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
           children: [
             Row(
               children: [
                 CustomContainer(
-                  backgroundColor: Color(0xFFCCCCCC),
-                  borderColor: Color(0xFF55B9FE),
+                  backgroundColor: const Color(0xFFCCCCCC),
+                  borderColor: const Color(0xFF55B9FE),
                   width: 162,
                   height: 112,
                   radiusCircular: 6,
@@ -46,7 +75,7 @@ class MonthlyPkg extends StatelessWidget {
                 ),
                 horizontalSpace(21),
                 CustomContainer(
-                  backgroundColor: Color(0xFFECECEC),
+                  backgroundColor: const Color(0xFFECECEC),
                   width: 162,
                   height: 112,
                   onTap: (){
@@ -119,30 +148,49 @@ class MonthlyPkg extends StatelessWidget {
               width: double.infinity,
               height: 40,
               radiusCircular: 3,
-              borderColor: Color(0xFF979797),
-              backgroundColor: Color(0xFFECECEC),
-              child: Padding(
-                padding: symmetricEdgeInsets(horizontal: 4),
-                child: Row(
-                  children: [
-                    TextWidget(
-                      text: 'Select',
-                      fontWeight: MyFontWeight.medium,
-                      textSize: MyFontSize.size10,
-                      color: Color(0xFF909090),
-                    ),
-                    Spacer(),
-                    SvgPicture.asset(
-                      'assets/svg/arrow_down.svg',
-                    )
-                  ],
+              borderColor: const Color(0xFF979797),
+              backgroundColor: const Color(0xFFECECEC),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: packageProvider.selectedManufacture,
+                  iconEnabledColor: Colors.black,
+                  hint: TextWidget(
+                    text: 'Select',
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size10,
+                    color: const Color(0xFF909090),
+                  ),
+                  icon: SvgPicture.asset(
+                    'assets/svg/arrow_down.svg',
+                  ),
+                  items: List.generate(
+                      packageProvider
+                          .manufacturerDataList.length,
+                          (index) => DropdownMenuItem<ManufacturerData>(
+                          value: packageProvider
+                              .manufacturerDataList[index],
+                          child: Text(
+                              packageProvider
+                                  .manufacturerDataList[index].name!,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16)))),
+                  onChanged: (value) async {
+                    packageProvider
+                        .setSelectedManufacture(value!);
+                  AppLoader.showLoader(context);
+                  await packageProvider
+                      .getVehiclesModels(manufactureId: value.id!)
+                      .then((result) {
+                    AppLoader.stopLoader();
+
+                  });
+                  },
+                  menuMaxHeight: 25.h,
                 ),
               ),
             ),
-            // CustomSizedBox(
-            //   height: 40,
-            //   width: double.infinity,
-            // ),
+
             verticalSpace(24),
             Row(
               children: [
@@ -164,38 +212,42 @@ class MonthlyPkg extends StatelessWidget {
               width: double.infinity,
               height: 40,
               radiusCircular: 3,
-              borderColor: Color(0xFF979797),
-              backgroundColor: Color(0xFFECECEC),
-              child: Padding(
-                padding: symmetricEdgeInsets(horizontal: 4),
-                child: Row(
-                  children: [
-                    TextWidget(
-                      text: 'Select',
-                      fontWeight: MyFontWeight.medium,
-                      textSize: MyFontSize.size10,
-                      color: Color(0xFF909090),
-                    ),
-                    Spacer(),
-                    SvgPicture.asset(
-                      'assets/svg/arrow_down.svg',
-                    )
-                  ],
+              borderColor: const Color(0xFF979797),
+              backgroundColor: const Color(0xFFECECEC),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: packageProvider.selectedVehicleModel,
+                  iconEnabledColor: Colors.black,
+                  hint: TextWidget(
+                    text: 'Select',
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size10,
+                    color: const Color(0xFF909090),
+                  ),
+                  icon: SvgPicture.asset(
+                    'assets/svg/arrow_down.svg',
+                  ),
+                  items: List.generate(
+                      packageProvider
+                          .vehiclesModelsDataList.length,
+                          (index) => DropdownMenuItem<VehiclesModelsData>(
+                          value: packageProvider
+                              .vehiclesModelsDataList[index],
+                          child: Text(
+                              packageProvider
+                                  .vehiclesModelsDataList[index].name!,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16)))),
+                  onChanged: (value) async {
+                    packageProvider
+                        .setSelectedVehicle(value!);
+                  },
+                  menuMaxHeight: 25.h,
                 ),
               ),
             ),
-            // CustomSizedBox(
-            //   height: 40,
-            //   width: double.infinity,
-            //   child: DefaultFormField(
-            //     hintText: 'Enter Name',
-            //     fillColor: AppColor.babyBlue,
-            //     filled: true,
-            //     textColor: AppColor.grey,
-            //     textSize: MyFontSize.size15,
-            //     fontWeight: MyFontWeight.medium,
-            //   ),
-            // ),
+
             verticalSpace(72),
             DefaultButton(
               height: 48,
@@ -245,7 +297,7 @@ class MonthlyPkg extends StatelessWidget {
                           text: 'Please try again later or contact us for help',
                           textSize: MyFontSize.size16,
                           fontWeight: MyFontWeight.medium,
-                          color: Color(0xFF9F9F9F),
+                          color: const Color(0xFF9F9F9F),
                         ),
                       ),
                       actions: [
@@ -259,7 +311,7 @@ class MonthlyPkg extends StatelessWidget {
                                 height: 32,
                                 text: 'Back',
                                 onPressed: () {
-                                  navigateTo(context, MonthlyPlans());
+                                  navigateTo(context, const MonthlyPlans());
                                 },
                               ),
                               verticalSpace(12),
@@ -271,7 +323,7 @@ class MonthlyPkg extends StatelessWidget {
                                     text: 'Contact us',
                                     textSize: MyFontSize.size14,
                                     fontWeight: MyFontWeight.semiBold,
-                                    color: Color(0xFF7A7A7A),
+                                    color: const Color(0xFF7A7A7A),
                                   ))
                             ],
                           ),

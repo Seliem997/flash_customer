@@ -1,6 +1,6 @@
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/material.dart';
 
 import '../models/otherServicesModel.dart';
 import '../services/otherServices_service.dart';
@@ -14,7 +14,6 @@ class OtherServicesProvider with ChangeNotifier{
     await otherServicesService.getOtherServices().then((value) {
       if (value.status == Status.success) {
         otherServicesList = value.data;
-        log(otherServicesList.toString());
       }
     });
     notifyListeners();
