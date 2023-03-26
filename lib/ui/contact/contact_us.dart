@@ -3,7 +3,7 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_container.dart';
@@ -46,7 +46,7 @@ class ContactUs extends StatelessWidget {
               width: double.infinity,
               child: DefaultFormField(
                 hintText: 'Enter Name',
-                fillColor: AppColor.borderGrey,
+                fillColor: AppColor.borderGreyLight,
                 filled: true,
                 textColor: AppColor.textGrey,
                 textSize: MyFontSize.size10,
@@ -64,7 +64,7 @@ class ContactUs extends StatelessWidget {
               width: double.infinity,
               child: DefaultFormField(
                 hintText: 'mariam.nasser87@yahoo.com',
-                fillColor: AppColor.borderGrey,
+                fillColor: AppColor.borderGreyLight,
                 filled: true,
                 textColor: AppColor.textGrey,
                 textSize: MyFontSize.size10,
@@ -82,7 +82,7 @@ class ContactUs extends StatelessWidget {
               width: double.infinity,
               child: DefaultFormField(
                 hintText: '+966 124 365 1236',
-                fillColor: AppColor.borderGrey,
+                fillColor: AppColor.borderGreyLight,
                 filled: true,
                 textColor: AppColor.textGrey,
                 textSize: MyFontSize.size10,
@@ -100,7 +100,7 @@ class ContactUs extends StatelessWidget {
               width: double.infinity,
               child: DefaultFormField(
                 hintText: 'Type your message........',
-                fillColor: AppColor.borderGrey,
+                fillColor: AppColor.borderGreyLight,
                 filled: true,
                 textColor: AppColor.textGrey,
                 textSize: MyFontSize.size10,

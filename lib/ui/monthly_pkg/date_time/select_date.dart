@@ -1,5 +1,5 @@
 import 'package:flash_customer/ui/widgets/custom_container.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

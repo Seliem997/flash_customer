@@ -15,7 +15,7 @@ class Api {
   static const String getAddresses = "$baseUrl/customer/my-addresses";
 
   static const String getManufacturers = "$baseUrl/customer/manufacturers";
-  static const String getVehiclesModels = "$baseUrl/customer/vehicle_models/get/by-manufacturers-id";
+  static const String getVehiclesModels = "$baseUrl/customer/vehicle_models/get/by/manufacturers/id/";
 
   static const String getPackages = "$baseUrl/customer/all-packages?";
 

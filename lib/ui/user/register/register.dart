@@ -7,7 +7,7 @@ import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/app_loader.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/enum/statuses.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flash_customer/utils/snack_bars.dart';

@@ -19,14 +19,14 @@ import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 
-class MonthlyPkg extends StatefulWidget {
-  const MonthlyPkg({Key? key}) : super(key: key);
+class VehicleTypes extends StatefulWidget {
+  const VehicleTypes({Key? key}) : super(key: key);
 
   @override
-  State<MonthlyPkg> createState() => _MonthlyPkgState();
+  State<VehicleTypes> createState() => _VehicleTypesState();
 }
 
-class _MonthlyPkgState extends State<MonthlyPkg> {
+class _VehicleTypesState extends State<VehicleTypes> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -44,7 +44,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
     final PackageProvider packageProvider=Provider.of<PackageProvider>(context);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Monthly pkg'),
+      appBar: CustomAppBar(title: 'Vehicle Type'),
       body: packageProvider.manufacturerDataList.isEmpty
           ? const DataLoader()
           : Padding(
@@ -54,84 +54,111 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
             Row(
               children: [
                 CustomContainer(
-                  padding: symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                  backgroundColor: AppColor.borderGrey,
-                  borderColor: AppColor.babyBlue,
+                  backgroundColor: AppColor.white,
+                  borderColor: AppColor.borderGrey,
                   width: 162,
-                  height: 112,
-                  radiusCircular: 6,
-                  child: Column(
-                    children: [
-                      CustomSizedBox(
-                        width: 50,
-                          height: 50,
-                          child: Image.asset('assets/images/new_car.png'),),
-                      verticalSpace(8),
-                      TextWidget(
-                        text: 'New Car',
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size18,
-                      )
-                    ],
+                  height: 50,
+                  radiusCircular: 4,
+                  child: Center(
+                    child: TextWidget(
+                      text: 'My Vehicles',
+                      fontWeight: MyFontWeight.medium,
+                      textSize: MyFontSize.size14,
+                      color: const Color(0xFF878787),
+                    ),
                   ),
                 ),
                 horizontalSpace(21),
                 CustomContainer(
-                  backgroundColor: AppColor.borderGreyLight,
+                  backgroundColor: AppColor.selectedColor,
+                  borderColor: AppColor.babyBlue,
                   width: 162,
+                  height: 50,
+                  radiusCircular: 4,
+                  child: Center(
+                    child: TextWidget(
+                      text: 'New Vehicles',
+                      fontWeight: MyFontWeight.semiBold,
+                      textSize: MyFontSize.size16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            verticalSpace(33),
+            Row(
+              children: [
+                CustomContainer(
+                  backgroundColor: const Color(0xFFE6EEFB),
+                  width: 105,
                   height: 112,
-                  padding: symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                  onTap: (){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Padding(
-                            padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
-                            child: TextWidget(
-                              textAlign: TextAlign.center,
-                              text: 'Management will edit vehicle size as price will depends on the vehicle size',
-                              textSize: MyFontSize.size17,
-                              fontWeight: MyFontWeight.semiBold,
-                            ),
-                          ),
-                          actions: [
-                            Padding(
-                              padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
-                              child: DefaultButton(
-                                width: 225,
-                                height: 32,
-                                text: 'Ok',
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                  },
-                              ),
-                            ),
-
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  radiusCircular: 6,
+                  padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
+                  onTap: (){},
+                  radiusCircular: 5,
                   child: Column(
                     children: [
                       CustomSizedBox(
                         width: 50,
                         height: 50,
-                        child: Image.asset('assets/images/my_vehicles.png'),),
+                        child: Image.asset('assets/images/vehicle_car.png'),),
                       verticalSpace(8),
                       TextWidget(
-                        text: 'My Vehicles',
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size18,
+                        text: 'Car',
+                        fontWeight: MyFontWeight.bold,
+                        textSize: MyFontSize.size14,
+                      ),
+                    ],
+                  ),
+                ),
+                horizontalSpace(11),
+                CustomContainer(
+                  backgroundColor: AppColor.borderGreyLight,
+                  width: 105,
+                  height: 112,
+                  padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
+                  onTap: (){},
+                  radiusCircular: 5,
+                  child: Column(
+                    children: [
+                      CustomSizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/images/vehicle_van.png'),),
+                      verticalSpace(8),
+                      TextWidget(
+                        text: 'Van',
+                        fontWeight: MyFontWeight.medium,
+                        textSize: MyFontSize.size12,
+                      ),
+                    ],
+                  ),
+                ),
+                horizontalSpace(11),
+                CustomContainer(
+                  backgroundColor: AppColor.borderGreyLight,
+                  width: 108,
+                  height: 112,
+                  padding: symmetricEdgeInsets(horizontal: 14, vertical: 19),
+                  onTap: (){},
+                  radiusCircular: 5,
+                  child: Column(
+                    children: [
+                      CustomSizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/images/vehicle_motorcycle.png'),),
+                      verticalSpace(8),
+                      TextWidget(
+                        text: 'Motorcycle',
+                        fontWeight: MyFontWeight.medium,
+                        textSize: MyFontSize.size12,
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            verticalSpace(56),
+            verticalSpace(38),
             Row(
               children: [
                 TextWidget(
@@ -153,7 +180,9 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
               height: 40,
               radiusCircular: 3,
               borderColor: const Color(0xFF979797),
-              backgroundColor: AppColor.borderGreyLight,
+              backgroundColor: const Color(0xFFECECEC),
+              padding: symmetricEdgeInsets(horizontal: 16),
+
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   value: packageProvider.selectedManufacture,
@@ -182,13 +211,15 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                   onChanged: (value) async {
                     packageProvider
                         .setSelectedManufacture(value!);
-                  AppLoader.showLoader(context);
-                  await packageProvider
-                      .getVehiclesModels(manufactureId: value.id!)
-                      .then((result) {
-                    AppLoader.stopLoader();
+                    AppLoader.showLoader(context);
+                    print('value.id! is 000000');
+                    print(value.id!);
+                    await packageProvider
+                        .getVehiclesModels(manufactureId: value.id!)
+                        .then((result) {
+                      AppLoader.stopLoader();
 
-                  });
+                    });
                   },
                   menuMaxHeight: 25.h,
                 ),
@@ -216,8 +247,9 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
               width: double.infinity,
               height: 40,
               radiusCircular: 3,
+              padding: symmetricEdgeInsets(horizontal: 16),
               borderColor: const Color(0xFF979797),
-              backgroundColor: AppColor.borderGreyLight,
+              backgroundColor: const Color(0xFFECECEC),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   value: packageProvider.selectedVehicleModel,
@@ -308,7 +340,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       actions: [
                         Padding(
                           padding:
-                              onlyEdgeInsets(bottom: 40, end: 48, start: 48),
+                          onlyEdgeInsets(bottom: 40, end: 48, start: 48),
                           child: Column(
                             children: [
                               DefaultButton(

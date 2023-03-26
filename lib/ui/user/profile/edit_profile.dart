@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
 import '../../../utils/app_loader.dart';
-import '../../../utils/colors.dart';
+import '../../../utils/styles/colors.dart';
 import '../../../utils/enum/shared_preference_keys.dart';
 import '../../../utils/enum/statuses.dart';
 import '../../../utils/snack_bars.dart';
@@ -56,7 +56,7 @@ class EditProfile extends StatelessWidget {
                       width: double.infinity,
                       child: DefaultFormField(
                         hintText: 'Enter ID',
-                        fillColor: AppColor.borderGrey,
+                        fillColor: AppColor.borderGreyLight,
                         filled: true,
                         enabled: false,
                         controller: TextEditingController(text: userProvider.userId),
@@ -84,7 +84,7 @@ class EditProfile extends StatelessWidget {
                     child: DefaultFormField(
                       controller: nameTextController,
                       hintText: 'Enter Name',
-                      fillColor: AppColor.babyBlue,
+                      fillColor: AppColor.lightBabyBlue,
                       filled: true,
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,
@@ -114,7 +114,7 @@ class EditProfile extends StatelessWidget {
                     child: DefaultFormField(
                       controller: emailTextController,
                       hintText: 'Enter Email',
-                      fillColor: AppColor.babyBlue,
+                      fillColor: AppColor.lightBabyBlue,
                       filled: true,
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,
@@ -134,7 +134,7 @@ class EditProfile extends StatelessWidget {
                       enabled: false,
                       controller: phoneTextController,
                       hintText: 'Enter Phone Number',
-                      fillColor: AppColor.borderGrey,
+                      fillColor: AppColor.borderGreyLight,
                       filled: true,
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,

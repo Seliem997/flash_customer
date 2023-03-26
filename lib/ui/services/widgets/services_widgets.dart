@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../utils/colors.dart';
+import '../../../utils/styles/colors.dart';
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/spaces.dart';
@@ -32,7 +32,7 @@ class ServicesItem extends StatelessWidget {
       height: 130,
       margin: onlyEdgeInsets(end: 11),
       radiusCircular: 5,
-      backgroundColor: AppColor.borderGrey,
+      backgroundColor: AppColor.borderGreyLight,
       padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
       onTap: onTap,
       child: Column(
@@ -117,7 +117,7 @@ class WaxingServicesItem extends StatelessWidget {
     return CustomContainer(
       height: 64,
       width: double.infinity,
-      backgroundColor: AppColor.borderGrey,
+      backgroundColor: AppColor.borderGreyLight,
       radiusCircular: 5,
       margin: onlyEdgeInsets(bottom: 12),
       padding: symmetricEdgeInsets(horizontal: 15, vertical: 12),

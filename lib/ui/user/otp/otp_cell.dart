@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../providers/user_provider.dart';
-import '../../../utils/colors.dart';
+import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/custom_text_form.dart';
 

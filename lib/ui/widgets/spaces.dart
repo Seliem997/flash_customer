@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-const int screenHeight = 852; // deduct safe area space and device bottom bar
+const int screenHeight = 808; // deduct safe area space and device bottom bar
 const int screenWidth = 393;
 
 SizedBox verticalSpace(double height) => SizedBox(

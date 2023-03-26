@@ -1,4 +1,4 @@
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -165,7 +165,7 @@ class _LocationDialogState extends State<LocationDialog> {
                       child: DefaultFormField(
                         hintText: 'Type',
                         textSize: MyFontSize.size8,
-                        fillColor: AppColor.babyBlue,
+                        fillColor: AppColor.lightBabyBlue,
                         filled: true,
                       )),
                 ],

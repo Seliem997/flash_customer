@@ -3,7 +3,7 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/image_editable.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,7 @@ class _WalletScreenState extends State<WalletScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'My Wallet',
-        backgroundColor: AppColor.babyBlue,
+        backgroundColor: AppColor.lightBabyBlue,
       ),
       body: Column(
         children: [
@@ -53,7 +53,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 bottomRight: Radius.circular(44)),
             width: double.infinity,
             height: 211,
-            backgroundColor: AppColor.babyBlue,
+            backgroundColor: AppColor.lightBabyBlue,
             child: Column(
               children: [
                 // const CircleAvatar(

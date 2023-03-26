@@ -72,4 +72,22 @@ class UserProvider extends ChangeNotifier {
   // }
 
 
+
+  bool isDark = false;
+
+  void changeAppMode({bool? modeFromShared}){
+
+    if(modeFromShared != null){
+      isDark = modeFromShared;
+      notifyListeners();
+    }else {
+      isDark = !isDark;
+      CacheHelper.saveData(key: CacheKey.darkMode, value: isDark).then((value) {
+        notifyListeners();
+      });
+    }
+
+  }
+
+
 }

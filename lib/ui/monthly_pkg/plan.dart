@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/package_provider.dart';
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
@@ -63,7 +63,7 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                 radiusCircular: 6,
                 width: 345,
                 height: 173,
-                backgroundColor: AppColor.borderGrey,
+                backgroundColor: AppColor.borderGreyLight,
                 padding: EdgeInsets.zero,
                 borderColor: const Color(0xFFCDCDCD),
                 child: Column(
@@ -176,9 +176,9 @@ class PackageCard extends StatelessWidget {
       radiusCircular: 6,
       width: 345,
       height: 173,
-      backgroundColor: isSelected ? AppColor.selectedColor : AppColor.borderGrey,
+      backgroundColor: isSelected ? AppColor.selectedColor : AppColor.borderGreyLight,
       padding: EdgeInsets.zero,
-      borderColor: isSelected ? const Color(0xFF55B9FE) : const Color(0xFFCDCDCD),
+      borderColor: isSelected ? AppColor.babyBlue : const Color(0xFFCDCDCD),
       child: Column(
         children: [
           Row(
@@ -206,7 +206,7 @@ class PackageCard extends StatelessWidget {
                     height: 18,
                     width: 18,
                     child: CircleAvatar(
-                      backgroundColor: Color(0xFF55B9FE),
+                      backgroundColor: AppColor.babyBlue,
                       child: Icon(
                         Icons.check,
                         color: Colors.white,

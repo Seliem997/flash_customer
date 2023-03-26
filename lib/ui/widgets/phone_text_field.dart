@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 
 class PhoneTextField extends StatelessWidget {
   const PhoneTextField(
@@ -27,7 +27,7 @@ class PhoneTextField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 3.w),
       decoration: BoxDecoration(
           color: enabled ? null : AppColor.grey,
-          border: Border.all(width: 1, color: AppColor.borderGrey),
+          border: Border.all(width: 1, color: AppColor.borderGreyLight),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

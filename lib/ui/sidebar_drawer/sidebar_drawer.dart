@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../providers/user_provider.dart';
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../about/about.dart';
 import '../addresses/addresses.dart';
@@ -44,7 +44,7 @@ class SidebarDrawer extends StatelessWidget {
 
   Widget buildHeader(context,UserProvider userDataProvider) {
     return CustomContainer(
-      backgroundColor: AppColor.babyBlue,
+      backgroundColor: userDataProvider.isDark ? AppColor.boldDark : AppColor.lightBabyBlue,
       width: 272,
       height: 175,
       padding: onlyEdgeInsets(top: 32, bottom: 16, start: 24, end: 18),
@@ -65,14 +65,13 @@ class SidebarDrawer extends StatelessWidget {
                 children: [
                   TextWidget(
                     text: userDataProvider.userName == "" ? "User Name" : userDataProvider.userName ?? "User Name",
-                    color: AppColor.black,
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size15,
                   ),
                   verticalSpace(6),
                   TextWidget(
                     text: userDataProvider.phone ?? 'phone Number',
-                    color: const Color(0xff1E1E1E),
+                    color: !userDataProvider.isDark ? const Color(0xff1E1E1E) : const Color(0xffDBDBDB),
                     fontWeight: MyFontWeight.regular,
                     textSize: MyFontSize.size12,
                   ),
@@ -112,6 +111,7 @@ class SidebarDrawer extends StatelessWidget {
                                 text: 'Switch',
                                 onPressed: () {
                                   Navigator.pop(context);
+                                  userDataProvider.changeAppMode();
                                 },
                                 backgroundColor: const Color(0xFFB85F66),
                               ),
@@ -124,7 +124,7 @@ class SidebarDrawer extends StatelessWidget {
                 );
               }, icon: Icon(Icons.dark_mode_outlined)),
               horizontalSpace(5),
-              SvgPicture.asset('assets/svg/translate.svg'),
+              SvgPicture.asset('assets/svg/translate.svg',color: userDataProvider.isDark ? AppColor.white : AppColor.black),
             ],
           ),
         ],

@@ -48,7 +48,7 @@ class PackageService extends BaseService {
     List<VehiclesModelsData> vehiclesModelsDataList = [];
     try {
       await requestFutureData(
-          api: '${Api.getVehiclesModels}/$manufactureId',
+          api: '${Api.getVehiclesModels}$manufactureId',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,

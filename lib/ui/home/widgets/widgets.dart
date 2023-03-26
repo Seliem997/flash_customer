@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../utils/colors.dart';
+import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/expanded_container.dart';

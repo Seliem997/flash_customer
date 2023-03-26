@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 
 class DefaultFormField extends StatelessWidget {
   const DefaultFormField({

@@ -3,7 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

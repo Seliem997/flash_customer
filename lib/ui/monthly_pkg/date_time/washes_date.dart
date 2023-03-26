@@ -1,7 +1,7 @@
 import 'package:flash_customer/ui/monthly_pkg/date_time/select_date.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -105,7 +105,7 @@ class WashesDate extends StatelessWidget {
               CustomContainer(
                 width: double.infinity,
                 height: 75,
-                backgroundColor: AppColor.borderGrey,
+                backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
                     CustomContainer(
@@ -179,7 +179,7 @@ class WashesDate extends StatelessWidget {
               CustomContainer(
                 width: double.infinity,
                 height: 75,
-                backgroundColor: AppColor.borderGrey,
+                backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
                     CustomContainer(
@@ -256,7 +256,7 @@ class WashesDate extends StatelessWidget {
                 onTap: (){
                   navigateTo(context, SelectDate());
                 },
-                backgroundColor: AppColor.borderGrey,
+                backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
                     CustomContainer(

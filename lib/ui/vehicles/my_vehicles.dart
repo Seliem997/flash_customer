@@ -3,7 +3,7 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class _MyVehiclesState extends State<MyVehicles> {
                         itemBuilder: (context, index) => CustomContainer(
                           height: 64,
                           width: 345,
-                          backgroundColor: AppColor.borderGrey,
+                          backgroundColor: AppColor.borderGreyLight,
                           child: Padding(
                             padding:
                                 symmetricEdgeInsets(vertical: 7, horizontal: 7),

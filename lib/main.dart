@@ -9,6 +9,7 @@ import 'package:flash_customer/ui/contact/contact_us.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
+import 'package:flash_customer/utils/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   late Locale _locale;
   late bool loggedIn = false;
   late bool showOnBoarding = false;
+  // late bool isDarkMode = false;
 
   changeLanguage(Locale locale) {
     setState(() {
@@ -58,6 +60,9 @@ class _MyAppState extends State<MyApp> {
     if (CacheHelper.returnData(key: CacheKey.showOnBoarding) != null) {
       showOnBoarding = CacheHelper.returnData(key: CacheKey.showOnBoarding);
     }
+    // if (CacheHelper.returnData(key: CacheKey.darkMode) != null) {
+    //   isDarkMode = CacheHelper.returnData(key: CacheKey.darkMode);
+    // }
   }
 
   @override
@@ -87,13 +92,13 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
+        UserProvider userProvider=Provider.of<UserProvider>(context);
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flash Customer',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: Colors.white,
-          ),
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: userProvider.isDark ? ThemeMode.dark : ThemeMode.light ,
           localizationsDelegates: const [
             S.delegate,
             GlobalMaterialLocalizations.delegate,

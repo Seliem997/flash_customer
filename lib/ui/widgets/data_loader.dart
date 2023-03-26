@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 
 class DataLoader extends StatelessWidget {
   const DataLoader({Key? key, this.useExpand = false}) : super(key: key);

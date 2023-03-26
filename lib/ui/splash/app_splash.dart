@@ -48,11 +48,14 @@ class _AppSplashState extends State<AppSplash> {
     //   });
     // }
     await Future.delayed(const Duration(seconds: 4));
-    final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
+    navigateAndFinish(
+      context, const HomeScreen(),
+    );
+    /*final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
     navigateAndFinish(
       context,
       !loggedIn ? const RegisterPhoneNumber() : const HomeScreen(),
-    );
+    );*/
   }
 
   @override

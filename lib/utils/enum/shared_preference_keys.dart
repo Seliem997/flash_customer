@@ -1,4 +1,5 @@
 enum CacheKey {
+  darkMode('darkMode'),
   loggedIn('loggedIn'),
   showOnBoarding('showOnBoarding'),
   language('language'),

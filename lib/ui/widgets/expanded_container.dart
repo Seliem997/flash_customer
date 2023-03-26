@@ -2,7 +2,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 
 
 class ExpandableContainer extends StatelessWidget {

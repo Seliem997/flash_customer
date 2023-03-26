@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../utils/colors.dart';
+import '../../utils/styles/colors.dart';
 
 class CustomTextForm extends StatelessWidget {
   const CustomTextForm({
@@ -45,7 +45,7 @@ class CustomTextForm extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         filled: !enabled,
-        fillColor: AppColor.borderGrey,
+        fillColor: AppColor.borderGreyLight,
         hintText: hintText,
         hintStyle: TextStyle(
           color: AppColor.grey,

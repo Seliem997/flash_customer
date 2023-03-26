@@ -90,7 +90,8 @@ class _OtherServicesState extends State<OtherServices> {
               return  ServicesItem(
                 title: otherServicesProvider.otherServicesList[index].name!,
                 imageName: otherServicesProvider.otherServicesList[index].image!,
-                serviceValue: '${otherServicesProvider.otherServicesList[index].cities![index].price!.value} ${otherServicesProvider.otherServicesList[index].cities![index].price!.unit}',
+                serviceValue: '45',
+                // serviceValue: '${otherServicesProvider.otherServicesList[index].cities![0].price!.value} ${otherServicesProvider.otherServicesList[index].cities![index].price!.unit}',
                 serviceUnit: otherServicesProvider.otherServicesList[index].deal,
                 infoOnPressed: (){
                   showDialog(

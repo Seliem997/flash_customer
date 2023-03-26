@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user_provider.dart';
 
 class TextWidget extends StatelessWidget {
   const TextWidget({
     Key? key,
     required this.text,
-    this.color = Colors.black,
+    this.color,
     this.textSize = 16,
     this.maxLines = 10,
     this.height = 1.0,
@@ -15,7 +18,7 @@ class TextWidget extends StatelessWidget {
     this.textScaleFactor,
   }) : super(key: key);
   final String text;
-  final Color color;
+  final Color? color;
   final double textSize;
   final double height;
   final double? width;
@@ -26,6 +29,7 @@ class TextWidget extends StatelessWidget {
   final TextAlign? textAlign;
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider=Provider.of<UserProvider>(context);
     return SizedBox(
       width: width,
       child: Text(
@@ -37,7 +41,7 @@ class TextWidget extends StatelessWidget {
 
         style: TextStyle(
           fontSize: textSize,
-          color: color,
+          color: color ?? (userProvider.isDark ? Colors.white : Colors.black),
           height: height,
           overflow: TextOverflow.ellipsis,
           fontFamily: "Montserrat",

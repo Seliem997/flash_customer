@@ -2,7 +2,7 @@ import 'package:flash_customer/ui/widgets/custom_bar_widget.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
-import 'package:flash_customer/utils/colors.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class VehicleInfo extends StatefulWidget {
@@ -40,10 +40,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 width: 200,
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    fillColor: AppColor.babyBlue,
+                    fillColor: AppColor.lightBabyBlue,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(width: 2, color: AppColor.babyBlue,),
+                      borderSide: BorderSide(width: 2, color: AppColor.lightBabyBlue,),
                     )
                   ),
                     items: items.map((item) {
