@@ -43,3 +43,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /lib/generated/intl/
+/lib/generated/l10n.dart

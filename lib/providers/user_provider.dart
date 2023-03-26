@@ -9,14 +9,12 @@ import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
 
 class UserProvider extends ChangeNotifier {
-  String? userName= CacheHelper.returnData(key: CacheKey.userName);
-  String? userBalance= CacheHelper.returnData(key: CacheKey.balance);
+  String? userName = CacheHelper.returnData(key: CacheKey.userName);
+  String? userBalance = CacheHelper.returnData(key: CacheKey.balance);
   String? userImage;
-  String phone= CacheHelper.returnData(key: CacheKey.phoneNumber);
-  String? userEmail= CacheHelper.returnData(key: CacheKey.email);
-  String? userId= CacheHelper.returnData(key: CacheKey.userId);
-
-
+  String? phone = CacheHelper.returnData(key: CacheKey.phoneNumber);
+  String? userEmail = CacheHelper.returnData(key: CacheKey.email);
+  String? userId = CacheHelper.returnData(key: CacheKey.userId);
 
   Timer? _timer;
 
@@ -27,7 +25,12 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> otp = ['', '', '', '',];
+  List<String> otp = [
+    '',
+    '',
+    '',
+    '',
+  ];
 
   String otpToString() {
     String otpString = '';
@@ -37,20 +40,23 @@ class UserProvider extends ChangeNotifier {
     return otpString;
   }
 
-
-  Future<Status> updateUserProfile({required String name,required String email,}) async {
+  Future<Status> updateUserProfile({
+    required String name,
+    required String email,
+  }) async {
     Status status = Status.error;
     AuthenticationService authenticationService = AuthenticationService();
-    await authenticationService.updateProfile(name: name, email: email)
+    await authenticationService
+        .updateProfile(name: name, email: email)
         .then((value) {
-         if( value.status == Status.success){
-           status = Status.success;
-           userName = (value.data as ProfileData).name;
-           userImage = (value.data as ProfileData).image;
-           userEmail = (value.data as ProfileData).email;
-           userId = (value.data as ProfileData).fwId;
-         }
-         notifyListeners();
+      if (value.status == Status.success) {
+        status = Status.success;
+        userName = (value.data as ProfileData).name;
+        userImage = (value.data as ProfileData).image;
+        userEmail = (value.data as ProfileData).email;
+        userId = (value.data as ProfileData).fwId;
+      }
+      notifyListeners();
     });
     return status;
   }
@@ -71,23 +77,17 @@ class UserProvider extends ChangeNotifier {
   //   return status;
   // }
 
-
-
   bool isDark = false;
 
-  void changeAppMode({bool? modeFromShared}){
-
-    if(modeFromShared != null){
+  void changeAppMode({bool? modeFromShared}) {
+    if (modeFromShared != null) {
       isDark = modeFromShared;
       notifyListeners();
-    }else {
+    } else {
       isDark = !isDark;
       CacheHelper.saveData(key: CacheKey.darkMode, value: isDark).then((value) {
         notifyListeners();
       });
     }
-
   }
-
-
 }

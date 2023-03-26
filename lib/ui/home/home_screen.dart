@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/home/widgets/widgets.dart';
 import 'package:flash_customer/ui/user/register/register.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
@@ -7,7 +10,11 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 
+import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
@@ -17,23 +24,109 @@ import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
 import '../widgets/text_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  CameraPosition _initialLocation = CameraPosition(target: LatLng(0, 0));
+  final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
+  final GlobalKey<ScaffoldState> globalKey = GlobalKey();
+
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    await _handleLocationPermission();
+    await _getCurrentLocation();
+  }
+
+  _getCurrentLocation() async {
+    final HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.resetMap();
+    try {
+      AppLoader.showLoader(context);
+      await Geolocator.getCurrentPosition().then((Position position) async {
+        AppLoader.stopLoader();
+        print("Cur Position1: ${position.longitude} ${position.latitude}");
+        homeProvider.currentPosition = position;
+        homeProvider.mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(position.latitude, position.longitude),
+              zoom: 11.5,
+            ),
+          ),
+        );
+      }).catchError((e) {
+        log("Error in accessing current location $e");
+      });
+    } catch (e) {
+      log("Error in accessing current location $e");
+    }
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> globalKey = GlobalKey();
-    final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     return Scaffold(
       key: globalKey,
       body: Stack(
         children: [
-          CustomContainer(
-              width: double.infinity,
-              padding: EdgeInsets.zero,
-              child: Image.asset('assets/images/home_mapping.png',
-                  fit: BoxFit.cover)),
-          // GoogleMap(),
+          // CustomContainer(
+          //     width: double.infinity,
+          //     padding: EdgeInsets.zero,
+          //     child: Image.asset('assets/images/home_mapping.png',
+          //         fit: BoxFit.cover)),
+          GoogleMap(
+            markers: Set<Marker>.from(homeProvider.markers),
+            initialCameraPosition: _initialLocation,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            mapType: MapType.normal,
+            zoomGesturesEnabled: true,
+            zoomControlsEnabled: false,
+            polylines: Set<Polyline>.of(homeProvider.polylines.values),
+            onMapCreated: (GoogleMapController controller) {
+              homeProvider.mapController = controller;
+            },
+          ),
           Column(
             children: [
               Padding(
@@ -52,12 +145,22 @@ class HomeScreen extends StatelessWidget {
               const Spacer(),
               Align(
                   alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: onlyEdgeInsets(end: 24),
-                    child: CustomSizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Image.asset('assets/images/locationSpot.png'),
+                  child: GestureDetector(
+                    onTap: () {
+                      homeProvider.mapController.animateCamera(
+                          CameraUpdate.newCameraPosition(CameraPosition(
+                              zoom: 11.5,
+                              target: LatLng(
+                                  homeProvider.currentPosition!.latitude,
+                                  homeProvider.currentPosition!.longitude))));
+                    },
+                    child: Padding(
+                      padding: onlyEdgeInsets(end: 24),
+                      child: CustomSizedBox(
+                        height: 40,
+                        width: 40,
+                        child: Image.asset('assets/images/locationSpot.png'),
+                      ),
                     ),
                   )),
               verticalSpace(32),
@@ -69,8 +172,8 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: MyFontWeight.bold,
                 onPressed: loggedIn
                     ? () {
-                  navigateTo(context, const VehicleTypes());
-                }
+                        navigateTo(context, const VehicleTypes());
+                      }
                     : () {
                         buildLoginDialog(context);
                       },

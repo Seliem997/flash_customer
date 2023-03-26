@@ -1,5 +1,6 @@
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
+import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/providers/myVehicles_provider.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
@@ -90,15 +91,18 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => MyVehiclesProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
-        UserProvider userProvider=Provider.of<UserProvider>(context);
+        UserProvider userProvider = Provider.of<UserProvider>(context);
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flash Customer',
           theme: lightTheme,
           darkTheme: darkTheme,
-          themeMode: userProvider.isDark ? ThemeMode.dark : ThemeMode.light ,
+          themeMode: userProvider.isDark ? ThemeMode.dark : ThemeMode.light,
           localizationsDelegates: const [
             S.delegate,
             GlobalMaterialLocalizations.delegate,
