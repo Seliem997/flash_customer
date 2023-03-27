@@ -313,13 +313,13 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                             children: [
                               DefaultButton(
                                 width: 225,
-                                height: 32,
+                                height: 40,
                                 text: 'Back',
                                 onPressed: () {
                                   navigateTo(context, const MonthlyPlans());
                                 },
                               ),
-                              verticalSpace(12),
+                              verticalSpace(10),
                               TextButton(
                                   onPressed: (){
                                     Navigator.pop(context);

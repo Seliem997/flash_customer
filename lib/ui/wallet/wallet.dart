@@ -111,7 +111,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 verticalSpace(28),
                 DefaultButton(
-                    text: 'Pay', onPressed: () {}, width: 217, height: 32),
+                    text: 'Pay', onPressed: () {}, width: 217, height: 40),
                 verticalSpace(45),
                 Row(
                   children: [

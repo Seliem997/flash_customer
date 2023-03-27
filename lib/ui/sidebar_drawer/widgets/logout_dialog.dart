@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../generated/l10n.dart';
 import '../../../services/authentication_service.dart';
 import '../../../utils/font_styles.dart';
+import '../../home/home_screen.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/navigate.dart';
@@ -61,7 +62,7 @@ class LogOutDialog extends StatelessWidget {
                   onPressed: () {
                     AuthenticationService auth = AuthenticationService();
                     auth.signOut();
-                    navigateAndFinish(context, const RegisterPhoneNumber());
+                    navigateAndFinish(context, const HomeScreen());
                   },
                 ),
               ],

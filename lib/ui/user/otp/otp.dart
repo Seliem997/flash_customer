@@ -175,8 +175,9 @@ class _OTPScreenState extends State<OTPScreen> {
               verticalSpace(150),
               DefaultButton(
                 text: S.of(context).continueText,
+                fontSize: MyFontSize.size18,
                 width: double.infinity,
-                height: 40,
+                height: 55,
                 onPressed: () async {
                   AppLoader.showLoader(context);
                   await auth

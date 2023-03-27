@@ -1,4 +1,5 @@
 import 'package:flash_customer/ui/widgets/custom_container.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../utils/styles/colors.dart';
+import '../home/home_screen.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -51,9 +53,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         Padding(
           padding: onlyEdgeInsets(end: 24),
-          child: CustomSizedBox(
+          child: CustomContainer(
             height: 26,
               width: 26,
+              onTap: (){
+              navigateAndFinish(context, const HomeScreen());
+              },
               child: Image.asset('assets/images/home_icon.png')),
         ),
       ],
