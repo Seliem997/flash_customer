@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   DefaultButton(
                     width: 140,
-                    height: 38,
+                    height: 45,
                     backgroundColor: AppColor.buttonGrey,
                     text: 'Products',
                     textColor: AppColor.black,
@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontalSpace(12),
                   DefaultButton(
                     width: 140,
-                    height: 38,
+                    height: 45,
                     backgroundColor: AppColor.buttonGrey,
                     text: 'Other Services',
                     textColor: AppColor.black,
@@ -275,21 +275,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Row buildHeader({required BuildContext context, onTap}) {
     final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
-    return Row(
+    return loggedIn ? Row(
       children: [
-        Visibility(
-          visible: loggedIn,
-          child: CustomSizedBox(
-            width: 24,
-            height: 24,
-            onTap: onTap,
-            child: SvgPicture.asset('assets/svg/menu.svg'),
-          ),
+        CustomSizedBox(
+          width: 24,
+          height: 24,
+          onTap: onTap,
+          child: SvgPicture.asset('assets/svg/menu.svg'),
         ),
         horizontalSpace(122),
         CustomSizedBox(
             width: 67, height: 64, child: Image.asset('assets/images/logo.png'))
       ],
-    );
+    ) : Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [CustomSizedBox(
+        width: 67, height: 64, child: Image.asset('assets/images/logo.png')),],);
   }
 }
