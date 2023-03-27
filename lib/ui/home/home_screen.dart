@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flash_customer/providers/home_provider.dart';
@@ -105,17 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    var markers = HashSet<Marker>();
     return Scaffold(
       key: globalKey,
       body: Stack(
         children: [
-          // CustomContainer(
-          //     width: double.infinity,
-          //     padding: EdgeInsets.zero,
-          //     child: Image.asset('assets/images/home_mapping.png',
-          //         fit: BoxFit.cover)),
           GoogleMap(
-            markers: Set<Marker>.from(homeProvider.markers),
+            markers: markers,
+            // markers: Set<Marker>.from(homeProvider.markers),
             initialCameraPosition: _initialLocation,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
@@ -125,6 +123,15 @@ class _HomeScreenState extends State<HomeScreen> {
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
             onMapCreated: (GoogleMapController controller) {
               homeProvider.mapController = controller;
+              setState(() {
+                markers.add(
+                  Marker(
+                    markerId: MarkerId('١'),
+                    position: LatLng(homeProvider.currentPosition!.latitude,
+                        homeProvider.currentPosition!.longitude),
+                  ),
+                );
+              });
             },
           ),
           Column(
@@ -175,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         navigateTo(context, const VehicleTypes());
                       }
                     : () {
-                        buildLoginDialog(context);
+                        navigateTo(context, const RegisterPhoneNumber());
                       },
               ),
               verticalSpace(14),
@@ -191,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: loggedIn
                         ? () {}
                         : () {
-                            buildLoginDialog(context);
+                            navigateTo(context, const RegisterPhoneNumber());
                           },
                     fontWeight: MyFontWeight.medium,
                     fontSize: MyFontSize.size14,
@@ -211,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                         : () {
-                            buildLoginDialog(context);
+                            navigateTo(context, const RegisterPhoneNumber());
                           },
                     fontWeight: MyFontWeight.medium,
                     fontSize: MyFontSize.size14,
