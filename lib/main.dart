@@ -4,6 +4,7 @@ import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/providers/myVehicles_provider.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
+import 'package:flash_customer/providers/services_provider.dart';
 import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/contact/contact_us.dart';
@@ -93,6 +94,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ServicesProvider(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

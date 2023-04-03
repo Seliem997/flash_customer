@@ -113,7 +113,7 @@ class SidebarDrawer extends StatelessWidget {
                                   Navigator.pop(context);
                                   userDataProvider.changeAppMode();
                                 },
-                                backgroundColor: const Color(0xFFB85F66),
+                                backgroundColor: AppColor.textRed,
                               ),
                             ],
                           ),

@@ -70,20 +70,21 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getPackages() async {
     Status result = Status.error;
+    Map<String, String> headers = const {
+      'Content-Type': 'application/json'};
 
     List<PackagesData> packagesDataList = [];
     try {
       await requestFutureData(
-          api: '${Api.getPackages}per=month',
+          api: '${Api.getPackages}per=week',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
-
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
               packagesDataList = PackagesModel.fromJson(response).data!;
-
             } catch (e) {
               logger.e("Error getting response packages Data\n$e");
             }

@@ -11,8 +11,10 @@ import '../../widgets/text_widget.dart';
 class SelectDate extends StatelessWidget {
   const SelectDate({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Date & Time '),
       body: Padding(
@@ -27,12 +29,12 @@ class SelectDate extends StatelessWidget {
                   textSize: MyFontSize.size15,
                 ),
 
-                Spacer(),
+                const Spacer(),
                 CustomContainer(
                   width: 55,
                   height: 24,
                   radiusCircular: 3,
-                  borderColor: Color(0xFF979797),
+                  borderColor: const Color(0xFF979797),
                   child: Padding(
                     padding: symmetricEdgeInsets(horizontal: 4),
                     child: Row(
@@ -41,7 +43,7 @@ class SelectDate extends StatelessWidget {
                           text: 'Jan',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF909090),
+                          color: const Color(0xFF909090),
                         ),
                         horizontalSpace(8),
                         SvgPicture.asset('assets/svg/arrow_down.svg',)
@@ -54,7 +56,7 @@ class SelectDate extends StatelessWidget {
                   width: 65,
                   height: 24,
                   radiusCircular: 3,
-                  borderColor: Color(0xFF979797),
+                  borderColor: const Color(0xFF979797),
                   child: Padding(
                     padding: symmetricEdgeInsets(horizontal: 4),
                     child: Row(
@@ -63,7 +65,7 @@ class SelectDate extends StatelessWidget {
                           text: '2023',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF909090),
+                          color: const Color(0xFF909090),
                         ),
                         horizontalSpace(11),
                         SvgPicture.asset('assets/svg/arrow_down.svg',)
@@ -90,14 +92,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],
@@ -116,14 +118,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],
@@ -142,14 +144,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],
@@ -168,14 +170,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],
@@ -194,14 +196,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],
@@ -220,14 +222,14 @@ class SelectDate extends StatelessWidget {
                           text: '20',
                           fontWeight: MyFontWeight.medium,
                           textSize: MyFontSize.size16,
-                          color: Color(0xFF565656),
+                          color: const Color(0xFF565656),
                         ),
                         verticalSpace(6),
                         TextWidget(
                           text: 'Fri',
                           fontWeight: MyFontWeight.regular,
                           textSize: MyFontSize.size10,
-                          color: Color(0xFF696969),
+                          color: const Color(0xFF696969),
                         ),
 
                       ],

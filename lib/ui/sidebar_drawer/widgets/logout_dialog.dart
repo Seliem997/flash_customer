@@ -1,4 +1,5 @@
 import 'package:flash_customer/ui/user/register/register.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/l10n.dart';
@@ -58,7 +59,7 @@ class LogOutDialog extends StatelessWidget {
                   fontSize: MyFontSize.size14,
                   height: 33,
                   width: 96,
-                  backgroundColor: const Color(0xFFB85F66),
+                  backgroundColor: AppColor.textRed,
                   onPressed: () {
                     AuthenticationService auth = AuthenticationService();
                     auth.signOut();

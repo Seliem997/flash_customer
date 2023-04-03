@@ -12,6 +12,10 @@ class Api {
 
   static const String getOtherServices = "$baseUrl/customer/getOtherServices";
 
+  static const String getBasicServices = "$baseUrl/customer/get-basic-services";
+
+  static const String getExtraServices = "$baseUrl/customer/get-extra-services";
+
   static const String getAddresses = "$baseUrl/customer/my-addresses";
 
   static const String getManufacturers = "$baseUrl/customer/manufacturers";
@@ -22,5 +26,8 @@ class Api {
   static const String getTransactionHistory = "$baseUrl/customer/history-transactions";
 
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
+
+
+  static const String addNewVehicle = "$baseUrl/customer/vehicles";
 
 }

@@ -29,6 +29,7 @@ class WashesDate extends StatelessWidget {
               ),
               verticalSpace(12),
               CustomContainer(
+                clipBehavior: Clip.hardEdge,
                 width: double.infinity,
                 height: 75,
                 backgroundColor: AppColor.selectedColor,
@@ -103,6 +104,7 @@ class WashesDate extends StatelessWidget {
               ),
               verticalSpace(12),
               CustomContainer(
+                clipBehavior: Clip.hardEdge,
                 width: double.infinity,
                 height: 75,
                 backgroundColor: AppColor.borderGreyLight,
@@ -177,6 +179,7 @@ class WashesDate extends StatelessWidget {
               ),
               verticalSpace(12),
               CustomContainer(
+                clipBehavior: Clip.hardEdge,
                 width: double.infinity,
                 height: 75,
                 backgroundColor: AppColor.borderGreyLight,
@@ -251,6 +254,7 @@ class WashesDate extends StatelessWidget {
               ),
               verticalSpace(12),
               CustomContainer(
+                clipBehavior: Clip.hardEdge,
                 width: double.infinity,
                 height: 75,
                 onTap: (){

@@ -19,7 +19,6 @@ import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
-import '../monthly_pkg/monthly_pkg.dart';
 import '../services/other_services.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
@@ -33,13 +32,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CameraPosition _initialLocation = CameraPosition(target: LatLng(0, 0));
+  final CameraPosition _initialLocation =
+      const CameraPosition(target: LatLng(0, 0));
   final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 0)).then((value) => loadData());
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     super.initState();
   }
 
@@ -56,13 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
       AppLoader.showLoader(context);
       await Geolocator.getCurrentPosition().then((Position position) async {
         AppLoader.stopLoader();
-        print("Cur Position1: ${position.longitude} ${position.latitude}");
+        // print("Cur Position1: ${position.longitude} ${position.latitude}");
         homeProvider.currentPosition = position;
+        homeProvider.startMarker();
         homeProvider.mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: LatLng(position.latitude, position.longitude),
-              zoom: 11.5,
+              zoom: 15.5,
             ),
           ),
         );
@@ -112,8 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           GoogleMap(
-            markers: markers,
-            // markers: Set<Marker>.from(homeProvider.markers),
+            markers: Set<Marker>.from(homeProvider.markers),
             initialCameraPosition: _initialLocation,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
@@ -123,16 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
             onMapCreated: (GoogleMapController controller) {
               homeProvider.mapController = controller;
-              setState(() {
-                markers.add(
-                  Marker(
-                    markerId: MarkerId('١'),
-                    position: LatLng(homeProvider.currentPosition!.latitude,
-                        homeProvider.currentPosition!.longitude),
-                  ),
-                );
-              });
             },
+
           ),
           Column(
             children: [
@@ -282,21 +274,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Row buildHeader({required BuildContext context, onTap}) {
     final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
-    return loggedIn ? Row(
-      children: [
-        CustomSizedBox(
-          width: 24,
-          height: 24,
-          onTap: onTap,
-          child: SvgPicture.asset('assets/svg/menu.svg'),
-        ),
-        horizontalSpace(122),
-        CustomSizedBox(
-            width: 67, height: 64, child: Image.asset('assets/images/logo.png'))
-      ],
-    ) : Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [CustomSizedBox(
-        width: 67, height: 64, child: Image.asset('assets/images/logo.png')),],);
+    return loggedIn
+        ? Row(
+            children: [
+              CustomSizedBox(
+                width: 24,
+                height: 24,
+                onTap: onTap,
+                child: SvgPicture.asset('assets/svg/menu.svg'),
+              ),
+              horizontalSpace(122),
+              CustomSizedBox(
+                  width: 67,
+                  height: 64,
+                  child: Image.asset('assets/images/logo.png'))
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomSizedBox(
+                  width: 67,
+                  height: 64,
+                  child: Image.asset('assets/images/logo.png')),
+            ],
+          );
   }
 }

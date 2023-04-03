@@ -11,6 +11,21 @@ import '../utils/enum/statuses.dart';
 
 class PackageProvider with ChangeNotifier{
 
+  bool requiredManufacture = false;
+  bool requiredModel = false;
+
+  void setRequiredManufacture(){
+    requiredManufacture = true;
+    notifyListeners();
+  }
+  void setRequiredModel(){
+    requiredModel = true;
+    notifyListeners();
+  }
+
+  bool chooseManufacture = false;
+  bool chooseModel = false;
+
   ManufacturerData? selectedManufacture;
 
   List<ManufacturerData> manufacturerDataList = [];
@@ -30,6 +45,7 @@ class PackageProvider with ChangeNotifier{
     notifyListeners();
   }
 
+
   VehiclesModelsData? selectedVehicleModel;
 
   List<VehiclesModelsData> vehiclesModelsDataList = [];
@@ -47,6 +63,21 @@ class PackageProvider with ChangeNotifier{
     selectedVehicleModel = vehicle;
     notifyListeners();
   }
+
+  bool newVehicleLabel = true;
+  bool myVehicleLabel = false;
+
+  void selectedNewVehicleLabel(){
+    newVehicleLabel = true;
+    myVehicleLabel = false;
+    notifyListeners();
+  }
+  void selectedMyVehicleLabel(){
+    newVehicleLabel = false;
+    myVehicleLabel = true;
+    notifyListeners();
+  }
+
 
   List<PackagesData> packagesDataList = [];
   Future getPackages() async {

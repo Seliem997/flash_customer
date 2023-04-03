@@ -1,164 +1,164 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '../../../utils/styles/colors.dart';
 import '../../../utils/font_styles.dart';
+import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/spaces.dart';
 import '../../widgets/text_widget.dart';
 
-class ServicesItem extends StatelessWidget {
-  const ServicesItem({
+class BasicServicesWidget extends StatelessWidget {
+  const BasicServicesWidget({
     super.key,
+    this.infoOnPressed,
     required this.title,
     required this.imageName,
-    this.serviceValue,
-    this.serviceUnit,
-    this.seeMore = false,
-    this.onlyValue = false,
-    this.onTap, this.infoOnPressed,
+    this.onCheck = false,
+    this.onTap,
   });
 
-  final String title, imageName;
-  final String? serviceValue, serviceUnit;
-  final bool seeMore, onlyValue;
-  final GestureTapCallback? onTap;
   final VoidCallback? infoOnPressed;
+  final String title, imageName;
+  final bool onCheck;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      width: 108,
-      height: 130,
-      margin: onlyEdgeInsets(end: 11),
-      radiusCircular: 5,
-      backgroundColor: AppColor.borderGreyLight,
-      padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
+      height: 59,
+      width: 313,
       onTap: onTap,
-      child: Column(
+      backgroundColor:
+          onCheck ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
+      radiusCircular: 4,
+      child: Row(
         children: [
           Align(
-            alignment: AlignmentDirectional.topEnd,
+            alignment: AlignmentDirectional.topStart,
             child: IconButton(
               icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
               onPressed: infoOnPressed,
             ),
-            // child: Icon(Icons.info, size: 20, color: AppColor.primary),
           ),
           CustomSizedBox(
-            width: 56,
-            height: 56,
+            height: 35,
+            width: 35,
             child: Image.network(imageName),
           ),
-          verticalSpace(11),
+          horizontalSpace(12),
           TextWidget(
             text: title,
-            fontWeight: FontWeight.bold,
-            textSize: MyFontSize.size9,
+            textSize: MyFontSize.size12,
+            fontWeight: MyFontWeight.semiBold,
           ),
-          verticalSpace(8),
-          seeMore
-              ? TextWidget(
-                  text: 'See more',
-                  fontWeight: MyFontWeight.medium,
-                  textSize: MyFontSize.size8,
-                  color: const Color(0xFF636363),
-                )
-              : onlyValue
-                  ? TextWidget(
-                      text: serviceValue!,
-                      fontWeight: MyFontWeight.medium,
-                      textSize: MyFontSize.size10,
-                      color: AppColor.attributeColor,
-                    )
-                  : FittedBox(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextWidget(
-                            text: serviceValue!,
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            color: AppColor.attributeColor,
-                          ),
-                          horizontalSpace(5),
-                          TextWidget(
-                            text: 'per',
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size8,
-                            color: const Color(0xFF575757),
-                          ),
-                          horizontalSpace(5),
-                          TextWidget(
-                            text: serviceUnit!,
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            color: AppColor.attributeColor,
-                          ),
-                        ],
-                      ),
-                  )
+          const Spacer(),
+          Padding(
+            padding: onlyEdgeInsets(
+              end: 20,
+              bottom: 20,
+              top: 20,
+            ),
+            child: onCheck
+                ? Image.asset('assets/images/checkIcon.png')
+                : const CustomContainer(
+                    radiusCircular: 5,
+                    backgroundColor: Colors.transparent,
+                    height: 19,
+                    width: 20,
+                    borderColor: Color(0xFF393939),
+                  ),
+          )
         ],
       ),
     );
   }
 }
 
-class WaxingServicesItem extends StatelessWidget {
-  const WaxingServicesItem({
+class ExtraServicesWidget extends StatelessWidget {
+  const ExtraServicesWidget({
     super.key,
+    this.infoOnPressed,
     required this.title,
     required this.imageName,
-    required this.serviceValue,
+    this.onCheck = false,
+    this.onTap,
+    this.isCounted = false,
   });
-  final String title, imageName, serviceValue;
+
+  final VoidCallback? infoOnPressed;
+  final String title, imageName;
+  final bool onCheck, isCounted;
+  final GestureTapCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 64,
-      width: double.infinity,
-      backgroundColor: AppColor.borderGreyLight,
-      radiusCircular: 5,
-      margin: onlyEdgeInsets(bottom: 12),
-      padding: symmetricEdgeInsets(horizontal: 15, vertical: 12),
+      height: 59,
+      width: 313,
+      backgroundColor: onCheck ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
+      radiusCircular: 4,
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CustomSizedBox(
-                    width: 90,
-                    child: TextWidget(
-                      text: title,
-                      fontWeight: MyFontWeight.semiBold,
-                      textSize: MyFontSize.size12,
-                    ),
-                  ),
-                  horizontalSpace(11),
-                  CustomSizedBox(
-                    width: 16,
-                    height: 16,
-                    child: SvgPicture.asset('assets/svg/Info.svg'),
-                  ),
-                ],
-              ),
-              verticalSpace(8),
-              TextWidget(
-                text: serviceValue,
-                fontWeight: MyFontWeight.semiBold,
-                textSize: MyFontSize.size10,
-                color: AppColor.attributeColor,
-              ),
-            ],
+          Align(
+            alignment: AlignmentDirectional.topStart,
+            child: IconButton(
+              icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
+              onPressed: () {},
+            ),
+          ),
+          CustomSizedBox(
+              height: 35,
+              width: 35,
+              child: Image.asset('assets/images/chair_image.png')),
+          horizontalSpace(12),
+          TextWidget(
+            text: 'One chair Wash',
+            textSize: MyFontSize.size12,
+            fontWeight: MyFontWeight.semiBold,
           ),
           const Spacer(),
-          CustomSizedBox(
-            width: 44,
-            height: 44,
-            child: Image.asset(imageName),
-          ),
+          Padding(
+            padding: onlyEdgeInsets(
+              end: 20,
+              bottom: 20,
+              top: 20,
+            ),
+            child: isCounted
+                ? Row(
+                    children: [
+                      CustomSizedBox(
+                        width: 18,
+                        height: 23,
+                        child: Image.asset('assets/images/minus.png'),
+                      ),
+                      horizontalSpace(9),
+                      TextWidget(
+                        text: '1',
+                        fontWeight: MyFontWeight.bold,
+                        textSize: MyFontSize.size12,
+                      ),
+                      horizontalSpace(9),
+                      CustomSizedBox(
+                        width: 18,
+                        height: 23,
+                        child: Image.asset('assets/images/plus.png'),
+                      ),
+                    ],
+                  )
+                : Padding(
+                    padding: onlyEdgeInsets(
+                      end: 20,
+                      bottom: 20,
+                      top: 20,
+                    ),
+                    child: const CustomContainer(
+                      radiusCircular: 5,
+                      backgroundColor: Colors.transparent,
+                      height: 19,
+                      width: 20,
+                      borderColor: Color(0xFF393939),
+                    ),
+                  ),
+          )
         ],
       ),
     );

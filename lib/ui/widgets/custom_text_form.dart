@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
@@ -16,7 +17,10 @@ class CustomTextForm extends StatelessWidget {
     this.validator,
     this.onSubmit,
     this.controller,
-    this.padding = 20, this.onTap, this.enabled= true,
+    this.padding = 20,
+    this.onTap,
+    this.enabled = true,
+    this.contentPadding,
   }) : super(key: key);
 
   final VoidCallback? onEditingComplete;
@@ -24,6 +28,7 @@ class CustomTextForm extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? hintText;
   final double? padding;
+  final EdgeInsetsGeometry? contentPadding;
   final ValueChanged<String>? onChanged;
   final FormFieldValidator? validator;
   final Function(dynamic)? onSubmit;
@@ -51,7 +56,7 @@ class CustomTextForm extends StatelessWidget {
           color: AppColor.grey,
           fontSize: 12.sp,
         ),
-        contentPadding: EdgeInsetsDirectional.only(start: 2.w),
+        contentPadding: contentPadding ?? onlyEdgeInsets(start: 10),
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: AppColor.white,

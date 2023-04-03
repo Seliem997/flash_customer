@@ -2,7 +2,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/custom_bar_widget.dart';
-import '../widgets/services_widgets.dart';
+import '../widgets/other_services_widgets.dart';
 
 class WaxingServices extends StatelessWidget {
   const WaxingServices({Key? key}) : super(key: key);

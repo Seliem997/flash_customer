@@ -30,6 +30,41 @@ class HomeProvider with ChangeNotifier {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
 
+    Future<bool> startMarker() async {
+    try {
+      double startLatitude = _currentPosition!.latitude;
+      double startLongitude = _currentPosition!.longitude;
+
+      String startCoordinatesString = '($startLatitude, $startLongitude)';
+
+      // Start Location Marker
+      Marker startMarker = Marker(
+          markerId: MarkerId(startCoordinatesString),
+          position: LatLng(startLatitude, startLongitude),
+          infoWindow: const InfoWindow(
+            title: 'That\'s your Location',
+            // snippet: _startAddress,
+          ),
+          icon: await BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueBlue));
+
+
+      // Adding the markers to the list
+      markers.clear();
+      polylineCoordinates = [];
+      polylines = {};
+      markers.add(startMarker);
+
+
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    notifyListeners();
+    return false;
+  }
+
+
   void resetMap() {
     markers.clear();
     polylineCoordinates = [];

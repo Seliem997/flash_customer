@@ -2,6 +2,7 @@ import 'package:flash_customer/ui/user/profile/edit_profile.dart';
 import 'package:flash_customer/ui/user/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import '../../models/loginModel.dart';
 import '../../providers/user_provider.dart';
 import '../../services/authentication_service.dart';
@@ -62,10 +63,7 @@ class _AppSplashState extends State<AppSplash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: CustomSizedBox(
-            // width: 279,
-            // height: 258,
-            child: Image.asset('assets/images/logo_animation.gif')),
+        child: Image.asset('assets/images/logo_animation.gif',fit: BoxFit.fitHeight,height: 100.h,),
       ),
     );
   }

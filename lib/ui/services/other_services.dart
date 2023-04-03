@@ -1,5 +1,5 @@
 import 'package:flash_customer/ui/services/waxing_services/waxing_services.dart';
-import 'package:flash_customer/ui/services/widgets/services_widgets.dart';
+import 'package:flash_customer/ui/services/widgets/other_services_widgets.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -87,7 +87,7 @@ class _OtherServicesState extends State<OtherServices> {
             shrinkWrap: true,
             itemCount: otherServicesProvider.otherServicesList.length,
             itemBuilder: (context, index) {
-              return  ServicesItem(
+              return  OtherServicesItem(
                 title: otherServicesProvider.otherServicesList[index].name!,
                 imageName: otherServicesProvider.otherServicesList[index].image!,
                 serviceValue: '45',

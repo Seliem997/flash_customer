@@ -15,8 +15,10 @@ class AppColor {
   static const Color borderBlue = Color(0xff0285E0);
   static const Color acceptGreen = Color(0xffCBFFAB);
   static const Color canceledRed = Color(0xffFFC0C3);
+  static const Color textRed = Color(0xffB85F66);
 
   static const Color boldBlue = Color(0xff006996);
+  static const Color boldGrey = Color(0xff565656);
   static const Color lightGrey = Color(0xff929292);
   static const Color lightBabyBlue = Color(0xFFC7E4F8);
   static const Color babyBlue = Color(0xFF55B9FE);
