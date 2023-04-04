@@ -14,7 +14,6 @@ import '../addresses/addresses.dart';
 import '../contact/contact_us.dart';
 import '../monthly_pkg/monthly_pkg.dart';
 import '../user/profile/edit_profile.dart';
-import '../user/register/register.dart';
 import '../vehicles/my_vehicles.dart';
 import '../wallet/wallet.dart';
 import '../widgets/custom_button.dart';
@@ -30,21 +29,24 @@ class SidebarDrawer extends StatelessWidget {
     final UserProvider userDataProvider = Provider.of<UserProvider>(context);
 
     return Drawer(
+      backgroundColor:
+          userDataProvider.isDark ? AppColor.primaryDark : Colors.white,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildHeader(context,userDataProvider),
-            buildMenuItems(context),
+            buildHeader(context, userDataProvider),
+            buildMenuItems(context, userDataProvider),
           ],
         ),
       ),
     );
   }
 
-  Widget buildHeader(context,UserProvider userDataProvider) {
+  Widget buildHeader(context, UserProvider userDataProvider) {
     return CustomContainer(
-      backgroundColor: userDataProvider.isDark ? AppColor.boldDark : AppColor.lightBabyBlue,
+      backgroundColor:
+          userDataProvider.isDark ? AppColor.boldDark : AppColor.lightBabyBlue,
       width: 272,
       height: 175,
       padding: onlyEdgeInsets(top: 32, bottom: 16, start: 24, end: 18),
@@ -64,67 +66,77 @@ class SidebarDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: userDataProvider.userName == "" ? "User Name" : userDataProvider.userName ?? "User Name",
+                    text: userDataProvider.userName == ""
+                        ? "User Name"
+                        : userDataProvider.userName ?? "User Name",
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size15,
                   ),
                   verticalSpace(6),
                   TextWidget(
                     text: userDataProvider.phone ?? 'phone Number',
-                    color: !userDataProvider.isDark ? const Color(0xff1E1E1E) : const Color(0xffDBDBDB),
+                    color: !userDataProvider.isDark
+                        ? const Color(0xff1E1E1E)
+                        : const Color(0xffDBDBDB),
                     fontWeight: MyFontWeight.regular,
                     textSize: MyFontSize.size12,
                   ),
                 ],
               ),
               const Spacer(),
-              IconButton(onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: TextWidget(
-                          text: 'Want to Switch Dark Mode?',
-                        ),
-                      ),
-                      actions: [
-                        Padding(
-                          padding: symmetricEdgeInsets(vertical: 5),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceAround,
-                            children: [
-                              DefaultButton(
-                                width: 130,
-                                height: 30,
-                                text: 'Cancel',
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                backgroundColor: const Color(0xFF6BB85F),
-                              ),
-                              DefaultButton(
-                                width: 130,
-                                height: 30,
-                                text: 'Switch',
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  userDataProvider.changeAppMode();
-                                },
-                                backgroundColor: AppColor.textRed,
-                              ),
-                            ],
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: TextWidget(
+                              text: 'Want Switch to ${userDataProvider.isDark ? 'Light Mode' : 'Dark Mode'}?',
+                              color: AppColor.black,
+                            ),
                           ),
-                        ),
-                      ],
+                          actions: [
+                            Padding(
+                              padding: symmetricEdgeInsets(vertical: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  DefaultButton(
+                                    width: 130,
+                                    height: 30,
+                                    text: 'Cancel',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    backgroundColor: const Color(0xFF6BB85F),
+                                  ),
+                                  DefaultButton(
+                                    width: 130,
+                                    height: 30,
+                                    text: 'Switch',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      userDataProvider.changeAppMode();
+                                    },
+                                    backgroundColor: AppColor.textRed,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
-                );
-              }, icon: Icon(Icons.dark_mode_outlined)),
+                  icon: const Icon(Icons.dark_mode_outlined)),
               horizontalSpace(5),
-              SvgPicture.asset('assets/svg/translate.svg',color: userDataProvider.isDark ? AppColor.white : AppColor.black),
+              SvgPicture.asset('assets/svg/translate.svg',
+                  color: userDataProvider.isDark
+                      ? AppColor.white
+                      : AppColor.black),
             ],
           ),
         ],
@@ -132,207 +144,229 @@ class SidebarDrawer extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItems(BuildContext context) {
+  Widget buildMenuItems(BuildContext context, UserProvider userDataProvider) {
     return Padding(
       padding: symmetricEdgeInsets(horizontal: 30, vertical: 42),
-      child: Column(
-        children: [
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/profile.svg',
-                color: AppColor.grey,
+      child: CustomContainer(
+        backgroundColor:
+            userDataProvider.isDark ? AppColor.primaryDark : Colors.white,
+        child: Column(
+          children: [
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/profile.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
               ),
-            ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Profile',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(context, const EditProfile());
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/requests.svg',
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Profile',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
               ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(context, const EditProfile());
+              },
             ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Requests',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              // Navigator.pop(context);
-              // navigateTo(context, const EditProfile());
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/wallet.svg',
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/requests.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
               ),
-            ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Wallet',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(context, const WalletScreen());
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/car.svg',
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Requests',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
               ),
+              onTap: () {
+                // Navigator.pop(context);
+                // navigateTo(context, const EditProfile());
+              },
             ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Vehicles',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(context, const MyVehicles());
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/map.svg',
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/wallet.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
               ),
-            ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Addresses',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(
-                context,
-                const MyAddresses(),
-              );
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/money.svg',
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Wallet',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
               ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(context, const WalletScreen());
+              },
             ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Monthly pkg',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(
-                context,
-                const MonthlyPkg(),
-              );
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/about.svg',
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/car.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
               ),
-            ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'About us',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(
-                context,
-                const AboutUs(),
-              );
-            },
-          ),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/messages.svg',
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Vehicles',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
               ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(context, const MyVehicles());
+              },
             ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: 'Contact us',
-              color: AppColor.grey,
-              textSize: 18,
-              fontWeight: MyFontWeight.medium,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              navigateTo(context, const ContactUs(),);
-            },
-          ),
-          verticalSpace(50),
-          ListTile(
-            leading: CustomSizedBox(
-              width: 25,
-              height: 25,
-              child: SvgPicture.asset(
-                'assets/svg/logout.svg',
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/map.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
               ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Addresses',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(
+                  context,
+                  const MyAddresses(),
+                );
+              },
             ),
-            minLeadingWidth: 2.w,
-            title: TextWidget(
-              text: "Log out",
-              color: Color(0xFFCC4A50),
-              textSize: MyFontSize.size16,
-              fontWeight: MyFontWeight.medium,
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/money.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
+              ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Monthly pkg',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(
+                  context,
+                  const MonthlyPkg(),
+                );
+              },
             ),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const LogOutDialog();
-                },
-              );
-            },
-          ),
-        ],
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/about.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
+              ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'About us',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(
+                  context,
+                  const AboutUs(),
+                );
+              },
+            ),
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/messages.svg',
+                  color:
+                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                ),
+              ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Contact us',
+                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(
+                  context,
+                  const ContactUs(),
+                );
+              },
+            ),
+            verticalSpace(50),
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/logout.svg',
+                ),
+              ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: "Log out",
+                color: const Color(0xFFCC4A50),
+                textSize: MyFontSize.size16,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const LogOutDialog();
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

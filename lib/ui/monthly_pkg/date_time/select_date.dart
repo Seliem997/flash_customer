@@ -2,19 +2,75 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_bar_widget.dart';
 import '../../widgets/spaces.dart';
 import '../../widgets/text_widget.dart';
 
-class SelectDate extends StatelessWidget {
+class SelectDate extends StatefulWidget {
   const SelectDate({Key? key}) : super(key: key);
 
+  @override
+  State<SelectDate> createState() => _SelectDateState();
+}
+
+class _SelectDateState extends State<SelectDate> {
+  final DateRangePickerController _controller = DateRangePickerController();
+  final List<String> _months = <String>[
+    'JANUARY',
+    'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER'
+  ];
+  bool _selected = false;
+  int _selectedIndex = -1;
+
+  Widget cellBuilder(BuildContext context, DateRangePickerCellDetails details) {
+    final bool isSelected = _controller.selectedDate != null &&
+        details.date.year == _controller.selectedDate!.year &&
+        details.date.month == _controller.selectedDate!.month &&
+        details.date.day == _controller.selectedDate!.day;
+    if (isSelected) {
+      return Column(
+        children: [
+          Container(
+            child: Text(
+              details.date.day.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          Container(
+              child: Text(
+            DateFormat('EEE').format((details.date)),
+            style: TextStyle(color: Colors.white),
+          )),
+        ],
+      );
+    } else {
+      return Container(
+        child: Text(
+          details.date.day.toString(),
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.tealAccent),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: CustomAppBar(title: 'Date & Time '),
       body: Padding(
@@ -28,7 +84,6 @@ class SelectDate extends StatelessWidget {
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size15,
                 ),
-
                 const Spacer(),
                 CustomContainer(
                   width: 55,
@@ -46,7 +101,9 @@ class SelectDate extends StatelessWidget {
                           color: const Color(0xFF909090),
                         ),
                         horizontalSpace(8),
-                        SvgPicture.asset('assets/svg/arrow_down.svg',)
+                        SvgPicture.asset(
+                          'assets/svg/arrow_down.svg',
+                        )
                       ],
                     ),
                   ),
@@ -68,7 +125,9 @@ class SelectDate extends StatelessWidget {
                           color: const Color(0xFF909090),
                         ),
                         horizontalSpace(11),
-                        SvgPicture.asset('assets/svg/arrow_down.svg',)
+                        SvgPicture.asset(
+                          'assets/svg/arrow_down.svg',
+                        )
                       ],
                     ),
                   ),
@@ -239,6 +298,55 @@ class SelectDate extends StatelessWidget {
                 ],
               ),
             ),
+           /* verticalSpace(40),
+            CustomSizedBox(
+              height: 400,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _months.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selected = true;
+                            _selectedIndex = index;
+                            _controller.displayDate =
+                                DateTime(2021, _selectedIndex, 1, 9, 0, 0);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 15, top: 5),
+                          height: 2,
+                          color: Color(0xFF192841),
+                          child: Column(
+                            children: [
+                              Container(
+                                  child: Text(_months[index],
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: _selected &&
+                                                  _selectedIndex == index
+                                              ? FontWeight.w900
+                                              : FontWeight.w400))),
+                              verticalSpace(10),
+                              SfDateRangePicker(
+                                backgroundColor: Color(0xFF192841),
+                                controller: _controller,
+                                selectionColor: Colors.red.shade400,
+                                view: DateRangePickerView.month,
+                                headerHeight: 0,
+                                cellBuilder: cellBuilder,
+                                monthViewSettings:
+                                    DateRangePickerMonthViewSettings(
+                                        viewHeaderHeight: 0,
+                                        numberOfWeeksInView: 1),
+                              ),
+                            ],
+                          ),
+                        ));
+                  }),
+            ),*/
           ],
         ),
       ),

@@ -263,32 +263,33 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    // return AlertDialog(
-                    //   content: Padding(
-                    //     padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
-                    //     child: TextWidget(
-                    //       textAlign: TextAlign.center,
-                    //       text: 'Management will edit vehicle size as price will depends on the vehicle size',
-                    //       textSize: MyFontSize.size17,
-                    //       fontWeight: MyFontWeight.semiBold,
-                    //     ),
-                    //   ),
-                    //   actions: [
-                    //     Padding(
-                    //       padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
-                    //       child: DefaultButton(
-                    //         width: 225,
-                    //         height: 32,
-                    //         text: 'Ok',
-                    //         onPressed: (){
-                    //           Navigator.pop(context);
-                    //           },
-                    //       ),
-                    //     ),
-                    //
-                    //   ],
-                    // );
                     return AlertDialog(
+                      content: Padding(
+                        padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
+                        child: TextWidget(
+                          textAlign: TextAlign.center,
+                          text: 'Management will edit vehicle size as price will depends on the vehicle size',
+                          textSize: MyFontSize.size17,
+                          fontWeight: MyFontWeight.semiBold,
+                        ),
+                      ),
+                      actions: [
+                        Padding(
+                          padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
+                          child: DefaultButton(
+                            width: 225,
+                            height: 32,
+                            text: 'Ok',
+                            onPressed: (){
+                              Navigator.pop(context);
+                              navigateTo(context, const MonthlyPlans());
+                              },
+                          ),
+                        ),
+
+                      ],
+                    );
+                   /* return AlertDialog(
                       title: TextWidget(
                         textAlign: TextAlign.center,
                         text: 'The packages is not available now',
@@ -334,7 +335,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                           ),
                         ),
                       ],
-                    );
+                    );*/
                   },
                 );
               },

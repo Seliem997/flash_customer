@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
@@ -23,6 +24,7 @@ import '../services/other_services.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
 import '../widgets/text_widget.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -188,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: 'Products',
                     textColor: AppColor.black,
                     onPressed: loggedIn
-                        ? () {}
+                        ? _launchUrl
                         : () {
                             navigateTo(context, const RegisterPhoneNumber());
                           },
@@ -299,5 +301,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Image.asset('assets/images/logo.png')),
             ],
           );
+  }
+}
+
+final Uri _url = Uri.parse('https://flashwashstore.com/');
+
+Future<void> _launchUrl() async {
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
   }
 }

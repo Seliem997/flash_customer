@@ -53,6 +53,7 @@ class OtherServicesItem extends StatelessWidget {
           verticalSpace(11),
           TextWidget(
             text: title,
+            textAlign: TextAlign.center,
             fontWeight: FontWeight.bold,
             textSize: MyFontSize.size9,
           ),
