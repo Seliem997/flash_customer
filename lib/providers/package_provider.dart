@@ -31,6 +31,7 @@ class PackageProvider with ChangeNotifier{
   List<ManufacturerData> manufacturerDataList = [];
   Future getManufacturers() async {
     PackageService packageService = PackageService();
+    resetDropDownValues();
     await packageService.getManufacturers().then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;
@@ -44,7 +45,6 @@ class PackageProvider with ChangeNotifier{
     selectedManufacture = manufacture;
     notifyListeners();
   }
-
 
   VehiclesModelsData? selectedVehicleModel;
 
@@ -63,6 +63,14 @@ class PackageProvider with ChangeNotifier{
     selectedVehicleModel = vehicle;
     notifyListeners();
   }
+
+
+  void resetDropDownValues(){
+    selectedVehicleModel = null;
+    selectedManufacture = null;
+    notifyListeners();
+  }
+
 
   bool newVehicleLabel = true;
   bool myVehicleLabel = false;

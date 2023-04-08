@@ -10,18 +10,21 @@ class AppColor {
   static const Color buttonGrey = Color(0xFFD9D9D9);
   static const Color subTitleGrey = Color(0xFF484850);
   static const Color textGrey = Color(0xFF5A5A5A);
+  static const Color subTextGrey = Color(0xFF393939);
   static const Color borderGrey = Color(0xffCCCCCC);
   static const Color borderGreyLight = Color(0xffECECEC);
+  static const Color borderGreyBold = Color(0xffCDCDCD);
   static const Color borderBlue = Color(0xff0285E0);
   static const Color acceptGreen = Color(0xffCBFFAB);
   static const Color canceledRed = Color(0xffFFC0C3);
   static const Color textRed = Color(0xffB85F66);
 
+  static const Color boldGreen = Color(0xff6BB85F);
   static const Color boldBlue = Color(0xff006996);
   static const Color boldGrey = Color(0xff565656);
   static const Color lightGrey = Color(0xff929292);
-  static const Color lightBabyBlue = Color(0xFFC7E4F8);
   static const Color babyBlue = Color(0xFF55B9FE);
+  static const Color lightBabyBlue = Color(0xFFC7E4F8);
   static const Color lightRed = Color(0xFFFF3F48);
   static const Color boldDark = Color(0xFF202124);
 

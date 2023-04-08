@@ -8,7 +8,8 @@ import '../utils/enum/statuses.dart';
 
 class ServicesProvider with ChangeNotifier{
 
-  bool onCheck = false;
+
+  int? selectedBasicIndex;
 
   List<BasicServicesData> basicServicesList = [];
   Future getBasicServices() async {
@@ -21,8 +22,9 @@ class ServicesProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void checkBasicService(){
-    onCheck = !onCheck;
+  void selectedBasicService({required int index}){
+    selectedBasicIndex = index;
+
     notifyListeners();
   }
 

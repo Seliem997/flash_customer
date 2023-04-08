@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/services_provider.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_container.dart';
@@ -12,23 +14,24 @@ class BasicServicesWidget extends StatelessWidget {
     this.infoOnPressed,
     required this.title,
     required this.imageName,
-    this.onCheck = false,
-    this.onTap,
+    this.onTap, required this.index,
   });
 
   final VoidCallback? infoOnPressed;
   final String title, imageName;
-  final bool onCheck;
+  final int index;
   final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final ServicesProvider servicesProvider =
+    Provider.of<ServicesProvider>(context);
     return CustomContainer(
       height: 59,
       width: 313,
       onTap: onTap,
       backgroundColor:
-          onCheck ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
+         servicesProvider.selectedBasicIndex == index ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
       radiusCircular: 4,
       child: Row(
         children: [
@@ -57,14 +60,14 @@ class BasicServicesWidget extends StatelessWidget {
               bottom: 20,
               top: 20,
             ),
-            child: onCheck
+            child: servicesProvider.selectedBasicIndex == index
                 ? Image.asset('assets/images/checkIcon.png')
                 : const CustomContainer(
                     radiusCircular: 5,
                     backgroundColor: Colors.transparent,
                     height: 19,
                     width: 20,
-                    borderColor: Color(0xFF393939),
+                    borderColor: AppColor.subTextGrey,
                   ),
           )
         ],
@@ -155,7 +158,7 @@ class ExtraServicesWidget extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       height: 19,
                       width: 20,
-                      borderColor: Color(0xFF393939),
+                      borderColor: AppColor.subTextGrey,
                     ),
                   ),
           )

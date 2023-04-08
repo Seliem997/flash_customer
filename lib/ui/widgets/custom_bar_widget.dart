@@ -16,10 +16,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final bool withArrow;
   final Color? backgroundColor;
+  final Widget customizePopButton;
 
   CustomAppBar({
     Key? key,
     this.withArrow = true,
+    this.customizePopButton = const SizedBox(),
     required this.title,
     this.backgroundColor,
   })  : preferredSize = const Size.fromHeight(50.0),
@@ -46,7 +48,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               color: Colors.black,
               iconSize: 20.0,
             )
-          : Container(),
+          : customizePopButton,
       centerTitle: true,
       titleSpacing: 0,
       elevation: 0,

@@ -173,7 +173,7 @@ class EditProfile extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    backgroundColor: const Color(0xFF6BB85F),
+                                    backgroundColor: AppColor.boldGreen,
                                   ),
                                   DefaultButton(
                                     width: 130,

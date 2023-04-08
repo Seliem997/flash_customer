@@ -8,10 +8,12 @@ import 'package:provider/provider.dart';
 
 import '../../providers/services_provider.dart';
 import '../../utils/styles/colors.dart';
+import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form.dart';
 import '../widgets/data_loader.dart';
+import '../widgets/navigate.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({Key? key}) : super(key: key);
@@ -75,9 +77,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         imageName:
                             servicesProvider.basicServicesList[index].image!,
                       onTap: (){
-                        servicesProvider.checkBasicService();
+
+                        servicesProvider.selectedBasicService(index: index);
                       },
-                      onCheck: servicesProvider.onCheck,
+                      index: index,
                       infoOnPressed: (){
                         showDialog(
                           context: context,
@@ -103,7 +106,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        backgroundColor: const Color(0xFF6BB85F),
+                                        backgroundColor: AppColor.boldGreen,
                                       ),
                                     ],
                                   ),
@@ -148,9 +151,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       imageName:
                       servicesProvider.extraServicesList[index].image!,
                       onTap: (){
-                        servicesProvider.checkBasicService();
+                        // servicesProvider.checkBasicService();
                       },
-                      onCheck: servicesProvider.onCheck,
+                      index: index,
                       infoOnPressed: (){
                         showDialog(
                           context: context,
@@ -176,7 +179,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        backgroundColor: const Color(0xFF6BB85F),
+                                        backgroundColor: AppColor.boldGreen,
                                       ),
                                     ],
                                   ),
@@ -295,7 +298,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   backgroundColor: Colors.transparent,
                                   height: 19,
                                   width: 20,
-                                  borderColor: Color(0xFF393939),
+                                  borderColor: AppColor.subTextGrey,
                                 ),
                               )
                             ],
@@ -343,7 +346,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   backgroundColor: Colors.transparent,
                                   height: 19,
                                   width: 20,
-                                  borderColor: Color(0xFF393939),
+                                  borderColor: AppColor.subTextGrey,
                                 ),
                               )
                             ],
@@ -391,7 +394,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   backgroundColor: Colors.transparent,
                                   height: 19,
                                   width: 20,
-                                  borderColor: Color(0xFF393939),
+                                  borderColor: AppColor.subTextGrey,
                                 ),
                               )
                             ],
@@ -532,7 +535,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 text: 'Book',
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
-                onPressed: () {},
+                onPressed: () {
+                  navigateTo(context, const RequestDetails());
+                },
               ),
             ],
           ),

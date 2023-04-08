@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../providers/otherServices_provider.dart';
+import '../../utils/styles/colors.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/data_loader.dart';
@@ -118,7 +119,7 @@ class _OtherServicesState extends State<OtherServices> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  backgroundColor: const Color(0xFF6BB85F),
+                                  backgroundColor: AppColor.boldGreen,
                                 ),
                               ],
                             ),
