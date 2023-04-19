@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/servicesModel.dart';
+import '../../../models/servicesModel2.dart';
 import '../../../providers/requestServices_provider.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
@@ -14,7 +16,8 @@ class BasicServicesWidget extends StatelessWidget {
     this.infoOnPressed,
     required this.title,
     required this.imageName,
-    this.onTap, required this.index,
+    this.onTap,
+    required this.index,
   });
 
   final VoidCallback? infoOnPressed;
@@ -25,13 +28,14 @@ class BasicServicesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RequestServicesProvider servicesProvider =
-    Provider.of<RequestServicesProvider>(context);
+        Provider.of<RequestServicesProvider>(context);
     return CustomContainer(
       height: 59,
       width: 313,
       onTap: onTap,
-      backgroundColor:
-         servicesProvider.selectedBasicIndex == index ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
+      backgroundColor: servicesProvider.selectedBasicIndex == index
+          ? const Color(0xFFE1ECFF)
+          : const Color(0xFFD1D1D1),
       radiusCircular: 4,
       child: Row(
         children: [
@@ -65,8 +69,8 @@ class BasicServicesWidget extends StatelessWidget {
                 : const CustomContainer(
                     radiusCircular: 5,
                     backgroundColor: Colors.transparent,
-                    height: 19,
-                    width: 20,
+                    height: 17,
+                    width: 17,
                     borderColor: AppColor.subTextGrey,
                   ),
           )
@@ -77,27 +81,23 @@ class BasicServicesWidget extends StatelessWidget {
 }
 
 class ExtraServicesWidget extends StatelessWidget {
-  const ExtraServicesWidget({
-    super.key,
-    this.infoOnPressed,
-    required this.title,
-    required this.imageName,
-    this.onCheck = false,
-    this.onTap,
-    this.isCounted = false,
-  });
+  const ExtraServicesWidget(
+      {super.key, this.infoOnPressed, this.onTap, required this.extraService});
 
   final VoidCallback? infoOnPressed;
-  final String title, imageName;
-  final bool onCheck, isCounted;
   final GestureTapCallback? onTap;
+  final ServiceData extraService;
 
   @override
   Widget build(BuildContext context) {
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context);
     return CustomContainer(
       height: 59,
       width: 313,
-      backgroundColor: onCheck ? const Color(0xFFE1ECFF) : const Color(0xFFD1D1D1),
+      backgroundColor: extraService.isSelected || extraService.quantity > 0
+          ? const Color(0xFFE1ECFF)
+          : const Color(0xFFD1D1D1),
       radiusCircular: 4,
       child: Row(
         children: [
@@ -109,13 +109,13 @@ class ExtraServicesWidget extends StatelessWidget {
             ),
           ),
           CustomSizedBox(
-              height: 35,
-              width: 35,
-              child: Image.network(imageName),
+            height: 35,
+            width: 35,
+            child: Image.network(extraService.image!),
           ),
           horizontalSpace(12),
           TextWidget(
-            text: title,
+            text: extraService.title!,
             textSize: MyFontSize.size12,
             fontWeight: MyFontWeight.semiBold,
           ),
@@ -123,41 +123,69 @@ class ExtraServicesWidget extends StatelessWidget {
           Padding(
             padding: onlyEdgeInsets(
               end: 20,
-              bottom: 20,
-              top: 20,
+              // bottom: 20,
+              // top: 20,
             ),
-            child: isCounted
+            child: extraService.countable!
                 ? Row(
                     children: [
-                      CustomSizedBox(
-                        width: 18,
-                        height: 23,
-                        child: Image.asset('assets/images/minus.png'),
+                      CustomContainer(
+                        onTap: () {
+                          if (extraService.quantity > 0) {
+                            extraService.quantity--;
+                            requestServicesProvider.notifyListeners();
+                          }
+                        },
+                        width: 20,
+                        height: 20,
+                        clipBehavior: Clip.hardEdge,
+                        borderRadius: BorderRadius.zero,
+                        backgroundColor: Colors.transparent,
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/minus.png'),
+                            fit: BoxFit.fitHeight),
                       ),
                       horizontalSpace(9),
                       TextWidget(
-                        text: '1',
+                        text: extraService.quantity.toString(),
                         fontWeight: MyFontWeight.bold,
                         textSize: MyFontSize.size12,
                       ),
                       horizontalSpace(9),
-                      CustomSizedBox(
-                        width: 18,
-                        height: 23,
-                        child: Image.asset('assets/images/plus.png'),
+                      CustomContainer(
+                        onTap: () {
+                          extraService.quantity++;
+                          requestServicesProvider.notifyListeners();
+                        },
+                        width: 20,
+                        height: 20,
+                        clipBehavior: Clip.hardEdge,
+                        borderRadius: BorderRadius.zero,
+                        backgroundColor: Colors.transparent,
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/plus.png'),
+                            fit: BoxFit.fitHeight),
                       ),
                     ],
                   )
-                : Padding(
-              padding: onlyEdgeInsets(end: 20,),
-                  child: const CustomContainer(
-              radiusCircular: 5,
-              backgroundColor: Colors.transparent,
-              height: 19,
-              width: 20,
-              borderColor: AppColor.subTextGrey,
-            ),
-                ),
+                : CustomContainer(
+                    onTap: () {
+                      extraService.isSelected = !extraService.isSelected;
+                      requestServicesProvider.notifyListeners();
+                    },
+                    radiusCircular: 5,
+                    backgroundColor: extraService.isSelected
+                        ? AppColor.primary
+                        : Colors.transparent,
+                    height: 17,
+                    width: 17,
+                    borderColor: extraService.isSelected
+                        ? AppColor.primary
+                        : AppColor.subTextGrey,
+                    child: extraService.isSelected
+                        ? const Icon(Icons.check, color: Colors.white, size: 13)
+                        : Container(),
+                  ),
           )
         ],
       ),

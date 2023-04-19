@@ -30,7 +30,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   void loadData() async {
     final TransactionHistoryProvider transactionHistoryProvider =
-    Provider.of<TransactionHistoryProvider>(context, listen: false);
+        Provider.of<TransactionHistoryProvider>(context, listen: false);
     await transactionHistoryProvider.getTransactionHistory();
   }
 
@@ -45,7 +45,8 @@ class _WalletScreenState extends State<WalletScreen> {
         title: 'My Wallet',
         backgroundColor: AppColor.lightBabyBlue,
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           CustomContainer(
             borderRadius: const BorderRadius.only(
@@ -136,16 +137,16 @@ class _WalletScreenState extends State<WalletScreen> {
                 transactionHistoryProvider.transactionData == null
                     ? const DataLoader()
                     : CustomSizedBox(
-                  height: 300,
-                      child: ListView.separated(
+                        height: 300,
+                        child: ListView.separated(
                           itemCount: transactionHistoryProvider
                               .transactionData!.collection!.length,
                           itemBuilder: (context, index) => CustomContainer(
                             height: 60,
                             width: 345,
                             radiusCircular: 4,
-                            padding:
-                                symmetricEdgeInsets(horizontal: 16, vertical: 12),
+                            padding: symmetricEdgeInsets(
+                                horizontal: 16, vertical: 12),
                             /*backgroundColor: int.parse(transactionHistoryProvider
                                         .transactionData!
                                         .collection![index]
@@ -158,7 +159,8 @@ class _WalletScreenState extends State<WalletScreen> {
                               child: Row(
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       TextWidget(
                                         text: transactionHistoryProvider
@@ -207,9 +209,10 @@ class _WalletScreenState extends State<WalletScreen> {
                               ),
                             ),
                           ),
-                          separatorBuilder: (context, index) => verticalSpace(14),
+                          separatorBuilder: (context, index) =>
+                              verticalSpace(14),
                         ),
-                    ),
+                      ),
               ],
             ),
           )

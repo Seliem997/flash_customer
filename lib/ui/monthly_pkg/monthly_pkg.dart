@@ -34,262 +34,266 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
   }
 
   void loadData() async {
-    final PackageProvider packageProvider=Provider.of<PackageProvider>(context, listen: false);
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
   }
 
   @override
   Widget build(BuildContext context) {
-    final PackageProvider packageProvider=Provider.of<PackageProvider>(context);
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Monthly pkg'),
       body: packageProvider.manufacturerDataList.isEmpty
           ? const DataLoader()
           : Padding(
-        padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CustomContainer(
-                  padding: symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                  backgroundColor: AppColor.borderGrey,
-                  borderColor: AppColor.babyBlue,
-                  width: 162,
-                  height: 112,
-                  radiusCircular: 6,
-                  child: Column(
+              padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      CustomSizedBox(
-                        width: 50,
-                          height: 50,
-                          child: Image.asset('assets/images/new_car.png'),),
-                      verticalSpace(8),
-                      TextWidget(
-                        text: 'New Car',
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size18,
-                      )
+                      CustomContainer(
+                        padding:
+                            symmetricEdgeInsets(horizontal: 18, vertical: 15),
+                        backgroundColor: AppColor.borderGrey,
+                        borderColor: AppColor.babyBlue,
+                        width: 162,
+                        height: 112,
+                        radiusCircular: 6,
+                        child: Column(
+                          children: [
+                            CustomSizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Image.asset('assets/images/new_car.png'),
+                            ),
+                            verticalSpace(8),
+                            TextWidget(
+                              text: 'New Car',
+                              fontWeight: MyFontWeight.semiBold,
+                              textSize: MyFontSize.size18,
+                            )
+                          ],
+                        ),
+                      ),
+                      horizontalSpace(21),
+                      CustomContainer(
+                        backgroundColor: AppColor.borderGreyLight,
+                        width: 162,
+                        height: 112,
+                        padding:
+                            symmetricEdgeInsets(horizontal: 18, vertical: 15),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Padding(
+                                  padding: onlyEdgeInsets(
+                                      top: 40, bottom: 32, end: 38, start: 38),
+                                  child: TextWidget(
+                                    textAlign: TextAlign.center,
+                                    text:
+                                        'Management will edit vehicle size as price will depends on the vehicle size',
+                                    textSize: MyFontSize.size17,
+                                    fontWeight: MyFontWeight.semiBold,
+                                  ),
+                                ),
+                                actions: [
+                                  Padding(
+                                    padding: onlyEdgeInsets(
+                                        top: 0, bottom: 40, end: 48, start: 48),
+                                    child: DefaultButton(
+                                      width: 225,
+                                      height: 32,
+                                      text: 'Ok',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        radiusCircular: 6,
+                        child: Column(
+                          children: [
+                            CustomSizedBox(
+                              width: 50,
+                              height: 50,
+                              child:
+                                  Image.asset('assets/images/my_vehicles.png'),
+                            ),
+                            verticalSpace(8),
+                            TextWidget(
+                              text: 'My Vehicles',
+                              fontWeight: MyFontWeight.semiBold,
+                              textSize: MyFontSize.size18,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                horizontalSpace(21),
-                CustomContainer(
-                  backgroundColor: AppColor.borderGreyLight,
-                  width: 162,
-                  height: 112,
-                  padding: symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                  onTap: (){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Padding(
-                            padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
-                            child: TextWidget(
-                              textAlign: TextAlign.center,
-                              text: 'Management will edit vehicle size as price will depends on the vehicle size',
-                              textSize: MyFontSize.size17,
-                              fontWeight: MyFontWeight.semiBold,
-                            ),
-                          ),
-                          actions: [
-                            Padding(
-                              padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
-                              child: DefaultButton(
-                                width: 225,
-                                height: 32,
-                                text: 'Ok',
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                  },
+                  verticalSpace(56),
+                  Row(
+                    children: [
+                      TextWidget(
+                          text: 'Select Manufacturer',
+                          textSize: MyFontSize.size18,
+                          fontWeight: MyFontWeight.medium),
+                      horizontalSpace(6),
+                      TextWidget(
+                        text: '(Required)',
+                        textSize: MyFontSize.size8,
+                        fontWeight: MyFontWeight.regular,
+                        color: AppColor.lightGrey,
+                      ),
+                    ],
+                  ),
+                  verticalSpace(10),
+                  CustomContainer(
+                    width: double.infinity,
+                    height: 40,
+                    radiusCircular: 3,
+                    borderColor: const Color(0xFF979797),
+                    backgroundColor: AppColor.borderGreyLight,
+                    padding: symmetricEdgeInsets(horizontal: 20),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: packageProvider.selectedManufacture,
+                        iconEnabledColor: Colors.black,
+                        hint: TextWidget(
+                          text: 'Select',
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size10,
+                          color: const Color(0xFF909090),
+                        ),
+                        icon: SvgPicture.asset(
+                          'assets/svg/arrow_down.svg',
+                        ),
+                        items: List.generate(
+                            packageProvider.manufacturerDataList.length,
+                            (index) => DropdownMenuItem<ManufacturerData>(
+                                value:
+                                    packageProvider.manufacturerDataList[index],
+                                child: Text(
+                                    packageProvider
+                                        .manufacturerDataList[index].name!,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16)))),
+                        onChanged: (value) async {
+                          packageProvider.setSelectedManufacture(value!);
+                          AppLoader.showLoader(context);
+                          await packageProvider
+                              .getVehiclesModels(manufactureId: value.id!)
+                              .then((result) {
+                            AppLoader.stopLoader();
+                          });
+                        },
+                        menuMaxHeight: 25.h,
+                      ),
+                    ),
+                  ),
+                  verticalSpace(24),
+                  Row(
+                    children: [
+                      TextWidget(
+                          text: 'Model',
+                          textSize: MyFontSize.size18,
+                          fontWeight: MyFontWeight.medium),
+                      horizontalSpace(6),
+                      TextWidget(
+                        text: '(Required)',
+                        textSize: MyFontSize.size8,
+                        fontWeight: MyFontWeight.regular,
+                        color: AppColor.lightGrey,
+                      ),
+                    ],
+                  ),
+                  verticalSpace(10),
+                  CustomContainer(
+                    width: double.infinity,
+                    height: 40,
+                    radiusCircular: 3,
+                    borderColor: const Color(0xFF979797),
+                    backgroundColor: AppColor.borderGreyLight,
+                    padding: symmetricEdgeInsets(horizontal: 20),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: packageProvider.selectedVehicleModel,
+                        iconEnabledColor: Colors.black,
+                        hint: TextWidget(
+                          text: 'Select',
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size10,
+                          color: const Color(0xFF909090),
+                        ),
+                        icon: SvgPicture.asset(
+                          'assets/svg/arrow_down.svg',
+                        ),
+                        items: List.generate(
+                            packageProvider.vehiclesModelsDataList.length,
+                            (index) => DropdownMenuItem<VehiclesModelsData>(
+                                value: packageProvider
+                                    .vehiclesModelsDataList[index],
+                                child: Text(
+                                    packageProvider
+                                        .vehiclesModelsDataList[index].name!,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16)))),
+                        onChanged: (value) async {
+                          packageProvider.setSelectedVehicle(value!);
+                        },
+                        menuMaxHeight: 25.h,
+                      ),
+                    ),
+                  ),
+                  verticalSpace(72),
+                  DefaultButton(
+                    height: 48,
+                    width: double.infinity,
+                    fontWeight: MyFontWeight.bold,
+                    fontSize: MyFontSize.size20,
+                    text: 'Next',
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Padding(
+                              padding: onlyEdgeInsets(
+                                  top: 40, bottom: 32, end: 38, start: 38),
+                              child: TextWidget(
+                                textAlign: TextAlign.center,
+                                text:
+                                    'Management will edit vehicle size as price will depends on the vehicle size',
+                                textSize: MyFontSize.size17,
+                                fontWeight: MyFontWeight.semiBold,
                               ),
                             ),
-
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  radiusCircular: 6,
-                  child: Column(
-                    children: [
-                      CustomSizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset('assets/images/my_vehicles.png'),),
-                      verticalSpace(8),
-                      TextWidget(
-                        text: 'My Vehicles',
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size18,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            verticalSpace(56),
-            Row(
-              children: [
-                TextWidget(
-                    text: 'Select Manufacturer',
-                    textSize: MyFontSize.size18,
-                    fontWeight: MyFontWeight.medium),
-                horizontalSpace(6),
-                TextWidget(
-                  text: '(Required)',
-                  textSize: MyFontSize.size8,
-                  fontWeight: MyFontWeight.regular,
-                  color: AppColor.lightGrey,
-                ),
-              ],
-            ),
-            verticalSpace(10),
-            CustomContainer(
-              width: double.infinity,
-              height: 40,
-              radiusCircular: 3,
-              borderColor: const Color(0xFF979797),
-              backgroundColor: AppColor.borderGreyLight,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: packageProvider.selectedManufacture,
-                  iconEnabledColor: Colors.black,
-                  hint: TextWidget(
-                    text: 'Select',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size10,
-                    color: const Color(0xFF909090),
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/svg/arrow_down.svg',
-                  ),
-                  items: List.generate(
-                      packageProvider
-                          .manufacturerDataList.length,
-                          (index) => DropdownMenuItem<ManufacturerData>(
-                          value: packageProvider
-                              .manufacturerDataList[index],
-                          child: Text(
-                              packageProvider
-                                  .manufacturerDataList[index].name!,
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16)))),
-                  onChanged: (value) async {
-                    packageProvider
-                        .setSelectedManufacture(value!);
-                  AppLoader.showLoader(context);
-                  await packageProvider
-                      .getVehiclesModels(manufactureId: value.id!)
-                      .then((result) {
-                    AppLoader.stopLoader();
-
-                  });
-                  },
-                  menuMaxHeight: 25.h,
-                ),
-              ),
-            ),
-
-            verticalSpace(24),
-            Row(
-              children: [
-                TextWidget(
-                    text: 'Model',
-                    textSize: MyFontSize.size18,
-                    fontWeight: MyFontWeight.medium),
-                horizontalSpace(6),
-                TextWidget(
-                  text: '(Required)',
-                  textSize: MyFontSize.size8,
-                  fontWeight: MyFontWeight.regular,
-                  color: AppColor.lightGrey,
-                ),
-              ],
-            ),
-            verticalSpace(10),
-            CustomContainer(
-              width: double.infinity,
-              height: 40,
-              radiusCircular: 3,
-              borderColor: const Color(0xFF979797),
-              backgroundColor: AppColor.borderGreyLight,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: packageProvider.selectedVehicleModel,
-                  iconEnabledColor: Colors.black,
-                  hint: TextWidget(
-                    text: 'Select',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size10,
-                    color: const Color(0xFF909090),
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/svg/arrow_down.svg',
-                  ),
-                  items: List.generate(
-                      packageProvider
-                          .vehiclesModelsDataList.length,
-                          (index) => DropdownMenuItem<VehiclesModelsData>(
-                          value: packageProvider
-                              .vehiclesModelsDataList[index],
-                          child: Text(
-                              packageProvider
-                                  .vehiclesModelsDataList[index].name!,
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16)))),
-                  onChanged: (value) async {
-                    packageProvider
-                        .setSelectedVehicle(value!);
-                  },
-                  menuMaxHeight: 25.h,
-                ),
-              ),
-            ),
-
-            verticalSpace(72),
-            DefaultButton(
-              height: 48,
-              width: double.infinity,
-              fontWeight: MyFontWeight.bold,
-              fontSize: MyFontSize.size20,
-              text: 'Next',
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Padding(
-                        padding: onlyEdgeInsets(top: 40,bottom: 32, end: 38, start: 38),
-                        child: TextWidget(
-                          textAlign: TextAlign.center,
-                          text: 'Management will edit vehicle size as price will depends on the vehicle size',
-                          textSize: MyFontSize.size17,
-                          fontWeight: MyFontWeight.semiBold,
-                        ),
-                      ),
-                      actions: [
-                        Padding(
-                          padding: onlyEdgeInsets(top: 0,bottom: 40, end: 48, start: 48),
-                          child: DefaultButton(
-                            width: 225,
-                            height: 32,
-                            text: 'Ok',
-                            onPressed: (){
-                              Navigator.pop(context);
-                              navigateTo(context, const MonthlyPlans());
-                              },
-                          ),
-                        ),
-
-                      ],
-                    );
-                   /* return AlertDialog(
+                            actions: [
+                              Padding(
+                                padding: onlyEdgeInsets(
+                                    top: 0, bottom: 40, end: 48, start: 48),
+                                child: DefaultButton(
+                                  width: 225,
+                                  height: 32,
+                                  text: 'Ok',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    navigateTo(context, const MonthlyPlans());
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                          /* return AlertDialog(
                       title: TextWidget(
                         textAlign: TextAlign.center,
                         text: 'The packages is not available now',
@@ -336,13 +340,13 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                         ),
                       ],
                     );*/
-                  },
-                );
-              },
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

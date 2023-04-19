@@ -1,6 +1,6 @@
-
 import 'dart:developer';
 
+import 'package:flash_customer/models/servicesModel2.dart';
 import 'package:flash_customer/models/taxModel.dart';
 
 import '../base/service/base_service.dart';
@@ -12,13 +12,11 @@ import '../utils/enum/request_types.dart';
 import '../utils/enum/statuses.dart';
 
 class RequestServicesService extends BaseService {
-
   Future<ResponseResult> getBasicServices() async {
     Status result = Status.error;
-    Map<String, String> headers = const {
-      'Content-Type': 'application/json'};
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
 
-    List<BasicServicesData> basicServicesDataList = [];
+    List<ServiceData> basicServicesDataList = [];
     try {
       await requestFutureData(
           api: Api.getBasicServices,
@@ -29,8 +27,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              basicServicesDataList = BasicServicesModel.fromJson(response).data!;
-
+              basicServicesDataList = ServicesModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Services Data\n$e");
             }
@@ -44,10 +41,9 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> getExtraServices() async {
     Status result = Status.error;
-    Map<String, String> headers = const {
-      'Content-Type': 'application/json'};
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
 
-    List<ExtraServiceData> extraServicesDataList = [];
+    List<ServiceData> extraServicesDataList = [];
     try {
       await requestFutureData(
           api: Api.getExtraServices,
@@ -58,8 +54,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              extraServicesDataList = ExtraServicesModel.fromJson(response).data!;
-
+              extraServicesDataList = ServicesModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Services Data\n$e");
             }
@@ -73,8 +68,7 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> getTax() async {
     Status result = Status.error;
-    Map<String, String> headers = const {
-      'Content-Type': 'application/json'};
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
 
     TaxData? taxData;
     try {
@@ -87,8 +81,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              taxData =TaxModel.fromJson(response).data!;
-
+              taxData = TaxModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Tax Data\n$e");
             }
@@ -100,15 +93,12 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, taxData);
   }
 
-
   Future<ResponseResult> checkCoupon({
     required String discountCode,
   }) async {
     Status status = Status.error;
     Map<String, String> header = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "offer_code": discountCode
-    };
+    Map<String, dynamic> body = {"offer_code": discountCode};
     CouponData? couponData;
     try {
       await requestFutureData(
@@ -122,10 +112,8 @@ class RequestServicesService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               couponData = OfferCouponModel.fromJson(response).data!;
-
             } else if (response["status_code"] == 422) {
               status = Status.codeNotCorrect;
-
             }
           });
     } catch (e) {
@@ -134,7 +122,4 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(status, couponData);
   }
-
-
-
 }

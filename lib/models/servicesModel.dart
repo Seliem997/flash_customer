@@ -35,7 +35,8 @@ class BasicServicesData {
   String? type;
   int? duration;
 
-  BasicServicesData({this.id, this.title, this.image, this.info, this.type, this.duration});
+  BasicServicesData(
+      {this.id, this.title, this.image, this.info, this.type, this.duration});
 
   BasicServicesData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -95,15 +96,17 @@ class ExtraServiceData {
   String? type;
   int? duration;
   bool? countable;
+  bool isSelected = false;
+  int quantity = 0;
 
   ExtraServiceData(
       {this.id,
-        this.title,
-        this.image,
-        this.info,
-        this.type,
-        this.duration,
-        this.countable});
+      this.title,
+      this.image,
+      this.info,
+      this.type,
+      this.duration,
+      this.countable});
 
   ExtraServiceData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

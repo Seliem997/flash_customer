@@ -5,6 +5,9 @@ import '../services/myVehicles_service.dart';
 import '../utils/enum/statuses.dart';
 
 class MyVehiclesProvider with ChangeNotifier {
+  MyVehiclesService myVehiclesService = MyVehiclesService();
+  bool loadingMyVehicles = true;
+  MyVehiclesData? myVehiclesData;
 
   Future addNewVehicle({
     required String vehicleTypeId,
@@ -16,8 +19,8 @@ class MyVehiclesProvider with ChangeNotifier {
     required String name,
     required String year,
   }) async {
-    MyVehiclesService myVehiclesService = MyVehiclesService();
-    await myVehiclesService.addVehicle(
+    await myVehiclesService
+        .addVehicle(
       vehicleTypeId: vehicleTypeId,
       manufacture: manufacture,
       model: model,
@@ -26,18 +29,20 @@ class MyVehiclesProvider with ChangeNotifier {
       color: color,
       name: name,
       year: year,
-    ).then((value) {
+    )
+        .then((value) {
       if (value.status == Status.success) {
         print('Added New Vehicle In Provider Successfully');
       }
     });
   }
 
-
-  MyVehiclesData? myVehiclesData;
   Future getMyVehicles() async {
-    MyVehiclesService myVehiclesService = MyVehiclesService();
+    myVehiclesData = null;
+    loadingMyVehicles = true;
+    notifyListeners();
     await myVehiclesService.getMyVehicles().then((value) {
+      loadingMyVehicles = false;
       if (value.status == Status.success) {
         myVehiclesData = value.data;
       }

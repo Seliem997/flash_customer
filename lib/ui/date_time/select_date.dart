@@ -90,7 +90,7 @@ class _SelectDateState extends State<SelectDate> {
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size15,
                 ),
-               /* const Spacer(),
+                /* const Spacer(),
                 CustomContainer(
                   width: 55,
                   height: 24,
@@ -304,7 +304,7 @@ class _SelectDateState extends State<SelectDate> {
                 ],
               ),
             ),*/
-           /* verticalSpace(40),
+            /* verticalSpace(40),
             CustomSizedBox(
               height: 400,
               child: ListView.builder(
@@ -382,7 +382,6 @@ class _SelectDateState extends State<SelectDate> {
             ),
           ],
         ),
-        
       ),
     );
   }

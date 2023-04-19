@@ -3,6 +3,7 @@ import 'package:flash_customer/models/vehiclesModelsModel.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/ui/widgets/no_data_place_holder.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/styles/colors.dart';
-import '../services/services.dart';
+import '../services/services_screen.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
@@ -41,7 +42,6 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<MyVehiclesProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
-
     await myVehiclesProvider.getMyVehicles();
   }
 
@@ -127,10 +127,12 @@ class _VehicleTypesState extends State<VehicleTypes> {
                         child: NewVehiclesScreenWidget(
                             packageProvider: packageProvider),
                       )
-                : myVehiclesProvider.myVehiclesData == null
-                    ? const DataLoader()
-                    : MyVehiclesScreenWidget(
-                        myVehiclesProvider: myVehiclesProvider),
+                : myVehiclesProvider.loadingMyVehicles
+                    ? const DataLoader(useExpand: true)
+                    : myVehiclesProvider.myVehiclesData == null
+                        ? const NoDataPlaceHolder()
+                        : MyVehiclesScreenWidget(
+                            myVehiclesProvider: myVehiclesProvider),
             packageProvider.newVehicleLabel
                 ? Visibility(
                     visible: packageProvider.manufacturerDataList.isEmpty,

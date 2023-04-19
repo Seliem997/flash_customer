@@ -9,5 +9,12 @@
   "continueText": "Continue",
   "areYouSureYouWantToLogout": "Are you sure you want to logout?",
   "logout": "Logout",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "active": "Active",
+  "apply": "Apply",
+  "remove": "Remove",
+  "enterCodeFirst": "Enter code first",
+  "codeIsInvalid": "Code is invalid",
+  "codeNotAccepted": "Code not accepted",
+  "offerAppliedSuccessfully": "Offer applied successfully"
 }

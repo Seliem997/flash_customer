@@ -12,8 +12,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _currentAddress = '';
-
   Position? get currentPosition => _currentPosition;
 
   set currentPosition(Position? value) {
@@ -30,7 +28,7 @@ class HomeProvider with ChangeNotifier {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
 
-    Future<bool> startMarker() async {
+  Future<bool> startMarker() async {
     try {
       double startLatitude = _currentPosition!.latitude;
       double startLongitude = _currentPosition!.longitude;
@@ -48,13 +46,11 @@ class HomeProvider with ChangeNotifier {
           icon: await BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue));
 
-
       // Adding the markers to the list
       markers.clear();
       polylineCoordinates = [];
       polylines = {};
       markers.add(startMarker);
-
 
       return true;
     } catch (e) {
@@ -63,7 +59,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return false;
   }
-
 
   void resetMap() {
     markers.clear();

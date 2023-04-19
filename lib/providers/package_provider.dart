@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../models/manufacturersModel.dart';
@@ -9,16 +7,16 @@ import '../models/vehiclesModelsModel.dart';
 import '../services/package_service.dart';
 import '../utils/enum/statuses.dart';
 
-class PackageProvider with ChangeNotifier{
-
+class PackageProvider with ChangeNotifier {
   bool requiredManufacture = false;
   bool requiredModel = false;
 
-  void setRequiredManufacture(){
+  void setRequiredManufacture() {
     requiredManufacture = true;
     notifyListeners();
   }
-  void setRequiredModel(){
+
+  void setRequiredModel() {
     requiredModel = true;
     notifyListeners();
   }
@@ -51,7 +49,9 @@ class PackageProvider with ChangeNotifier{
   List<VehiclesModelsData> vehiclesModelsDataList = [];
   Future getVehiclesModels({required int manufactureId}) async {
     PackageService packageService = PackageService();
-    await packageService.getVehiclesModels(manufactureId: manufactureId).then((value) {
+    await packageService
+        .getVehiclesModels(manufactureId: manufactureId)
+        .then((value) {
       if (value.status == Status.success) {
         vehiclesModelsDataList = value.data;
       }
@@ -64,28 +64,28 @@ class PackageProvider with ChangeNotifier{
     notifyListeners();
   }
 
-
-  void resetDropDownValues(){
+  void resetDropDownValues() {
+    manufacturerDataList = [];
+    vehiclesModelsDataList = [];
     selectedVehicleModel = null;
     selectedManufacture = null;
     notifyListeners();
   }
 
-
   bool newVehicleLabel = true;
   bool myVehicleLabel = false;
 
-  void selectedNewVehicleLabel(){
+  void selectedNewVehicleLabel() {
     newVehicleLabel = true;
     myVehicleLabel = false;
     notifyListeners();
   }
-  void selectedMyVehicleLabel(){
+
+  void selectedMyVehicleLabel() {
     newVehicleLabel = false;
     myVehicleLabel = true;
     notifyListeners();
   }
-
 
   List<PackagesData> packagesDataList = [];
   Future getPackages() async {
@@ -97,5 +97,4 @@ class PackageProvider with ChangeNotifier{
     });
     notifyListeners();
   }
-
 }

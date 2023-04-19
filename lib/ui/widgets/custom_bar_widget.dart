@@ -56,10 +56,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         Padding(
           padding: onlyEdgeInsets(end: 24),
           child: CustomContainer(
-            height: 26,
+              backgroundColor: Colors.transparent,
+              height: 26,
               width: 26,
-              onTap: (){
-              navigateAndFinish(context, const HomeScreen());
+              onTap: () {
+                navigateAndFinish(context, const HomeScreen());
               },
               child: Image.asset('assets/images/home_icon.png')),
         ),

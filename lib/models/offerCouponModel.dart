@@ -1,4 +1,3 @@
-
 class OfferCouponModel {
   int? statusCode;
   String? message;
@@ -27,7 +26,7 @@ class CouponData {
   int? id;
   String? name;
   String? code;
-  Null? type;
+  String? type;
   String? startDate;
   String? startTime;
   String? endDate;
@@ -37,15 +36,15 @@ class CouponData {
 
   CouponData(
       {this.id,
-        this.name,
-        this.code,
-        this.type,
-        this.startDate,
-        this.startTime,
-        this.endDate,
-        this.endTime,
-        this.discountAmount,
-        this.isActive});
+      this.name,
+      this.code,
+      this.type,
+      this.startDate,
+      this.startTime,
+      this.endDate,
+      this.endTime,
+      this.discountAmount,
+      this.isActive});
 
   CouponData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

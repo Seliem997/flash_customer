@@ -18,6 +18,7 @@ class DefaultFormField extends StatelessWidget {
     this.suffixIcon,
     this.enabled = true,
     this.filled = false,
+    this.withBorder = true,
     this.fillColor,
     this.textColor,
     this.padding,
@@ -44,6 +45,7 @@ class DefaultFormField extends StatelessWidget {
   final TextAlign textAlign;
   final bool isPassword, filled;
   final bool enabled;
+  final bool withBorder;
   final Color? fillColor, textColor;
   final String hintText;
   final String? Function(String?)? validator;
@@ -61,9 +63,11 @@ class DefaultFormField extends StatelessWidget {
               ? filled
                   ? fillColor
                   : null
-              : AppColor.grey,
-          border: Border.all(
-              width: 1, color: filled ? fillColor! : AppColor.borderBlue),
+              : Colors.grey[300],
+          border: withBorder
+              ? Border.all(
+                  width: 1, color: filled ? fillColor! : AppColor.borderBlue)
+              : null,
           borderRadius: BorderRadius.circular(radiusCircular)),
       child: TextFormField(
         controller: controller,
@@ -88,6 +92,7 @@ class DefaultFormField extends StatelessWidget {
           hintText: hintText,
           filled: filled,
           fillColor: fillColor,
+          disabledBorder: InputBorder.none,
           hintStyle: hintStyle ?? TextStyle(color: Colors.grey[500]),
         ),
       ),
