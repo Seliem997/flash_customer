@@ -1,14 +1,18 @@
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+// import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../utils/font_styles.dart';
-import '../../widgets/custom_bar_widget.dart';
-import '../../widgets/spaces.dart';
-import '../../widgets/text_widget.dart';
+import '../requests/request_details.dart';
+import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/navigate.dart';
+import '../widgets/spaces.dart';
+import '../widgets/text_widget.dart';
 
 class SelectDate extends StatefulWidget {
   const SelectDate({Key? key}) : super(key: key);
@@ -18,7 +22,7 @@ class SelectDate extends StatefulWidget {
 }
 
 class _SelectDateState extends State<SelectDate> {
-  final DateRangePickerController _controller = DateRangePickerController();
+  // final DateRangePickerController _controller = DateRangePickerController();
   final List<String> _months = <String>[
     'JANUARY',
     'FEBRUARY',
@@ -33,41 +37,43 @@ class _SelectDateState extends State<SelectDate> {
     'NOVEMBER',
     'DECEMBER'
   ];
-  bool _selected = false;
-  int _selectedIndex = -1;
+  final bool _selected = false;
+  final int _selectedIndex = -1;
 
-  Widget cellBuilder(BuildContext context, DateRangePickerCellDetails details) {
-    final bool isSelected = _controller.selectedDate != null &&
-        details.date.year == _controller.selectedDate!.year &&
-        details.date.month == _controller.selectedDate!.month &&
-        details.date.day == _controller.selectedDate!.day;
-    if (isSelected) {
-      return Column(
-        children: [
-          Container(
-            child: Text(
-              details.date.day.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          Container(
-              child: Text(
-            DateFormat('EEE').format((details.date)),
-            style: TextStyle(color: Colors.white),
-          )),
-        ],
-      );
-    } else {
-      return Container(
-        child: Text(
-          details.date.day.toString(),
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.tealAccent),
-        ),
-      );
-    }
-  }
+  var date = DateTime.now();
+
+  // Widget cellBuilder(BuildContext context, DateRangePickerCellDetails details) {
+  //   final bool isSelected = _controller.selectedDate != null &&
+  //       details.date.year == _controller.selectedDate!.year &&
+  //       details.date.month == _controller.selectedDate!.month &&
+  //       details.date.day == _controller.selectedDate!.day;
+  //   if (isSelected) {
+  //     return Column(
+  //       children: [
+  //         Container(
+  //           child: Text(
+  //             details.date.day.toString(),
+  //             textAlign: TextAlign.center,
+  //             style: const TextStyle(color: Colors.white),
+  //           ),
+  //         ),
+  //         Container(
+  //             child: Text(
+  //           DateFormat('EEE').format((details.date)),
+  //           style: const TextStyle(color: Colors.white),
+  //         )),
+  //       ],
+  //     );
+  //   } else {
+  //     return Container(
+  //       child: Text(
+  //         details.date.day.toString(),
+  //         textAlign: TextAlign.center,
+  //         style: const TextStyle(color: Colors.tealAccent),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +90,7 @@ class _SelectDateState extends State<SelectDate> {
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size15,
                 ),
-                const Spacer(),
+               /* const Spacer(),
                 CustomContainer(
                   width: 55,
                   height: 24,
@@ -131,11 +137,11 @@ class _SelectDateState extends State<SelectDate> {
                       ],
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
-            verticalSpace(16),
-            SingleChildScrollView(
+            verticalSpace(20),
+            /*SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
@@ -297,7 +303,7 @@ class _SelectDateState extends State<SelectDate> {
                   horizontalSpace(10),
                 ],
               ),
-            ),
+            ),*/
            /* verticalSpace(40),
             CustomSizedBox(
               height: 400,
@@ -347,8 +353,36 @@ class _SelectDateState extends State<SelectDate> {
                         ));
                   }),
             ),*/
+            CalendarTimeline(
+              initialDate: date,
+              firstDate: date,
+              lastDate: DateTime(date.year + 1, date.month, date.day),
+              onDateSelected: (date) => print(date),
+              leftMargin: 20,
+              showYears: true,
+              dayNameColor: Colors.black,
+              monthColor: Colors.blueGrey,
+              dayColor: Colors.teal[200],
+              activeDayColor: Colors.white,
+              activeBackgroundDayColor: Colors.redAccent[100],
+              dotsColor: const Color(0xFF333A47),
+              // selectableDayPredicate: (date) => date.day != 23,
+              locale: 'en_ISO',
+            ),
+            const Spacer(),
+            DefaultButton(
+              text: 'Pay',
+              onPressed: () {
+                navigateTo(context, const RequestDetails());
+              },
+              fontWeight: MyFontWeight.bold,
+              fontSize: 21,
+              height: 48,
+              width: 345,
+            ),
           ],
         ),
+        
       ),
     );
   }

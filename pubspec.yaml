@@ -56,8 +56,8 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_slidable: ^2.0.0
 
-  #  calendar_timeline: ^1.1.2
-  syncfusion_flutter_datepicker: ^21.1.37
+  calendar_timeline: ^1.1.2
+#  syncfusion_flutter_datepicker: ^21.1.37
 
 
   #  firebase

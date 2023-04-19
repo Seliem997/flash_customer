@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/services_provider.dart';
+import '../../../providers/requestServices_provider.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_container.dart';
@@ -24,8 +24,8 @@ class BasicServicesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ServicesProvider servicesProvider =
-    Provider.of<ServicesProvider>(context);
+    final RequestServicesProvider servicesProvider =
+    Provider.of<RequestServicesProvider>(context);
     return CustomContainer(
       height: 59,
       width: 313,
@@ -111,10 +111,11 @@ class ExtraServicesWidget extends StatelessWidget {
           CustomSizedBox(
               height: 35,
               width: 35,
-              child: Image.asset('assets/images/chair_image.png')),
+              child: Image.network(imageName),
+          ),
           horizontalSpace(12),
           TextWidget(
-            text: 'One chair Wash',
+            text: title,
             textSize: MyFontSize.size12,
             fontWeight: MyFontWeight.semiBold,
           ),
@@ -148,19 +149,15 @@ class ExtraServicesWidget extends StatelessWidget {
                     ],
                   )
                 : Padding(
-                    padding: onlyEdgeInsets(
-                      end: 20,
-                      bottom: 20,
-                      top: 20,
-                    ),
-                    child: const CustomContainer(
-                      radiusCircular: 5,
-                      backgroundColor: Colors.transparent,
-                      height: 19,
-                      width: 20,
-                      borderColor: AppColor.subTextGrey,
-                    ),
-                  ),
+              padding: onlyEdgeInsets(end: 20,),
+                  child: const CustomContainer(
+              radiusCircular: 5,
+              backgroundColor: Colors.transparent,
+              height: 19,
+              width: 20,
+              borderColor: AppColor.subTextGrey,
+            ),
+                ),
           )
         ],
       ),

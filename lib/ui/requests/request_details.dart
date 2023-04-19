@@ -32,20 +32,20 @@ class RequestDetails extends StatelessWidget {
               builder: (BuildContext context) {
                 return AlertDialog(
                   content: Padding(
-                    padding: symmetricEdgeInsets(horizontal: 36, vertical: 20),
+                    padding: symmetricEdgeInsets(horizontal: 36, vertical: 0),
                     child: RichText(
                       text: TextSpan(
                         text: 'The request will be',
                         style: TextStyle(
                             color: const Color(0xFF0F0F0F),
-                            fontSize: MyFontSize.size10,
+                            fontSize: MyFontSize.size20,
                             fontWeight: MyFontWeight.medium),
                         children: [
                           TextSpan(
                             text: ' canceled',
                             style: TextStyle(
                               color: const Color(0xFFFF3F48),
-                              fontSize: MyFontSize.size10,
+                              fontSize: MyFontSize.size20,
                               fontWeight: MyFontWeight.medium,
                             ),
                           ),
@@ -53,7 +53,7 @@ class RequestDetails extends StatelessWidget {
                             text: ' Are you sure to go back?',
                             style: TextStyle(
                               color: const Color(0xFF0F0F0F),
-                              fontSize: MyFontSize.size10,
+                              fontSize: MyFontSize.size20,
                               fontWeight: MyFontWeight.medium,
                             ),
                           ),
@@ -69,7 +69,7 @@ class RequestDetails extends StatelessWidget {
                         MainAxisAlignment.center,
                         children: [
                           DefaultButton(
-                            width: 126,
+                            width: 100,
                             height: 33,
                             text: 'Cancel',
                             textColor: AppColor.white,
@@ -78,8 +78,9 @@ class RequestDetails extends StatelessWidget {
                             },
                             backgroundColor: AppColor.textRed,
                           ),
+                          horizontalSpace(21),
                           DefaultButton(
-                            width: 126,
+                            width: 100,
                             height: 33,
                             text: 'Continue',
                             textColor: AppColor.white,
@@ -327,7 +328,7 @@ class RequestDetails extends StatelessWidget {
                                           const Spacer(),
                                           CustomSizedBox(
                                             height: 16,width: 16,
-                                            child: SvgPicture.asset('assets/svg/calender.svg',fit: BoxFit.fitWidth,),
+                                            child: Image.asset('assets/images/calendar.png',fit: BoxFit.fitWidth,),
                                           ),
                                         ],
                                       ),

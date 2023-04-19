@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 import '../../providers/package_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
+import '../date_time/washes_date.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
-import 'date_time/washes_date.dart';
 
 class MonthlyPlans extends StatefulWidget {
   const MonthlyPlans({Key? key}) : super(key: key);

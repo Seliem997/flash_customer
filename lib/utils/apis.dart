@@ -30,4 +30,9 @@ class Api {
 
   static const String addNewVehicle = "$baseUrl/customer/vehicles";
 
+
+  static const String checkOfferCoupon = "$baseUrl/customer/check-offer";
+
+  static const String getActiveTax = "$baseUrl/customer/get-active-tax";
+
 }

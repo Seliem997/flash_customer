@@ -6,8 +6,11 @@ import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/services_provider.dart';
+import '../../providers/requestServices_provider.dart';
+import '../../utils/enum/statuses.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
+import '../date_time/select_date.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -30,21 +33,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   void loadData() async {
-    final ServicesProvider servicesProvider =
-        Provider.of<ServicesProvider>(context, listen: false);
+    final RequestServicesProvider servicesProvider =
+        Provider.of<RequestServicesProvider>(context, listen: false);
 
     await servicesProvider.getBasicServices();
     await servicesProvider.getExtraServices();
+    await servicesProvider.getTax();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ServicesProvider servicesProvider =
-        Provider.of<ServicesProvider>(context);
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: 'Services'),
       body: SingleChildScrollView(
-        child: Padding(
+        child: (requestServicesProvider.basicServicesList.isEmpty || requestServicesProvider.extraServicesList.isEmpty || requestServicesProvider.taxData == null)
+            ? const DataLoader()
+            : Padding(
           padding: symmetricEdgeInsets(horizontal: 24, vertical: 41),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,9 +67,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 height: 322,
                 radiusCircular: 4,
                 backgroundColor: const Color(0xFFF9F9F9),
-                child: servicesProvider.basicServicesList.isEmpty
-                    ? const DataLoader()
-                    : Padding(
+                child: Padding(
                   padding: onlyEdgeInsets(
                     start: 11,
                     end: 21,
@@ -73,12 +77,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) => BasicServicesWidget(
-                        title: servicesProvider.basicServicesList[index].title!,
+                        title: requestServicesProvider.basicServicesList[index].title!,
                         imageName:
-                            servicesProvider.basicServicesList[index].image!,
+                            requestServicesProvider.basicServicesList[index].image!,
                       onTap: (){
-
-                        servicesProvider.selectedBasicService(index: index);
+                        requestServicesProvider.selectedBasicService(index: index);
+                        requestServicesProvider.selectedBasicServiceDuration = requestServicesProvider.basicServicesList[index].duration!;
                       },
                       index: index,
                       infoOnPressed: (){
@@ -89,7 +93,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               content: Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextWidget(
-                                  text: '${servicesProvider.basicServicesList[index].info}',
+                                  text: '${requestServicesProvider.basicServicesList[index].info}',
                                 ),
                               ),
                               actions: [
@@ -118,7 +122,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       },
                     ),
                     separatorBuilder: (context, index) => verticalSpace(14),
-                    itemCount: servicesProvider.basicServicesList.length,
+                    itemCount: requestServicesProvider.basicServicesList.length,
                   ),
                 ),
               ),
@@ -135,7 +139,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 height: 322,
                 radiusCircular: 4,
                 backgroundColor: const Color(0xFFF9F9F9),
-                child: servicesProvider.extraServicesList.isEmpty
+                child: requestServicesProvider.extraServicesList.isEmpty
                     ? const DataLoader()
                     : Padding(
                   padding: onlyEdgeInsets(
@@ -146,6 +150,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   ),
                   child:  ListView.separated(
                     physics: const BouncingScrollPhysics(),
+/*
                     itemBuilder: (context, index) => BasicServicesWidget(
                       title: servicesProvider.extraServicesList[index].title!,
                       imageName:
@@ -190,8 +195,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         );
                       },
                     ),
+*/
+                  itemBuilder: (context, index) => ExtraServicesWidget(
+                    title: requestServicesProvider.extraServicesList[index].title!,
+                    imageName: requestServicesProvider.extraServicesList[index].image!,
+                    isCounted: requestServicesProvider.extraServicesList[index].countable!,
+                  ),
                     separatorBuilder: (context, index) => verticalSpace(14),
-                    itemCount: servicesProvider.extraServicesList.length,
+                    itemCount: requestServicesProvider.extraServicesList.length,
                   ),
                   /*child: SingleChildScrollView(
                     child: Column(
@@ -419,7 +430,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     fontWeight: MyFontWeight.bold,
                   ),
                   TextWidget(
-                    text: ' 50 Min',
+                    text: ' ${(requestServicesProvider.selectedBasicServiceDuration) } Min',
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF686868),
@@ -462,7 +473,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           ),
                           const Spacer(),
                           TextWidget(
-                            text: '15 SR',
+                            text: '${double.parse(requestServicesProvider.taxData!.percent!)} SR',
                             textSize: MyFontSize.size12,
                             fontWeight: MyFontWeight.medium,
                             color: const Color(0xFF383838),
@@ -479,31 +490,48 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           ),
                           CustomContainer(
                             width: 112,
-                            height: 24,
+                            height: 30,
                             radiusCircular: 3,
                             backgroundColor: AppColor.buttonGrey,
                             borderColor: AppColor.boldGrey,
                             child: Center(
                               child: CustomTextForm(
+                                controller: requestServicesProvider.discountCodeController,
                                 contentPadding:
                                     onlyEdgeInsets(start: 10, bottom: 8),
                                 textInputAction: TextInputAction.done,
-                                hintText: '',
                               ),
                             ),
                           ),
                           const Spacer(),
-                          TextWidget(
-                            text: 'Remove',
-                            textSize: MyFontSize.size12,
-                            fontWeight: MyFontWeight.medium,
-                            color: AppColor.textRed,
+                          TextButton(
+                            onPressed: requestServicesProvider.discountCodeController.text.isEmpty ? (){} : (){
+                              requestServicesProvider.checkOfferCoupon(discountCode: requestServicesProvider.discountCodeController.text)
+                                  .then((value) {
+                                if (requestServicesProvider.couponData != null) {
+                                  if(requestServicesProvider.couponData!.isActive == 1 ){
+                                    CustomSnackBars.successSnackBar(context, 'Offer sent Successfully');
+                                    requestServicesProvider.discountAmount = requestServicesProvider.couponData!.discountAmount!;
+                                  }else{
+                                    CustomSnackBars.successSnackBar(context, 'Code not accepted');
+                                  }
+                                }else{
+                                  CustomSnackBars.failureSnackBar(context, 'code is invalid');
+                                }
+                              });
+                            },
+                            child: TextWidget(
+                              text: 'active',
+                              textSize: MyFontSize.size12,
+                              fontWeight: MyFontWeight.medium,
+                              color: AppColor.primary,
+                            ),
                           ),
                         ],
                       ),
                       Padding(
                         padding:
-                            symmetricEdgeInsets(horizontal: 10, vertical: 28),
+                            symmetricEdgeInsets(horizontal: 10, vertical: 20),
                         child: const Divider(
                           color: Color(0xFF898A8D),
                         ),
@@ -517,7 +545,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           ),
                           const Spacer(),
                           TextWidget(
-                            text: '240 SR',
+                            text: '${240-requestServicesProvider.discountAmount} SR',
                             textSize: MyFontSize.size12,
                             fontWeight: MyFontWeight.medium,
                             color: const Color(0xFF383838),
@@ -536,7 +564,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
                 onPressed: () {
-                  navigateTo(context, const RequestDetails());
+                  navigateTo(context, const SelectDate());
                 },
               ),
             ],

@@ -1,4 +1,4 @@
-import 'package:flash_customer/ui/monthly_pkg/date_time/select_date.dart';
+import 'package:flash_customer/ui/date_time/select_date.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../utils/font_styles.dart';
-import '../../widgets/custom_bar_widget.dart';
-import '../../widgets/spaces.dart';
-import '../../widgets/text_widget.dart';
+import '../widgets/custom_bar_widget.dart';
+import '../widgets/spaces.dart';
+import '../widgets/text_widget.dart';
 
 class WashesDate extends StatelessWidget {
   const WashesDate({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class WashesDate extends StatelessWidget {
                 backgroundColor: AppColor.selectedColor,
                 child: Row(
                   children: [
-                    CustomContainer(
+                    const CustomContainer(
                       width: 8,
                       height: double.infinity,
                       radiusCircular: 0,
@@ -47,7 +47,7 @@ class WashesDate extends StatelessWidget {
                       child: Row(
                         children: [
                           CustomContainer(
-                            borderColor: Color(0xFF0096FF),
+                            borderColor: const Color(0xFF0096FF),
                             height: 45,
                             width: 45,
                             backgroundColor: Colors.transparent,
@@ -71,7 +71,7 @@ class WashesDate extends StatelessWidget {
                                     text: 'Monday, 22 January 2023',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -84,7 +84,7 @@ class WashesDate extends StatelessWidget {
                                     text: '03:15 PM',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -110,7 +110,7 @@ class WashesDate extends StatelessWidget {
                 backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
-                    CustomContainer(
+                    const CustomContainer(
                       width: 8,
                       height: double.infinity,
                       radiusCircular: 0,
@@ -122,7 +122,7 @@ class WashesDate extends StatelessWidget {
                       child: Row(
                         children: [
                           CustomContainer(
-                            borderColor: Color(0xFF979797),
+                            borderColor: const Color(0xFF979797),
                             height: 46,
                             width: 46,
                             backgroundColor: Colors.transparent,
@@ -146,7 +146,7 @@ class WashesDate extends StatelessWidget {
                                     text: 'Monday, 22 January 2023',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -159,7 +159,7 @@ class WashesDate extends StatelessWidget {
                                     text: '03:15 PM',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -185,7 +185,7 @@ class WashesDate extends StatelessWidget {
                 backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
-                    CustomContainer(
+                    const CustomContainer(
                       width: 8,
                       height: double.infinity,
                       radiusCircular: 0,
@@ -197,7 +197,7 @@ class WashesDate extends StatelessWidget {
                       child: Row(
                         children: [
                           CustomContainer(
-                            borderColor: Color(0xFF979797),
+                            borderColor: const Color(0xFF979797),
                             height: 46,
                             width: 46,
                             backgroundColor: Colors.transparent,
@@ -221,7 +221,7 @@ class WashesDate extends StatelessWidget {
                                     text: 'Monday, 22 January 2023',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -234,7 +234,7 @@ class WashesDate extends StatelessWidget {
                                     text: '03:15 PM',
                                     textSize: MyFontSize.size10,
                                     fontWeight: MyFontWeight.medium,
-                                    color: Color(0xff282828),
+                                    color: const Color(0xff282828),
                                   ),
                                 ],
                               ),
@@ -258,12 +258,12 @@ class WashesDate extends StatelessWidget {
                 width: double.infinity,
                 height: 75,
                 onTap: (){
-                  navigateTo(context, SelectDate());
+                  navigateTo(context, const SelectDate());
                 },
                 backgroundColor: AppColor.borderGreyLight,
                 child: Row(
                   children: [
-                    CustomContainer(
+                    const CustomContainer(
                       width: 8,
                       height: double.infinity,
                       radiusCircular: 0,
