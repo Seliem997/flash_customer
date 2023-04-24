@@ -11,8 +11,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../providers/home_provider.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
+import '../../providers/requestServices_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/styles/colors.dart';
 import '../services/services_screen.dart';
@@ -40,9 +42,18 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<PackageProvider>(context, listen: false);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context, listen: false);
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context, listen: false);
+    final HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
     await myVehiclesProvider.getMyVehicles();
+    await requestServicesProvider.getCityId(
+      context,
+      lat: homeProvider.currentPosition!.latitude,
+      long: homeProvider.currentPosition!.longitude,
+    );
   }
 
   @override
@@ -51,7 +62,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<PackageProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context);
-
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: 'Vehicle Type'),
       body: Padding(
@@ -122,7 +134,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
             verticalSpace(33),
             packageProvider.newVehicleLabel
                 ? packageProvider.manufacturerDataList.isEmpty
-                    ? const DataLoader()
+                    ? const DataLoader() /*AppLoader.showLoader(context);*/
                     : Expanded(
                         child: NewVehiclesScreenWidget(
                             packageProvider: packageProvider),
@@ -152,12 +164,23 @@ class _VehicleTypesState extends State<VehicleTypes> {
                 packageProvider.newVehicleLabel
                     ? packageProvider.chooseManufacture
                         ? packageProvider.chooseModel
-                            ? navigateTo(context, const ServicesScreen())
+                            ? navigateTo(
+                                context,
+                                ServicesScreen(
+                                    cityId: 1,
+                                        // requestServicesProvider.cityIdData!.id!,
+                                    vehicleId: 6
+                                    // packageProvider.selectedVehicleModel!.id!,
+                                    ),
+                              )
                             : packageProvider.setRequiredModel()
                         : packageProvider.setRequiredManufacture()
                     : navigateTo(
                         context,
-                        const ServicesScreen(),
+                        ServicesScreen(
+                          cityId: 1/*requestServicesProvider.cityIdData!.id!*/,
+                          vehicleId:6 /* packageProvider.selectedVehicleModel!.id!*/,
+                        ),
                       );
               },
             ),
@@ -282,7 +305,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
           borderColor: packageProvider.requiredManufacture
               ? Colors.red
               : const Color(0xFF979797),
-          backgroundColor: const Color(0xFFECECEC),
+          backgroundColor: AppColor.borderGreyLight,
           padding: symmetricEdgeInsets(horizontal: 16),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
@@ -346,7 +369,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
           borderColor: packageProvider.requiredManufacture
               ? Colors.red
               : const Color(0xFF979797),
-          backgroundColor: const Color(0xFFECECEC),
+          backgroundColor: AppColor.borderGreyLight,
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
               value: packageProvider.selectedVehicleModel,

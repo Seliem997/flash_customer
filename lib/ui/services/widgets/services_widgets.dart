@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/servicesModel.dart';
-import '../../../models/servicesModel2.dart';
 import '../../../providers/requestServices_provider.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
@@ -105,7 +104,7 @@ class ExtraServicesWidget extends StatelessWidget {
             alignment: AlignmentDirectional.topStart,
             child: IconButton(
               icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
-              onPressed: () {},
+              onPressed: infoOnPressed,
             ),
           ),
           CustomSizedBox(

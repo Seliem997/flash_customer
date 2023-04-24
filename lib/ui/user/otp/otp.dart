@@ -202,6 +202,7 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
+
   GestureDetector timerTextWidget() {
     return GestureDetector(
       child: Directionality(
@@ -215,7 +216,5 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
-
-
 
 }

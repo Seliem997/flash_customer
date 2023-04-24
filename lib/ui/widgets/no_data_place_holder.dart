@@ -14,14 +14,14 @@ class NoDataPlaceHolder extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: const TextWidget(
-                text: 'noDataAvailable',
+                text: 'no Data Available',
                 color: AppColor.grey,
               ),
             ),
           )
         : const Center(
             child: TextWidget(
-              text: 'noDataAvailable',
+              text: 'no Data Available',
               color: AppColor.grey,
             ),
           );

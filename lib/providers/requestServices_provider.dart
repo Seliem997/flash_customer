@@ -3,9 +3,11 @@ import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 
 import '../generated/l10n.dart';
+import '../models/bookServicesModel.dart';
+import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
+import '../models/requestDetailsModel.dart';
 import '../models/servicesModel.dart';
-import '../models/servicesModel2.dart';
 import '../services/requestServices_service.dart';
 import '../utils/enum/statuses.dart';
 import '../utils/snack_bars.dart';
@@ -20,12 +22,28 @@ class RequestServicesProvider with ChangeNotifier {
   int discountAmount = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
+  int selectedBasicServiceId = 0;
   int? selectedBasicIndex;
+  bool isLoading = true;
+  List<ExtraServicesItem> selectedExtraServices= [];
+  bool selectedCashPayment = false;
+
+  void setLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
+
+
+  void selectCashPayment(bool value) {
+    selectedCashPayment = value;
+    notifyListeners();
+  }
 
   void selectedBasicService({required int index}) {
     selectedBasicIndex = index;
     notifyListeners();
   }
+
 
   void calculateTotal() {
     totalAmount = 0;
@@ -36,9 +54,9 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   List<ServiceData> basicServicesList = [];
-  Future getBasicServices() async {
+  Future getBasicServices({required int cityId, required int vehicleId,}) async {
     RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getBasicServices().then((value) {
+    await servicesService.getBasicServices(cityId: cityId, vehicleId: vehicleId).then((value) {
       if (value.status == Status.success) {
         basicServicesList = value.data;
       }
@@ -47,9 +65,9 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   List<ServiceData> extraServicesList = [];
-  Future getExtraServices() async {
+  Future getExtraServices({required int cityId, required int vehicleId}) async {
     RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getExtraServices().then((value) {
+    await servicesService.getExtraServices(cityId: cityId, vehicleId: vehicleId,).then((value) {
       if (value.status == Status.success) {
         extraServicesList = value.data;
       }
@@ -97,6 +115,63 @@ class RequestServicesProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+
+
+  CityIdData? cityIdData;
+  Future getCityId(BuildContext context,{required double lat, required double long}) async {
+      await servicesService
+          .getCityId(lat: lat, lng: long)
+          .then((value) {
+        if (value.status == Status.success) {
+          cityIdData = value.data;
+
+        }
+
+      });
+
+
+    notifyListeners();
+  }
+
+
+  BookServicesData? bookServicesData;
+  Future bookServices(BuildContext context,{
+    required int cityId,
+    required int vehicleId,
+    required int basicServiceId,
+  }) async {
+    extraServicesList.forEach((element) {
+      if(element.quantity > 0 || element.isSelected){
+        selectedExtraServices.add(
+            ExtraServicesItem(element.id!,element.quantity)
+        );
+      }
+    });
+    await servicesService
+        .bookServices(cityId: cityId, vehicleId: vehicleId, basicServiceId: basicServiceId, selectedExtraServices: selectedExtraServices)
+        .then((value) {
+      if (value.status == Status.success) {
+        bookServicesData = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
+
+  RequestDetailsData? requestDetailsData;
+  Future getRequestDetails({required int requestId}) async {
+    setLoading(true);
+    RequestServicesService servicesService = RequestServicesService();
+    await servicesService.getRequestDetails(requestId: requestId).then((value) {
+      if (value.status == Status.success) {
+        requestDetailsData = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
+
 
   void resetCoupon() {
     couponData = null;

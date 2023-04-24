@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../utils/styles/colors.dart';
+import '../../addresses/new_address.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/expanded_container.dart';
@@ -39,9 +41,10 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     padding: symmetricEdgeInsets(horizontal: 28),
                     borderRadius: BorderRadius.circular(8),
                     backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset(
-                      'assets/svg/home_n.svg',
-                    ),
+                    icon: CustomSizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Image.asset('assets/images/home_light.png')),
                     onPressed: () {},
                     labelText: 'Home',
                     textColor: AppColor.black,
@@ -74,15 +77,20 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                     labelText: 'School',
                     textColor: AppColor.black,
                   ),
-                  Spacer(),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: AppColor.primary),
-                    child: Icon(
-                      Icons.add,
-                      size: 25,
-                      color: Colors.white,
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: (){
+                      navigateTo(context, NewAddress());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: AppColor.primary),
+                      child: const Icon(
+                        Icons.add,
+                        size: 25,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

@@ -1,21 +1,50 @@
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../providers/requestServices_provider.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
+import '../home/home_screen.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_text_form.dart';
+import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
-class RequestDetails extends StatelessWidget {
+class RequestDetails extends StatefulWidget {
   const RequestDetails({Key? key}) : super(key: key);
 
   @override
+  State<RequestDetails> createState() => _RequestDetailsState();
+}
+
+class _RequestDetailsState extends State<RequestDetails> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    final RequestServicesProvider servicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
+
+
+    await servicesProvider.getRequestDetails(requestId: 1 /*servicesProvider.bookServicesData!.id!*/).then((value) =>  print(servicesProvider.requestDetailsData!.services![2].type!));
+
+    servicesProvider.setLoading(false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context);
+
     return Scaffold(
       appBar: CustomAppBar(
         withArrow: false,
@@ -85,7 +114,7 @@ class RequestDetails extends StatelessWidget {
                             text: 'Continue',
                             textColor: AppColor.white,
                             onPressed: () {
-                              Navigator.pop(context);
+                              navigateAndFinish(context, const HomeScreen());
                             },
                             backgroundColor: AppColor.boldGreen,
                           ),
@@ -103,7 +132,14 @@ class RequestDetails extends StatelessWidget {
         ,
       ),
       body: SingleChildScrollView(
-        child: Padding(
+        child: (requestServicesProvider.isLoading)
+            ? const DataLoader()
+            : (requestServicesProvider.requestDetailsData == null)
+            ? const CustomSizedBox(
+            height: 500,
+            child: Center(
+                child: TextWidget(text: 'No Data Available')))
+            : Padding(
           padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
           child: Column(
             children: [
@@ -138,7 +174,8 @@ class RequestDetails extends StatelessWidget {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: 'Small Car - Blue Yaris ACWS 2190',
+                        text: '${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].year!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].letters!}',
+                        // text: 'Small Car - Blue Yaris ACWS 2190',
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -151,7 +188,7 @@ class RequestDetails extends StatelessWidget {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: 'Monday, 23 January 2023',
+                        text: "${requestServicesProvider.requestDetailsData!.date!} - ${requestServicesProvider.requestDetailsData!.time!}",
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -163,12 +200,23 @@ class RequestDetails extends StatelessWidget {
                         fontWeight: MyFontWeight.semiBold,
                       ),
                       verticalSpace(10),
-                      TextWidget(
-                        text: 'Inside & Outside wash (45 SR)',
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.regular,
-                        color: AppColor.subTextGrey,
-                      ),
+                      CustomSizedBox(
+                        // height: 25,
+                        child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: requestServicesProvider.requestDetailsData!.services!.length,
+                        itemBuilder: (context, index) {
+                          if(requestServicesProvider.requestDetailsData!.services![index].type == 'basic') {
+                            return TextWidget(
+                              text: requestServicesProvider.requestDetailsData!.services![index].title!,
+                              textSize: MyFontSize.size12,
+                              fontWeight: MyFontWeight.regular,
+                              color: AppColor.subTextGrey,
+                            );
+                        }
+                          return null;
+                        },
+                      ),),
                       verticalSpace(20),
                       TextWidget(
                         text: 'Extra Services',
@@ -176,12 +224,23 @@ class RequestDetails extends StatelessWidget {
                         fontWeight: MyFontWeight.semiBold,
                       ),
                       verticalSpace(10),
-                      TextWidget(
-                        text: 'One chair wash (40 SR)',
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.regular,
-                        color: AppColor.subTextGrey,
-                      ),
+                      CustomSizedBox(
+                        // height: 25,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: requestServicesProvider.requestDetailsData!.services!.length,
+                          itemBuilder: (context, index) {
+                            if(requestServicesProvider.requestDetailsData!.services![index].type == 'extra') {
+                              return TextWidget(
+                                text: requestServicesProvider.requestDetailsData!.services![index].title!,
+                                textSize: MyFontSize.size12,
+                                fontWeight: MyFontWeight.regular,
+                                color: AppColor.subTextGrey,
+                              );
+                            }
+                            return null;
+                          },
+                        ),),
                       verticalSpace(20),
                       Row(
                         children: [
@@ -190,6 +249,7 @@ class RequestDetails extends StatelessWidget {
                             textSize: MyFontSize.size15,
                             fontWeight: MyFontWeight.semiBold,
                           ),
+                          horizontalSpace(10),
                           TextWidget(
                             text: '50 Min',
                             textSize: MyFontSize.size15,
@@ -206,7 +266,6 @@ class RequestDetails extends StatelessWidget {
               verticalSpace(22),
               CustomContainer(
                 width: 345,
-                // height: 275,
                 radiusCircular: 4,
                 backgroundColor: const Color(0xFFE2E2F5),
                 child: Padding(
@@ -222,10 +281,13 @@ class RequestDetails extends StatelessWidget {
                       verticalSpace(12),
                       CustomContainer(
                         height: 34,
-                        backgroundColor: AppColor.white,
+                        backgroundColor: requestServicesProvider.selectedCashPayment ? const Color(0xFFD2FFEA) : AppColor.white,
                         borderColor: AppColor.borderGreyBold,
                         radiusCircular: 4,
                         padding: symmetricEdgeInsets(vertical: 5, horizontal: 12),
+                        onTap: (){
+                          requestServicesProvider.selectCashPayment(!requestServicesProvider.selectedCashPayment);
+                        },
                         child: Row(
                           children: [
                             CustomSizedBox(
@@ -241,154 +303,157 @@ class RequestDetails extends StatelessWidget {
                           ],
                         ),
                       ),
-                      verticalSpace(10),
-                      CustomContainer(
-                        height: 240,
-                        backgroundColor: const Color(0xFFF4FFFA),
-                        borderColor: AppColor.borderGreyBold,
-                        radiusCircular: 7,
-                        padding: symmetricEdgeInsets(vertical: 16, horizontal: 14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget(
-                              text: 'Card number',
-                              textSize: MyFontSize.size12,
-                              fontWeight: MyFontWeight.medium,
-                              color: const Color(0xFF272727),
-                            ),
-                            verticalSpace(8),
-                            CustomContainer(
-                              height: 28,
-                              backgroundColor: AppColor.white,
-                              borderColor: AppColor.borderGreyBold,
-                              radiusCircular: 3,
-                              padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
-                              child: Row(
+                      Visibility(
+                        visible: requestServicesProvider.selectedCashPayment,
+                        child: CustomContainer(
+                          backgroundColor: const Color(0xFFF4FFFA),
+                          borderColor: AppColor.borderGreyBold,
+                          radiusCircular: 7,
+                          padding: symmetricEdgeInsets(vertical: 16, horizontal: 14),
+                          margin: onlyEdgeInsets(top: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextWidget(
+                                text: 'Card number',
+                                textSize: MyFontSize.size12,
+                                fontWeight: MyFontWeight.medium,
+                                color: const Color(0xFF272727),
+                              ),
+                              verticalSpace(8),
+                              CustomContainer(
+                                height: 28,
+                                backgroundColor: AppColor.white,
+                                borderColor: AppColor.borderGreyBold,
+                                radiusCircular: 3,
+                                padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
+                                child: Row(
+                                  children: [
+                                    TextWidget(
+                                      text: '*********8729',
+                                      textSize: MyFontSize.size8,
+                                      fontWeight: MyFontWeight.regular,
+                                    ),
+                                    const Spacer(),
+                                    CustomSizedBox(
+                                      height: 16,width: 16,
+                                      child: Image.asset('assets/images/card.png',fit: BoxFit.fitWidth,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              verticalSpace(11),
+                              TextWidget(
+                                text: 'Cardholder name',
+                                textSize: MyFontSize.size12,
+                                fontWeight: MyFontWeight.medium,
+                                color: const Color(0xFF272727),
+                              ),
+                              verticalSpace(8),
+                              CustomContainer(
+                                height: 28,
+                                backgroundColor: AppColor.white,
+                                borderColor: AppColor.borderGreyBold,
+                                radiusCircular: 3,
+                                padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
+                                child: TextWidget(
+                                  text: '*********8729',
+                                  textSize: MyFontSize.size8,
+                                  fontWeight: MyFontWeight.regular,
+                                ),
+                              ),
+                              verticalSpace(16),
+                              Row(
                                 children: [
-                                  TextWidget(
-                                    text: '*********8729',
-                                    textSize: MyFontSize.size8,
-                                    fontWeight: MyFontWeight.regular,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextWidget(
+                                        text: 'Expiry Date',
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.medium,
+                                        color: const Color(0xFF272727),
+                                      ),
+                                      verticalSpace(8),
+                                      CustomContainer(
+                                        height: 28,
+                                        width: 117,
+                                        backgroundColor: AppColor.white,
+                                        borderColor: AppColor.borderGreyBold,
+                                        radiusCircular: 3,
+                                        padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
+                                        child: Row(
+                                          children: [
+                                            TextWidget(
+                                              text: 'MM/YY',
+                                              textSize: MyFontSize.size8,
+                                              fontWeight: MyFontWeight.regular,
+                                            ),
+                                            const Spacer(),
+                                            CustomSizedBox(
+                                              height: 16,width: 16,
+                                              child: Image.asset('assets/images/calendar.png',fit: BoxFit.fitWidth,),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const Spacer(),
-                                  CustomSizedBox(
-                                    height: 16,width: 16,
-                                    child: Image.asset('assets/images/card.png',fit: BoxFit.fitWidth,),
+                                  horizontalSpace(50),
+                                  Column(
+                                    children: [
+                                      TextWidget(
+                                        text: 'CVV/CVC',
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.medium,
+                                        color: const Color(0xFF272727),
+                                      ),
+                                      verticalSpace(8),
+                                      CustomContainer(
+                                        height: 28,
+                                        width: 97,
+                                        backgroundColor: AppColor.white,
+                                        borderColor: AppColor.borderGreyBold,
+                                        radiusCircular: 3,
+                                        padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
+                                        child: Row(
+                                          children: [
+                                            TextWidget(
+                                              text: '***',
+                                              textSize: MyFontSize.size8,
+                                              fontWeight: MyFontWeight.regular,
+                                            ),
+                                            const Spacer(),
+                                            CustomSizedBox(
+                                              height: 16,width: 16,
+                                              child: Image.asset('assets/images/info-circle.png'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
-                            verticalSpace(11),
-                            TextWidget(
-                              text: 'Cardholder name',
-                              textSize: MyFontSize.size12,
-                              fontWeight: MyFontWeight.medium,
-                              color: const Color(0xFF272727),
-                            ),
-                            verticalSpace(8),
-                            CustomContainer(
-                              height: 28,
-                              backgroundColor: AppColor.white,
-                              borderColor: AppColor.borderGreyBold,
-                              radiusCircular: 3,
-                              padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
-                              child: TextWidget(
-                                text: '*********8729',
-                                textSize: MyFontSize.size8,
-                                fontWeight: MyFontWeight.regular,
+                              verticalSpace(16),
+                              Row(
+                                children: [
+                                  CustomSizedBox(
+                                    height: 16,
+                                      width: 16,
+                                      child: Image.asset('assets/images/empty_circle.png'),
+                                  ),
+                                  horizontalSpace(8),
+                                  TextWidget(
+                                    text: 'Save Card',
+                                    textSize: MyFontSize.size12,
+                                    fontWeight: MyFontWeight.semiBold,
+                                    color: AppColor.black,
+                                  ),
+                                ],
                               ),
-                            ),
-                            verticalSpace(16),
-                            Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    TextWidget(
-                                      text: 'Expiry Date',
-                                      textSize: MyFontSize.size12,
-                                      fontWeight: MyFontWeight.medium,
-                                      color: const Color(0xFF272727),
-                                    ),
-                                    verticalSpace(8),
-                                    CustomContainer(
-                                      height: 28,
-                                      width: 117,
-                                      backgroundColor: AppColor.white,
-                                      borderColor: AppColor.borderGreyBold,
-                                      radiusCircular: 3,
-                                      padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
-                                      child: Row(
-                                        children: [
-                                          TextWidget(
-                                            text: 'MM/YY',
-                                            textSize: MyFontSize.size8,
-                                            fontWeight: MyFontWeight.regular,
-                                          ),
-                                          const Spacer(),
-                                          CustomSizedBox(
-                                            height: 16,width: 16,
-                                            child: Image.asset('assets/images/calendar.png',fit: BoxFit.fitWidth,),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                horizontalSpace(50),
-                                Column(
-                                  children: [
-                                    TextWidget(
-                                      text: 'CVV/CVC',
-                                      textSize: MyFontSize.size12,
-                                      fontWeight: MyFontWeight.medium,
-                                      color: const Color(0xFF272727),
-                                    ),
-                                    verticalSpace(8),
-                                    CustomContainer(
-                                      height: 28,
-                                      width: 97,
-                                      backgroundColor: AppColor.white,
-                                      borderColor: AppColor.borderGreyBold,
-                                      radiusCircular: 3,
-                                      padding: symmetricEdgeInsets(vertical: 6, horizontal: 10),
-                                      child: Row(
-                                        children: [
-                                          TextWidget(
-                                            text: '***',
-                                            textSize: MyFontSize.size8,
-                                            fontWeight: MyFontWeight.regular,
-                                          ),
-                                          const Spacer(),
-                                          CustomSizedBox(
-                                            height: 16,width: 16,
-                                            child: Image.asset('assets/images/info-circle.png'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            verticalSpace(16),
-                            Row(
-                              children: [
-                                CustomSizedBox(
-                                  height: 16,
-                                    width: 16,
-                                    child: Image.asset('assets/images/empty_circle.png'),
-                                ),
-                                horizontalSpace(8),
-                                TextWidget(
-                                  text: 'Save Card',
-                                  textSize: MyFontSize.size12,
-                                  fontWeight: MyFontWeight.semiBold,
-                                  color: AppColor.black,
-                                ),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       verticalSpace(12),
@@ -493,7 +558,7 @@ class RequestDetails extends StatelessWidget {
                     fontWeight: MyFontWeight.semiBold,
                   ),
                   horizontalSpace(12),
-                  TextWidget(
+                  TextWidget(/*${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].customerDetails!.balance}*/
                     text: '20 SR',
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.semiBold,

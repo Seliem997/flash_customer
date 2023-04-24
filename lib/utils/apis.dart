@@ -11,11 +11,20 @@ class Api {
 
   static const String getOtherServices = "$baseUrl/customer/getOtherServices";
 
+  static const String getCityId = "$baseUrl/customer/cities/check/If/FoundIn";
+
+  static const String storeAddress = "$baseUrl/customer/addresses";
+
   static const String getBasicServices =
       "$baseUrl/customer/services?type=basic";
 
   static const String getExtraServices =
       "$baseUrl/customer/services?type=extra";
+
+  static const String getRequestDetails =
+      "$baseUrl/customer/request-details/";
+
+  static const String bookServices = "$baseUrl/customer/initial-request";
 
   static const String getAddresses = "$baseUrl/customer/my-addresses";
 

@@ -1,7 +1,11 @@
+import 'package:flash_customer/providers/addresses_provider.dart';
+import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/home_provider.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_container.dart';
@@ -17,15 +21,17 @@ class LocationDialog extends StatefulWidget {
 }
 
 class _LocationDialogState extends State<LocationDialog> {
-  String? gender;
+  String? addressType;
 
   @override
   Widget build(BuildContext context) {
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    final AddressesProvider addressesProvider =
+        Provider.of<AddressesProvider>(context);
     return Dialog(
       child: CustomContainer(
         width: 321,
-        height: 400,
-        padding: symmetricEdgeInsets(horizontal: 10,vertical: 20),
+        padding: symmetricEdgeInsets(horizontal: 10, vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -47,9 +53,7 @@ class _LocationDialogState extends State<LocationDialog> {
                   CustomSizedBox(
                     height: 14,
                     width: 14,
-                    child: SvgPicture.asset(
-                      'assets/svg/home_light.svg',
-                    ),
+                    child: SizedBox(),
                   ),
                   horizontalSpace(6),
                   TextWidget(
@@ -61,10 +65,10 @@ class _LocationDialogState extends State<LocationDialog> {
                 ],
               ),
               value: "home",
-              groupValue: gender,
+              groupValue: addressType,
               onChanged: (value) {
                 setState(() {
-                  gender = value.toString();
+                  addressType = value.toString();
                 });
               },
             ),
@@ -88,10 +92,10 @@ class _LocationDialogState extends State<LocationDialog> {
                 ],
               ),
               value: "work",
-              groupValue: gender,
+              groupValue: addressType,
               onChanged: (value) {
                 setState(() {
-                  gender = value.toString();
+                  addressType = value.toString();
                 });
               },
             ),
@@ -115,10 +119,10 @@ class _LocationDialogState extends State<LocationDialog> {
                 ],
               ),
               value: "school",
-              groupValue: gender,
+              groupValue: addressType,
               onChanged: (value) {
                 setState(() {
-                  gender = value.toString();
+                  addressType = value.toString();
                 });
               },
             ),
@@ -142,10 +146,10 @@ class _LocationDialogState extends State<LocationDialog> {
                 ],
               ),
               value: "shop",
-              groupValue: gender,
+              groupValue: addressType,
               onChanged: (value) {
                 setState(() {
-                  gender = value.toString();
+                  addressType = value.toString();
                 });
               },
             ),
@@ -171,17 +175,29 @@ class _LocationDialogState extends State<LocationDialog> {
                 ],
               ),
               value: "other",
-              groupValue: gender,
+              groupValue: addressType,
               onChanged: (value) {
                 setState(() {
-                  gender = value.toString();
+                  addressType = value.toString();
                 });
               },
             ),
             verticalSpace(6),
             DefaultButton(
               text: 'Save',
-              onPressed: () {},
+              onPressed: () async{
+                print('mmmmmm');
+               if(addressType != null){
+                 print('fffffff');
+                 await addressesProvider.storeAddress(
+                   type: addressType!,
+                   lat: homeProvider.currentPosition!.latitude,
+                   long: homeProvider.currentPosition!.longitude,
+                 );
+               }else{
+                 CustomSnackBars.failureSnackBar(context, 'Please, Choose Type',);
+               }
+              },
               height: 32,
               width: 225,
             ),

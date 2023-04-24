@@ -30,7 +30,7 @@ class _MyAddressesState extends State<MyAddresses> {
   void loadData() async {
     final AddressesProvider addressesProvider=Provider.of<AddressesProvider>(context, listen: false);
 
-    addressesProvider.getAddresses();
+    await addressesProvider.getAddresses().then((value) => addressesProvider.setLoading(false));
   }
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _MyAddressesState extends State<MyAddresses> {
       appBar: CustomAppBar(
         title: 'My Addresses',
       ),
-      body: addressesProvider.addressesDataList.isEmpty
+      body: addressesProvider.isLoading
           ? const DataLoader()
           : Padding(
         padding: symmetricEdgeInsets(horizontal: 24),
@@ -113,7 +113,9 @@ class _MyAddressesState extends State<MyAddresses> {
             //     ),
             //   ),
             // ),
-            Expanded(
+            addressesProvider.addressesDataList.isEmpty
+                ? const Expanded(child: Center(child: TextWidget(text: 'There Is No address yet')))
+                : Expanded(
               child: Padding(
                 padding: symmetricEdgeInsets(vertical: 30),
                 child: ListView.separated(

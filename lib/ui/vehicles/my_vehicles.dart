@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
+import '../widgets/no_data_place_holder.dart';
 import 'new_vehicle.dart';
 
 class MyVehicles extends StatefulWidget {
@@ -42,8 +43,16 @@ class _MyVehiclesState extends State<MyVehicles> {
       appBar: CustomAppBar(
         title: 'My Vehicles',
       ),
-      body: myVehiclesProvider.myVehiclesData == null
-          ? const DataLoader()
+      /*
+      *  myVehiclesProvider.loadingMyVehicles
+                    ? const DataLoader(useExpand: true)
+                    : myVehiclesProvider.myVehiclesData == null
+                        ? const NoDataPlaceHolder()
+                        : */
+      body: myVehiclesProvider.loadingMyVehicles
+          ? const DataLoader(useExpand: true)
+          : myVehiclesProvider.myVehiclesData == null
+          ? const NoDataPlaceHolder()
           : Padding(
               padding: symmetricEdgeInsets(horizontal: 24),
               child: Column(

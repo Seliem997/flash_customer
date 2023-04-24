@@ -83,7 +83,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 height: 44,
                 radiusCircular: 3,
                 borderColor: const Color(0xFF979797),
-                backgroundColor: const Color(0xFFECECEC),
+                backgroundColor: AppColor.borderGreyLight,
                 padding: symmetricEdgeInsets(horizontal: 16),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -145,7 +145,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 radiusCircular: 3,
                 padding: symmetricEdgeInsets(horizontal: 16),
                 borderColor: const Color(0xFF979797),
-                backgroundColor: const Color(0xFFECECEC),
+                backgroundColor: AppColor.borderGreyLight,
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
                     value: packageProvider.selectedVehicleModel,

@@ -22,23 +22,6 @@ class SelectDate extends StatefulWidget {
 }
 
 class _SelectDateState extends State<SelectDate> {
-  // final DateRangePickerController _controller = DateRangePickerController();
-  final List<String> _months = <String>[
-    'JANUARY',
-    'FEBRUARY',
-    'MARCH',
-    'APRIL',
-    'MAY',
-    'JUNE',
-    'JULY',
-    'AUGUST',
-    'SEPTEMBER',
-    'OCTOBER',
-    'NOVEMBER',
-    'DECEMBER'
-  ];
-  final bool _selected = false;
-  final int _selectedIndex = -1;
 
   var date = DateTime.now();
 
@@ -82,6 +65,7 @@ class _SelectDateState extends State<SelectDate> {
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -141,218 +125,6 @@ class _SelectDateState extends State<SelectDate> {
               ],
             ),
             verticalSpace(20),
-            /*SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  CustomContainer(
-                    width: 48,
-                    height: 58,
-                    radiusCircular: 6,
-                    backgroundColor: AppColor.buttonGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: '20',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size16,
-                          color: const Color(0xFF565656),
-                        ),
-                        verticalSpace(6),
-                        TextWidget(
-                          text: 'Fri',
-                          fontWeight: MyFontWeight.regular,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF696969),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(10),
-                ],
-              ),
-            ),*/
-            /* verticalSpace(40),
-            CustomSizedBox(
-              height: 400,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _months.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selected = true;
-                            _selectedIndex = index;
-                            _controller.displayDate =
-                                DateTime(2021, _selectedIndex, 1, 9, 0, 0);
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 15, top: 5),
-                          height: 2,
-                          color: Color(0xFF192841),
-                          child: Column(
-                            children: [
-                              Container(
-                                  child: Text(_months[index],
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: _selected &&
-                                                  _selectedIndex == index
-                                              ? FontWeight.w900
-                                              : FontWeight.w400))),
-                              verticalSpace(10),
-                              SfDateRangePicker(
-                                backgroundColor: Color(0xFF192841),
-                                controller: _controller,
-                                selectionColor: Colors.red.shade400,
-                                view: DateRangePickerView.month,
-                                headerHeight: 0,
-                                cellBuilder: cellBuilder,
-                                monthViewSettings:
-                                    DateRangePickerMonthViewSettings(
-                                        viewHeaderHeight: 0,
-                                        numberOfWeeksInView: 1),
-                              ),
-                            ],
-                          ),
-                        ));
-                  }),
-            ),*/
             CalendarTimeline(
               initialDate: date,
               firstDate: date,
@@ -369,6 +141,83 @@ class _SelectDateState extends State<SelectDate> {
               // selectableDayPredicate: (date) => date.day != 23,
               locale: 'en_ISO',
             ),
+            verticalSpace(20),
+            TextWidget(
+              text: 'Select Time',
+              fontWeight: MyFontWeight.semiBold,
+              textSize: MyFontSize.size15,
+            ),
+            verticalSpace(19),
+            CustomContainer(
+              height: 40,
+              backgroundColor: AppColor.borderGreyLight,
+              radiusCircular: 3,
+              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
+              child: Row(
+                children: [
+                  TextWidget(
+                    text: '03:30 PM',
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size10,
+                    color: const Color(0xFF565656),
+                  ),
+                  const Spacer(),
+                  CustomSizedBox(height: 14,width: 14,child: Image.asset('assets/images/circleGray.png',),),
+                ],
+              ),
+            ),
+            verticalSpace(14),
+            CustomContainer(
+              height: 40,
+              backgroundColor: AppColor.borderGreyLight,
+              radiusCircular: 3,
+              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
+              child: Row(
+                children: [
+                  TextWidget(
+                    text: '04:30 PM',
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size10,
+                    color: const Color(0xFF565656),
+                  ),
+                  const Spacer(),
+                  CustomSizedBox(height: 14,width: 14,child: Image.asset('assets/images/circleGray.png',),),
+                ],
+              ),
+            ),
+            verticalSpace(14),
+            CustomContainer(
+              height: 40,
+              backgroundColor: const Color(0xFFBADEF6),
+              borderColor: AppColor.borderBlue,
+              radiusCircular: 3,
+              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
+              child: Row(
+                children: [
+                  TextWidget(
+                    text: '04:30 PM',
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size10,
+                    color: const Color(0xFF565656),
+                  ),
+                  const Spacer(),
+                  CustomSizedBox(height: 14,width: 14, child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: AppColor.attributeColor,
+                    child: CustomSizedBox(
+                      child: CircleAvatar(
+                        backgroundColor: AppColor.white,
+                        radius: 25,
+                      ),
+                      width: 6,
+                      height: 6,
+                    ),
+                  ),
+                  ),
+                ],
+              ),
+            ),
+            verticalSpace(14),
             const Spacer(),
             DefaultButton(
               text: 'Pay',
