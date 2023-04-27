@@ -4,12 +4,19 @@ import '../models/manufacturersModel.dart';
 
 import '../models/packagesModel.dart';
 import '../models/vehiclesModelsModel.dart';
+import '../models/vehiclesTypesActiveModel.dart';
 import '../services/package_service.dart';
 import '../utils/enum/statuses.dart';
 
 class PackageProvider with ChangeNotifier {
   bool requiredManufacture = false;
   bool requiredModel = false;
+  int vehicleTypeId = 1;
+
+  void setVehicleTypeId({required int typeId}) {
+    vehicleTypeId = typeId;
+    notifyListeners();
+  }
 
   void setRequiredManufacture() {
     requiredManufacture = true;
@@ -24,19 +31,34 @@ class PackageProvider with ChangeNotifier {
   bool chooseManufacture = false;
   bool chooseModel = false;
 
+
+  List<VehiclesActiveTypesData> vehiclesTypesDataList = [];
+  Future getVehiclesTypeActive() async {
+    PackageService packageService = PackageService();
+    await packageService.getVehiclesTypes().then((value) {
+      if (value.status == Status.success) {
+        vehiclesTypesDataList = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
   ManufacturerData? selectedManufacture;
 
   List<ManufacturerData> manufacturerDataList = [];
-  Future getManufacturers() async {
+  Future getManufacturers({int? vehicleTypeId}) async {
     PackageService packageService = PackageService();
     resetDropDownValues();
-    await packageService.getManufacturers().then((value) {
+    await packageService.getManufacturers(vehicleTypeId: vehicleTypeId).then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;
       }
     });
     notifyListeners();
   }
+
+
+
 
   void setSelectedManufacture(ManufacturerData manufacture) {
     selectedVehicleModel = null;

@@ -47,7 +47,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
 
-    await packageProvider.getManufacturers();
+    await packageProvider.getVehiclesTypeActive();
+    await packageProvider.getManufacturers(vehicleTypeId: packageProvider.vehicleTypeId);
     await myVehiclesProvider.getMyVehicles();
     await requestServicesProvider.getCityId(
       context,
@@ -133,7 +134,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
             ),
             verticalSpace(33),
             packageProvider.newVehicleLabel
-                ? packageProvider.manufacturerDataList.isEmpty
+                ? (packageProvider.vehiclesTypesDataList.isEmpty || packageProvider.manufacturerDataList.isEmpty)
                     ? const DataLoader() /*AppLoader.showLoader(context);*/
                     : Expanded(
                         child: NewVehiclesScreenWidget(
@@ -204,6 +205,33 @@ class NewVehiclesScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        ListView.separated(
+                      itemCount: packageProvider.vehiclesTypesDataList.length,
+                      itemBuilder: (context, index) => CustomContainer(
+                        backgroundColor: const Color(0xFFE6EEFB),
+                        width: 105,
+                        height: 112,
+                        padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
+                        onTap: () {},
+                        radiusCircular: 5,
+                        child: Column(
+                          children: [
+                            CustomSizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(packageProvider.vehiclesTypesDataList[index].image!),
+                            ),
+                            verticalSpace(8),
+                            TextWidget(
+                              text: packageProvider.vehiclesTypesDataList[index].name!,
+                              fontWeight: MyFontWeight.bold,
+                              textSize: MyFontSize.size14,
+                            ),
+                          ],
+                        ),
+                      ),
+                      separatorBuilder: (context, index) => verticalSpace(11),
+                    ),
         Row(
           children: [
             CustomContainer(
@@ -218,7 +246,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                   CustomSizedBox(
                     width: 50,
                     height: 50,
-                    child: Image.asset('assets/images/vehicle_car.png'),
+                    child: Image.network(packageProvider.vehiclesTypesDataList[0].image!),
                   ),
                   verticalSpace(8),
                   TextWidget(

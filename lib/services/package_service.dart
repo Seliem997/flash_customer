@@ -7,13 +7,40 @@ import '../models/otherServicesModel.dart';
 import '../models/packagesModel.dart';
 import '../models/requestResult.dart';
 import '../models/vehiclesModelsModel.dart';
+import '../models/vehiclesTypesActiveModel.dart';
 import '../utils/apis.dart';
 import '../utils/enum/request_types.dart';
 import '../utils/enum/statuses.dart';
 
 class PackageService extends BaseService {
 
-  Future<ResponseResult> getManufacturers() async {
+  Future<ResponseResult> getVehiclesTypes() async {
+    Status result = Status.error;
+
+    List<VehiclesActiveTypesData> vehiclesTypesDataList = [];
+    try {
+      await requestFutureData(
+          api: Api.getVehicles,
+          requestType: Request.get,
+          jsonBody: true,
+          withToken: true,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              vehiclesTypesDataList = VehiclesActiveTypesModel.fromJson(response).data!;
+
+            } catch (e) {
+              logger.e("Error getting response Vehicle Models Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting Vehicle Models Data$e");
+    }
+    return ResponseResult(result, vehiclesTypesDataList);
+  }
+
+  Future<ResponseResult> getManufacturers({int? vehicleTypeId}) async {
     Status result = Status.error;
     /*Map<String, String> headers = const {
       'Content-Type': 'application/json'};*/
@@ -21,7 +48,7 @@ class PackageService extends BaseService {
     List<ManufacturerData> manufacturerDataList = [];
     try {
       await requestFutureData(
-          api: Api.getManufacturers,
+          api: '${Api.getManufacturersOfType}$vehicleTypeId',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
