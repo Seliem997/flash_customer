@@ -113,7 +113,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                       AppLoader.showLoader(context);
 
                       await packageProvider
-                          .getVehiclesModels(manufactureId: value.id!)
+                          .getVehiclesModels(context: context,manufactureId: value.id!)
                           .then((result) {
                         AppLoader.stopLoader();
                       });
@@ -353,7 +353,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 fontWeight: MyFontWeight.bold,
                 onPressed: () {
                   myVehiclesProvider.addNewVehicle(
-                    vehicleTypeId: '4',
+                    vehicleTypeId: '1',
                     manufacture: 2,
                     model: 2,
                     numbers: numbersController.text,

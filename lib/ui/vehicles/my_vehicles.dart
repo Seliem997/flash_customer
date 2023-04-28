@@ -50,14 +50,15 @@ class _MyVehiclesState extends State<MyVehicles> {
                         ? const NoDataPlaceHolder()
                         : */
       body: myVehiclesProvider.loadingMyVehicles
-          ? const DataLoader(useExpand: true)
-          : myVehiclesProvider.myVehiclesData == null
-          ? const NoDataPlaceHolder()
+          ? const DataLoader()
           : Padding(
               padding: symmetricEdgeInsets(horizontal: 24),
               child: Column(
                 children: [
-                  MyVehiclesScreenWidget(myVehiclesProvider: myVehiclesProvider),
+                  myVehiclesProvider.myVehiclesData!.total == 0
+                      ? const NoDataPlaceHolder()
+                      : MyVehiclesScreenWidget(
+                          myVehiclesProvider: myVehiclesProvider),
                   DefaultButton(
                     text: 'Add new Vehicle',
                     onPressed: () {
@@ -90,15 +91,13 @@ class MyVehiclesScreenWidget extends StatelessWidget {
       child: Padding(
         padding: symmetricEdgeInsets(vertical: 30),
         child: ListView.separated(
-          itemCount: myVehiclesProvider
-              .myVehiclesData!.collection!.length,
+          itemCount: myVehiclesProvider.myVehiclesData!.collection!.length,
           itemBuilder: (context, index) => CustomContainer(
             height: 64,
             width: 345,
             backgroundColor: AppColor.borderGreyLight,
             child: Padding(
-              padding:
-                  symmetricEdgeInsets(vertical: 7, horizontal: 7),
+              padding: symmetricEdgeInsets(vertical: 7, horizontal: 7),
               child: Row(
                 children: [
                   CustomContainer(
@@ -109,8 +108,8 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                     clipBehavior: Clip.hardEdge,
                     backgroundColor: Colors.transparent,
                     child: Image.network(
-                      myVehiclesProvider.myVehiclesData!
-                          .collection![index].manufacturerLogo!,
+                      myVehiclesProvider
+                          .myVehiclesData!.collection![index].manufacturerLogo!,
                       fit: BoxFit.fitHeight,
                       width: 71,
                       height: 50,
@@ -121,8 +120,7 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                     child: Padding(
                       padding: onlyEdgeInsets(top: 5),
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextWidget(
                             text:
@@ -136,8 +134,7 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                             children: [
                               const CircleAvatar(
                                 radius: 6,
-                                backgroundColor:
-                                    Color(0xFF3424F1),
+                                backgroundColor: Color(0xFF3424F1),
                               ),
                               horizontalSpace(6),
                               TextWidget(

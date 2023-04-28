@@ -40,7 +40,37 @@ class PackageService extends BaseService {
     return ResponseResult(result, vehiclesTypesDataList);
   }
 
-  Future<ResponseResult> getManufacturers({int? vehicleTypeId}) async {
+  Future<ResponseResult> getManufacturers() async {
+    Status result = Status.error;
+    /*Map<String, String> headers = const {
+      'Content-Type': 'application/json'};*/
+
+    List<ManufacturerData> manufacturerDataList = [];
+    try {
+      await requestFutureData(
+          api: Api.getManufacturers,
+          requestType: Request.get,
+          jsonBody: true,
+          withToken: true,
+          // headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              manufacturerDataList = ManufacturersModel.fromJson(response).data!;
+
+            } catch (e) {
+              logger.e("Error getting response Manufacturer Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting Manufacturer Data$e");
+    }
+    return ResponseResult(result, manufacturerDataList);
+  }
+
+
+  Future<ResponseResult> getManufacturersOfType({required int vehicleTypeId}) async {
     Status result = Status.error;
     /*Map<String, String> headers = const {
       'Content-Type': 'application/json'};*/

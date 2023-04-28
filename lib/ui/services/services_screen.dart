@@ -107,7 +107,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           .selectedBasicServiceDuration =
                                       requestServicesProvider
                                           .basicServicesList[index].duration!;
-                                  // requestServicesProvider.totalAmount =requestServicesProvider.basicServicesList[index].cities!;
+                                  requestServicesProvider.basicAmount =int.parse(requestServicesProvider.basicServicesList[index].cities![0].price!.value!);
                                   requestServicesProvider
                                           .selectedBasicServiceId =
                                       requestServicesProvider
@@ -488,7 +488,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '154 SR',
+                                      text: '${requestServicesProvider.basicAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -591,7 +591,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${240 - requestServicesProvider.discountAmount} SR',
+                                          '${(requestServicesProvider.basicAmount + (double.parse(requestServicesProvider.taxData!.percent!).toInt())) - requestServicesProvider.discountAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -611,6 +611,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           fontWeight: MyFontWeight.bold,
                           onPressed: () {
                             if(requestServicesProvider.selectedBasicIndex != null){
+
                               requestServicesProvider.bookServices(
                                 context,
                                 cityId: widget.cityId,

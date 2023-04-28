@@ -4,6 +4,7 @@ import '../base/service/base_service.dart';
 
 import '../models/myVehiclesModel.dart';
 import '../models/requestResult.dart';
+import '../models/vehicleDetailsModel.dart';
 import '../utils/apis.dart';
 import '../utils/enum/request_types.dart';
 import '../utils/enum/statuses.dart';
@@ -14,11 +15,11 @@ class MyVehiclesService extends BaseService {
     required String vehicleTypeId,
     required int manufacture,
     required int model,
-    required String numbers,
-    required String letters,
-    required String color,
-    required String name,
-    required String year,
+    String? numbers,
+    String? letters,
+    String? color,
+    String? name,
+    String? year,
   }) async {
     Status status = Status.error;
     Map<String, String> header = {'Content-Type': 'application/json'};
@@ -32,6 +33,7 @@ class MyVehiclesService extends BaseService {
       "manufacturer_id": manufacture,
       "vehicle_model_id": model
     };
+    VehicleDetailsData? vehicleDetailsData;
     try {
       await requestFutureData(
           api: Api.addNewVehicle,
@@ -43,6 +45,7 @@ class MyVehiclesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              vehicleDetailsData = VehicleDetailsModel.fromJson(response).data!;
               print('Added New Vehicle Service Successfully');
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
@@ -54,7 +57,7 @@ class MyVehiclesService extends BaseService {
       status = Status.error;
       logger.e("Error in Added New Vehicle $e");
     }
-    return ResponseResult(status, "");
+    return ResponseResult(status, vehicleDetailsData);
   }
 
   Future<ResponseResult> getMyVehicles() async {

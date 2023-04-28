@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
 import '../models/myVehiclesModel.dart';
+import '../models/vehicleDetailsModel.dart';
 import '../services/myVehicles_service.dart';
 import '../utils/enum/statuses.dart';
 
 class MyVehiclesProvider with ChangeNotifier {
+
   MyVehiclesService myVehiclesService = MyVehiclesService();
   bool loadingMyVehicles = true;
   MyVehiclesData? myVehiclesData;
 
+  VehicleDetailsData? vehicleDetailsData;
   Future addNewVehicle({
     required String vehicleTypeId,
     required int manufacture,
     required int model,
-    required String numbers,
-    required String letters,
-    required String color,
-    required String name,
-    required String year,
+    String? numbers,
+    String? letters,
+    String? color,
+    String? name,
+    String? year,
   }) async {
     await myVehiclesService
         .addVehicle(
@@ -32,6 +35,7 @@ class MyVehiclesProvider with ChangeNotifier {
     )
         .then((value) {
       if (value.status == Status.success) {
+        vehicleDetailsData = value.data;
         print('Added New Vehicle In Provider Successfully');
       }
     });

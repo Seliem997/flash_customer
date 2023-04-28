@@ -48,7 +48,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<HomeProvider>(context, listen: false);
 
     await packageProvider.getVehiclesTypeActive();
-    await packageProvider.getManufacturers(vehicleTypeId: packageProvider.vehicleTypeId);
+    await packageProvider.getManufacturersOfType(
+        vehicleTypeId: packageProvider.vehicleTypeId);
     await myVehiclesProvider.getMyVehicles();
     await requestServicesProvider.getCityId(
       context,
@@ -65,6 +66,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<MyVehiclesProvider>(context);
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Vehicle Type'),
       body: Padding(
@@ -134,7 +136,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
             ),
             verticalSpace(33),
             packageProvider.newVehicleLabel
-                ? (packageProvider.vehiclesTypesDataList.isEmpty || packageProvider.manufacturerDataList.isEmpty)
+                ? (packageProvider.vehiclesTypesDataList.isEmpty ||
+                        packageProvider.manufacturerDataList.isEmpty)
                     ? const DataLoader() /*AppLoader.showLoader(context);*/
                     : Expanded(
                         child: NewVehiclesScreenWidget(
@@ -161,26 +164,40 @@ class _VehicleTypesState extends State<VehicleTypes> {
               fontWeight: MyFontWeight.bold,
               fontSize: MyFontSize.size20,
               text: 'Next',
-              onPressed: () {
+              onPressed: () async {
                 packageProvider.newVehicleLabel
                     ? packageProvider.chooseManufacture
                         ? packageProvider.chooseModel
-                            ? navigateTo(
-                                context,
-                                ServicesScreen(
-                                    cityId: 1,
-                                        // requestServicesProvider.cityIdData!.id!,
-                                    vehicleId: 6
-                                    // packageProvider.selectedVehicleModel!.id!,
-                                    ),
-                              )
+                            ? {
+                                AppLoader(),
+                                await myVehiclesProvider.addNewVehicle(
+                                    vehicleTypeId: '1',
+                                    manufacture: packageProvider
+                                        .selectedManufacture!.id!,
+                                    model: packageProvider
+                                        .selectedVehicleModel!.id!,
+                                    name: 'fff',
+                                    year: 'year',
+                                    color: '0xFF6515ds',
+                                    letters: 'ddd',
+                                    numbers: '5897'),
+                                navigateTo(
+                                  context,
+                                  ServicesScreen(
+                                    cityId:
+                                        requestServicesProvider.cityIdData!.id!,
+                                    vehicleId:
+                                        2 /* myVehiclesProvider.vehicleDetailsData!.id!*/,
+                                  ),
+                                )
+                              }
                             : packageProvider.setRequiredModel()
                         : packageProvider.setRequiredManufacture()
                     : navigateTo(
                         context,
                         ServicesScreen(
-                          cityId: 1/*requestServicesProvider.cityIdData!.id!*/,
-                          vehicleId:6 /* packageProvider.selectedVehicleModel!.id!*/,
+                          cityId: requestServicesProvider.cityIdData!.id!,
+                          vehicleId: packageProvider.selectedVehicleModel!.id!,
                         ),
                       );
               },
@@ -205,34 +222,39 @@ class NewVehiclesScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListView.separated(
-                      itemCount: packageProvider.vehiclesTypesDataList.length,
-                      itemBuilder: (context, index) => CustomContainer(
-                        backgroundColor: const Color(0xFFE6EEFB),
-                        width: 105,
-                        height: 112,
-                        padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
-                        onTap: () {},
-                        radiusCircular: 5,
-                        child: Column(
-                          children: [
-                            CustomSizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Image.network(packageProvider.vehiclesTypesDataList[index].image!),
-                            ),
-                            verticalSpace(8),
-                            TextWidget(
-                              text: packageProvider.vehiclesTypesDataList[index].name!,
-                              fontWeight: MyFontWeight.bold,
-                              textSize: MyFontSize.size14,
-                            ),
-                          ],
-                        ),
-                      ),
-                      separatorBuilder: (context, index) => verticalSpace(11),
-                    ),
-        Row(
+        CustomSizedBox(
+          height: 115,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: packageProvider.vehiclesTypesDataList.length,
+            itemBuilder: (context, index) => CustomContainer(
+              backgroundColor: const Color(0xFFE6EEFB),
+              width: 105,
+              height: 112,
+              padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
+              onTap: () {},
+              radiusCircular: 5,
+              child: Column(
+                children: [
+                  CustomSizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.network(
+                        packageProvider.vehiclesTypesDataList[index].image!),
+                  ),
+                  verticalSpace(8),
+                  TextWidget(
+                    text: packageProvider.vehiclesTypesDataList[index].name!,
+                    fontWeight: MyFontWeight.bold,
+                    textSize: MyFontSize.size14,
+                  ),
+                ],
+              ),
+            ),
+            separatorBuilder: (context, index) => horizontalSpace(11),
+          ),
+        ),
+        /* Row(
           children: [
             CustomContainer(
               backgroundColor: const Color(0xFFE6EEFB),
@@ -306,7 +328,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ),*/
         verticalSpace(38),
         Row(
           children: [
@@ -361,7 +383,8 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                 packageProvider.chooseManufacture = true;
                 AppLoader.showLoader(context);
                 await packageProvider
-                    .getVehiclesModels(manufactureId: value.id!)
+                    .getVehiclesModels(
+                        context: context, manufactureId: value.id!)
                     .then((result) {
                   AppLoader.stopLoader();
                 });
@@ -412,13 +435,14 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                 'assets/svg/arrow_down.svg',
               ),
               items: List.generate(
-                  packageProvider.vehiclesModelsDataList.length,
-                  (index) => DropdownMenuItem<VehiclesModelsData>(
-                      value: packageProvider.vehiclesModelsDataList[index],
-                      child: Text(
-                          packageProvider.vehiclesModelsDataList[index].name!,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 16)))),
+                packageProvider.vehiclesModelsDataList.length,
+                (index) => DropdownMenuItem<VehiclesModelsData>(
+                    value: packageProvider.vehiclesModelsDataList[index],
+                    child: Text(
+                        packageProvider.vehiclesModelsDataList[index].name!,
+                        style: const TextStyle(
+                            color: Colors.black, fontSize: 16))),
+              ),
               onChanged: (value) async {
                 packageProvider.setSelectedVehicle(value!);
                 packageProvider.chooseModel = true;

@@ -1,4 +1,6 @@
+import 'package:flash_customer/providers/requestServices_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/manufacturersModel.dart';
 
@@ -46,10 +48,22 @@ class PackageProvider with ChangeNotifier {
   ManufacturerData? selectedManufacture;
 
   List<ManufacturerData> manufacturerDataList = [];
-  Future getManufacturers({int? vehicleTypeId}) async {
+  Future getManufacturersOfType({required int vehicleTypeId}) async {
     PackageService packageService = PackageService();
     resetDropDownValues();
-    await packageService.getManufacturers(vehicleTypeId: vehicleTypeId).then((value) {
+    await packageService.getManufacturersOfType(vehicleTypeId: vehicleTypeId).then((value) {
+      if (value.status == Status.success) {
+        manufacturerDataList = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
+
+  Future getManufacturers() async {
+    PackageService packageService = PackageService();
+    resetDropDownValues();
+    await packageService.getManufacturersOfType(vehicleTypeId: vehicleTypeId).then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;
       }
@@ -69,8 +83,11 @@ class PackageProvider with ChangeNotifier {
   VehiclesModelsData? selectedVehicleModel;
 
   List<VehiclesModelsData> vehiclesModelsDataList = [];
-  Future getVehiclesModels({required int manufactureId}) async {
+  Future getVehiclesModels({context, required int manufactureId}) async {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
     PackageService packageService = PackageService();
+    requestServicesProvider.isLoading = true;
     await packageService
         .getVehiclesModels(manufactureId: manufactureId)
         .then((value) {

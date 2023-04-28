@@ -30,6 +30,8 @@ class Api {
 
   static const String getVehicles = "$baseUrl/customer/vehicle_types/get/active";
 
+  static const String getManufacturers = "$baseUrl/customer/manufacturers";
+
   static const String getManufacturersOfType = "$baseUrl/customer/vehicle_types/get/by/type/id/";
 
   static const String getVehiclesModels =

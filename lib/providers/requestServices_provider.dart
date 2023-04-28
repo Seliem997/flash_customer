@@ -18,6 +18,8 @@ class RequestServicesProvider with ChangeNotifier {
   TextEditingController discountCodeController =
       TextEditingController(text: '');
   int totalAmount = 0;
+  int basicAmount = 0;
+  int extraAmount = 0;
   int totalAmountAfterDiscount = 0;
   int discountAmount = 0;
   int selectedBasicServiceAmount = 0;
