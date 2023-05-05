@@ -21,8 +21,11 @@ class Api {
   static const String getExtraServices =
       "$baseUrl/customer/services?type=extra";
 
-  static const String getRequestDetails =
-      "$baseUrl/customer/request-details/";
+  static const String getRequestDetails = "$baseUrl/customer/request-details/";
+
+  static String getTimeSlots(
+          {int cityId = 1, int duration = 50, String date = "05/2/2023"}) =>
+      "$baseUrl/customer/slots?city_id=$cityId&services[0]=2&date=$date&services_duration=$duration";
 
   static const String updateInitialRequest =
       "$baseUrl/customer/update-initial-request?pay_by";
@@ -31,11 +34,13 @@ class Api {
 
   static const String getAddresses = "$baseUrl/customer/my-addresses";
 
-  static const String getVehicles = "$baseUrl/customer/vehicle_types/get/active";
+  static const String getVehicles =
+      "$baseUrl/customer/vehicle_types/get/active";
 
   static const String getManufacturers = "$baseUrl/customer/manufacturers";
 
-  static const String getManufacturersOfType = "$baseUrl/customer/vehicle_types/get/by/type/id/";
+  static const String getManufacturersOfType =
+      "$baseUrl/customer/vehicle_types/get/by/type/id/";
 
   static const String getVehiclesModels =
       "$baseUrl/customer/vehicle_models/get/by/manufacturers/id/";

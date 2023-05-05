@@ -9,13 +9,16 @@ import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
 import '../models/requestDetailsModel.dart';
 import '../models/requestResult.dart';
+import '../models/slotsModel.dart';
 import '../utils/apis.dart';
 import '../utils/enum/request_types.dart';
 import '../utils/enum/statuses.dart';
 
 class RequestServicesService extends BaseService {
-
-  Future<ResponseResult> getBasicServices({required int cityId, required int vehicleId,}) async {
+  Future<ResponseResult> getBasicServices({
+    required int cityId,
+    required int vehicleId,
+  }) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
 
@@ -42,7 +45,8 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, basicServicesDataList);
   }
 
-  Future<ResponseResult> getExtraServices({required int cityId, required int vehicleId}) async {
+  Future<ResponseResult> getExtraServices(
+      {required int cityId, required int vehicleId}) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
 
@@ -68,7 +72,6 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(result, extraServicesDataList);
   }
-
 
   Future<ResponseResult> getTax() async {
     Status result = Status.error;
@@ -127,17 +130,13 @@ class RequestServicesService extends BaseService {
     return ResponseResult(status, couponData);
   }
 
-
   Future<ResponseResult> getCityId({
     required double lat,
     required double lng,
   }) async {
     Status status = Status.error;
     Map<String, String> header = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "lat": lat,
-      "lng": lng
-    };
+    Map<String, dynamic> body = {"lat": lat, "lng": lng};
     CityIdData? cityIdData;
     try {
       await requestFutureData(
@@ -162,7 +161,6 @@ class RequestServicesService extends BaseService {
     return ResponseResult(status, cityIdData);
   }
 
-
   Future<ResponseResult> bookServices({
     required int cityId,
     required int vehicleId,
@@ -176,7 +174,8 @@ class RequestServicesService extends BaseService {
       "city_id": cityId,
       "vehicle_id": vehicleId,
       "basic_service_id": basicServiceId,
-      "extra_services_ids": selectedExtraServices.map((element) => element.toJson() ).toList(),
+      "extra_services_ids":
+          selectedExtraServices.map((element) => element.toJson()).toList(),
     };
     BookServicesData? bookServicesData;
     try {
@@ -191,7 +190,8 @@ class RequestServicesService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               bookServicesData = BookServicesModel.fromJson(response).data!;
-            } else if (response["status_code"] == 422 || response["status_code"] == 400) {
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
               status = Status.codeNotCorrect;
               message = response["message"];
             }
@@ -202,7 +202,6 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(status, bookServicesData, message: message);
   }
-
 
   Future<ResponseResult> getRequestDetails({required int requestId}) async {
     Status result = Status.error;
@@ -231,7 +230,6 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, requestDetailsData);
   }
 
-
   Future<ResponseResult> updateRequestSlots({
     required String requestId,
     required String offerCode,
@@ -259,7 +257,8 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              updatedRequestDetailsData = RequestDetailsModel.fromJson(response).data!;
+              updatedRequestDetailsData =
+                  RequestDetailsModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response update Request Slots Data\n$e");
             }
@@ -271,4 +270,30 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, updatedRequestDetailsData);
   }
 
+  Future<ResponseResult> getTimeSlots() async {
+    Status result = Status.error;
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
+
+    List<List<SlotData>>? slots = [];
+    try {
+      await requestFutureData(
+          api: Api.getTimeSlots(),
+          requestType: Request.get,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              slots = SlotsModel.fromJson(response).data!;
+            } catch (e) {
+              logger.e("Error getting response Request Details Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting Request Details Data$e");
+    }
+    return ResponseResult(result, slots);
+  }
 }
