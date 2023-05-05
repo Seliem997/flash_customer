@@ -3,5 +3,6 @@ import '../utils/enum/statuses.dart';
 class ResponseResult {
   Status status;
   dynamic data;
-  ResponseResult(this.status, this.data);
+  dynamic message;
+  ResponseResult(this.status, this.data,{this.message});
 }

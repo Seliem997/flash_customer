@@ -31,8 +31,8 @@ class RequestDetailsData {
   String? feedback;
   String? amount;
   String? tax;
-  String? discountAmount;
-  String? totalAmount;
+  int? discountAmount;
+  int? totalAmount;
   String? time;
   String? date;
   Employee? employee;

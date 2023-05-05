@@ -7,6 +7,7 @@ import '../models/bookServicesModel.dart';
 import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
 import '../models/requestDetailsModel.dart';
+import '../models/requestResult.dart';
 import '../models/servicesModel.dart';
 import '../services/requestServices_service.dart';
 import '../utils/enum/statuses.dart';
@@ -129,20 +130,19 @@ class RequestServicesProvider with ChangeNotifier {
           cityIdData = value.data;
 
         }
-
       });
-
-
     notifyListeners();
   }
 
 
   BookServicesData? bookServicesData;
-  Future bookServices(BuildContext context,{
+  Future<ResponseResult> bookServices(BuildContext context,{
     required int cityId,
     required int vehicleId,
     required int basicServiceId,
   }) async {
+    Status state = Status.error;
+    dynamic message;
     extraServicesList.forEach((element) {
       if(element.quantity > 0 || element.isSelected){
         selectedExtraServices.add(
@@ -154,10 +154,14 @@ class RequestServicesProvider with ChangeNotifier {
         .bookServices(cityId: cityId, vehicleId: vehicleId, basicServiceId: basicServiceId, selectedExtraServices: selectedExtraServices)
         .then((value) {
       if (value.status == Status.success) {
+        state = Status.success;
         bookServicesData = value.data;
+      }else{
+        message = value.message;
       }
     });
     notifyListeners();
+    return ResponseResult(state, bookServicesData, message: message);
   }
 
 
@@ -173,12 +177,45 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  RequestDetailsData? updatedRequestDetailsData;
+  Future updateRequestSlots({
+    required String requestId,
+    required String offerCode,
+    required int employeeID,
+    required String payBy,
+}) async {
+    setLoading(true);
+    RequestServicesService servicesService = RequestServicesService();
+    await servicesService.updateRequestSlots(
+      requestId: requestId,
+      offerCode: offerCode,
+      employeeID: employeeID,
+      payBy: payBy,
+    ).then((value) {
+      if (value.status == Status.success) {
+        updatedRequestDetailsData = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
 
 
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController();
     calculateTotal();
+    notifyListeners();
+  }
+
+  void clearServices(){
+    isLoading = true;
+    basicServicesList = [];
+    extraServicesList = [];
+    selectedExtraServices = [];
+    selectedBasicIndex = null;
+    basicAmount = 0;
+    extraAmount = 0;
     notifyListeners();
   }
 }

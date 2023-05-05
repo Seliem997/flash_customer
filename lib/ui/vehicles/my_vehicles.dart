@@ -93,9 +93,13 @@ class MyVehiclesScreenWidget extends StatelessWidget {
         child: ListView.separated(
           itemCount: myVehiclesProvider.myVehiclesData!.collection!.length,
           itemBuilder: (context, index) => CustomContainer(
-            height: 64,
+            height: 70,
             width: 345,
-            backgroundColor: AppColor.borderGreyLight,
+            borderColor: myVehiclesProvider.selectedMyVehicleIndex == index ? AppColor.borderBlue : Colors.transparent,
+            backgroundColor: myVehiclesProvider.selectedMyVehicleIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
+            onTap: (){
+              myVehiclesProvider.setSelectedMyVehicle(index: index);
+            },
             child: Padding(
               padding: symmetricEdgeInsets(vertical: 7, horizontal: 7),
               child: Row(

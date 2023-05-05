@@ -24,6 +24,9 @@ class Api {
   static const String getRequestDetails =
       "$baseUrl/customer/request-details/";
 
+  static const String updateInitialRequest =
+      "$baseUrl/customer/update-initial-request?pay_by";
+
   static const String bookServices = "$baseUrl/customer/initial-request";
 
   static const String getAddresses = "$baseUrl/customer/my-addresses";

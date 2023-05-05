@@ -76,6 +76,28 @@ class BaseService {
               logger.e("Error in $api \nError: ${value.body}");
             }
           });
+        } else if (requestType == Request.patch) {
+          await http
+              .patch(Uri.parse(api),
+              body: jsonBody ? jsonEncode(body) : body,
+              headers: headerWithToken)
+              .timeout(const Duration(seconds: 10), onTimeout: () {
+            AppLoader.stopLoader();
+            logger.e("Request Timeout");
+            return http.Response('Request Timeout', 408);
+          }).then((value) async {
+            if (jsonDecode(value.body)['status_code'] == 200 ||
+                jsonDecode(value.body)['code'] == 200) {
+              logger.i("Data Came from $api \nData: ${value.body}");
+              onSuccess(jsonDecode(value.body));
+            } else if (jsonDecode(value.body)['status_code'] == 401) {
+              onSuccess(jsonDecode(value.body));
+              logger.w("Something went wrong $api \nData: ${value.body}");
+            } else {
+              onSuccess(jsonDecode(value.body));
+              logger.e("Error in $api \nError: ${value.body}");
+            }
+          });
         }
       } else {
         logger.i(
@@ -104,6 +126,27 @@ class BaseService {
         } else if (requestType == Request.get) {
           await http
               .get(Uri.parse(api), headers: headers)
+              .timeout(const Duration(seconds: 10), onTimeout: () {
+            AppLoader.stopLoader();
+            logger.e("Request Timeout");
+            return http.Response('Request Timeout', 408);
+          }).then((value) async {
+            if (jsonDecode(value.body)['status_code'] == 200 ||
+                jsonDecode(value.body)['code'] == 200) {
+              logger.i("Data Came from $api \nData: ${value.body}");
+              onSuccess(jsonDecode(value.body));
+            } else if (jsonDecode(value.body)['status_code'] == 401) {
+              onSuccess(jsonDecode(value.body));
+              logger.w("Something went wrong $api \nData: ${value.body}");
+            } else {
+              onSuccess(jsonDecode(value.body));
+              logger.e("Error in $api \nError: ${value.body}");
+            }
+          });
+        } else if (requestType == Request.patch) {
+          await http
+              .patch(Uri.parse(api),
+              body: jsonBody ? jsonEncode(body) : body, headers: headers)
               .timeout(const Duration(seconds: 10), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");

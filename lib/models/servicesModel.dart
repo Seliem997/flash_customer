@@ -1,6 +1,6 @@
 class ServicesModel {
   int? statusCode;
-  Null? message;
+  String? message;
   List<ServiceData>? data;
 
   ServicesModel({this.statusCode, this.message, this.data});
@@ -11,7 +11,7 @@ class ServicesModel {
     if (json['data'] != null) {
       data = <ServiceData>[];
       json['data'].forEach((v) {
-        data!.add(new ServiceData.fromJson(v));
+        data!.add(ServiceData.fromJson(v));
       });
     }
   }
@@ -23,23 +23,27 @@ class ServiceData {
   String? image;
   String? info;
   String? type;
+  String? testAttribute;
   int? duration;
   bool? countable;
   bool isSelected = false;
   int quantity = 0;
-  List<Cities>? cities;
-  List<ChildServices>? childServices;
+  String? selectedPrice;
+  List<ServicePrices>? servicePrices;
+
 
   ServiceData(
       {this.id,
-      this.title,
-      this.image,
-      this.info,
-      this.type,
-      this.duration,
-      this.countable,
-      this.cities,
-      this.childServices});
+        this.title,
+        this.image,
+        this.info,
+        this.type,
+        this.testAttribute,
+        this.duration,
+        this.countable,
+        this.selectedPrice,
+        this.servicePrices,
+       });
 
   ServiceData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -47,31 +51,46 @@ class ServiceData {
     image = json['image'];
     info = json['info'];
     type = json['type'];
+    testAttribute = json['test_attribute'];
     duration = json['duration'];
     countable = json['countable'];
-    if (json['cities'] != null) {
-      cities = <Cities>[];
-      json['cities'].forEach((v) {
-        cities!.add(new Cities.fromJson(v));
-      });
-    }
-    if (json['child_services'] != null) {
-      childServices = <ChildServices>[];
-      json['child_services'].forEach((v) {
-        childServices!.add(new ChildServices.fromJson(v));
+    selectedPrice = json['selected_price'];
+    if (json['service_prices'] != null) {
+      servicePrices = <ServicePrices>[];
+      json['service_prices'].forEach((v) {
+        servicePrices!.add(new ServicePrices.fromJson(v));
       });
     }
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['image'] = this.image;
+    data['info'] = this.info;
+    data['type'] = this.type;
+    data['test_attribute'] = this.testAttribute;
+    data['duration'] = this.duration;
+    data['countable'] = this.countable;
+    data['selected_price'] = this.selectedPrice;
+    if (this.servicePrices != null) {
+      data['service_prices'] =
+          this.servicePrices!.map((v) => v.toJson()).toList();
+    }
+
+    return data;
+  }
 }
 
-class Cities {
+class ServicePrices {
   int? id;
   String? name;
   Price? price;
 
-  Cities({this.id, this.name, this.price});
+  ServicePrices({this.id, this.name, this.price});
 
-  Cities.fromJson(Map<String, dynamic> json) {
+  ServicePrices.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     price = json['price'] != null ? new Price.fromJson(json['price']) : null;
@@ -113,50 +132,7 @@ class Price {
   }
 }
 
-class ChildServices {
-  int? id;
-  String? title;
-  String? image;
-  String? info;
-  String? type;
-  int? duration;
-  bool? countable;
-  List<Cities>? cities;
-  List<ChildServices>? childServices;
 
-  ChildServices(
-      {this.id,
-      this.title,
-      this.image,
-      this.info,
-      this.type,
-      this.duration,
-      this.countable,
-      this.cities,
-      this.childServices});
-
-  ChildServices.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    image = json['image'];
-    info = json['info'];
-    type = json['type'];
-    duration = json['duration'];
-    countable = json['countable'];
-    if (json['cities'] != null) {
-      cities = <Cities>[];
-      json['cities'].forEach((v) {
-        cities!.add(new Cities.fromJson(v));
-      });
-    }
-    if (json['child_services'] != null) {
-      childServices = <ChildServices>[];
-      json['child_services'].forEach((v) {
-        childServices!.add(ChildServices.fromJson(v));
-      });
-    }
-  }
-}
 
 class ExtraServicesItem {
   int extraServiceId;
@@ -164,9 +140,9 @@ class ExtraServicesItem {
   ExtraServicesItem(this.extraServiceId, this.extraServiceCount);
 
   Map<String, dynamic> toJson (){
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['extra_service_id'] = this.extraServiceId;
-    data['extra_service_count'] = this.extraServiceCount;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['extra_service_id'] = extraServiceId;
+    data['extra_service_count'] = extraServiceCount;
     return data;
 }
 }

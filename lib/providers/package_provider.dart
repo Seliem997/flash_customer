@@ -11,9 +11,17 @@ import '../services/package_service.dart';
 import '../utils/enum/statuses.dart';
 
 class PackageProvider with ChangeNotifier {
+
   bool requiredManufacture = false;
   bool requiredModel = false;
   int vehicleTypeId = 1;
+  int selectedVehicleTypeIndex = 0;
+
+
+  void setSelectedVehicleType({required int index}) {
+    selectedVehicleTypeIndex = index;
+    notifyListeners();
+  }
 
   void setVehicleTypeId({required int typeId}) {
     vehicleTypeId = typeId;

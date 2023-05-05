@@ -3,6 +3,7 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/requestServices_provider.dart';
+import '../../utils/enum/statuses.dart';
 import '../../utils/styles/colors.dart';
 import '../date_time/select_date.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -107,7 +109,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           .selectedBasicServiceDuration =
                                       requestServicesProvider
                                           .basicServicesList[index].duration!;
-                                  requestServicesProvider.basicAmount =int.parse(requestServicesProvider.basicServicesList[index].cities![0].price!.value!);
+                                  requestServicesProvider.basicAmount =(double.parse(requestServicesProvider.basicServicesList[index].selectedPrice!)).toInt();
                                   requestServicesProvider
                                           .selectedBasicServiceId =
                                       requestServicesProvider
@@ -190,6 +192,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                             ExtraServicesWidget(
                                           extraService: requestServicesProvider
                                               .extraServicesList[index],
+                                              onTap: (){
+                                            requestServicesProvider.extraServicesList[index].countable!
+                                                ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + (requestServicesProvider.extraServicesList[index].quantity * double.parse(requestServicesProvider.extraServicesList[index].selectedPrice!).toInt())
+                                                : requestServicesProvider.extraServicesList[index].isSelected
+                                                  ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + requestServicesProvider.extraAmount
+                                                  : requestServicesProvider.extraAmount = requestServicesProvider.extraAmount;
+                                              },
                                               infoOnPressed: () {
                                                 showDialog(
                                                   context: context,
@@ -488,7 +497,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.basicAmount} SR',
+                                      text: '${requestServicesProvider.basicAmount + requestServicesProvider.extraAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -611,14 +620,20 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           fontWeight: MyFontWeight.bold,
                           onPressed: () {
                             if(requestServicesProvider.selectedBasicIndex != null){
-
+                              AppLoader.showLoader(context);
                               requestServicesProvider.bookServices(
                                 context,
                                 cityId: widget.cityId,
                                 vehicleId: widget.vehicleId,
                                 basicServiceId: requestServicesProvider.selectedBasicServiceId,
-                              );
-                              navigateTo(context, const SelectDate());
+                              ).then((value) {
+                                AppLoader.stopLoader();
+                                if(value.status == Status.success){
+                                  navigateTo(context, const SelectDate());
+                                }else{
+                                  CustomSnackBars.failureSnackBar(context, '${value.message}');
+                                }
+                              });
                             }else{
                               CustomSnackBars.failureSnackBar(context, 'Please Select Basic Service');
                             }

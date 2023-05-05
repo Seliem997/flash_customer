@@ -6,6 +6,7 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/no_data_place_holder.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/font_styles.dart';
+import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/app_loader.dart';
+import '../../utils/enum/statuses.dart';
 import '../../utils/styles/colors.dart';
 import '../services/services_screen.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -134,7 +136,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                 ),
               ],
             ),
-            verticalSpace(33),
+            verticalSpace(20),
             packageProvider.newVehicleLabel
                 ? (packageProvider.vehiclesTypesDataList.isEmpty ||
                         packageProvider.manufacturerDataList.isEmpty)
@@ -165,44 +167,56 @@ class _VehicleTypesState extends State<VehicleTypes> {
               fontSize: MyFontSize.size20,
               text: 'Next',
               onPressed: () async {
+                requestServicesProvider.clearServices();
                 packageProvider.newVehicleLabel
                     ? packageProvider.chooseManufacture
                         ? packageProvider.chooseModel
                             ? {
-                                AppLoader(),
+                                AppLoader.showLoader(context),
                                 await myVehiclesProvider.addNewVehicle(
                                     vehicleTypeId: '1',
                                     manufacture: packageProvider
                                         .selectedManufacture!.id!,
                                     model: packageProvider
                                         .selectedVehicleModel!.id!,
-                                    name: 'fff',
-                                    year: 'year',
+                                    name: packageProvider
+                                        .selectedVehicleModel!.name!,
+                                  /* year: 'year',
                                     color: '0xFF6515ds',
                                     letters: 'ddd',
-                                    numbers: '5897'),
-                                navigateTo(
-                                  context,
-                                  ServicesScreen(
-                                    cityId:
-                                        requestServicesProvider.cityIdData!.id!,
-                                    vehicleId:
-                                        2 /* myVehiclesProvider.vehicleDetailsData!.id!*/,
-                                  ),
-                                )
+                                    numbers: '5897'*/).then((value) {
+                                      AppLoader.stopLoader();
+                                      if (value.status == Status.success) {
+                                        CustomSnackBars.successSnackBar(context, 'New Vehicle added');
+                                        navigateTo(
+                                          context,
+                                          ServicesScreen(
+                                            cityId:
+                                            requestServicesProvider.cityIdData!.id!,
+                                            vehicleId: myVehiclesProvider.vehicleDetailsData!.id!,
+                                          ),
+                                        );
+                                      } else {
+                                        CustomSnackBars.somethingWentWrongSnackBar(context);
+                                      }
+
+                                    }),
+
                               }
                             : packageProvider.setRequiredModel()
                         : packageProvider.setRequiredManufacture()
-                    : navigateTo(
+                    : myVehiclesProvider.selectedMyVehicleIndex != null
+                    ? navigateTo(
                         context,
                         ServicesScreen(
                           cityId: requestServicesProvider.cityIdData!.id!,
-                          vehicleId: packageProvider.selectedVehicleModel!.id!,
+                          vehicleId: myVehiclesProvider.myVehiclesData!.collection![myVehiclesProvider.selectedMyVehicleIndex!].id!,
                         ),
-                      );
+                      )
+                : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
               },
             ),
-            verticalSpace(50),
+            verticalSpace(10),
           ],
         ),
       ),
@@ -228,11 +242,17 @@ class NewVehiclesScreenWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: packageProvider.vehiclesTypesDataList.length,
             itemBuilder: (context, index) => CustomContainer(
-              backgroundColor: const Color(0xFFE6EEFB),
+              backgroundColor: packageProvider.selectedVehicleTypeIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
               width: 105,
               height: 112,
-              padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
-              onTap: () {},
+              padding: symmetricEdgeInsets(horizontal: 4, vertical: 19),
+              onTap: () async{
+                packageProvider.setSelectedVehicleType(index: index);
+                packageProvider.setVehicleTypeId(typeId: (index+1));
+                AppLoader();
+                await packageProvider.getManufacturersOfType(
+                    vehicleTypeId: packageProvider.vehicleTypeId).then((value) {AppLoader.stopLoader();});
+              },
               radiusCircular: 5,
               child: Column(
                 children: [
@@ -245,8 +265,8 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                   verticalSpace(8),
                   TextWidget(
                     text: packageProvider.vehiclesTypesDataList[index].name!,
-                    fontWeight: MyFontWeight.bold,
-                    textSize: MyFontSize.size14,
+                    fontWeight: MyFontWeight.medium,
+                    textSize: MyFontSize.size12,
                   ),
                 ],
               ),

@@ -24,7 +24,7 @@ class RequestDetails extends StatefulWidget {
 }
 
 class _RequestDetailsState extends State<RequestDetails> {
-  @override
+  /*@override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     super.initState();
@@ -35,11 +35,11 @@ class _RequestDetailsState extends State<RequestDetails> {
     Provider.of<RequestServicesProvider>(context, listen: false);
 
 
-    await servicesProvider.getRequestDetails(requestId: 1 /*servicesProvider.bookServicesData!.id!*/).then((value) =>  print(servicesProvider.requestDetailsData!.services![2].type!));
+    await servicesProvider.getRequestDetails(requestId: 1 *//*servicesProvider.bookServicesData!.id!*//*).then((value) =>  print(servicesProvider.requestDetailsData!.services![2].type!));
 
     servicesProvider.setLoading(false);
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
@@ -132,9 +132,9 @@ class _RequestDetailsState extends State<RequestDetails> {
         ,
       ),
       body: SingleChildScrollView(
-        child: (requestServicesProvider.isLoading)
+        child: /*(requestServicesProvider.isLoading)
             ? const DataLoader()
-            : (requestServicesProvider.requestDetailsData == null)
+            : */(requestServicesProvider.updatedRequestDetailsData == null)
             ? const CustomSizedBox(
             height: 500,
             child: Center(
@@ -174,7 +174,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: '${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].year!} - ${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].letters!}',
+                        text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}',
                         // text: 'Small Car - Blue Yaris ACWS 2190',
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
@@ -188,7 +188,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: "${requestServicesProvider.requestDetailsData!.date!} - ${requestServicesProvider.requestDetailsData!.time!}",
+                        text: "${requestServicesProvider.updatedRequestDetailsData!.date!} - ${requestServicesProvider.updatedRequestDetailsData!.time!}",
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -204,11 +204,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                         // height: 25,
                         child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: requestServicesProvider.requestDetailsData!.services!.length,
+                        itemCount: requestServicesProvider.updatedRequestDetailsData!.services!.length,
                         itemBuilder: (context, index) {
-                          if(requestServicesProvider.requestDetailsData!.services![index].type == 'basic') {
+                          if(requestServicesProvider.updatedRequestDetailsData!.services![index].type == 'basic') {
                             return TextWidget(
-                              text: requestServicesProvider.requestDetailsData!.services![index].title!,
+                              text: requestServicesProvider.updatedRequestDetailsData!.services![index].title!,
                               textSize: MyFontSize.size12,
                               fontWeight: MyFontWeight.regular,
                               color: AppColor.subTextGrey,
@@ -228,11 +228,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                         // height: 25,
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: requestServicesProvider.requestDetailsData!.services!.length,
+                          itemCount: requestServicesProvider.updatedRequestDetailsData!.services!.length,
                           itemBuilder: (context, index) {
-                            if(requestServicesProvider.requestDetailsData!.services![index].type == 'extra') {
+                            if(requestServicesProvider.updatedRequestDetailsData!.services![index].type == 'extra') {
                               return TextWidget(
-                                text: requestServicesProvider.requestDetailsData!.services![index].title!,
+                                text: requestServicesProvider.updatedRequestDetailsData!.services![index].title!,
                                 textSize: MyFontSize.size12,
                                 fontWeight: MyFontWeight.regular,
                                 color: AppColor.subTextGrey,
@@ -558,7 +558,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     fontWeight: MyFontWeight.semiBold,
                   ),
                   horizontalSpace(12),
-                  TextWidget(/*${requestServicesProvider.requestDetailsData!.customer!.vehicle![0].customerDetails!.balance}*/
+                  TextWidget(/*${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance}*/
                     text: '20 SR',
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.semiBold,

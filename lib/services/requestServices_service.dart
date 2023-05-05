@@ -170,6 +170,7 @@ class RequestServicesService extends BaseService {
     required List<ExtraServicesItem> selectedExtraServices,
   }) async {
     Status status = Status.error;
+    dynamic message;
     Map<String, String> header = {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
       "city_id": cityId,
@@ -190,15 +191,16 @@ class RequestServicesService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               bookServicesData = BookServicesModel.fromJson(response).data!;
-            } else if (response["status_code"] == 422) {
+            } else if (response["status_code"] == 422 || response["status_code"] == 400) {
               status = Status.codeNotCorrect;
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error in book Services $e");
     }
-    return ResponseResult(status, bookServicesData);
+    return ResponseResult(status, bookServicesData, message: message);
   }
 
 
@@ -227,6 +229,46 @@ class RequestServicesService extends BaseService {
       log("Error in getting Request Details Data$e");
     }
     return ResponseResult(result, requestDetailsData);
+  }
+
+
+  Future<ResponseResult> updateRequestSlots({
+    required String requestId,
+    required String offerCode,
+    required int employeeID,
+    required String payBy,
+  }) async {
+    Status result = Status.error;
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, dynamic> body = {
+      "request_id": requestId,
+      "offer_code": offerCode,
+      "employee_id": employeeID,
+      "pay_by": payBy
+    };
+
+    RequestDetailsData? updatedRequestDetailsData;
+    try {
+      await requestFutureData(
+          api: Api.updateInitialRequest,
+          requestType: Request.patch,
+          jsonBody: true,
+          withToken: true,
+          body: body,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              updatedRequestDetailsData = RequestDetailsModel.fromJson(response).data!;
+            } catch (e) {
+              logger.e("Error getting response update Request Slots Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting update Request Slots Data$e");
+    }
+    return ResponseResult(result, updatedRequestDetailsData);
   }
 
 }

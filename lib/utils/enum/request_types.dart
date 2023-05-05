@@ -3,4 +3,5 @@ enum Request {
   post,
   delete,
   put,
+  patch,
 }

@@ -140,7 +140,7 @@ class ExtraServicesWidget extends StatelessWidget {
                         clipBehavior: Clip.hardEdge,
                         borderRadius: BorderRadius.zero,
                         backgroundColor: Colors.transparent,
-                        image: DecorationImage(
+                        image: const DecorationImage(
                             image: AssetImage('assets/images/minus.png'),
                             fit: BoxFit.fitHeight),
                       ),
@@ -161,7 +161,7 @@ class ExtraServicesWidget extends StatelessWidget {
                         clipBehavior: Clip.hardEdge,
                         borderRadius: BorderRadius.zero,
                         backgroundColor: Colors.transparent,
-                        image: DecorationImage(
+                        image: const DecorationImage(
                             image: AssetImage('assets/images/plus.png'),
                             fit: BoxFit.fitHeight),
                       ),
@@ -170,6 +170,7 @@ class ExtraServicesWidget extends StatelessWidget {
                 : CustomContainer(
                     onTap: () {
                       extraService.isSelected = !extraService.isSelected;
+                      extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
                       requestServicesProvider.notifyListeners();
                     },
                     radiusCircular: 5,

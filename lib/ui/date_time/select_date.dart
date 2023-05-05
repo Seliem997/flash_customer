@@ -4,9 +4,11 @@ import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 // import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../utils/font_styles.dart';
+import '../../providers/requestServices_provider.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -59,7 +61,39 @@ class _SelectDateState extends State<SelectDate> {
   // }
 
   @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
+    
+   /* final PackageProvider packageProvider =
+    Provider.of<PackageProvider>(context, listen: false);
+    final MyVehiclesProvider myVehiclesProvider =
+    Provider.of<MyVehiclesProvider>(context, listen: false);
+   
+    final HomeProvider homeProvider =
+    Provider.of<HomeProvider>(context, listen: false);
+
+    await packageProvider.getVehiclesTypeActive();
+    await packageProvider.getManufacturersOfType(
+        vehicleTypeId: packageProvider.vehicleTypeId);
+    await myVehiclesProvider.getMyVehicles();
+    await requestServicesProvider.getCityId(
+      context,
+      lat: homeProvider.currentPosition!.latitude,
+      long: homeProvider.currentPosition!.longitude,
+    );*/
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context);
+    
     return Scaffold(
       appBar: CustomAppBar(title: 'Date & Time '),
       body: Padding(
@@ -201,16 +235,16 @@ class _SelectDateState extends State<SelectDate> {
                     color: const Color(0xFF565656),
                   ),
                   const Spacer(),
-                  CustomSizedBox(height: 14,width: 14, child: CircleAvatar(
+                  const CustomSizedBox(height: 14,width: 14, child: CircleAvatar(
                     radius: 30,
                     backgroundColor: AppColor.attributeColor,
                     child: CustomSizedBox(
+                      width: 6,
+                      height: 6,
                       child: CircleAvatar(
                         backgroundColor: AppColor.white,
                         radius: 25,
                       ),
-                      width: 6,
-                      height: 6,
                     ),
                   ),
                   ),
@@ -222,7 +256,14 @@ class _SelectDateState extends State<SelectDate> {
             DefaultButton(
               text: 'Pay',
               onPressed: () {
-                navigateTo(context, const RequestDetails());
+                requestServicesProvider.updateRequestSlots(
+                  requestId: requestServicesProvider.bookServicesData!.requestId!,
+                  offerCode: requestServicesProvider.couponData!.code!,
+                    employeeID: 5,
+                    payBy: "wallet",
+                ).then((value) {
+                  navigateTo(context, const RequestDetails());
+                });
               },
               fontWeight: MyFontWeight.bold,
               fontSize: 21,

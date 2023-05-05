@@ -31,10 +31,10 @@ class VehicleDetailsData {
   String? year;
   String? mainImage;
   int? customerId;
-  String? manufacturerId;
+  int? manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  String? vehicleModelId;
+  int? vehicleModelId;
   String? vehicleModelName;
   String? vehicleTypeId;
   String? vehicleTypeName;
