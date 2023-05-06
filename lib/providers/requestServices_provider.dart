@@ -180,10 +180,12 @@ class RequestServicesProvider with ChangeNotifier {
   RequestDetailsData? updatedRequestDetailsData;
   Future updateRequestSlots({
     required String requestId,
-    required String offerCode,
+    String? offerCode,
     required int employeeID,
     required String payBy,
 }) async {
+    Status state = Status.error;
+    dynamic message;
     setLoading(true);
     RequestServicesService servicesService = RequestServicesService();
     await servicesService.updateRequestSlots(
@@ -193,10 +195,14 @@ class RequestServicesProvider with ChangeNotifier {
       payBy: payBy,
     ).then((value) {
       if (value.status == Status.success) {
+        state = Status.success;
         updatedRequestDetailsData = value.data;
+      }else{
+        message = value.message;
       }
     });
     notifyListeners();
+    return ResponseResult(state, bookServicesData, message: message);
   }
 
 

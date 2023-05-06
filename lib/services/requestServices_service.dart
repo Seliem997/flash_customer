@@ -232,11 +232,12 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> updateRequestSlots({
     required String requestId,
-    required String offerCode,
+    String? offerCode,
     required int employeeID,
     required String payBy,
   }) async {
     Status result = Status.error;
+    dynamic message;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
       "request_id": requestId,
@@ -255,10 +256,17 @@ class RequestServicesService extends BaseService {
           body: body,
           headers: headers,
           onSuccess: (response) async {
+
             try {
-              result = Status.success;
-              updatedRequestDetailsData =
-                  RequestDetailsModel.fromJson(response).data!;
+              if (response["status_code"] == 200) {
+                result = Status.success;
+                updatedRequestDetailsData =
+                RequestDetailsModel.fromJson(response).data!;
+              } else if (response["status_code"] == 422 ||
+                  response["status_code"] == 400) {
+                result = Status.codeNotCorrect;
+                message = response["message"];
+              }
             } catch (e) {
               logger.e("Error getting response update Request Slots Data\n$e");
             }
@@ -267,7 +275,7 @@ class RequestServicesService extends BaseService {
       result = Status.error;
       log("Error in getting update Request Slots Data$e");
     }
-    return ResponseResult(result, updatedRequestDetailsData);
+    return ResponseResult(result, updatedRequestDetailsData, message: message);
   }
 
   Future<ResponseResult> getTimeSlots() async {

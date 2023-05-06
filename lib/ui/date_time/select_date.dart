@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/font_styles.dart';
 import '../../providers/requestServices_provider.dart';
+import '../../utils/enum/statuses.dart';
+import '../../utils/snack_bars.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -258,11 +260,15 @@ class _SelectDateState extends State<SelectDate> {
               onPressed: () {
                 requestServicesProvider.updateRequestSlots(
                   requestId: requestServicesProvider.bookServicesData!.requestId!,
-                  offerCode: requestServicesProvider.couponData!.code!,
-                    employeeID: 5,
+                  offerCode: requestServicesProvider.couponData?.code,
+                    employeeID: 1,
                     payBy: "wallet",
                 ).then((value) {
-                  navigateTo(context, const RequestDetails());
+                  if(value.status == Status.success){
+                    navigateTo(context, const RequestDetails());
+                  }else{
+                    CustomSnackBars.failureSnackBar(context, '${value.message}');
+                  }
                 });
               },
               fontWeight: MyFontWeight.bold,

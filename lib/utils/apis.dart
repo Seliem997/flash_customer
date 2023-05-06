@@ -24,8 +24,8 @@ class Api {
   static const String getRequestDetails = "$baseUrl/customer/request-details/";
 
   static String getTimeSlots(
-          {int cityId = 1, int duration = 50, String date = "05/2/2023"}) =>
-      "$baseUrl/customer/slots?city_id=$cityId&services[0]=2&date=$date&services_duration=$duration";
+          {int cityId = 1, int basicId = 27, int duration = 50, String date = "06/5/2023"}) =>
+      "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId&{for(int i = 1; i <= 10; i++) {}}&date=$date&services_duration=$duration";
 
   static const String updateInitialRequest =
       "$baseUrl/customer/update-initial-request?pay_by";

@@ -224,6 +224,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
   }
 }
 
+
 class NewVehiclesScreenWidget extends StatelessWidget {
   const NewVehiclesScreenWidget({
     super.key,

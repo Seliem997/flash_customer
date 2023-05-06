@@ -196,8 +196,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                             requestServicesProvider.extraServicesList[index].countable!
                                                 ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + (requestServicesProvider.extraServicesList[index].quantity * double.parse(requestServicesProvider.extraServicesList[index].selectedPrice!).toInt())
                                                 : requestServicesProvider.extraServicesList[index].isSelected
-                                                  ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + requestServicesProvider.extraAmount
-                                                  : requestServicesProvider.extraAmount = requestServicesProvider.extraAmount;
+                                                  ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + double.parse(requestServicesProvider.extraServicesList[index].selectedPrice!).toInt()
+                                                  : requestServicesProvider.extraAmount = requestServicesProvider.extraAmount+1;
                                               },
                                               infoOnPressed: () {
                                                 showDialog(
