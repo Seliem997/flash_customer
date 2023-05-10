@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/home/widgets/widgets.dart';
+import 'package:flash_customer/ui/requests/myRequests.dart';
 import 'package:flash_customer/ui/user/register/register.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
@@ -30,8 +31,9 @@ import '../vehicles/vehicles_type.dart';
 import '../widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key, this.cameFromNewRequest= false}) : super(key: key);
 
+  final bool cameFromNewRequest;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void loadData() async {
+    widget.cameFromNewRequest ?  navigateTo(context, const MyRequests()) : null;
     await _handleLocationPermission();
     await _getCurrentLocation();
   }

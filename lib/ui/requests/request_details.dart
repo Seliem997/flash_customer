@@ -820,7 +820,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             );*/
                             await requestServicesProvider.submitFinialRequest(requestId: requestServicesProvider.updatedRequestDetailsData!.id!, payBy: 'Wallet').then((value) {
                               CustomSnackBars.successSnackBar(context, 'Submit Request Success');
-                              navigateTo(context, const MyRequests());
+                              navigateAndFinish(context, const HomeScreen(cameFromNewRequest: true,));
                             });
                           },
                         ),

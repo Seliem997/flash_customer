@@ -65,7 +65,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: 'Flash Wash Store - Uhud St. - Qatifggg',
+                        text: '${requestServicesProvider.detailsRequestData!.city!.name}',
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -78,10 +78,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        // text:/*/*- ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!}   - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}*/*/
-                        // '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
-
-                        text: 'Small Car - Blue Yaris ACWS 2190',
+                       text: '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -94,8 +91,8 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text: "ggggggggg",
-                        // "${requestServicesProvider.updatedRequestDetailsData!.date!} - ${requestServicesProvider.updatedRequestDetailsData!.time!}",
+                        text:
+                        "${requestServicesProvider.detailsRequestData!.date!} - ${requestServicesProvider.detailsRequestData!.time!}",
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -111,26 +108,23 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                         // height: 25,
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount:/* requestServicesProvider
-                              .updatedRequestDetailsData!
+                          itemCount: requestServicesProvider.detailsRequestData!
                               .services!
-                              .length,*/ 2,
+                              .length,
                           itemBuilder: (context, index) {
-                            // if (requestServicesProvider
-                            //     .updatedRequestDetailsData!
-                            //     .services![index]
-                            //     .type ==
-                            //     'basic') {
-                            //   return TextWidget(
-                            //     text: requestServicesProvider
-                            //         .updatedRequestDetailsData!
-                            //         .services![index]
-                            //         .title!,
-                            //     textSize: MyFontSize.size12,
-                            //     fontWeight: MyFontWeight.regular,
-                            //     color: AppColor.subTextGrey,
-                            //   );
-                            // }
+                            if (requestServicesProvider.detailsRequestData!
+                                .services![index]
+                                .type ==
+                                'basic') {
+                              return TextWidget(
+                                text: requestServicesProvider.detailsRequestData!
+                                    .services![index]
+                                    .title!,
+                                textSize: MyFontSize.size12,
+                                fontWeight: MyFontWeight.regular,
+                                color: AppColor.subTextGrey,
+                              );
+                            }
                             return Container();
                           },
                         ),
@@ -143,29 +137,25 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                       ),
                       verticalSpace(10),
                       CustomSizedBox(
-                        // height: 25,
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount:/* requestServicesProvider
-                              .updatedRequestDetailsData!
+                          itemCount: requestServicesProvider.detailsRequestData!
                               .services!
-                              .length*/2,
+                              .length,
                           itemBuilder: (context, index) {
-                            /*if (requestServicesProvider
-                                .updatedRequestDetailsData!
+                            if (requestServicesProvider.detailsRequestData!
                                 .services![index]
                                 .type ==
                                 'extra') {
                               return TextWidget(
-                                text: requestServicesProvider
-                                    .updatedRequestDetailsData!
+                                text: requestServicesProvider.detailsRequestData!
                                     .services![index]
                                     .title!,
                                 textSize: MyFontSize.size12,
                                 fontWeight: MyFontWeight.regular,
                                 color: AppColor.subTextGrey,
                               );
-                            }*/
+                            }
                             return Container();
                           },
                         ),
@@ -180,7 +170,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                           ),
                           horizontalSpace(10),
                           TextWidget(
-                            text: '50 Min',
+                            text: '${requestServicesProvider.detailsRequestData!.totalDuration} Min',
                             textSize: MyFontSize.size15,
                             fontWeight: MyFontWeight.medium,
                             color: const Color(0xFF686868),
