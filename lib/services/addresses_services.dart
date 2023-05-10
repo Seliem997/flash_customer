@@ -10,7 +10,7 @@ import '../utils/enum/statuses.dart';
 class AddressesService extends BaseService {
 
   Future<ResponseResult> storeAddress({
-    required String type,
+    String? type,
     String? locationName,
     required double lat,
     required double long,
@@ -18,11 +18,12 @@ class AddressesService extends BaseService {
     Status status = Status.error;
     Map<String, String> header = {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
-      "type": type,
+      "type": type ?? "Home",
       "latitude": lat,
       "langitude": long,
       "location_name": locationName ?? "Location Name"
     };
+    AddressesData? addressesData;
     try {
       await requestFutureData(
           api: Api.storeAddress,
@@ -34,6 +35,7 @@ class AddressesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              addressesData = AddressDetailsModel.fromJson(response).data!;
             } else if (response["status_code"] == 422) {
               status = Status.codeNotCorrect;
             }
@@ -42,7 +44,7 @@ class AddressesService extends BaseService {
       status = Status.error;
       logger.e("Error in store address $e");
     }
-    return ResponseResult(status, '');
+    return ResponseResult(status, addressesData);
   }
 
 

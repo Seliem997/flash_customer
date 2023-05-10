@@ -9,7 +9,7 @@ class DefaultFormField extends StatelessWidget {
   const DefaultFormField({
     Key? key,
     this.controller,
-    this.height,
+    this.height = 48,
     this.keyboardType,
     this.onChanged,
     required this.hintText,
@@ -34,7 +34,8 @@ class DefaultFormField extends StatelessWidget {
   }) : super(key: key);
 
   final TextEditingController? controller;
-  final double? height, textSize;
+  final double? textSize;
+  final double height;
   final double radiusCircular;
   final double? letterSpacing;
   final double? textHeight;
@@ -57,7 +58,7 @@ class DefaultFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: (48 / screenHeight) * 100.h,
+      height: (height / screenHeight) * 100.h,
       decoration: BoxDecoration(
           color: enabled
               ? filled

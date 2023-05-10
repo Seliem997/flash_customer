@@ -57,13 +57,17 @@ class DefaultButtonWithIcon extends StatelessWidget {
     this.borderRadius,
     required this.icon,
     required this.onPressed,
-    required this.labelText, this.padding,
+    required this.labelText,
+    this.padding,
+    this.border = false,
+    this.borderColor,
   }) : super(key: key);
 
   final double? width, height, elevation, labelSize;
-  final Color? textColor, backgroundButton;
+  final Color? textColor, backgroundButton, borderColor;
   final BorderRadiusGeometry? borderRadius;
   final VoidCallback onPressed;
+  final bool border;
   final String labelText;
   final Widget icon;
   final EdgeInsetsGeometry? padding;
@@ -87,6 +91,13 @@ class DefaultButtonWithIcon extends StatelessWidget {
             backgroundColor: backgroundButton ?? AppColor.primary,
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(5),
+                side: border
+                    ? BorderSide(
+                    width: 1, // the thickness
+                    color: borderColor ??
+                        Colors.black // the color of the border
+                )
+                    : BorderSide.none,
             ),
             padding: padding ?? EdgeInsets.symmetric(horizontal: 1.w),
             textStyle: TextStyle(

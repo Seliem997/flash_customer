@@ -9,6 +9,7 @@ import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
 import '../models/requestDetailsModel.dart';
 import '../models/requestResult.dart';
+import '../models/request_details_model.dart';
 import '../models/slotsModel.dart';
 import '../utils/apis.dart';
 import '../utils/enum/request_types.dart';
@@ -163,6 +164,7 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> bookServices({
     required int cityId,
+    required int addressId,
     required int vehicleId,
     required int basicServiceId,
     required List<ExtraServicesItem> selectedExtraServices,
@@ -172,6 +174,7 @@ class RequestServicesService extends BaseService {
     Map<String, String> header = {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
       "city_id": cityId,
+      "address_id": addressId,
       "vehicle_id": vehicleId,
       "basic_service_id": basicServiceId,
       "extra_services_ids":
@@ -203,11 +206,54 @@ class RequestServicesService extends BaseService {
     return ResponseResult(status, bookServicesData, message: message);
   }
 
+
+
+  Future<ResponseResult> assignEmployee({
+    required List slotsIds,
+    required String slotsDate,
+    required int id,
+
+  }) async {
+    Status status = Status.error;
+    dynamic message;
+    Map<String, String> header = {'Content-Type': 'application/json'};
+    Map<String, dynamic> body = {
+      "slots_ids": slotsIds,
+      "slots_date": slotsDate,
+      "id": id,
+
+    };
+    EmployeeDetailsData? employeeDetailsData;
+    try {
+      await requestFutureData(
+          api: Api.assignEmployee,
+          body: body,
+          headers: header,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.post,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              employeeDetailsData = EmployeeDetailsModel.fromJson(response).data!;
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
+              status = Status.codeNotCorrect;
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in assign employee $e");
+    }
+    return ResponseResult(status, employeeDetailsData, message: message);
+  }
+
   Future<ResponseResult> getRequestDetails({required int requestId}) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
 
-    RequestDetailsData? requestDetailsData;
+    DetailsRequestData? detailsRequestData;
     try {
       await requestFutureData(
           api: '${Api.getRequestDetails}$requestId',
@@ -218,7 +264,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              requestDetailsData = RequestDetailsModel.fromJson(response).data!;
+              detailsRequestData = DetailsRequestModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Request Details Data\n$e");
             }
@@ -227,22 +273,19 @@ class RequestServicesService extends BaseService {
       result = Status.error;
       log("Error in getting Request Details Data$e");
     }
-    return ResponseResult(result, requestDetailsData);
+    return ResponseResult(result, detailsRequestData);
   }
 
   Future<ResponseResult> updateRequestSlots({
-    required String requestId,
-    String? offerCode,
-    required int employeeID,
+    required int requestId,
+
     required String payBy,
   }) async {
     Status result = Status.error;
     dynamic message;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
-      "request_id": requestId,
-      "offer_code": offerCode,
-      "employee_id": employeeID,
+      "id": requestId,
       "pay_by": payBy
     };
 
@@ -256,12 +299,11 @@ class RequestServicesService extends BaseService {
           body: body,
           headers: headers,
           onSuccess: (response) async {
-
             try {
               if (response["status_code"] == 200) {
                 result = Status.success;
                 updatedRequestDetailsData =
-                RequestDetailsModel.fromJson(response).data!;
+                    RequestDetailsModel.fromJson(response).data!;
               } else if (response["status_code"] == 422 ||
                   response["status_code"] == 400) {
                 result = Status.codeNotCorrect;
@@ -278,14 +320,28 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, updatedRequestDetailsData, message: message);
   }
 
-  Future<ResponseResult> getTimeSlots() async {
+  Future<ResponseResult> getTimeSlots(
+      {
+        required int cityId,
+      required int basicId,
+      required int duration,
+      String? service,
+      required String date,
+      }) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
+/*
 
+    */
     List<List<SlotData>>? slots = [];
     try {
       await requestFutureData(
-          api: Api.getTimeSlots(),
+          api: Api.getTimeSlots(
+              cityId: cityId,
+              basicId: basicId,
+              date: date,
+              duration: duration,
+              service: service),
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
@@ -304,4 +360,43 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(result, slots);
   }
+
+  Future<ResponseResult> submitFinialRequest({
+    required int requestId,
+    required String payBy,
+
+  }) async {
+    Status status = Status.error;
+    dynamic message;
+    Map<String, String> header = {'Content-Type': 'application/json'};
+    Map<String, dynamic> body = {
+      "id": requestId,
+      "pay_by": payBy
+    };
+    try {
+      await requestFutureData(
+          api: Api.submitFinialRequest,
+          body: body,
+          headers: header,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.post,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              message = response["message"];
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
+              status = Status.codeNotCorrect;
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in submit Finial Request $e");
+    }
+    return ResponseResult(status, '', message: message);
+  }
+
+
 }

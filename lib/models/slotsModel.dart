@@ -9,7 +9,7 @@ class SlotsModel {
     statusCode = json['status_code'];
     message = json['message'];
     if (json['data'] != null) {
-      data = [<SlotData>[]];
+      data = [/*<SlotData>[]*/];
       json['data'].forEach((v) {
         final List<SlotData> innerList = [];
         v.forEach((b) {
@@ -47,5 +47,48 @@ class SlotData {
     shiftId = json['shift_id'];
     status = json['status'];
     gapTime = json['gap_time'];
+  }
+}
+
+class EmployeeDetailsModel {
+  int? statusCode;
+  String? message;
+  EmployeeDetailsData? data;
+
+  EmployeeDetailsModel({this.statusCode, this.message, this.data});
+
+  EmployeeDetailsModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? EmployeeDetailsData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class EmployeeDetailsData {
+  int? id;
+  String? name;
+
+  EmployeeDetailsData({this.id, this.name});
+
+  EmployeeDetailsData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
   }
 }

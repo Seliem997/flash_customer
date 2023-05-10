@@ -1,3 +1,28 @@
+class AddressDetailsModel {
+  int? statusCode;
+  AddressesData? data;
+  String? message;
+
+  AddressDetailsModel({this.statusCode, this.data, this.message});
+
+  AddressDetailsModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    data = json['data'] != null ? new AddressesData.fromJson(json['data']) : null;
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    data['message'] = this.message;
+    return data;
+  }
+}
+
+
 class AddressesModel {
   int? statusCode;
   List<AddressesData>? data;
@@ -31,8 +56,8 @@ class AddressesData {
   int? id;
   String? image;
   String? type;
-  String? latitude;
-  String? langitude;
+  double? latitude;
+  double? langitude;
   String? locationName;
   int? customerId;
 

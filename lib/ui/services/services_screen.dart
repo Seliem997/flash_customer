@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../../providers/addresses_provider.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/styles/colors.dart';
@@ -57,6 +58,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
+ final AddressesProvider addressesProvider =
+        Provider.of<AddressesProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Services'),
@@ -105,11 +108,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 onTap: () {
                                   requestServicesProvider.selectedBasicService(
                                       index: index);
-                                  requestServicesProvider
-                                          .selectedBasicServiceDuration =
-                                      requestServicesProvider
-                                          .basicServicesList[index].duration!;
-                                  requestServicesProvider.basicAmount =(double.parse(requestServicesProvider.basicServicesList[index].selectedPrice!)).toInt();
+                                  requestServicesProvider.calculateTotal();
                                   requestServicesProvider
                                           .selectedBasicServiceId =
                                       requestServicesProvider
@@ -192,13 +191,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                             ExtraServicesWidget(
                                           extraService: requestServicesProvider
                                               .extraServicesList[index],
-                                              onTap: (){
-                                            requestServicesProvider.extraServicesList[index].countable!
-                                                ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + (requestServicesProvider.extraServicesList[index].quantity * double.parse(requestServicesProvider.extraServicesList[index].selectedPrice!).toInt())
-                                                : requestServicesProvider.extraServicesList[index].isSelected
-                                                  ? requestServicesProvider.extraAmount = requestServicesProvider.extraAmount + double.parse(requestServicesProvider.extraServicesList[index].selectedPrice!).toInt()
-                                                  : requestServicesProvider.extraAmount = requestServicesProvider.extraAmount+1;
-                                              },
                                               infoOnPressed: () {
                                                 showDialog(
                                                   context: context,
@@ -470,7 +462,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                             ),
                             TextWidget(
                               text:
-                                  ' ${(requestServicesProvider.selectedBasicServiceDuration)} Min',
+                                  ' ${(requestServicesProvider.totalDuration)} Min',
                               textSize: MyFontSize.size15,
                               fontWeight: MyFontWeight.medium,
                               color: const Color(0xFF686868),
@@ -497,7 +489,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.basicAmount + requestServicesProvider.extraAmount} SR',
+                                      text: '${requestServicesProvider.totalAmount} SR',
+                                      // text: '${requestServicesProvider.basicAmount + requestServicesProvider.extraAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -600,7 +593,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${(requestServicesProvider.basicAmount + (double.parse(requestServicesProvider.taxData!.percent!).toInt())) - requestServicesProvider.discountAmount} SR',
+                                          '${(requestServicesProvider.totalAmount + (double.parse(requestServicesProvider.taxData!.percent!).toInt())) - requestServicesProvider.discountAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -626,6 +619,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 cityId: widget.cityId,
                                 vehicleId: widget.vehicleId,
                                 basicServiceId: requestServicesProvider.selectedBasicServiceId,
+                                addressId: addressesProvider.addressDetailsData!.id!,
                               ).then((value) {
                                 AppLoader.stopLoader();
                                 if(value.status == Status.success){

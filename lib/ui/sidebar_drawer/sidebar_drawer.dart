@@ -13,6 +13,7 @@ import '../about/about.dart';
 import '../addresses/addresses.dart';
 import '../contact/contact_us.dart';
 import '../monthly_pkg/monthly_pkg.dart';
+import '../requests/myRequests.dart';
 import '../user/profile/edit_profile.dart';
 import '../vehicles/my_vehicles.dart';
 import '../wallet/wallet.dart';
@@ -192,8 +193,8 @@ class SidebarDrawer extends StatelessWidget {
                 fontWeight: MyFontWeight.medium,
               ),
               onTap: () {
-                // Navigator.pop(context);
-                // navigateTo(context, const EditProfile());
+                Navigator.pop(context);
+                navigateTo(context, const MyRequests());
               },
             ),
             ListTile(

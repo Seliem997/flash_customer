@@ -16,8 +16,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../providers/addresses_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
+import '../../utils/enum/statuses.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
 import '../date_time/select_date.dart';
@@ -109,7 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-    var markers = HashSet<Marker>();
+    final AddressesProvider addressesProvider =
+    Provider.of<AddressesProvider>(context);
+
     return Scaffold(
       key: globalKey,
       body: Stack(
@@ -171,8 +176,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 28,
                 fontWeight: MyFontWeight.bold,
                 onPressed: loggedIn
-                    ? () {
+                    ? () async{
+                    await addressesProvider.storeAddress(
+                      lat: homeProvider.currentPosition!.latitude,
+                      long: homeProvider.currentPosition!.longitude,
+                    ).then((value) {
+                      AppLoader.showLoader(context);
+                      if(value.status == Status.success){
+                        AppLoader.stopLoader();
+                        print(addressesProvider.addressDetailsData!.id);
                         navigateTo(context, const VehicleTypes());
+                        CustomSnackBars.successSnackBar(context, 'Address Added Successfully');
+                      }else{
+                        print('Faild');
+                        CustomSnackBars.somethingWentWrongSnackBar(context);
+                        AppLoader.stopLoader();
+                      }
+                    });
                       }
                     : () {
                         navigateTo(context, const RegisterPhoneNumber());

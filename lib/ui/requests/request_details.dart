@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../providers/requestServices_provider.dart';
 import '../../utils/font_styles.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../home/home_screen.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -15,6 +16,7 @@ import '../widgets/custom_text_form.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
+import 'myRequests.dart';
 
 class RequestDetails extends StatefulWidget {
   const RequestDetails({Key? key}) : super(key: key);
@@ -174,8 +176,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 ),
                                 verticalSpace(10),
                                 TextWidget(
-                                  text:
-                                      '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}',
+                                  text:/*/*- ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!}   - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}*/*/
+                                      '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
                                   // text: 'Small Car - Blue Yaris ACWS 2190',
                                   textSize: MyFontSize.size12,
                                   fontWeight: MyFontWeight.regular,
@@ -275,7 +277,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     horizontalSpace(10),
                                     TextWidget(
-                                      text: '50 Min',
+                                      text: "${requestServicesProvider.totalDuration}",
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF686868),
@@ -653,7 +655,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         verticalSpace(22),
                         CustomContainer(
                           width: 345,
-                          height: 235,
+                          // height: 235,
                           borderColor: AppColor.primary,
                           backgroundColor: const Color(0xFFF1F6FE),
                           child: Padding(
@@ -670,7 +672,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '154 SR',
+                                      text: '${requestServicesProvider.updatedRequestDetailsData!.amount!} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -687,7 +689,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '17 SR',
+                                      text: "${requestServicesProvider.updatedRequestDetailsData!.tax!} SR",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -704,14 +706,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '70 SR',
+                                      text: "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
                                     ),
                                   ],
                                 ),
-                                Row(
+                               /* Row(
                                   children: [
                                     TextWidget(
                                       text: 'Discount code : ',
@@ -740,7 +742,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
                                   ],
-                                ),
+                                ),*/
                                 Padding(
                                   padding: symmetricEdgeInsets(
                                       horizontal: 10, vertical: 28),
@@ -757,7 +759,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '240 SR',
+                                      text: '${requestServicesProvider.updatedRequestDetailsData!.totalAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -776,8 +778,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                           fontSize: MyFontSize.size20,
                           backgroundColor: const Color(0xFFB6B6B6),
                           text: 'Confirm and Pay',
-                          onPressed: () {
-                            showDialog(
+                          onPressed: () async{
+                            /*showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
@@ -785,7 +787,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     padding: symmetricEdgeInsets(
                                         horizontal: 42, vertical: 20),
                                     child: TextWidget(
-                                      text: 'Please select a payment method ',
+                                      text: 'Please select a cash payment method ',
                                       fontWeight: MyFontWeight.semiBold,
                                       textSize: MyFontSize.size15,
                                       height: 1.5,
@@ -815,7 +817,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   ],
                                 );
                               },
-                            );
+                            );*/
+                            await requestServicesProvider.submitFinialRequest(requestId: requestServicesProvider.updatedRequestDetailsData!.id!, payBy: 'Wallet').then((value) {
+                              CustomSnackBars.successSnackBar(context, 'Submit Request Success');
+                              navigateTo(context, const MyRequests());
+                            });
                           },
                         ),
                       ],

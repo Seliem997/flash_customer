@@ -8,7 +8,9 @@ import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
 import '../models/requestDetailsModel.dart';
 import '../models/requestResult.dart';
+import '../models/request_details_model.dart';
 import '../models/servicesModel.dart';
+import '../models/slotsModel.dart';
 import '../services/requestServices_service.dart';
 import '../utils/enum/statuses.dart';
 import '../utils/snack_bars.dart';
@@ -19,23 +21,56 @@ class RequestServicesProvider with ChangeNotifier {
   TextEditingController discountCodeController =
       TextEditingController(text: '');
   int totalAmount = 0;
-  int basicAmount = 0;
-  int extraAmount = 0;
+  int totalDuration = 0;
   int totalAmountAfterDiscount = 0;
   int discountAmount = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
   int selectedBasicServiceId = 0;
   int? selectedBasicIndex;
+  int? selectedSlotIndex;
   bool isLoading = true;
-  List<ExtraServicesItem> selectedExtraServices= [];
+  List<ExtraServicesItem> selectedExtraServices = [];
   bool selectedCashPayment = false;
+  String? selectedDate;
+  List slotsIds=[];
+
+  var date = DateTime.now();
 
   void setLoading(bool value) {
     isLoading = value;
     notifyListeners();
   }
 
+  void calculateTotal() {
+    totalAmount = 0;
+    totalDuration = 0;
+    if (selectedBasicIndex != null) {
+      totalAmount +=
+          (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!))
+              .toInt();
+      totalDuration += basicServicesList[selectedBasicIndex!].duration!;
+    }
+    if (selectedExtraServices != []) {
+      for (int i = 0; i < extraServicesList.length; i++) {
+        extraServicesList[i].countable!
+            ? {
+                totalAmount += (extraServicesList[i].quantity *
+                    double.parse(extraServicesList[i].selectedPrice!).toInt()),
+                totalDuration += extraServicesList[i].duration!,
+              }
+            : extraServicesList[i].isSelected
+                ? {
+                    totalAmount +=
+                        double.parse(extraServicesList[i].selectedPrice!)
+                            .toInt(),
+                    totalDuration += extraServicesList[i].duration!,
+                  }
+                : totalAmount = totalAmount;
+      }
+    }
+    notifyListeners();
+  }
 
   void selectCashPayment(bool value) {
     selectedCashPayment = value;
@@ -47,19 +82,20 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  void calculateTotal() {
-    totalAmount = 0;
-    if (selectedBasicIndex != null) {
-      // totalAmount+=basicServicesList[selectedBasicIndex].
-    }
+  void selectedTimeSlot({required int index}) {
+    selectedSlotIndex = index;
     notifyListeners();
   }
 
   List<ServiceData> basicServicesList = [];
-  Future getBasicServices({required int cityId, required int vehicleId,}) async {
+  Future getBasicServices({
+    required int cityId,
+    required int vehicleId,
+  }) async {
     RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getBasicServices(cityId: cityId, vehicleId: vehicleId).then((value) {
+    await servicesService
+        .getBasicServices(cityId: cityId, vehicleId: vehicleId)
+        .then((value) {
       if (value.status == Status.success) {
         basicServicesList = value.data;
       }
@@ -70,7 +106,12 @@ class RequestServicesProvider with ChangeNotifier {
   List<ServiceData> extraServicesList = [];
   Future getExtraServices({required int cityId, required int vehicleId}) async {
     RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getExtraServices(cityId: cityId, vehicleId: vehicleId,).then((value) {
+    await servicesService
+        .getExtraServices(
+      cityId: cityId,
+      vehicleId: vehicleId,
+    )
+        .then((value) {
       if (value.status == Status.success) {
         extraServicesList = value.data;
       }
@@ -119,44 +160,45 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-
   CityIdData? cityIdData;
-  Future getCityId(BuildContext context,{required double lat, required double long}) async {
-      await servicesService
-          .getCityId(lat: lat, lng: long)
-          .then((value) {
-        if (value.status == Status.success) {
-          cityIdData = value.data;
-
-        }
-      });
+  Future getCityId(BuildContext context,
+      {required double lat, required double long}) async {
+    await servicesService.getCityId(lat: lat, lng: long).then((value) {
+      if (value.status == Status.success) {
+        cityIdData = value.data;
+      }
+    });
     notifyListeners();
   }
 
-
   BookServicesData? bookServicesData;
-  Future<ResponseResult> bookServices(BuildContext context,{
+  Future<ResponseResult> bookServices(
+    BuildContext context, {
     required int cityId,
+    required int addressId,
     required int vehicleId,
     required int basicServiceId,
   }) async {
     Status state = Status.error;
     dynamic message;
     extraServicesList.forEach((element) {
-      if(element.quantity > 0 || element.isSelected){
-        selectedExtraServices.add(
-            ExtraServicesItem(element.id!,element.quantity)
-        );
+      if (element.quantity > 0 || element.isSelected) {
+        selectedExtraServices
+            .add(ExtraServicesItem(element.id!, element.quantity));
       }
     });
     await servicesService
-        .bookServices(cityId: cityId, vehicleId: vehicleId, basicServiceId: basicServiceId, selectedExtraServices: selectedExtraServices)
+        .bookServices(
+            cityId: cityId,
+            vehicleId: vehicleId,
+            basicServiceId: basicServiceId,
+            selectedExtraServices: selectedExtraServices,
+            addressId: addressId)
         .then((value) {
       if (value.status == Status.success) {
         state = Status.success;
         bookServicesData = value.data;
-      }else{
+      } else {
         message = value.message;
       }
     });
@@ -164,14 +206,46 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, bookServicesData, message: message);
   }
 
-
-  RequestDetailsData? requestDetailsData;
+  DetailsRequestData? detailsRequestData;
   Future getRequestDetails({required int requestId}) async {
     setLoading(true);
     RequestServicesService servicesService = RequestServicesService();
     await servicesService.getRequestDetails(requestId: requestId).then((value) {
       if (value.status == Status.success) {
-        requestDetailsData = value.data;
+        detailsRequestData = value.data;
+      }
+    });
+    notifyListeners();
+  }
+
+  List<List<SlotData>> slotsList = [];
+  Future getTimeSlots({
+    required int cityId,
+    required int basicId,
+    required int duration,
+    required String date,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    String services = "";
+    for (int i = 0; i < selectedExtraServices.length; i++) {
+      services +=
+          "&services[${i + 1}]= ${selectedExtraServices[i].extraServiceId}";
+    }
+    RequestServicesService servicesService = RequestServicesService();
+    await servicesService
+        .getTimeSlots(
+            cityId: cityId,
+            basicId: basicId,
+            duration: duration,
+            date: date,
+            service: services,
+    ).then((value) {
+      isLoading = false;
+      if (value.status == Status.success) {
+        slotsList = value.data;
+        print('Time Slot in provider Success');
+        print(slotsList);
       }
     });
     notifyListeners();
@@ -179,33 +253,77 @@ class RequestServicesProvider with ChangeNotifier {
 
   RequestDetailsData? updatedRequestDetailsData;
   Future updateRequestSlots({
-    required String requestId,
-    String? offerCode,
-    required int employeeID,
+    required int requestId,
     required String payBy,
-}) async {
+  }) async {
     Status state = Status.error;
     dynamic message;
     setLoading(true);
     RequestServicesService servicesService = RequestServicesService();
-    await servicesService.updateRequestSlots(
+    await servicesService
+        .updateRequestSlots(
       requestId: requestId,
-      offerCode: offerCode,
-      employeeID: employeeID,
+
       payBy: payBy,
-    ).then((value) {
+    )
+        .then((value) {
       if (value.status == Status.success) {
         state = Status.success;
         updatedRequestDetailsData = value.data;
-      }else{
+      } else {
         message = value.message;
       }
     });
     notifyListeners();
-    return ResponseResult(state, bookServicesData, message: message);
+    return ResponseResult(state, updatedRequestDetailsData, message: message);
+  }
+
+  Future<ResponseResult> submitFinialRequest({
+    required int requestId,
+    required String payBy,
+  }) async {
+    Status state = Status.error;
+    dynamic message;
+
+    await servicesService
+        .submitFinialRequest(requestId: requestId, payBy: payBy)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        message = value.message;
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, '', message: message);
   }
 
 
+  EmployeeDetailsData? employeeDetailsData;
+  Future<ResponseResult> assignEmployee({
+    required List slotsIds,
+    required String slotsDate,
+    required int id,
+
+  }) async {
+    Status state = Status.error;
+    dynamic message;
+
+    await servicesService
+        .assignEmployee(slotsIds: slotsIds, slotsDate: slotsDate, id: id)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        message = value.message;
+        employeeDetailsData = value.data;
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, employeeDetailsData, message: message);
+  }
 
   void resetCoupon() {
     couponData = null;
@@ -214,14 +332,13 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearServices(){
+  void clearServices() {
     isLoading = true;
     basicServicesList = [];
     extraServicesList = [];
     selectedExtraServices = [];
     selectedBasicIndex = null;
-    basicAmount = 0;
-    extraAmount = 0;
+    selectedSlotIndex = null;
     notifyListeners();
   }
 }

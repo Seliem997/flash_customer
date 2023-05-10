@@ -1,6 +1,7 @@
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
 import 'package:flash_customer/providers/home_provider.dart';
+import 'package:flash_customer/providers/myRequests_provider.dart';
 import 'package:flash_customer/providers/myVehicles_provider.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
@@ -97,6 +98,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => RequestServicesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MyRequestsProvider(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

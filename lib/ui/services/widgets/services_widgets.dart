@@ -133,6 +133,7 @@ class ExtraServicesWidget extends StatelessWidget {
                           if (extraService.quantity > 0) {
                             extraService.quantity--;
                             requestServicesProvider.notifyListeners();
+                            requestServicesProvider.calculateTotal();
                           }
                         },
                         width: 20,
@@ -155,6 +156,8 @@ class ExtraServicesWidget extends StatelessWidget {
                         onTap: () {
                           extraService.quantity++;
                           requestServicesProvider.notifyListeners();
+                          requestServicesProvider.calculateTotal();
+
                         },
                         width: 20,
                         height: 20,
@@ -172,6 +175,8 @@ class ExtraServicesWidget extends StatelessWidget {
                       extraService.isSelected = !extraService.isSelected;
                       extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
                       requestServicesProvider.notifyListeners();
+                      requestServicesProvider.calculateTotal();
+
                     },
                     radiusCircular: 5,
                     backgroundColor: extraService.isSelected

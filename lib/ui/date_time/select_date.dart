@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:collection/collection.dart';
 
 import '../../../utils/font_styles.dart';
 import '../../providers/requestServices_provider.dart';
+import '../../utils/enum/date_formats.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/data_loader.dart';
 import '../widgets/navigate.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
@@ -27,41 +29,6 @@ class SelectDate extends StatefulWidget {
 
 class _SelectDateState extends State<SelectDate> {
 
-  var date = DateTime.now();
-
-  // Widget cellBuilder(BuildContext context, DateRangePickerCellDetails details) {
-  //   final bool isSelected = _controller.selectedDate != null &&
-  //       details.date.year == _controller.selectedDate!.year &&
-  //       details.date.month == _controller.selectedDate!.month &&
-  //       details.date.day == _controller.selectedDate!.day;
-  //   if (isSelected) {
-  //     return Column(
-  //       children: [
-  //         Container(
-  //           child: Text(
-  //             details.date.day.toString(),
-  //             textAlign: TextAlign.center,
-  //             style: const TextStyle(color: Colors.white),
-  //           ),
-  //         ),
-  //         Container(
-  //             child: Text(
-  //           DateFormat('EEE').format((details.date)),
-  //           style: const TextStyle(color: Colors.white),
-  //         )),
-  //       ],
-  //     );
-  //   } else {
-  //     return Container(
-  //       child: Text(
-  //         details.date.day.toString(),
-  //         textAlign: TextAlign.center,
-  //         style: const TextStyle(color: Colors.tealAccent),
-  //       ),
-  //     );
-  //   }
-  // }
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -71,24 +38,14 @@ class _SelectDateState extends State<SelectDate> {
   void loadData() async {
     final RequestServicesProvider requestServicesProvider =
     Provider.of<RequestServicesProvider>(context, listen: false);
-    
-   /* final PackageProvider packageProvider =
-    Provider.of<PackageProvider>(context, listen: false);
-    final MyVehiclesProvider myVehiclesProvider =
-    Provider.of<MyVehiclesProvider>(context, listen: false);
-   
-    final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
 
-    await packageProvider.getVehiclesTypeActive();
-    await packageProvider.getManufacturersOfType(
-        vehicleTypeId: packageProvider.vehicleTypeId);
-    await myVehiclesProvider.getMyVehicles();
-    await requestServicesProvider.getCityId(
-      context,
-      lat: homeProvider.currentPosition!.latitude,
-      long: homeProvider.currentPosition!.longitude,
-    );*/
+    await requestServicesProvider.getTimeSlots(
+        cityId: requestServicesProvider.cityIdData!.id!,
+        basicId: requestServicesProvider.selectedBasicServiceId,
+        duration: 50,
+        date: DateFormat(DFormat.mdy.key).format(requestServicesProvider.date),
+    ).then((value) => requestServicesProvider.setLoading(false));
+
   }
 
   @override
@@ -110,65 +67,30 @@ class _SelectDateState extends State<SelectDate> {
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size15,
                 ),
-                /* const Spacer(),
-                CustomContainer(
-                  width: 55,
-                  height: 24,
-                  radiusCircular: 3,
-                  borderColor: const Color(0xFF979797),
-                  child: Padding(
-                    padding: symmetricEdgeInsets(horizontal: 4),
-                    child: Row(
-                      children: [
-                        TextWidget(
-                          text: 'Jan',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF909090),
-                        ),
-                        horizontalSpace(8),
-                        SvgPicture.asset(
-                          'assets/svg/arrow_down.svg',
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                horizontalSpace(8),
-                CustomContainer(
-                  width: 65,
-                  height: 24,
-                  radiusCircular: 3,
-                  borderColor: const Color(0xFF979797),
-                  child: Padding(
-                    padding: symmetricEdgeInsets(horizontal: 4),
-                    child: Row(
-                      children: [
-                        TextWidget(
-                          text: '2023',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF909090),
-                        ),
-                        horizontalSpace(11),
-                        SvgPicture.asset(
-                          'assets/svg/arrow_down.svg',
-                        )
-                      ],
-                    ),
-                  ),
-                ),*/
               ],
             ),
             verticalSpace(20),
             CalendarTimeline(
-              initialDate: date,
-              firstDate: date,
-              lastDate: DateTime(date.year + 1, date.month, date.day),
-              onDateSelected: (date) => print(date),
+              initialDate: requestServicesProvider.date,
+              firstDate: requestServicesProvider.date,
+              lastDate: DateTime(requestServicesProvider.date.year + 1, requestServicesProvider.date.month, requestServicesProvider.date.day),
+              // onDateSelected: (date) => print(date),
+              onDateSelected: (date) async{
+                requestServicesProvider.selectedSlotIndex = null;
+                print(date);
+                requestServicesProvider.selectedDate = DateFormat(DFormat.ymd.key).format(date);
+                 await requestServicesProvider.getTimeSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  basicId: requestServicesProvider.selectedBasicServiceId,
+                  duration: requestServicesProvider.totalDuration,
+                  date: DateFormat(DFormat.mdy.key).format(date),
+                ).then((value) {
+
+                  requestServicesProvider.setLoading(false);
+                });
+              },
               leftMargin: 20,
               showYears: true,
-
               monthColor: const Color(0xFF565656),
               dayColor: AppColor.boldGrey,
               activeDayColor: Colors.black,
@@ -184,92 +106,83 @@ class _SelectDateState extends State<SelectDate> {
               textSize: MyFontSize.size15,
             ),
             verticalSpace(19),
-            CustomContainer(
-              height: 40,
-              backgroundColor: AppColor.borderGreyLight,
-              radiusCircular: 3,
-              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
-              child: Row(
-                children: [
-                  TextWidget(
-                    text: '03:30 PM',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size10,
-                    color: const Color(0xFF565656),
-                  ),
-                  const Spacer(),
-                  CustomSizedBox(height: 14,width: 14,child: Image.asset('assets/images/circleGray.png',),),
-                ],
-              ),
-            ),
-            verticalSpace(14),
-            CustomContainer(
-              height: 40,
-              backgroundColor: AppColor.borderGreyLight,
-              radiusCircular: 3,
-              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
-              child: Row(
-                children: [
-                  TextWidget(
-                    text: '04:30 PM',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size10,
-                    color: const Color(0xFF565656),
-                  ),
-                  const Spacer(),
-                  CustomSizedBox(height: 14,width: 14,child: Image.asset('assets/images/circleGray.png',),),
-                ],
-              ),
-            ),
-            verticalSpace(14),
-            CustomContainer(
-              height: 40,
-              backgroundColor: const Color(0xFFBADEF6),
-              borderColor: AppColor.borderBlue,
-              radiusCircular: 3,
-              padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
-              child: Row(
-                children: [
-                  TextWidget(
-                    text: '04:30 PM',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size10,
-                    color: const Color(0xFF565656),
-                  ),
-                  const Spacer(),
-                  const CustomSizedBox(height: 14,width: 14, child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: AppColor.attributeColor,
-                    child: CustomSizedBox(
-                      width: 6,
-                      height: 6,
-                      child: CircleAvatar(
-                        backgroundColor: AppColor.white,
-                        radius: 25,
-                      ),
+            (requestServicesProvider.isLoading)
+                ? const DataLoader()
+                : (requestServicesProvider.slotsList.isEmpty)
+                ? const CustomSizedBox(
+                height: 300,
+                child: Center(
+                    child: TextWidget(text: 'No Slots Available')))
+                : Expanded(
+              child: ListView.separated(
+                itemCount: requestServicesProvider.slotsList.length,
+                itemBuilder: (context, employeeIndex) {
+                  return CustomContainer(
+                    height: 40,
+                    backgroundColor: requestServicesProvider.selectedSlotIndex == employeeIndex ? const Color(0xFFBADEF6) : AppColor.borderGreyLight,
+                    borderColor: requestServicesProvider.selectedSlotIndex == employeeIndex ? AppColor.borderBlue :  Colors.transparent,
+                    radiusCircular: 3,
+                    padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
+                    onTap: (){
+                      requestServicesProvider.selectedTimeSlot(
+                          index: employeeIndex);
+                      requestServicesProvider.slotsList[employeeIndex].forEach((v) {
+                        requestServicesProvider.slotsIds.add(v.id);
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        TextWidget(
+                          text: '${requestServicesProvider.slotsList[employeeIndex].firstOrNull?.startAt} - ${requestServicesProvider.slotsList[employeeIndex].lastOrNull?.endAt}',
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size10,
+                          color: const Color(0xFF565656),
+                        ),
+                        const Spacer(),
+                        CustomSizedBox(height: 14,width: 14,child: requestServicesProvider.selectedSlotIndex == employeeIndex ? CircleAvatar(
+                          radius: 30,
+                          backgroundColor: AppColor.attributeColor,
+                          child: CustomSizedBox(
+                            width: 6,
+                            height: 6,
+                            child: CircleAvatar(
+                              backgroundColor: AppColor.white,
+                              radius: 25,
+                            ),
+                          ),
+                        ) : Image.asset('assets/images/circleGray.png',),),
+                      ],
                     ),
-                  ),
-                  ),
-                ],
+                  );
+                },
+                separatorBuilder: (context, index) => verticalSpace(14),
               ),
             ),
-            verticalSpace(14),
             const Spacer(),
             DefaultButton(
               text: 'Pay',
               onPressed: () {
-                requestServicesProvider.updateRequestSlots(
-                  requestId: requestServicesProvider.bookServicesData!.requestId!,
-                  offerCode: requestServicesProvider.couponData?.code,
-                    employeeID: 1,
-                    payBy: "wallet",
-                ).then((value) {
-                  if(value.status == Status.success){
-                    navigateTo(context, const RequestDetails());
-                  }else{
-                    CustomSnackBars.failureSnackBar(context, '${value.message}');
-                  }
-                });
+                if(requestServicesProvider.selectedSlotIndex != null){
+
+                  requestServicesProvider.assignEmployee(slotsIds: requestServicesProvider.slotsIds, slotsDate: requestServicesProvider.selectedDate!, id: requestServicesProvider.bookServicesData!.id!).then((value) {
+                    if(value.status == Status.success){
+                      requestServicesProvider.updateRequestSlots(
+                        requestId: requestServicesProvider.bookServicesData!.id!,
+                        payBy: "wallet",
+                      ).then((value) {
+                        if(value.status == Status.success){
+                          navigateTo(context, const RequestDetails());
+                        }else{
+                          CustomSnackBars.failureSnackBar(context, '${value.message}');
+                        }
+                      });
+                    }else{
+                      CustomSnackBars.failureSnackBar(context, '${value.message}');
+                    }
+                  });
+                }else{
+                  CustomSnackBars.failureSnackBar(context, 'Choose time First!');
+                }
               },
               fontWeight: MyFontWeight.bold,
               fontSize: 21,

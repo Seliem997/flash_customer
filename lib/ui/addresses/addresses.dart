@@ -122,7 +122,6 @@ class _MyAddressesState extends State<MyAddresses> {
                   itemCount: addressesProvider.addressesDataList.length,
                   itemBuilder: (context, index) => Slidable(
                     key: ValueKey(index),
-
                     endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       children: [

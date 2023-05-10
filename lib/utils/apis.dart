@@ -24,13 +24,16 @@ class Api {
   static const String getRequestDetails = "$baseUrl/customer/request-details/";
 
   static String getTimeSlots(
-          {int cityId = 1, int basicId = 27, int duration = 50, String date = "06/5/2023"}) =>
-      "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId&{for(int i = 1; i <= 10; i++) {}}&date=$date&services_duration=$duration";
+          {int cityId = 1, int basicId = 27, int duration = 50, String? service , String date = "06/5/2023"}) =>
+      "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
 
   static const String updateInitialRequest =
       "$baseUrl/customer/update-initial-request?pay_by";
+  static const String submitFinialRequest = "$baseUrl/customer/request";
 
   static const String bookServices = "$baseUrl/customer/initial-request";
+
+  static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
   static const String getAddresses = "$baseUrl/customer/my-addresses";
 
@@ -51,6 +54,8 @@ class Api {
       "$baseUrl/customer/history-transactions";
 
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
+
+  static const String getMyRequests = "$baseUrl/customer/customer-requests";
 
   static const String addNewVehicle = "$baseUrl/customer/vehicles";
 
