@@ -33,7 +33,7 @@ class RequestServicesProvider with ChangeNotifier {
   List<ExtraServicesItem> selectedExtraServices = [];
   bool selectedCashPayment = false;
   String? selectedDate;
-  List slotsIds=[];
+  List slotsIds = [];
 
   var date = DateTime.now();
 
@@ -235,12 +235,13 @@ class RequestServicesProvider with ChangeNotifier {
     RequestServicesService servicesService = RequestServicesService();
     await servicesService
         .getTimeSlots(
-            cityId: cityId,
-            basicId: basicId,
-            duration: duration,
-            date: date,
-            service: services,
-    ).then((value) {
+      cityId: cityId,
+      basicId: basicId,
+      duration: duration,
+      date: date,
+      service: services,
+    )
+        .then((value) {
       isLoading = false;
       if (value.status == Status.success) {
         slotsList = value.data;
@@ -263,7 +264,6 @@ class RequestServicesProvider with ChangeNotifier {
     await servicesService
         .updateRequestSlots(
       requestId: requestId,
-
       payBy: payBy,
     )
         .then((value) {
@@ -299,13 +299,11 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, '', message: message);
   }
 
-
   EmployeeDetailsData? employeeDetailsData;
   Future<ResponseResult> assignEmployee({
     required List slotsIds,
     required String slotsDate,
     required int id,
-
   }) async {
     Status state = Status.error;
     dynamic message;

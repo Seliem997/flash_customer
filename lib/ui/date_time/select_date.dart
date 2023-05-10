@@ -28,7 +28,6 @@ class SelectDate extends StatefulWidget {
 }
 
 class _SelectDateState extends State<SelectDate> {
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -37,22 +36,24 @@ class _SelectDateState extends State<SelectDate> {
 
   void loadData() async {
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
+        Provider.of<RequestServicesProvider>(context, listen: false);
 
-    await requestServicesProvider.getTimeSlots(
-        cityId: requestServicesProvider.cityIdData!.id!,
-        basicId: requestServicesProvider.selectedBasicServiceId,
-        duration: 50,
-        date: DateFormat(DFormat.mdy.key).format(requestServicesProvider.date),
-    ).then((value) => requestServicesProvider.setLoading(false));
-
+    await requestServicesProvider
+        .getTimeSlots(
+          cityId: requestServicesProvider.cityIdData!.id!,
+          basicId: requestServicesProvider.selectedBasicServiceId,
+          duration: 50,
+          date:
+              DateFormat(DFormat.mdy.key).format(requestServicesProvider.date),
+        )
+        .then((value) => requestServicesProvider.setLoading(false));
   }
 
   @override
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context);
-    
+        Provider.of<RequestServicesProvider>(context, listen: false);
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Date & Time '),
       body: Padding(
@@ -73,19 +74,24 @@ class _SelectDateState extends State<SelectDate> {
             CalendarTimeline(
               initialDate: requestServicesProvider.date,
               firstDate: requestServicesProvider.date,
-              lastDate: DateTime(requestServicesProvider.date.year + 1, requestServicesProvider.date.month, requestServicesProvider.date.day),
+              lastDate: DateTime(
+                  requestServicesProvider.date.year + 1,
+                  requestServicesProvider.date.month,
+                  requestServicesProvider.date.day),
               // onDateSelected: (date) => print(date),
-              onDateSelected: (date) async{
+              onDateSelected: (date) async {
                 requestServicesProvider.selectedSlotIndex = null;
                 print(date);
-                requestServicesProvider.selectedDate = DateFormat(DFormat.ymd.key).format(date);
-                 await requestServicesProvider.getTimeSlots(
+                requestServicesProvider.selectedDate =
+                    DateFormat(DFormat.ymd.key).format(date);
+                await requestServicesProvider
+                    .getTimeSlots(
                   cityId: requestServicesProvider.cityIdData!.id!,
                   basicId: requestServicesProvider.selectedBasicServiceId,
                   duration: requestServicesProvider.totalDuration,
                   date: DateFormat(DFormat.mdy.key).format(date),
-                ).then((value) {
-
+                )
+                    .then((value) {
                   requestServicesProvider.setLoading(false);
                 });
               },
@@ -106,82 +112,120 @@ class _SelectDateState extends State<SelectDate> {
               textSize: MyFontSize.size15,
             ),
             verticalSpace(19),
-            (requestServicesProvider.isLoading)
-                ? const DataLoader()
-                : (requestServicesProvider.slotsList.isEmpty)
-                ? const CustomSizedBox(
-                height: 300,
-                child: Center(
-                    child: TextWidget(text: 'No Slots Available')))
-                : Expanded(
-              child: ListView.separated(
-                itemCount: requestServicesProvider.slotsList.length,
-                itemBuilder: (context, employeeIndex) {
-                  return CustomContainer(
-                    height: 40,
-                    backgroundColor: requestServicesProvider.selectedSlotIndex == employeeIndex ? const Color(0xFFBADEF6) : AppColor.borderGreyLight,
-                    borderColor: requestServicesProvider.selectedSlotIndex == employeeIndex ? AppColor.borderBlue :  Colors.transparent,
-                    radiusCircular: 3,
-                    padding: symmetricEdgeInsets(vertical: 10, horizontal: 12),
-                    onTap: (){
-                      requestServicesProvider.selectedTimeSlot(
-                          index: employeeIndex);
-                      requestServicesProvider.slotsList[employeeIndex].forEach((v) {
-                        requestServicesProvider.slotsIds.add(v.id);
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        TextWidget(
-                          text: '${requestServicesProvider.slotsList[employeeIndex].firstOrNull?.startAt} - ${requestServicesProvider.slotsList[employeeIndex].lastOrNull?.endAt}',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size10,
-                          color: const Color(0xFF565656),
-                        ),
-                        const Spacer(),
-                        CustomSizedBox(height: 14,width: 14,child: requestServicesProvider.selectedSlotIndex == employeeIndex ? CircleAvatar(
-                          radius: 30,
-                          backgroundColor: AppColor.attributeColor,
-                          child: CustomSizedBox(
-                            width: 6,
-                            height: 6,
-                            child: CircleAvatar(
-                              backgroundColor: AppColor.white,
-                              radius: 25,
+            Consumer<RequestServicesProvider>(
+              builder: (context, value, child) {
+                return Container(
+                  child: (value.isLoading)
+                      ? const DataLoader()
+                      : (value.slotsList.isEmpty)
+                          ? const CustomSizedBox(
+                              height: 300,
+                              child: Center(
+                                  child:
+                                      TextWidget(text: 'No Slots Available')))
+                          : Expanded(
+                              child: ListView.separated(
+                                itemCount: value.slotsList.length,
+                                itemBuilder: (context, employeeIndex) {
+                                  return CustomContainer(
+                                    height: 40,
+                                    backgroundColor:
+                                        value.selectedSlotIndex == employeeIndex
+                                            ? const Color(0xFFBADEF6)
+                                            : AppColor.borderGreyLight,
+                                    borderColor:
+                                        value.selectedSlotIndex == employeeIndex
+                                            ? AppColor.borderBlue
+                                            : Colors.transparent,
+                                    radiusCircular: 3,
+                                    padding: symmetricEdgeInsets(
+                                        vertical: 10, horizontal: 12),
+                                    onTap: () {
+                                      value.selectedTimeSlot(
+                                          index: employeeIndex);
+                                      value.slotsList[employeeIndex]
+                                          .forEach((v) {
+                                        value.slotsIds.add(v.id);
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        TextWidget(
+                                          text:
+                                              '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                          fontWeight: MyFontWeight.medium,
+                                          textSize: MyFontSize.size10,
+                                          color: const Color(0xFF565656),
+                                        ),
+                                        const Spacer(),
+                                        CustomSizedBox(
+                                          height: 14,
+                                          width: 14,
+                                          child: value.selectedSlotIndex ==
+                                                  employeeIndex
+                                              ? CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor:
+                                                      AppColor.attributeColor,
+                                                  child: CustomSizedBox(
+                                                    width: 6,
+                                                    height: 6,
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          AppColor.white,
+                                                      radius: 25,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Image.asset(
+                                                  'assets/images/circleGray.png',
+                                                ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    verticalSpace(14),
+                              ),
                             ),
-                          ),
-                        ) : Image.asset('assets/images/circleGray.png',),),
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => verticalSpace(14),
-              ),
+                );
+              },
             ),
             const Spacer(),
             DefaultButton(
               text: 'Pay',
               onPressed: () {
-                if(requestServicesProvider.selectedSlotIndex != null){
-
-                  requestServicesProvider.assignEmployee(slotsIds: requestServicesProvider.slotsIds, slotsDate: requestServicesProvider.selectedDate!, id: requestServicesProvider.bookServicesData!.id!).then((value) {
-                    if(value.status == Status.success){
-                      requestServicesProvider.updateRequestSlots(
-                        requestId: requestServicesProvider.bookServicesData!.id!,
+                if (requestServicesProvider.selectedSlotIndex != null) {
+                  requestServicesProvider
+                      .assignEmployee(
+                          slotsIds: requestServicesProvider.slotsIds,
+                          slotsDate: requestServicesProvider.selectedDate!,
+                          id: requestServicesProvider.bookServicesData!.id!)
+                      .then((value) {
+                    if (value.status == Status.success) {
+                      requestServicesProvider
+                          .updateRequestSlots(
+                        requestId:
+                            requestServicesProvider.bookServicesData!.id!,
                         payBy: "wallet",
-                      ).then((value) {
-                        if(value.status == Status.success){
+                      )
+                          .then((value) {
+                        if (value.status == Status.success) {
                           navigateTo(context, const RequestDetails());
-                        }else{
-                          CustomSnackBars.failureSnackBar(context, '${value.message}');
+                        } else {
+                          CustomSnackBars.failureSnackBar(
+                              context, '${value.message}');
                         }
                       });
-                    }else{
-                      CustomSnackBars.failureSnackBar(context, '${value.message}');
+                    } else {
+                      CustomSnackBars.failureSnackBar(
+                          context, '${value.message}');
                     }
                   });
-                }else{
-                  CustomSnackBars.failureSnackBar(context, 'Choose time First!');
+                } else {
+                  CustomSnackBars.failureSnackBar(
+                      context, 'Choose time First!');
                 }
               },
               fontWeight: MyFontWeight.bold,
