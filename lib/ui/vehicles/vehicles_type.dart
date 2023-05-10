@@ -49,11 +49,11 @@ class _VehicleTypesState extends State<VehicleTypes> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
 
-    await packageProvider.getVehiclesTypeActive();
-    await packageProvider.getManufacturersOfType(
+    myVehiclesProvider.getMyVehicles();
+    packageProvider.getVehiclesTypeActive();
+    packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
-    await myVehiclesProvider.getMyVehicles();
-    await requestServicesProvider.getCityId(
+    requestServicesProvider.getCityId(
       context,
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
@@ -173,47 +173,56 @@ class _VehicleTypesState extends State<VehicleTypes> {
                         ? packageProvider.chooseModel
                             ? {
                                 AppLoader.showLoader(context),
-                                await myVehiclesProvider.addNewVehicle(
-                                    vehicleTypeId: '1',
-                                    manufacture: packageProvider
-                                        .selectedManufacture!.id!,
-                                    model: packageProvider
-                                        .selectedVehicleModel!.id!,
-                                    name: packageProvider
-                                        .selectedVehicleModel!.name!,
+                                await myVehiclesProvider
+                                    .addNewVehicle(
+                                  vehicleTypeId: '1',
+                                  manufacture:
+                                      packageProvider.selectedManufacture!.id!,
+                                  model:
+                                      packageProvider.selectedVehicleModel!.id!,
+                                  name: packageProvider
+                                      .selectedVehicleModel!.name!,
                                   /* year: 'year',
                                     color: '0xFF6515ds',
                                     letters: 'ddd',
-                                    numbers: '5897'*/).then((value) {
-                                      AppLoader.stopLoader();
-                                      if (value.status == Status.success) {
-                                        CustomSnackBars.successSnackBar(context, 'New Vehicle added');
-                                        navigateTo(
-                                          context,
-                                          ServicesScreen(
-                                            cityId:
-                                            requestServicesProvider.cityIdData!.id!,
-                                            vehicleId: myVehiclesProvider.vehicleDetailsData!.id!,
-                                          ),
-                                        );
-                                      } else {
-                                        CustomSnackBars.somethingWentWrongSnackBar(context);
-                                      }
-
-                                    }),
-
+                                    numbers: '5897'*/
+                                )
+                                    .then((value) {
+                                  AppLoader.stopLoader();
+                                  if (value.status == Status.success) {
+                                    CustomSnackBars.successSnackBar(
+                                        context, 'New Vehicle added');
+                                    navigateTo(
+                                      context,
+                                      ServicesScreen(
+                                        cityId: requestServicesProvider
+                                            .cityIdData!.id!,
+                                        vehicleId: myVehiclesProvider
+                                            .vehicleDetailsData!.id!,
+                                      ),
+                                    );
+                                  } else {
+                                    CustomSnackBars.somethingWentWrongSnackBar(
+                                        context);
+                                  }
+                                }),
                               }
                             : packageProvider.setRequiredModel()
                         : packageProvider.setRequiredManufacture()
                     : myVehiclesProvider.selectedMyVehicleIndex != null
-                    ? navigateTo(
-                        context,
-                        ServicesScreen(
-                          cityId: requestServicesProvider.cityIdData!.id!,
-                          vehicleId: myVehiclesProvider.myVehiclesData!.collection![myVehiclesProvider.selectedMyVehicleIndex!].id!,
-                        ),
-                      )
-                : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
+                        ? navigateTo(
+                            context,
+                            ServicesScreen(
+                              cityId: requestServicesProvider.cityIdData!.id!,
+                              vehicleId: myVehiclesProvider
+                                  .myVehiclesData!
+                                  .collection![myVehiclesProvider
+                                      .selectedMyVehicleIndex!]
+                                  .id!,
+                            ),
+                          )
+                        : CustomSnackBars.failureSnackBar(
+                            context, 'Choose Vehicle First');
               },
             ),
             verticalSpace(10),
@@ -223,7 +232,6 @@ class _VehicleTypesState extends State<VehicleTypes> {
     );
   }
 }
-
 
 class NewVehiclesScreenWidget extends StatelessWidget {
   const NewVehiclesScreenWidget({
@@ -243,16 +251,22 @@ class NewVehiclesScreenWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: packageProvider.vehiclesTypesDataList.length,
             itemBuilder: (context, index) => CustomContainer(
-              backgroundColor: packageProvider.selectedVehicleTypeIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
+              backgroundColor: packageProvider.selectedVehicleTypeIndex == index
+                  ? const Color(0xFFE6EEFB)
+                  : AppColor.borderGreyLight,
               width: 105,
               height: 112,
               padding: symmetricEdgeInsets(horizontal: 4, vertical: 19),
-              onTap: () async{
+              onTap: () async {
                 packageProvider.setSelectedVehicleType(index: index);
-                packageProvider.setVehicleTypeId(typeId: (index+1));
+                packageProvider.setVehicleTypeId(typeId: (index + 1));
                 AppLoader();
-                await packageProvider.getManufacturersOfType(
-                    vehicleTypeId: packageProvider.vehicleTypeId).then((value) {AppLoader.stopLoader();});
+                await packageProvider
+                    .getManufacturersOfType(
+                        vehicleTypeId: packageProvider.vehicleTypeId)
+                    .then((value) {
+                  AppLoader.stopLoader();
+                });
               },
               radiusCircular: 5,
               child: Column(

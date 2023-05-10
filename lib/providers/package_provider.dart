@@ -11,12 +11,10 @@ import '../services/package_service.dart';
 import '../utils/enum/statuses.dart';
 
 class PackageProvider with ChangeNotifier {
-
   bool requiredManufacture = false;
   bool requiredModel = false;
   int vehicleTypeId = 1;
   int selectedVehicleTypeIndex = 0;
-
 
   void setSelectedVehicleType({required int index}) {
     selectedVehicleTypeIndex = index;
@@ -41,9 +39,11 @@ class PackageProvider with ChangeNotifier {
   bool chooseManufacture = false;
   bool chooseModel = false;
 
-
   List<VehiclesActiveTypesData> vehiclesTypesDataList = [];
   Future getVehiclesTypeActive() async {
+    vehiclesTypesDataList = [];
+    manufacturerDataList = [];
+    notifyListeners();
     PackageService packageService = PackageService();
     await packageService.getVehiclesTypes().then((value) {
       if (value.status == Status.success) {
@@ -59,28 +59,28 @@ class PackageProvider with ChangeNotifier {
   Future getManufacturersOfType({required int vehicleTypeId}) async {
     PackageService packageService = PackageService();
     resetDropDownValues();
-    await packageService.getManufacturersOfType(vehicleTypeId: vehicleTypeId).then((value) {
+    await packageService
+        .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
+        .then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;
       }
     });
     notifyListeners();
   }
-
 
   Future getManufacturers() async {
     PackageService packageService = PackageService();
     resetDropDownValues();
-    await packageService.getManufacturersOfType(vehicleTypeId: vehicleTypeId).then((value) {
+    await packageService
+        .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
+        .then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;
       }
     });
     notifyListeners();
   }
-
-
-
 
   void setSelectedManufacture(ManufacturerData manufacture) {
     selectedVehicleModel = null;
@@ -93,7 +93,7 @@ class PackageProvider with ChangeNotifier {
   List<VehiclesModelsData> vehiclesModelsDataList = [];
   Future getVehiclesModels({context, required int manufactureId}) async {
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
+        Provider.of<RequestServicesProvider>(context, listen: false);
     PackageService packageService = PackageService();
     requestServicesProvider.isLoading = true;
     await packageService

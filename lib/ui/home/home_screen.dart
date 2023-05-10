@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final AddressesProvider addressesProvider =
-    Provider.of<AddressesProvider>(context);
+        Provider.of<AddressesProvider>(context);
 
     return Scaffold(
       key: globalKey,
@@ -176,23 +176,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 28,
                 fontWeight: MyFontWeight.bold,
                 onPressed: loggedIn
-                    ? () async{
-                    await addressesProvider.storeAddress(
-                      lat: homeProvider.currentPosition!.latitude,
-                      long: homeProvider.currentPosition!.longitude,
-                    ).then((value) {
-                      AppLoader.showLoader(context);
-                      if(value.status == Status.success){
-                        AppLoader.stopLoader();
-                        print(addressesProvider.addressDetailsData!.id);
-                        navigateTo(context, const VehicleTypes());
-                        CustomSnackBars.successSnackBar(context, 'Address Added Successfully');
-                      }else{
-                        print('Faild');
-                        CustomSnackBars.somethingWentWrongSnackBar(context);
-                        AppLoader.stopLoader();
-                      }
-                    });
+                    ? () async {
+                        AppLoader.showLoader(context);
+                        await addressesProvider
+                            .storeAddress(
+                          lat: homeProvider.currentPosition!.latitude,
+                          long: homeProvider.currentPosition!.longitude,
+                        )
+                            .then((value) {
+                          if (value.status == Status.success) {
+                            AppLoader.stopLoader();
+                            print(addressesProvider.addressDetailsData!.id);
+                            navigateTo(context, const VehicleTypes());
+                            CustomSnackBars.successSnackBar(
+                                context, 'Address Added Successfully');
+                          } else {
+                            print('Faild');
+                            CustomSnackBars.somethingWentWrongSnackBar(context);
+                            AppLoader.stopLoader();
+                          }
+                        });
                       }
                     : () {
                         navigateTo(context, const RegisterPhoneNumber());

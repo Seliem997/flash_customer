@@ -14,7 +14,10 @@ import '../../widgets/text_widget.dart';
 
 class RequestItem extends StatelessWidget {
   const RequestItem({
-    Key? key, this.statusCompleted = true, required this.myRequestsData, this.onTap,
+    Key? key,
+    this.statusCompleted = true,
+    required this.myRequestsData,
+    this.onTap,
   }) : super(key: key);
 
   final bool statusCompleted;
@@ -23,8 +26,8 @@ class RequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String services='';
-    for(int i = 0; i < myRequestsData.services!.length; i++) {
+    String services = '';
+    for (int i = 0; i < myRequestsData.services!.length; i++) {
       services += "${myRequestsData.services![i].title}, ";
     }
     return CustomContainer(
@@ -50,7 +53,6 @@ class RequestItem extends StatelessWidget {
                   fontWeight: MyFontWeight.medium,
                   color: AppColor.grey,
                   maxLines: 2,
-
                 ),
               ),
             ],
@@ -103,16 +105,14 @@ class RequestItem extends StatelessWidget {
               ),
               horizontalSpace(8),
               TextWidget(
-                text: '${myRequestsData.employee!.name}',
+                text: myRequestsData.employee?.name ?? "No Employee",
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
               ),
             ],
           ),
-          Visibility(
-              visible: statusCompleted,
-              child: verticalSpace(10)),
+          Visibility(visible: statusCompleted, child: verticalSpace(10)),
           Visibility(
             visible: statusCompleted,
             child: Row(
@@ -123,13 +123,25 @@ class RequestItem extends StatelessWidget {
                   fontWeight: MyFontWeight.semiBold,
                 ),
                 horizontalSpace(8),
-                CustomSizedBox(height: 12,width: 12,child: Image.asset('assets/images/star.png')),
+                CustomSizedBox(
+                    height: 12,
+                    width: 12,
+                    child: Image.asset('assets/images/star.png')),
                 horizontalSpace(4),
-                CustomSizedBox(height: 12,width: 12,child: Image.asset('assets/images/star.png')),
+                CustomSizedBox(
+                    height: 12,
+                    width: 12,
+                    child: Image.asset('assets/images/star.png')),
                 horizontalSpace(4),
-                CustomSizedBox(height: 12,width: 12,child: Image.asset('assets/images/star.png')),
+                CustomSizedBox(
+                    height: 12,
+                    width: 12,
+                    child: Image.asset('assets/images/star.png')),
                 horizontalSpace(4),
-                CustomSizedBox(height: 12,width: 12,child: Image.asset('assets/images/star.png')),
+                CustomSizedBox(
+                    height: 12,
+                    width: 12,
+                    child: Image.asset('assets/images/star.png')),
                 horizontalSpace(6),
                 DefaultButton(
                   height: 15,
@@ -174,7 +186,9 @@ class RequestItem extends StatelessWidget {
                 text: "${myRequestsData.status}",
                 fontSize: MyFontSize.size9,
                 fontWeight: MyFontWeight.semiBold,
-                backgroundColor: myRequestsData.status == 'Complete' ? Colors.green : AppColor.textRed,
+                backgroundColor: myRequestsData.status == 'Complete'
+                    ? Colors.green
+                    : AppColor.textRed,
                 onPressed: () {},
               ),
             ],
