@@ -6,12 +6,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../home/home_screen.dart';
 import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_form_field.dart';
 import '../widgets/custom_text_form.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
@@ -26,22 +28,7 @@ class RequestDetails extends StatefulWidget {
 }
 
 class _RequestDetailsState extends State<RequestDetails> {
-  /*@override
-  void initState() {
-    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
-    super.initState();
-  }
 
-  void loadData() async {
-    final RequestServicesProvider servicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
-
-
-    await servicesProvider.getRequestDetails(requestId: 1 */ /*servicesProvider.bookServicesData!.id!*/ /*).then((value) =>  print(servicesProvider.requestDetailsData!.services![2].type!));
-
-    servicesProvider.setLoading(false);
-  }
-*/
   @override
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
@@ -176,7 +163,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 ),
                                 verticalSpace(10),
                                 TextWidget(
-                                  text:/*/*- ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!}   - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}*/*/
+                                  text: /*/*- ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!}   - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}*/*/
                                       '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
                                   // text: 'Small Car - Blue Yaris ACWS 2190',
                                   textSize: MyFontSize.size12,
@@ -277,7 +264,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     horizontalSpace(10),
                                     TextWidget(
-                                      text: "${requestServicesProvider.totalDuration}",
+                                      text:
+                                          "${requestServicesProvider.totalDuration}",
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF686868),
@@ -308,19 +296,12 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
-                                  backgroundColor: requestServicesProvider
-                                          .selectedCashPayment
-                                      ? const Color(0xFFD2FFEA)
-                                      : AppColor.white,
+                                  backgroundColor: AppColor.white,
                                   borderColor: AppColor.borderGreyBold,
                                   radiusCircular: 4,
                                   padding: symmetricEdgeInsets(
                                       vertical: 5, horizontal: 12),
-                                  onTap: () {
-                                    requestServicesProvider.selectCashPayment(
-                                        !requestServicesProvider
-                                            .selectedCashPayment);
-                                  },
+                                  onTap: () {},
                                   child: Row(
                                     children: [
                                       CustomSizedBox(
@@ -338,9 +319,43 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ],
                                   ),
                                 ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: requestServicesProvider
+                                          .selectedCreditCardPayment
+                                      ? const Color(0xFFD2FFEA)
+                                      : AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  onTap: () {
+                                    requestServicesProvider
+                                        .selectCreditCardPayment(
+                                            !requestServicesProvider
+                                                .selectedCreditCardPayment);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/card.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: 'Credit card',
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 Visibility(
                                   visible: requestServicesProvider
-                                      .selectedCashPayment,
+                                      .selectedCreditCardPayment,
                                   child: CustomContainer(
                                     backgroundColor: const Color(0xFFF4FFFA),
                                     borderColor: AppColor.borderGreyBold,
@@ -539,31 +554,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
-                                            'assets/images/card.png'),
-                                      ),
-                                      horizontalSpace(10),
-                                      TextWidget(
-                                        text: 'Credit card',
-                                        textSize: MyFontSize.size12,
-                                        fontWeight: MyFontWeight.semiBold,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                verticalSpace(12),
-                                CustomContainer(
-                                  height: 34,
-                                  backgroundColor: AppColor.white,
-                                  borderColor: AppColor.borderGreyBold,
-                                  radiusCircular: 4,
-                                  padding: symmetricEdgeInsets(
-                                      vertical: 5, horizontal: 12),
-                                  child: Row(
-                                    children: [
-                                      CustomSizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: Image.asset(
                                             'assets/images/apple.png'),
                                       ),
                                       horizontalSpace(10),
@@ -672,7 +662,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.updatedRequestDetailsData!.amount!} SR',
+                                      text:
+                                          '${requestServicesProvider.updatedRequestDetailsData!.amount!} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -689,10 +680,74 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: "${requestServicesProvider.updatedRequestDetailsData!.tax!} SR",
+                                      text:
+                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!}%",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
+                                    ),
+                                  ],
+                                ),
+
+                                verticalSpace(20),
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: 'Discount code : ',
+                                      textSize: MyFontSize.size14,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    CustomContainer(
+                                      width: 112,
+                                      height: 30,
+                                      radiusCircular: 3,
+                                      backgroundColor: AppColor.buttonGrey,
+                                      borderColor: AppColor.boldGrey,
+                                      alignment: Alignment.center,
+                                      child: Center(
+                                        child: DefaultFormField(
+                                          controller: requestServicesProvider
+                                              .discountCodeController,
+                                          withBorder: false,
+                                          // padding: 10,
+                                          // contentPadding: onlyEdgeInsets(start: 10),
+                                          textInputAction: TextInputAction.done,
+                                          hintText: '',
+                                          enabled: requestServicesProvider
+                                                  .couponData ==
+                                              null,
+                                          padding: symmetricEdgeInsets(
+                                              vertical: 9, horizontal: 5),
+                                        ),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    TextButton(
+                                      onPressed: requestServicesProvider
+                                                  .couponData !=
+                                              null
+                                          ? () {
+                                              requestServicesProvider
+                                                  .resetCoupon();
+                                            }
+                                          : () {
+                                              requestServicesProvider
+                                                  .checkOfferCoupon(context);
+                                            },
+                                      child: TextWidget(
+                                        text: requestServicesProvider
+                                                    .couponData !=
+                                                null
+                                            ? S.of(context).remove
+                                            : S.of(context).apply,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.medium,
+                                        color: requestServicesProvider
+                                                    .couponData !=
+                                                null
+                                            ? AppColor.textRed
+                                            : AppColor.primary,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -706,43 +761,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
+                                      text: "${requestServicesProvider.couponData?.discountAmount ?? 0}",
+                                      // "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
                                     ),
                                   ],
                                 ),
-                               /* Row(
-                                  children: [
-                                    TextWidget(
-                                      text: 'Discount code : ',
-                                      textSize: MyFontSize.size14,
-                                      fontWeight: MyFontWeight.semiBold,
-                                    ),
-                                    CustomContainer(
-                                      width: 112,
-                                      height: 24,
-                                      radiusCircular: 3,
-                                      backgroundColor: AppColor.white,
-                                      borderColor: AppColor.boldGrey,
-                                      child: Center(
-                                        child: CustomTextForm(
-                                          contentPadding: onlyEdgeInsets(
-                                              start: 10, bottom: 8),
-                                          textInputAction: TextInputAction.done,
-                                          hintText: '',
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    TextWidget(
-                                      text: 'Active',
-                                      textSize: MyFontSize.size12,
-                                      fontWeight: MyFontWeight.semiBold,
-                                    ),
-                                  ],
-                                ),*/
                                 Padding(
                                   padding: symmetricEdgeInsets(
                                       horizontal: 10, vertical: 28),
@@ -759,7 +785,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.updatedRequestDetailsData!.totalAmount} SR',
+                                      text:
+                                          '${requestServicesProvider.totalAmountAfterDiscount } SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -778,7 +805,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                           fontSize: MyFontSize.size20,
                           backgroundColor: const Color(0xFFB6B6B6),
                           text: 'Confirm and Pay',
-                          onPressed: () async{
+                          onPressed: () async {
                             /*showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -818,9 +845,19 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 );
                               },
                             );*/
-                            await requestServicesProvider.submitFinialRequest(requestId: requestServicesProvider.updatedRequestDetailsData!.id!, payBy: 'Wallet').then((value) {
-                              CustomSnackBars.successSnackBar(context, 'Submit Request Success');
-                              navigateAndFinish(context, const HomeScreen(cameFromNewRequest: true,));
+                            await requestServicesProvider
+                                .submitFinialRequest(
+                                    requestId: requestServicesProvider
+                                        .updatedRequestDetailsData!.id!,
+                                    payBy: 'Wallet')
+                                .then((value) {
+                              CustomSnackBars.successSnackBar(
+                                  context, 'Submit Request Success');
+                              navigateAndFinish(
+                                  context,
+                                  const HomeScreen(
+                                    cameFromNewRequest: true,
+                                  ));
                             });
                           },
                         ),

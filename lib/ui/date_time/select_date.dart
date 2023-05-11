@@ -1,5 +1,6 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -197,6 +198,7 @@ class _SelectDateState extends State<SelectDate> {
               text: 'Pay',
               onPressed: () {
                 if (requestServicesProvider.selectedSlotIndex != null) {
+                  AppLoader.showLoader(context);
                   requestServicesProvider
                       .assignEmployee(
                           slotsIds: requestServicesProvider.slotsIds,
@@ -212,13 +214,16 @@ class _SelectDateState extends State<SelectDate> {
                       )
                           .then((value) {
                         if (value.status == Status.success) {
+                          AppLoader.stopLoader();
                           navigateTo(context, const RequestDetails());
                         } else {
+                          AppLoader.stopLoader();
                           CustomSnackBars.failureSnackBar(
                               context, '${value.message}');
                         }
                       });
                     } else {
+                      AppLoader.stopLoader();
                       CustomSnackBars.failureSnackBar(
                           context, '${value.message}');
                     }

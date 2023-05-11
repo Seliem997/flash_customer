@@ -31,7 +31,7 @@ class RequestServicesProvider with ChangeNotifier {
   int? selectedSlotIndex;
   bool isLoading = true;
   List<ExtraServicesItem> selectedExtraServices = [];
-  bool selectedCashPayment = false;
+  bool selectedCreditCardPayment = false;
   String? selectedDate;
   List slotsIds = [];
 
@@ -72,8 +72,9 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectCashPayment(bool value) {
-    selectedCashPayment = value;
+
+  void selectCreditCardPayment(bool value) {
+    selectedCreditCardPayment = value;
     notifyListeners();
   }
 
@@ -140,11 +141,11 @@ class RequestServicesProvider with ChangeNotifier {
         AppLoader.stopLoader();
         if (value.status == Status.success) {
           couponData = value.data;
-          calculateTotal();
           if (couponData!.isActive == 1) {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).offerAppliedSuccessfully);
             discountAmount = couponData!.discountAmount!;
+            totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount! - discountAmount;
           } else {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).codeNotAccepted);
@@ -259,7 +260,6 @@ class RequestServicesProvider with ChangeNotifier {
   }) async {
     Status state = Status.error;
     dynamic message;
-    setLoading(true);
     RequestServicesService servicesService = RequestServicesService();
     await servicesService
         .updateRequestSlots(
@@ -270,6 +270,7 @@ class RequestServicesProvider with ChangeNotifier {
       if (value.status == Status.success) {
         state = Status.success;
         updatedRequestDetailsData = value.data;
+        totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount!;
       } else {
         message = value.message;
       }
@@ -284,7 +285,6 @@ class RequestServicesProvider with ChangeNotifier {
   }) async {
     Status state = Status.error;
     dynamic message;
-
     await servicesService
         .submitFinialRequest(requestId: requestId, payBy: payBy)
         .then((value) {
@@ -326,7 +326,7 @@ class RequestServicesProvider with ChangeNotifier {
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController();
-    calculateTotal();
+    totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount! ;
     notifyListeners();
   }
 
@@ -335,6 +335,7 @@ class RequestServicesProvider with ChangeNotifier {
     basicServicesList = [];
     extraServicesList = [];
     selectedExtraServices = [];
+    slotsIds = [];
     selectedBasicIndex = null;
     selectedSlotIndex = null;
     notifyListeners();

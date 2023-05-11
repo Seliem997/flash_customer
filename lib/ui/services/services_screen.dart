@@ -472,7 +472,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         verticalSpace(25),
                         CustomContainer(
                           width: 345,
-                          height: 230,
                           borderColor: AppColor.primary,
                           backgroundColor: const Color(0xFFF1F6FE),
                           child: Padding(
@@ -516,7 +515,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   ],
                                 ),
                                 verticalSpace(20),
-                                Row(
+                                /*Row(
                                   children: [
                                     TextWidget(
                                       text: 'Discount code : ',
@@ -577,7 +576,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                   ],
                                 ),
-                                verticalSpace(15),
+                                verticalSpace(15),*/
                                 const Divider(
                                   color: AppColor.borderGrey,
                                   thickness: 1.5,
