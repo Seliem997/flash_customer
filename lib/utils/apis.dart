@@ -24,7 +24,11 @@ class Api {
   static const String getRequestDetails = "$baseUrl/customer/request-details/";
 
   static String getTimeSlots(
-          {int cityId = 1, int basicId = 27, int duration = 50, String? service , String date = "06/5/2023"}) =>
+          {int cityId = 1,
+          int basicId = 27,
+          double duration = 50,
+          String? service,
+          String date = "06/5/2023"}) =>
       "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
 
   static const String updateInitialRequest =

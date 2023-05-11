@@ -20,10 +20,10 @@ class RequestServicesProvider with ChangeNotifier {
 
   TextEditingController discountCodeController =
       TextEditingController(text: '');
-  int totalAmount = 0;
-  int totalDuration = 0;
-  int totalAmountAfterDiscount = 0;
-  int discountAmount = 0;
+  double totalAmount = 0;
+  double totalDuration = 0;
+  num totalAmountAfterDiscount = 0;
+  double discountAmount = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
   int selectedBasicServiceId = 0;
@@ -71,7 +71,6 @@ class RequestServicesProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   void selectCreditCardPayment(bool value) {
     selectedCreditCardPayment = value;
@@ -145,7 +144,8 @@ class RequestServicesProvider with ChangeNotifier {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).offerAppliedSuccessfully);
             discountAmount = couponData!.discountAmount!;
-            totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount! - discountAmount;
+            totalAmountAfterDiscount =
+                updatedRequestDetailsData!.totalAmount! - discountAmount;
           } else {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).codeNotAccepted);
@@ -223,7 +223,7 @@ class RequestServicesProvider with ChangeNotifier {
   Future getTimeSlots({
     required int cityId,
     required int basicId,
-    required int duration,
+    required double duration,
     required String date,
   }) async {
     isLoading = true;
@@ -326,7 +326,7 @@ class RequestServicesProvider with ChangeNotifier {
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController();
-    totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount! ;
+    totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount!;
     notifyListeners();
   }
 

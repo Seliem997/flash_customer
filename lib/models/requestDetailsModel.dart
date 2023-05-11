@@ -8,7 +8,9 @@ class RequestDetailsModel {
   RequestDetailsModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
     message = json['message'];
-    data = json['data'] != null ? new RequestDetailsData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new RequestDetailsData.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -31,8 +33,8 @@ class RequestDetailsData {
   String? feedback;
   String? amount;
   String? tax;
-  int? discountAmount;
-  int? totalAmount;
+  num? discountAmount;
+  num? totalAmount;
   String? time;
   String? date;
   Employee? employee;
@@ -41,20 +43,20 @@ class RequestDetailsData {
 
   RequestDetailsData(
       {this.id,
-        this.requestId,
-        this.status,
-        this.rate,
-        this.payBy,
-        this.feedback,
-        this.amount,
-        this.tax,
-        this.discountAmount,
-        this.totalAmount,
-        this.time,
-        this.date,
-        this.employee,
-        this.services,
-        this.customer});
+      this.requestId,
+      this.status,
+      this.rate,
+      this.payBy,
+      this.feedback,
+      this.amount,
+      this.tax,
+      this.discountAmount,
+      this.totalAmount,
+      this.time,
+      this.date,
+      this.employee,
+      this.services,
+      this.customer});
 
   RequestDetailsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -135,17 +137,17 @@ class Services {
   String? image;
   String? info;
   String? type;
-  int? duration;
+  num? duration;
   bool? countable;
 
   Services(
       {this.id,
-        this.title,
-        this.image,
-        this.info,
-        this.type,
-        this.duration,
-        this.countable});
+      this.title,
+      this.image,
+      this.info,
+      this.type,
+      this.duration,
+      this.countable});
 
   Services.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -221,23 +223,23 @@ class Vehicle {
 
   Vehicle(
       {this.id,
-        this.name,
-        this.numbers,
-        this.letters,
-        this.color,
-        this.year,
-        this.mainImage,
-        this.customerId,
-        this.manufacturerId,
-        this.manufacturerName,
-        this.manufacturerLogo,
-        this.vehicleModelId,
-        this.vehicleModelName,
-        this.vehicleTypeId,
-        this.vehicleTypeName,
-        this.subVehicleTypeId,
-        this.subVehicleTypeName,
-        this.customerDetails});
+      this.name,
+      this.numbers,
+      this.letters,
+      this.color,
+      this.year,
+      this.mainImage,
+      this.customerId,
+      this.manufacturerId,
+      this.manufacturerName,
+      this.manufacturerLogo,
+      this.vehicleModelId,
+      this.vehicleModelName,
+      this.vehicleTypeId,
+      this.vehicleTypeName,
+      this.subVehicleTypeId,
+      this.subVehicleTypeName,
+      this.customerDetails});
 
   Vehicle.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -300,13 +302,13 @@ class CustomerDetails {
 
   CustomerDetails(
       {this.id,
-        this.fwId,
-        this.name,
-        this.email,
-        this.phone,
-        this.countryCode,
-        this.image,
-        this.balance});
+      this.fwId,
+      this.name,
+      this.email,
+      this.phone,
+      this.countryCode,
+      this.image,
+      this.balance});
 
   CustomerDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];

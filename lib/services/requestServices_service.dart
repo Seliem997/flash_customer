@@ -206,13 +206,10 @@ class RequestServicesService extends BaseService {
     return ResponseResult(status, bookServicesData, message: message);
   }
 
-
-
   Future<ResponseResult> assignEmployee({
     required List slotsIds,
     required String slotsDate,
     required int id,
-
   }) async {
     Status status = Status.error;
     dynamic message;
@@ -221,7 +218,6 @@ class RequestServicesService extends BaseService {
       "slots_ids": slotsIds,
       "slots_date": slotsDate,
       "id": id,
-
     };
     EmployeeDetailsData? employeeDetailsData;
     try {
@@ -235,7 +231,8 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
-              employeeDetailsData = EmployeeDetailsModel.fromJson(response).data!;
+              employeeDetailsData =
+                  EmployeeDetailsModel.fromJson(response).data!;
             } else if (response["status_code"] == 422 ||
                 response["status_code"] == 400) {
               status = Status.codeNotCorrect;
@@ -278,16 +275,12 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> updateRequestSlots({
     required int requestId,
-
     required String payBy,
   }) async {
     Status result = Status.error;
     dynamic message;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "id": requestId,
-      "pay_by": payBy
-    };
+    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
 
     RequestDetailsData? updatedRequestDetailsData;
     try {
@@ -320,14 +313,13 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, updatedRequestDetailsData, message: message);
   }
 
-  Future<ResponseResult> getTimeSlots(
-      {
-        required int cityId,
-      required int basicId,
-      required int duration,
-      String? service,
-      required String date,
-      }) async {
+  Future<ResponseResult> getTimeSlots({
+    required int cityId,
+    required int basicId,
+    required double duration,
+    String? service,
+    required String date,
+  }) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
 /*
@@ -364,15 +356,11 @@ class RequestServicesService extends BaseService {
   Future<ResponseResult> submitFinialRequest({
     required int requestId,
     required String payBy,
-
   }) async {
     Status status = Status.error;
     dynamic message;
     Map<String, String> header = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "id": requestId,
-      "pay_by": payBy
-    };
+    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
     try {
       await requestFutureData(
           api: Api.submitFinialRequest,
@@ -397,6 +385,4 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(status, '', message: message);
   }
-
-
 }
