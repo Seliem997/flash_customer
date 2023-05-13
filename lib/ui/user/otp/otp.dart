@@ -185,14 +185,15 @@ class _OTPScreenState extends State<OTPScreen> {
                           userDataProvider.otpToString())
                       .then((value) {
                     AppLoader.stopLoader();
-                   /* if (value.status == Status.success) {
-                      if(userDataProvider.otpToString() == "1234"){
+                    if (value.status == Status.success) {
+                      if(value.message != "invalid otp"){
                         navigateTo(context, const HomeScreen());
                       }else{
-                        CustomSnackBars.somethingWentWrongSnackBar(context);
+                        CustomSnackBars.failureSnackBar(context, value.message);
                       }
-                    }*/
-                    navigateTo(context, const HomeScreen());
+                    }else{
+                      CustomSnackBars.failureSnackBar(context, value.message);
+                    }
                   });
                 },
               )

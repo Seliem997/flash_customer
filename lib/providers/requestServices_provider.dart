@@ -23,7 +23,7 @@ class RequestServicesProvider with ChangeNotifier {
   double totalAmount = 0;
   double totalDuration = 0;
   num totalAmountAfterDiscount = 0;
-  double discountAmount = 0;
+  num discountAmount = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
   int selectedBasicServiceId = 0;
@@ -32,6 +32,7 @@ class RequestServicesProvider with ChangeNotifier {
   bool isLoading = true;
   List<ExtraServicesItem> selectedExtraServices = [];
   bool selectedCreditCardPayment = false;
+  bool selectedCashPayment = false;
   String? selectedDate;
   List slotsIds = [];
 
@@ -74,6 +75,11 @@ class RequestServicesProvider with ChangeNotifier {
 
   void selectCreditCardPayment(bool value) {
     selectedCreditCardPayment = value;
+    notifyListeners();
+  }
+
+  void selectCashPayment(bool value) {
+    selectedCashPayment = value;
     notifyListeners();
   }
 
@@ -336,6 +342,11 @@ class RequestServicesProvider with ChangeNotifier {
     extraServicesList = [];
     selectedExtraServices = [];
     slotsIds = [];
+    totalAmount = 0;
+    totalDuration = 0;
+    totalAmountAfterDiscount = 0;
+    discountAmount = 0;
+    resetCoupon();
     selectedBasicIndex = null;
     selectedSlotIndex = null;
     notifyListeners();

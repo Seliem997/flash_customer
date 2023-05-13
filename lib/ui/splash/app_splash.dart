@@ -1,17 +1,7 @@
-import 'package:flash_customer/ui/user/profile/edit_profile.dart';
-import 'package:flash_customer/ui/user/register/register.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../models/loginModel.dart';
-import '../../providers/user_provider.dart';
-import '../../services/authentication_service.dart';
-import '../../utils/cache_helper.dart';
-import '../../utils/enum/shared_preference_keys.dart';
-import '../../utils/enum/statuses.dart';
+
 import '../home/home_screen.dart';
-import '../user/login/login.dart';
-import '../widgets/custom_container.dart';
 import '../widgets/navigate.dart';
 
 class AppSplash extends StatefulWidget {

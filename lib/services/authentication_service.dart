@@ -39,6 +39,7 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
     Status status = Status.error;
+    dynamic message;
     Map<String, String> header = {'Content-Type' : 'application/json'};
     Map<String, dynamic> body = {
       "phone": phoneNumber,
@@ -55,6 +56,8 @@ class AuthenticationService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              message = response["message"];
+
               print("Bearer ${response["data"]["token"]}");
               CacheHelper.saveData(key: CacheKey.balance, value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
@@ -63,13 +66,14 @@ class AuthenticationService extends BaseService {
                   value: "Bearer ${response["data"]["token"]}");
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error in checking code $e");
     }
-    return ResponseResult(status, "");
+    return ResponseResult(status, "", message: message);
   }
 
 
@@ -225,6 +229,7 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> registerOrLogin(
       String phoneNumber, String countryCode) async {
     Status status = Status.error;
+    dynamic message;
     late LoginModel loginModel;
     UserData? userData;
     Map<String, dynamic> body = {
@@ -249,6 +254,7 @@ class AuthenticationService extends BaseService {
               //     key: CacheKey.userImage, value: userData!.image!);
               // await CacheHelper.saveData(
               //     key: CacheKey.email, value: userData!.email);
+              message = response["message"];
 
               await CacheHelper.saveData(
                   key: CacheKey.phoneNumber, value: phoneNumber);
@@ -256,13 +262,14 @@ class AuthenticationService extends BaseService {
                   key: CacheKey.countryCode, value: countryCode);
             } else if (response["status_code"] == 400) {
               status = Status.invalidEmailOrPass;
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error Signing in $e");
     }
-    return ResponseResult(status, userData);
+    return ResponseResult(status, userData, message: message);
   }
 
   // Future<ResponseResult> getMyProfile() async {

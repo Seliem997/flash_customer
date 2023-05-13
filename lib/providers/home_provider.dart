@@ -59,6 +59,31 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return false;
   }
+/*
+
+  Future addMarkerLongPressed(LatLng latlang) async {
+    final MarkerId markerId = MarkerId("RANDOM_ID");
+    Marker marker = Marker(
+      markerId: markerId,
+      draggable: true,
+      position: latlang, //With this parameter you automatically obtain latitude and longitude
+      infoWindow: InfoWindow(
+        title: "Marker here",
+        snippet: 'This looks good',
+      ),
+      icon: BitmapDescriptor.defaultMarker,
+    );
+
+    markers[markerId] = marker;
+    notifyListeners();
+*/
+/*
+    //This is optional, it will zoom when the marker has been created
+    GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newLatLngZoom(latlang, 17.0));*//*
+
+  }
+*/
 
   void resetMap() {
     markers.clear();

@@ -131,6 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
             zoomGesturesEnabled: true,
             zoomControlsEnabled: false,
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
+           /* onLongPress: (latlang) {
+              homeProvider.addMarkerLongPressed(latlang); //we will call this function when pressed on the map
+            },*/
             onMapCreated: (GoogleMapController controller) {
               homeProvider.mapController = controller;
             },

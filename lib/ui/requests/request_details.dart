@@ -296,12 +296,20 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
-                                  backgroundColor: AppColor.white,
+                                  backgroundColor:  requestServicesProvider
+                                      .selectedCashPayment
+                                      ? const Color(0xFFD2FFEA)
+                                      : AppColor.white,
                                   borderColor: AppColor.borderGreyBold,
                                   radiusCircular: 4,
                                   padding: symmetricEdgeInsets(
                                       vertical: 5, horizontal: 12),
-                                  onTap: () {},
+                                  onTap: () {
+                                    requestServicesProvider
+                                        .selectCashPayment(
+                                        !requestServicesProvider
+                                            .selectedCashPayment);
+                                  },
                                   child: Row(
                                     children: [
                                       CustomSizedBox(
@@ -638,7 +646,42 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 color: const Color(0xFF0084DF),
                               ),
                               horizontalSpace(10),
-                              Image.asset('assets/images/info-circle.png'),
+                              GestureDetector(
+                                onTap: (){
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Padding(
+                                          padding: onlyEdgeInsets(
+                                              top: 40, bottom: 32, end: 38, start: 38),
+                                          child: TextWidget(
+                                            textAlign: TextAlign.center,
+                                            text:
+                                            'This amount will decrease from your wallet',
+                                            textSize: MyFontSize.size17,
+                                            fontWeight: MyFontWeight.semiBold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Padding(
+                                            padding: onlyEdgeInsets(
+                                                top: 0, bottom: 40, end: 48, start: 48),
+                                            child: DefaultButton(
+                                              width: 225,
+                                              height: 32,
+                                              text: 'Ok',
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                  child: Image.asset('assets/images/info-circle.png')),
                             ],
                           ),
                         ),
@@ -806,7 +849,23 @@ class _RequestDetailsState extends State<RequestDetails> {
                           backgroundColor: const Color(0xFFB6B6B6),
                           text: 'Confirm and Pay',
                           onPressed: () async {
-                            /*showDialog(
+                            if(requestServicesProvider.selectedCashPayment || requestServicesProvider.selectedCreditCardPayment){
+                              await requestServicesProvider
+                                  .submitFinialRequest(
+                                  requestId: requestServicesProvider
+                                      .updatedRequestDetailsData!.id!,
+                                  payBy: 'Cash')
+                                  .then((value) {
+                                CustomSnackBars.successSnackBar(
+                                    context, 'Submit Request Success');
+                                navigateAndFinish(
+                                    context,
+                                    const HomeScreen(
+                                      cameFromNewRequest: true,
+                                    ));
+                              });
+                            }else{
+                              showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
@@ -844,21 +903,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   ],
                                 );
                               },
-                            );*/
-                            await requestServicesProvider
-                                .submitFinialRequest(
-                                    requestId: requestServicesProvider
-                                        .updatedRequestDetailsData!.id!,
-                                    payBy: 'Wallet')
-                                .then((value) {
-                              CustomSnackBars.successSnackBar(
-                                  context, 'Submit Request Success');
-                              navigateAndFinish(
-                                  context,
-                                  const HomeScreen(
-                                    cameFromNewRequest: true,
-                                  ));
-                            });
+                            );
+                            }
+
                           },
                         ),
                       ],

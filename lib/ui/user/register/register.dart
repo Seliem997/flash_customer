@@ -178,7 +178,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                                 countryCode: countryCode!.dialCode,
                                 phoneNumber: phoneController.text));
                       } else {
-                        CustomSnackBars.somethingWentWrongSnackBar(context);
+                        CustomSnackBars.failureSnackBar(context, value.message);
                       }
                     });
                   }

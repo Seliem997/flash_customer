@@ -322,9 +322,7 @@ class RequestServicesService extends BaseService {
   }) async {
     Status result = Status.error;
     Map<String, String> headers = const {'Content-Type': 'application/json'};
-/*
 
-    */
     List<List<SlotData>>? slots = [];
     try {
       await requestFutureData(
