@@ -433,7 +433,7 @@ class Services {
   int? id;
   String? title;
   String? image;
-  Null? info;
+  String? info;
   String? type;
   int? duration;
   bool? countable;
@@ -485,10 +485,10 @@ class Services {
 class VehicleRequest {
   int? id;
   String? name;
-  Null? numbers;
-  Null? letters;
-  Null? color;
-  Null? year;
+  String? numbers;
+  String? letters;
+  String? color;
+  String? year;
   String? mainImage;
   int? customerId;
   int? manufacturerId;
@@ -498,8 +498,8 @@ class VehicleRequest {
   String? vehicleModelName;
   int? vehicleTypeId;
   String? vehicleTypeName;
-  Null? subVehicleTypeId;
-  Null? subVehicleTypeName;
+  int? subVehicleTypeId;
+  String? subVehicleTypeName;
   Customer? customer;
 
   VehicleRequest(

@@ -233,12 +233,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: 'Other Services',
                     textColor: AppColor.black,
                     onPressed: loggedIn
-                        ? () {
-                            navigateTo(
-                              context,
-                              const OtherServices(),
-                            );
-                          }
+                        ? () async {
+                      AppLoader.showLoader(context);
+                      await addressesProvider
+                          .storeAddress(
+                        lat: homeProvider.currentPosition!.latitude,
+                        long: homeProvider.currentPosition!.longitude,
+                      )
+                          .then((value) {
+                        if (value.status == Status.success) {
+                          AppLoader.stopLoader();
+                          print(addressesProvider.addressDetailsData!.id);
+                          navigateTo(
+                            context,
+                            const OtherServices(),
+                          );
+                          CustomSnackBars.successSnackBar(
+                              context, 'Address Added Successfully');
+                        } else {
+                          print('Faild');
+                          CustomSnackBars.somethingWentWrongSnackBar(context);
+                          AppLoader.stopLoader();
+                        }
+                      });
+                    }
                         : () {
                             navigateTo(context, const RegisterPhoneNumber());
                           },

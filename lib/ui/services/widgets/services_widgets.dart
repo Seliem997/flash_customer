@@ -157,7 +157,6 @@ class ExtraServicesWidget extends StatelessWidget {
                           extraService.quantity++;
                           requestServicesProvider.notifyListeners();
                           requestServicesProvider.calculateTotal();
-
                         },
                         width: 20,
                         height: 20,

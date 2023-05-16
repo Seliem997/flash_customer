@@ -17,6 +17,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool withArrow;
   final Color? backgroundColor;
   final Widget customizePopButton;
+  final GestureTapCallback? onTap;
 
   CustomAppBar({
     Key? key,
@@ -24,6 +25,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.customizePopButton = const SizedBox(),
     required this.title,
     this.backgroundColor,
+    this.onTap,
   })  : preferredSize = const Size.fromHeight(50.0),
         super(key: key);
 
@@ -59,7 +61,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               backgroundColor: Colors.transparent,
               height: 26,
               width: 26,
-              onTap: () {
+              onTap: onTap ??() {
                 navigateAndFinish(context, const HomeScreen());
               },
               child: Image.asset('assets/images/home_icon.png')),

@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/requests/summaryRequestDetails.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -21,13 +22,29 @@ import '../widgets/text_widget.dart';
 import 'myRequests.dart';
 
 class RequestDetails extends StatefulWidget {
-  const RequestDetails({Key? key}) : super(key: key);
+  const RequestDetails({Key? key, required this.requestId, this.cameFromOtherServices = false}) : super(key: key);
+
+  final int requestId;
+  final bool cameFromOtherServices;
 
   @override
   State<RequestDetails> createState() => _RequestDetailsState();
 }
 
 class _RequestDetailsState extends State<RequestDetails> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
+    await requestServicesProvider
+        .getRequestDetails(requestId: widget.requestId)
+        .then((value) => requestServicesProvider.setLoading(false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +137,9 @@ class _RequestDetailsState extends State<RequestDetails> {
         ),
       ),
       body: SingleChildScrollView(
-        child: /*(requestServicesProvider.isLoading)
+        child: (requestServicesProvider.isLoading)
             ? const DataLoader()
-            : */
-            (requestServicesProvider.updatedRequestDetailsData == null)
+            : requestServicesProvider.detailsRequestData == null
                 ? const CustomSizedBox(
                     height: 500,
                     child: Center(child: TextWidget(text: 'No Data Available')))
@@ -131,152 +147,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
                     child: Column(
                       children: [
-                        CustomContainer(
-                          width: 345,
-                          // height: 395,
-                          radiusCircular: 4,
-                          borderColor: AppColor.primary,
-                          backgroundColor: const Color(0xFFF1F6FE),
-                          child: Padding(
-                            padding: symmetricEdgeInsets(
-                                vertical: 24, horizontal: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextWidget(
-                                  text: 'Location',
-                                  textSize: MyFontSize.size15,
-                                  fontWeight: MyFontWeight.semiBold,
-                                ),
-                                verticalSpace(10),
-                                TextWidget(
-                                  text: 'Flash Wash Store - Uhud St. - Qatif',
-                                  textSize: MyFontSize.size12,
-                                  fontWeight: MyFontWeight.regular,
-                                  color: AppColor.subTextGrey,
-                                ),
-                                verticalSpace(20),
-                                TextWidget(
-                                  text: 'Vehicle',
-                                  textSize: MyFontSize.size15,
-                                  fontWeight: MyFontWeight.semiBold,
-                                ),
-                                verticalSpace(10),
-                                TextWidget(
-                                  text: /*/*- ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].year!}   - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].letters!}*/*/
-                                      '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
-                                  // text: 'Small Car - Blue Yaris ACWS 2190',
-                                  textSize: MyFontSize.size12,
-                                  fontWeight: MyFontWeight.regular,
-                                  color: AppColor.subTextGrey,
-                                ),
-                                verticalSpace(20),
-                                TextWidget(
-                                  text: 'Date & Time',
-                                  textSize: MyFontSize.size15,
-                                  fontWeight: MyFontWeight.semiBold,
-                                ),
-                                verticalSpace(10),
-                                TextWidget(
-                                  text:
-                                      "${requestServicesProvider.updatedRequestDetailsData!.date!} - ${requestServicesProvider.updatedRequestDetailsData!.time!}",
-                                  textSize: MyFontSize.size12,
-                                  fontWeight: MyFontWeight.regular,
-                                  color: AppColor.subTextGrey,
-                                ),
-                                verticalSpace(20),
-                                TextWidget(
-                                  text: 'Services',
-                                  textSize: MyFontSize.size15,
-                                  fontWeight: MyFontWeight.semiBold,
-                                ),
-                                verticalSpace(10),
-                                CustomSizedBox(
-                                  // height: 25,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: requestServicesProvider
-                                        .updatedRequestDetailsData!
-                                        .services!
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      if (requestServicesProvider
-                                              .updatedRequestDetailsData!
-                                              .services![index]
-                                              .type ==
-                                          'basic') {
-                                        return TextWidget(
-                                          text: requestServicesProvider
-                                              .updatedRequestDetailsData!
-                                              .services![index]
-                                              .title!,
-                                          textSize: MyFontSize.size12,
-                                          fontWeight: MyFontWeight.regular,
-                                          color: AppColor.subTextGrey,
-                                        );
-                                      }
-                                      return Container();
-                                    },
-                                  ),
-                                ),
-                                verticalSpace(20),
-                                TextWidget(
-                                  text: 'Extra Services',
-                                  textSize: MyFontSize.size15,
-                                  fontWeight: MyFontWeight.semiBold,
-                                ),
-                                verticalSpace(10),
-                                CustomSizedBox(
-                                  // height: 25,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: requestServicesProvider
-                                        .updatedRequestDetailsData!
-                                        .services!
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      if (requestServicesProvider
-                                              .updatedRequestDetailsData!
-                                              .services![index]
-                                              .type ==
-                                          'extra') {
-                                        return TextWidget(
-                                          text: requestServicesProvider
-                                              .updatedRequestDetailsData!
-                                              .services![index]
-                                              .title!,
-                                          textSize: MyFontSize.size12,
-                                          fontWeight: MyFontWeight.regular,
-                                          color: AppColor.subTextGrey,
-                                        );
-                                      }
-                                      return Container();
-                                    },
-                                  ),
-                                ),
-                                verticalSpace(20),
-                                Row(
-                                  children: [
-                                    TextWidget(
-                                      text: 'Service Duration',
-                                      textSize: MyFontSize.size15,
-                                      fontWeight: MyFontWeight.semiBold,
-                                    ),
-                                    horizontalSpace(10),
-                                    TextWidget(
-                                      text:
-                                          "${requestServicesProvider.totalDuration}",
-                                      textSize: MyFontSize.size15,
-                                      fontWeight: MyFontWeight.medium,
-                                      color: const Color(0xFF686868),
-                                    ),
-                                    verticalSpace(20),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        SummaryRequestDetails(cameFromOtherServices: widget.cameFromOtherServices,requestServicesProvider: requestServicesProvider),
                         verticalSpace(22),
                         CustomContainer(
                           width: 345,
@@ -854,7 +725,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   .submitFinialRequest(
                                   requestId: requestServicesProvider
                                       .updatedRequestDetailsData!.id!,
-                                  payBy: 'Cash')
+                                  payBy: 'cash')
                                   .then((value) {
                                 CustomSnackBars.successSnackBar(
                                     context, 'Submit Request Success');
@@ -915,3 +786,4 @@ class _RequestDetailsState extends State<RequestDetails> {
     );
   }
 }
+

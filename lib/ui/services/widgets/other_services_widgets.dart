@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
+import '../../../models/otherServicesModel.dart';
+import '../../../providers/otherServices_provider.dart';
 import '../../../utils/styles/colors.dart';
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_container.dart';
@@ -16,7 +19,10 @@ class OtherServicesItem extends StatelessWidget {
     this.serviceUnit,
     this.seeMore = false,
     this.onlyValue = false,
-    this.onTap, this.infoOnPressed,
+    this.onTap,
+    this.infoOnPressed,
+    required this.index,
+    required this.service,
   });
 
   final String title, imageName;
@@ -24,15 +30,23 @@ class OtherServicesItem extends StatelessWidget {
   final bool seeMore, onlyValue;
   final GestureTapCallback? onTap;
   final VoidCallback? infoOnPressed;
+  final int index;
+  final OtherServicesData service;
+
 
   @override
   Widget build(BuildContext context) {
+    final OtherServicesProvider otherServicesProvider=Provider.of<OtherServicesProvider>(context);
+
     return CustomContainer(
       width: 108,
-      height: 130,
+      // height: 130,
       margin: onlyEdgeInsets(end: 11),
       radiusCircular: 5,
-      backgroundColor: AppColor.borderGreyLight,
+      backgroundColor: otherServicesProvider.selectedServiceIndex == index
+          ? const Color(0xFFE1ECFF)
+          : AppColor.borderGreyLight,
+      borderColor: otherServicesProvider.selectedServiceIndex == index ? const Color(0xFF0285E0) : Colors.transparent,
       padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
       onTap: onTap,
       child: Column(
@@ -46,7 +60,7 @@ class OtherServicesItem extends StatelessWidget {
             // child: Icon(Icons.info, size: 20, color: AppColor.primary),
           ),
           CustomSizedBox(
-            width: 56,
+            width: 60,
             height: 56,
             child: Image.network(imageName),
           ),
@@ -98,7 +112,50 @@ class OtherServicesItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                  )
+                  ),
+          verticalSpace(15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomContainer(
+                onTap: () {
+                  otherServicesProvider.selectedService(
+                      index: index);
+                  otherServicesProvider.decreaseQuantityService();
+                },
+                width: 20,
+                height: 20,
+                clipBehavior: Clip.hardEdge,
+                borderRadius: BorderRadius.zero,
+                backgroundColor: Colors.transparent,
+                image: const DecorationImage(
+                    image: AssetImage('assets/images/minus.png'),
+                    fit: BoxFit.fitHeight),
+              ),
+              horizontalSpace(15),
+              TextWidget(
+                text: '${service.quantity}',
+                fontWeight: MyFontWeight.bold,
+                textSize: MyFontSize.size12,
+              ),
+              horizontalSpace(15),
+              CustomContainer(
+                onTap: () {
+                  otherServicesProvider.selectedService(
+                      index: index);
+                  otherServicesProvider.increaseQuantityService();
+                },
+                width: 20,
+                height: 20,
+                clipBehavior: Clip.hardEdge,
+                borderRadius: BorderRadius.zero,
+                backgroundColor: Colors.transparent,
+                image: const DecorationImage(
+                    image: AssetImage('assets/images/plus.png'),
+                    fit: BoxFit.fitHeight),
+              ),
+            ],
+          )
         ],
       ),
     );

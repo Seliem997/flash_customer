@@ -1,3 +1,4 @@
+import 'package:flash_customer/ui/requests/summaryRequestDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,146 +45,10 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
             ? const DataLoader()
             : Padding(
           padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
-          child: Column(
-            children: [
-              CustomContainer(
-                width: 345,
-                radiusCircular: 4,
-                borderColor: AppColor.primary,
-                backgroundColor: const Color(0xFFF1F6FE),
-                child: Padding(
-                  padding: symmetricEdgeInsets(
-                      vertical: 24, horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        text: 'Location',
-                        textSize: MyFontSize.size15,
-                        fontWeight: MyFontWeight.semiBold,
-                        color: AppColor.subTextGrey,
-                      ),
-                      verticalSpace(10),
-                      TextWidget(
-                        text: '${requestServicesProvider.detailsRequestData!.city!.name}',
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.regular,
-                        color: AppColor.subTextGrey,
-                      ),
-                      verticalSpace(20),
-                      TextWidget(
-                        text: 'Vehicle',
-                        textSize: MyFontSize.size15,
-                        fontWeight: MyFontWeight.semiBold,
-                      ),
-                      verticalSpace(10),
-                      TextWidget(
-                       text: '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.regular,
-                        color: AppColor.subTextGrey,
-                      ),
-                      verticalSpace(20),
-                      TextWidget(
-                        text: 'Date & Time',
-                        textSize: MyFontSize.size15,
-                        fontWeight: MyFontWeight.semiBold,
-                      ),
-                      verticalSpace(10),
-                      TextWidget(
-                        text:
-                        "${requestServicesProvider.detailsRequestData!.date!} - ${requestServicesProvider.detailsRequestData!.time!}",
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.regular,
-                        color: AppColor.subTextGrey,
-                      ),
-                      verticalSpace(20),
-                      TextWidget(
-                        text: 'Services',
-                        textSize: MyFontSize.size15,
-                        fontWeight: MyFontWeight.semiBold,
-                      ),
-                      verticalSpace(10),
-                      CustomSizedBox(
-                        // height: 25,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: requestServicesProvider.detailsRequestData!
-                              .services!
-                              .length,
-                          itemBuilder: (context, index) {
-                            if (requestServicesProvider.detailsRequestData!
-                                .services![index]
-                                .type ==
-                                'basic') {
-                              return TextWidget(
-                                text: requestServicesProvider.detailsRequestData!
-                                    .services![index]
-                                    .title!,
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.regular,
-                                color: AppColor.subTextGrey,
-                              );
-                            }
-                            return Container();
-                          },
-                        ),
-                      ),
-                      verticalSpace(20),
-                      TextWidget(
-                        text: 'Extra Services',
-                        textSize: MyFontSize.size15,
-                        fontWeight: MyFontWeight.semiBold,
-                      ),
-                      verticalSpace(10),
-                      CustomSizedBox(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: requestServicesProvider.detailsRequestData!
-                              .services!
-                              .length,
-                          itemBuilder: (context, index) {
-                            if (requestServicesProvider.detailsRequestData!
-                                .services![index]
-                                .type ==
-                                'extra') {
-                              return TextWidget(
-                                text: requestServicesProvider.detailsRequestData!
-                                    .services![index]
-                                    .title!,
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.regular,
-                                color: AppColor.subTextGrey,
-                              );
-                            }
-                            return Container();
-                          },
-                        ),
-                      ),
-                      verticalSpace(20),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: 'Service Duration',
-                            textSize: MyFontSize.size15,
-                            fontWeight: MyFontWeight.semiBold,
-                          ),
-                          horizontalSpace(10),
-                          TextWidget(
-                            text: '${requestServicesProvider.detailsRequestData!.totalDuration} Min',
-                            textSize: MyFontSize.size15,
-                            fontWeight: MyFontWeight.medium,
-                            color: const Color(0xFF686868),
-                          ),
-                          verticalSpace(20),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: SummaryRequestDetails(requestServicesProvider: requestServicesProvider,cameFromOtherServices:  requestServicesProvider
+              .detailsRequestData!
+              .services![0]
+              .type == "other"),
         ),
       ),
     );

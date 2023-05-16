@@ -331,7 +331,7 @@ class RequestServicesService extends BaseService {
               basicId: basicId,
               date: date,
               duration: duration,
-              service: service),
+              service: service ?? ''),
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
@@ -341,7 +341,7 @@ class RequestServicesService extends BaseService {
               result = Status.success;
               slots = SlotsModel.fromJson(response).data!;
             } catch (e) {
-              logger.e("Error getting response Request Details Data\n$e");
+              logger.e("Error getting response Get Time Slot\n$e");
             }
           });
     } catch (e) {

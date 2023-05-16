@@ -9,7 +9,7 @@ class Api {
   static const String getAboutImages =
       "$baseUrl/get-images?related_to=about_us_slider_images";
 
-  static const String getOtherServices = "$baseUrl/customer/getOtherServices";
+  static const String getOtherServices = "$baseUrl/customer/services?type=other";
 
   static const String getCityId = "$baseUrl/customer/cities/check/If/FoundIn";
 

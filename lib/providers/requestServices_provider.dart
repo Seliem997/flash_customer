@@ -22,7 +22,7 @@ class RequestServicesProvider with ChangeNotifier {
       TextEditingController(text: '');
   double totalAmount = 0;
   double totalDuration = 0;
-  num totalAmountAfterDiscount = 0;
+  num? totalAmountAfterDiscount = 0;
   num discountAmount = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
@@ -332,7 +332,7 @@ class RequestServicesProvider with ChangeNotifier {
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController();
-    totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount!;
+    totalAmountAfterDiscount = updatedRequestDetailsData?.totalAmount;
     notifyListeners();
   }
 
