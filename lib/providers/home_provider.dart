@@ -46,7 +46,6 @@ class HomeProvider with ChangeNotifier {
           icon: await BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue));
 
-      // Adding the markers to the list
       markers.clear();
       polylineCoordinates = [];
       polylines = {};
@@ -59,34 +58,39 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return false;
   }
-/*
 
   Future addMarkerLongPressed(LatLng latlang) async {
-    final MarkerId markerId = MarkerId("RANDOM_ID");
+    const MarkerId markerId = MarkerId("RANDOM_ID");
     Marker marker = Marker(
       markerId: markerId,
       draggable: true,
-      position: latlang, //With this parameter you automatically obtain latitude and longitude
-      infoWindow: InfoWindow(
-        title: "Marker here",
-        snippet: 'This looks good',
+      position: latlang,
+      //With this parameter you automatically obtain latitude and longitude
+      infoWindow: const InfoWindow(
+        title: "New Location",
+        snippet: 'Marker here',
       ),
       icon: BitmapDescriptor.defaultMarker,
     );
 
-    markers[markerId] = marker;
+    currentPosition = Position(
+      longitude: latlang.longitude,
+      latitude: latlang.latitude,
+      timestamp: currentPosition!.timestamp,
+      accuracy: currentPosition!.accuracy,
+      altitude: currentPosition!.altitude,
+      heading: currentPosition!.heading,
+      speed: currentPosition!.speed,
+      speedAccuracy: currentPosition!.speedAccuracy,
+    );
+
+
+    markers.add(marker);
+    print('Lat Lang $latlang');
     notifyListeners();
-*/
-/*
-    //This is optional, it will zoom when the marker has been created
-    GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newLatLngZoom(latlang, 17.0));*//*
-
   }
-*/
-
   void resetMap() {
-    markers.clear();
+    // markers.clear();
     polylineCoordinates = [];
     polylines = {};
     polylinePoints = null;

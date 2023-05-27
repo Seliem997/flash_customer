@@ -11,12 +11,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../providers/home_provider.dart';
+import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
+import '../../providers/requestServices_provider.dart';
 import '../../utils/app_loader.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/statuses.dart';
+import '../vehicles/my_vehicles.dart';
+import '../vehicles/vehicles_type.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
+import '../widgets/no_data_place_holder.dart';
 import '../widgets/spaces.dart';
 
 class MonthlyPkg extends StatefulWidget {
@@ -36,15 +43,28 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+    final MyVehiclesProvider myVehiclesProvider =
+    Provider.of<MyVehiclesProvider>(context, listen: false);
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
+    final HomeProvider homeProvider =
+    Provider.of<HomeProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
+    myVehiclesProvider.getMyVehicles();
+    requestServicesProvider.getCityId(
+      context,
+      lat: homeProvider.currentPosition!.latitude,
+      long: homeProvider.currentPosition!.longitude,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context);
-
+    final MyVehiclesProvider myVehiclesProvider =
+    Provider.of<MyVehiclesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: 'Monthly pkg'),
       body: packageProvider.manufacturerDataList.isEmpty
@@ -58,11 +78,15 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       CustomContainer(
                         padding:
                             symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                        backgroundColor: AppColor.borderGrey,
-                        borderColor: AppColor.babyBlue,
+                        backgroundColor: packageProvider.newVehicleLabel ? AppColor.borderGrey : AppColor.borderGreyLight,
+                        borderColor: packageProvider.newVehicleLabel
+                            ? AppColor.babyBlue : Colors.transparent,
                         width: 162,
                         height: 112,
                         radiusCircular: 6,
+                        onTap: (){
+                          packageProvider.selectedNewVehicleLabel();
+                        },
                         child: Column(
                           children: [
                             CustomSizedBox(
@@ -81,44 +105,15 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       ),
                       horizontalSpace(21),
                       CustomContainer(
-                        backgroundColor: AppColor.borderGreyLight,
+                        backgroundColor: packageProvider.myVehicleLabel ? AppColor.borderGrey : AppColor.borderGreyLight,
+                        borderColor: packageProvider.myVehicleLabel
+                            ? AppColor.babyBlue : Colors.transparent,
                         width: 162,
                         height: 112,
                         padding:
                             symmetricEdgeInsets(horizontal: 18, vertical: 15),
                         onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Padding(
-                                  padding: onlyEdgeInsets(
-                                      top: 40, bottom: 32, end: 38, start: 38),
-                                  child: TextWidget(
-                                    textAlign: TextAlign.center,
-                                    text:
-                                        'Management will edit vehicle size as price will depends on the vehicle size',
-                                    textSize: MyFontSize.size17,
-                                    fontWeight: MyFontWeight.semiBold,
-                                  ),
-                                ),
-                                actions: [
-                                  Padding(
-                                    padding: onlyEdgeInsets(
-                                        top: 0, bottom: 40, end: 48, start: 48),
-                                    child: DefaultButton(
-                                      width: 225,
-                                      height: 32,
-                                      text: 'Ok',
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          packageProvider.selectedMyVehicleLabel();
                         },
                         radiusCircular: 6,
                         child: Column(
@@ -140,7 +135,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       ),
                     ],
                   ),
-                  verticalSpace(56),
+                  /*verticalSpace(56),
                   Row(
                     children: [
                       TextWidget(
@@ -254,46 +249,79 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       ),
                     ),
                   ),
-                  verticalSpace(72),
+                  verticalSpace(72),*/
+                  verticalSpace(20),
+                  packageProvider.newVehicleLabel
+                      ? (packageProvider.manufacturerDataList.isEmpty)
+                      ? const DataLoader()
+                      : Expanded(
+                    child: NewVehiclesScreenWidget(
+                        packageProvider: packageProvider),
+                  )
+                      : myVehiclesProvider.loadingMyVehicles
+                      ? const DataLoader(useExpand: true)
+                      : myVehiclesProvider.myVehiclesData == null
+                      ? const NoDataPlaceHolder()
+                      : MyVehiclesScreenWidget(
+                      myVehiclesProvider: myVehiclesProvider),
+                  packageProvider.newVehicleLabel
+                      ? Visibility(
+                    visible: packageProvider.manufacturerDataList.isEmpty,
+                    child: const Spacer(),
+                  )
+                      : Visibility(
+                    visible: myVehiclesProvider.myVehiclesData == null,
+                    child: const Spacer(),
+                  ),
                   DefaultButton(
                     height: 48,
                     width: double.infinity,
                     fontWeight: MyFontWeight.bold,
                     fontSize: MyFontSize.size20,
                     text: 'Next',
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Padding(
-                              padding: onlyEdgeInsets(
-                                  top: 40, bottom: 32, end: 38, start: 38),
-                              child: TextWidget(
-                                textAlign: TextAlign.center,
-                                text:
-                                    'Management will edit vehicle size as price will depends on the vehicle size',
-                                textSize: MyFontSize.size17,
-                                fontWeight: MyFontWeight.semiBold,
-                              ),
-                            ),
-                            actions: [
-                              Padding(
-                                padding: onlyEdgeInsets(
-                                    top: 0, bottom: 40, end: 48, start: 48),
-                                child: DefaultButton(
-                                  width: 225,
-                                  height: 32,
-                                  text: 'Ok',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    navigateTo(context, const MonthlyPlans());
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                          /* return AlertDialog(
+                    onPressed: () async {
+                      packageProvider.newVehicleLabel
+                          ? packageProvider.chooseManufacture
+                          ? packageProvider.chooseModel
+                          ? {
+                        AppLoader.showLoader(context),
+                        await myVehiclesProvider
+                            .addNewVehicle(
+                          vehicleTypeId: '1',
+                          manufacture:
+                          packageProvider.selectedManufacture!.id!,
+                          model:
+                          packageProvider.selectedVehicleModel!.id!,
+                          name: packageProvider
+                              .selectedVehicleModel!.name!,
+                        )
+                            .then((value) {
+                          AppLoader.stopLoader();
+                          if (value.status == Status.success) {
+                            CustomSnackBars.successSnackBar(
+                                context, 'New Vehicle added');
+                            navigateTo(context, const MonthlyPlans());
+                          } else {
+                            CustomSnackBars.somethingWentWrongSnackBar(
+                                context);
+                          }
+                        }),
+                      }
+                          : packageProvider.setRequiredModel()
+                          : packageProvider.setRequiredManufacture()
+                          : myVehiclesProvider.selectedMyVehicleIndex != null
+                          ? navigateTo(context, const MonthlyPlans())
+                          : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
+                    },
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+/* return AlertDialog(
                       title: TextWidget(
                         textAlign: TextAlign.center,
                         text: 'The packages is not available now',
@@ -340,13 +368,73 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                         ),
                       ],
                     );*/
+
+/* تحذير لو مفيش باكدج مناسبة
+* showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Padding(
+                                  padding: onlyEdgeInsets(
+                                      top: 40, bottom: 32, end: 38, start: 38),
+                                  child: TextWidget(
+                                    textAlign: TextAlign.center,
+                                    text:
+                                        'Management will edit vehicle size as price will depends on the vehicle size',
+                                    textSize: MyFontSize.size17,
+                                    fontWeight: MyFontWeight.semiBold,
+                                  ),
+                                ),
+                                actions: [
+                                  Padding(
+                                    padding: onlyEdgeInsets(
+                                        top: 0, bottom: 40, end: 48, start: 48),
+                                    child: DefaultButton(
+                                      width: 225,
+                                      height: 32,
+                                      text: 'Ok',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );*/
+
+/* onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Padding(
+                              padding: onlyEdgeInsets(
+                                  top: 40, bottom: 32, end: 38, start: 38),
+                              child: TextWidget(
+                                textAlign: TextAlign.center,
+                                text:
+                                    'Management will edit vehicle size as price will depends on the vehicle size',
+                                textSize: MyFontSize.size17,
+                                fontWeight: MyFontWeight.semiBold,
+                              ),
+                            ),
+                            actions: [
+                              Padding(
+                                padding: onlyEdgeInsets(
+                                    top: 0, bottom: 40, end: 48, start: 48),
+                                child: DefaultButton(
+                                  width: 225,
+                                  height: 32,
+                                  text: 'Ok',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    navigateTo(context, const MonthlyPlans());
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
                         },
                       );
-                    },
-                  ),
-                ],
-              ),
-            ),
-    );
-  }
-}
+                    },*/

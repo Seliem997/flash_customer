@@ -142,8 +142,6 @@ class _MyAddressesState extends State<MyAddresses> {
                         ),
                       ],
                     ),
-
-
                     child: CustomContainer(
                       height: 64,
                       width: 345,
@@ -174,7 +172,7 @@ class _MyAddressesState extends State<MyAddresses> {
                                 children: [
                                   TextWidget(
                                     text:
-                                    addressesProvider.addressesDataList[index].locationName!,
+                                    addressesProvider.addressesDataList[index].locationName ?? "New Location",
                                     maxLines: 2,
                                     fontWeight: MyFontWeight.medium,
                                     textSize: MyFontSize.size10,

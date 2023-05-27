@@ -140,7 +140,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
             packageProvider.newVehicleLabel
                 ? (packageProvider.vehiclesTypesDataList.isEmpty ||
                         packageProvider.manufacturerDataList.isEmpty)
-                    ? const DataLoader() /*AppLoader.showLoader(context);*/
+                    ? const DataLoader()
                     : Expanded(
                         child: NewVehiclesScreenWidget(
                             packageProvider: packageProvider),
@@ -182,10 +182,6 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                       packageProvider.selectedVehicleModel!.id!,
                                   name: packageProvider
                                       .selectedVehicleModel!.name!,
-                                  /* year: 'year',
-                                    color: '0xFF6515ds',
-                                    letters: 'ddd',
-                                    numbers: '5897'*/
                                 )
                                     .then((value) {
                                   AppLoader.stopLoader();
@@ -221,8 +217,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                   .id!,
                             ),
                           )
-                        : CustomSnackBars.failureSnackBar(
-                            context, 'Choose Vehicle First');
+                        : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
               },
             ),
             verticalSpace(10),

@@ -6,6 +6,7 @@ import '../models/manufacturersModel.dart';
 import '../models/otherServicesModel.dart';
 import '../models/packagesModel.dart';
 import '../models/requestResult.dart';
+import '../models/slotsModel.dart';
 import '../models/vehiclesModelsModel.dart';
 import '../models/vehiclesTypesActiveModel.dart';
 import '../utils/apis.dart';
@@ -72,9 +73,6 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getManufacturersOfType({required int vehicleTypeId}) async {
     Status result = Status.error;
-    /*Map<String, String> headers = const {
-      'Content-Type': 'application/json'};*/
-
     List<ManufacturerData> manufacturerDataList = [];
     try {
       await requestFutureData(
@@ -82,7 +80,6 @@ class PackageService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
-          // headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -152,5 +149,36 @@ class PackageService extends BaseService {
     }
     return ResponseResult(result, packagesDataList);
   }
+
+  Future<ResponseResult> getPackageTimeSlots({
+    required int cityId,
+    required int packageId,
+    required int packageDuration,
+    required String date,
+  }) async {
+    Status result = Status.error;
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
+
+    List<List<SlotData>>? slots = [];
+    try {
+      await requestFutureData(
+          api: Api.getPackageSlots(cityId: cityId, packageId: packageId, packageDuration: packageDuration, date: date,),
+          requestType: Request.get,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              slots = SlotsModel.fromJson(response).data!;
+            } catch (e) {
+              logger.e("Error getting response Get Package Time Slot\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting Get Package Time Slot$e");
+    }
+    return ResponseResult(result, slots); }
 
 }

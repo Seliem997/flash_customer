@@ -52,6 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void loadData() async {
     widget.cameFromNewRequest ?  navigateTo(context, const MyRequests()) : null;
+    final HomeProvider homeProvider =
+    Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.markers.clear();
     await _handleLocationPermission();
     await _getCurrentLocation();
   }
@@ -59,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _getCurrentLocation() async {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.markers.clear();
     homeProvider.resetMap();
     try {
       AppLoader.showLoader(context);
@@ -131,9 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
             zoomGesturesEnabled: true,
             zoomControlsEnabled: false,
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
-           /* onLongPress: (latlang) {
+            onLongPress: (latlang) {
               homeProvider.addMarkerLongPressed(latlang); //we will call this function when pressed on the map
-            },*/
+            },
             onMapCreated: (GoogleMapController controller) {
               homeProvider.mapController = controller;
             },

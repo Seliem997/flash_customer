@@ -1,4 +1,5 @@
 import 'package:flash_customer/providers/addresses_provider.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/home_provider.dart';
 import '../../utils/font_styles.dart';
+import '../home/home_screen.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_container.dart';
 import '../widgets/custom_form_field.dart';
@@ -51,10 +53,9 @@ class _LocationDialogState extends State<LocationDialog> {
               title: Row(
                 children: [
                   CustomSizedBox(
-                    height: 14,
-                    width: 14,
-                    child: SizedBox(),
-                  ),
+                      height: 20,
+                      width: 20,
+                      child: Image.asset('assets/images/home_light.png')),
                   horizontalSpace(6),
                   TextWidget(
                     text: 'Home',
@@ -193,7 +194,9 @@ class _LocationDialogState extends State<LocationDialog> {
                    type: addressType!,
                    lat: homeProvider.currentPosition!.latitude,
                    long: homeProvider.currentPosition!.longitude,
-                 );
+                 ).then((value) {
+                   navigateAndFinish(context, const HomeScreen());
+                 });
                }else{
                  CustomSnackBars.failureSnackBar(context, 'Please, Choose Type',);
                }

@@ -80,7 +80,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                   const Spacer(),
                   GestureDetector(
                     onTap: (){
-                      navigateTo(context, NewAddress());
+                      navigateTo(context, const NewAddress(cameFromHomeScreen: true,));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5),

@@ -1,5 +1,6 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
+import 'package:flash_customer/providers/package_provider.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
@@ -24,9 +25,16 @@ import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
 class SelectDate extends StatefulWidget {
-  const SelectDate({Key? key, this.cameFromOtherServices = false}) : super(key: key);
+  const SelectDate(
+      {Key? key,
+      this.cameFromOtherServices = false,
+      this.cameFromPackage = false,
+      this.index})
+      : super(key: key);
 
   final bool cameFromOtherServices;
+  final bool cameFromPackage;
+  final int? index;
   @override
   State<SelectDate> createState() => _SelectDateState();
 }
@@ -45,22 +53,43 @@ class _SelectDateState extends State<SelectDate> {
     final OtherServicesProvider otherServicesProvider =
         Provider.of<OtherServicesProvider>(context, listen: false);
 
-    widget.cameFromOtherServices
-        ? await otherServicesProvider.getOtherServicesSlots(
-      cityId: requestServicesProvider.cityIdData!.id!,
-      serviceId: otherServicesProvider.selectedOtherServiceId,
-      duration: otherServicesProvider.otherServicesList[otherServicesProvider.selectedServiceIndex!].duration!.toDouble(),
-      date: DateFormat(DFormat.mdy.key).format(requestServicesProvider.date),
-    ).then((value) => requestServicesProvider.setLoading(false))
-    : await requestServicesProvider
-        .getTimeSlots(
-          cityId: requestServicesProvider.cityIdData!.id!,
-          basicId: requestServicesProvider.selectedBasicServiceId,
-          duration: requestServicesProvider.totalDuration,
-          date:
-              DateFormat(DFormat.mdy.key).format(requestServicesProvider.date),
-        )
-        .then((value) => requestServicesProvider.setLoading(false));
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context, listen: false);
+
+    widget.cameFromPackage
+        ? await packageProvider.getPackageTimeSlots(
+            cityId: requestServicesProvider.cityIdData!.id!,
+            packageId: packageProvider
+                .packagesDataList[packageProvider.selectedPackageIndex!].id!,
+            packageDuration: packageProvider
+                .packagesDataList[packageProvider.selectedPackageIndex!]
+                .duration!,
+            date: DateFormat(DFormat.dmy.key)
+                .format(requestServicesProvider.date),
+          )
+        : widget.cameFromOtherServices
+            ? await otherServicesProvider
+                .getOtherServicesSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  serviceId: otherServicesProvider.selectedOtherServiceId,
+                  duration: otherServicesProvider
+                      .otherServicesList[
+                          otherServicesProvider.selectedServiceIndex!]
+                      .duration!
+                      .toDouble(),
+                  date: DateFormat(DFormat.mdy.key)
+                      .format(requestServicesProvider.date),
+                )
+                .then((value) => requestServicesProvider.setLoading(false))
+            : await requestServicesProvider
+                .getTimeSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  basicId: requestServicesProvider.selectedBasicServiceId,
+                  duration: requestServicesProvider.totalDuration,
+                  date: DateFormat(DFormat.mdy.key)
+                      .format(requestServicesProvider.date),
+                )
+                .then((value) => requestServicesProvider.setLoading(false));
   }
 
   @override
@@ -69,11 +98,13 @@ class _SelectDateState extends State<SelectDate> {
         Provider.of<RequestServicesProvider>(context, listen: false);
     final OtherServicesProvider otherServicesProvider =
         Provider.of<OtherServicesProvider>(context, listen: false);
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context, listen: false);
 
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Date & Time ',
-        onTap: (){
+        onTap: () {
           navigateAndFinish(context, const HomeScreen());
           requestServicesProvider.clearServices();
           otherServicesProvider.clearServices();
@@ -101,35 +132,62 @@ class _SelectDateState extends State<SelectDate> {
                   requestServicesProvider.date.year + 1,
                   requestServicesProvider.date.month,
                   requestServicesProvider.date.day),
-              // onDateSelected: (date) => print(date),
               onDateSelected: (date) async {
                 requestServicesProvider.selectedSlotIndex = null;
                 otherServicesProvider.selectedTimeSlot();
-                print(date);
-                widget.cameFromOtherServices
-                    ? otherServicesProvider.selectedDate =
-                    DateFormat(DFormat.ymd.key).format(date)
-                    : requestServicesProvider.selectedDate =
-                    DateFormat(DFormat.ymd.key).format(date);
-                print("second date request");
-                print(requestServicesProvider.selectedDate);
-                print("second date other");
-                print( otherServicesProvider.selectedDate);
-                widget.cameFromOtherServices
-                    ? await otherServicesProvider.getOtherServicesSlots(
-                  cityId: requestServicesProvider.cityIdData!.id!,
-                  serviceId: otherServicesProvider.selectedOtherServiceId,
-                  duration: otherServicesProvider.otherServicesList[otherServicesProvider.selectedServiceIndex!].duration!.toDouble(),
-                  date: DateFormat(DFormat.mdy.key).format(date),
-                ).then((value) => requestServicesProvider.setLoading(false))
-                    : await requestServicesProvider
-                    .getTimeSlots(
-                  cityId: requestServicesProvider.cityIdData!.id!,
-                  basicId: requestServicesProvider.selectedBasicServiceId,
-                  duration: requestServicesProvider.totalDuration,
-                  date: DateFormat(DFormat.mdy.key).format(date),
-                )
-                    .then((value) => requestServicesProvider.setLoading(false));
+                packageProvider.selectedSlotIndex = null;
+
+                widget.cameFromPackage
+                    ? packageProvider.washesDate[widget.index] =
+                        DateFormat(DFormat.ymd.key).format(date)
+                    : widget.cameFromOtherServices
+                        ? otherServicesProvider.selectedDate =
+                            DateFormat(DFormat.ymd.key).format(date)
+                        : requestServicesProvider.selectedDate =
+                            DateFormat(DFormat.ymd.key).format(date);
+
+                widget.cameFromPackage
+                    ? await packageProvider.getPackageTimeSlots(
+                        cityId: requestServicesProvider.cityIdData!.id!,
+                        packageId: packageProvider
+                            .packagesDataList[
+                                packageProvider.selectedPackageIndex!]
+                            .id!,
+                        packageDuration: packageProvider
+                            .packagesDataList[
+                                packageProvider.selectedPackageIndex!]
+                            .duration!,
+                        date: DateFormat(DFormat.dmy.key).format(date),
+                        /*cityId: 2,
+                  packageId: 1,
+                  packageDuration: 10,
+                  date: "5/15/2022",*/
+                      )
+                    : widget.cameFromOtherServices
+                        ? await otherServicesProvider
+                            .getOtherServicesSlots(
+                              cityId: requestServicesProvider.cityIdData!.id!,
+                              serviceId:
+                                  otherServicesProvider.selectedOtherServiceId,
+                              duration: otherServicesProvider
+                                  .otherServicesList[otherServicesProvider
+                                      .selectedServiceIndex!]
+                                  .duration!
+                                  .toDouble(),
+                              date: DateFormat(DFormat.mdy.key).format(date),
+                            )
+                            .then((value) =>
+                                requestServicesProvider.setLoading(false))
+                        : await requestServicesProvider
+                            .getTimeSlots(
+                              cityId: requestServicesProvider.cityIdData!.id!,
+                              basicId: requestServicesProvider
+                                  .selectedBasicServiceId,
+                              duration: requestServicesProvider.totalDuration,
+                              date: DateFormat(DFormat.mdy.key).format(date),
+                            )
+                            .then((value) =>
+                                requestServicesProvider.setLoading(false));
               },
               leftMargin: 20,
               showYears: true,
@@ -148,254 +206,394 @@ class _SelectDateState extends State<SelectDate> {
               textSize: MyFontSize.size15,
             ),
             verticalSpace(19),
-            widget.cameFromOtherServices ?
-            Consumer<OtherServicesProvider>(
-              builder: (context, value, child) {
-                return Container(
-                  child: (value.isLoading)
-                      ? const DataLoader()
-                      : (value.slotsList.isEmpty)
-                          ? const CustomSizedBox(
-                              height: 300,
-                              child: Center(
-                                  child:
-                                      TextWidget(text: 'No Slots Available')))
-                          : Expanded(
-                              child: ListView.separated(
-                                itemCount: value.slotsList.length,
-                                itemBuilder: (context, employeeIndex) {
-                                  return CustomContainer(
-                                    height: 40,
-                                    backgroundColor:
-                                        value.selectedSlotIndex == employeeIndex
-                                            ? const Color(0xFFBADEF6)
-                                            : AppColor.borderGreyLight,
-                                    borderColor:
-                                        value.selectedSlotIndex == employeeIndex
-                                            ? AppColor.borderBlue
-                                            : Colors.transparent,
-                                    radiusCircular: 3,
-                                    padding: symmetricEdgeInsets(
-                                        vertical: 10, horizontal: 12),
-                                    onTap: () {
-                                      value.selectedTimeSlot(
-                                          index: employeeIndex);
-                                      otherServicesProvider.selectedDate =
-                                          DateFormat(DFormat.ymd.key).format(requestServicesProvider.date);
-                                      value.slotsList[employeeIndex]
-                                          .forEach((v) {
-                                        value.slotsIds.add(v.id);
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        TextWidget(
-                                          text:
-                                              '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
-                                          fontWeight: MyFontWeight.medium,
-                                          textSize: MyFontSize.size10,
-                                          color: const Color(0xFF565656),
-                                        ),
-                                        const Spacer(),
-                                        CustomSizedBox(
-                                          height: 14,
-                                          width: 14,
-                                          child: value.selectedSlotIndex ==
-                                                  employeeIndex
-                                              ? CircleAvatar(
-                                                  radius: 30,
-                                                  backgroundColor:
-                                                      AppColor.attributeColor,
-                                                  child: CustomSizedBox(
-                                                    width: 6,
-                                                    height: 6,
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          AppColor.white,
-                                                      radius: 25,
-                                                    ),
-                                                  ),
-                                                )
-                                              : Image.asset(
-                                                  'assets/images/circleGray.png',
-                                                ),
-                                        ),
-                                      ],
+            widget.cameFromPackage
+                ? Consumer<PackageProvider>(
+                    builder: (context, value, child) {
+                      return Container(
+                        child: (value.isLoading)
+                            ? const DataLoader()
+                            : (value.packageSlotsList.isEmpty)
+                                ? const CustomSizedBox(
+                                    height: 300,
+                                    child: Center(
+                                        child: TextWidget(
+                                            text: 'No Slots Available')))
+                                : Expanded(
+                                    child: ListView.separated(
+                                      itemCount: value.packageSlotsList.length,
+                                      itemBuilder: (context, employeeIndex) {
+                                        return CustomContainer(
+                                          height: 40,
+                                          backgroundColor:
+                                              value.selectedSlotIndex ==
+                                                      employeeIndex
+                                                  ? const Color(0xFFBADEF6)
+                                                  : AppColor.borderGreyLight,
+                                          borderColor:
+                                              value.selectedSlotIndex ==
+                                                      employeeIndex
+                                                  ? AppColor.borderBlue
+                                                  : Colors.transparent,
+                                          radiusCircular: 3,
+                                          padding: symmetricEdgeInsets(
+                                              vertical: 10, horizontal: 12),
+                                          onTap: () {
+                                            value.selectedTimeSlot(
+                                                index: employeeIndex);
+                                            otherServicesProvider.selectedDate =
+                                                DateFormat(DFormat.ymd.key)
+                                                    .format(
+                                                        requestServicesProvider
+                                                            .date);
+                                            value
+                                                .packageSlotsList[employeeIndex]
+                                                .forEach((v) {
+                                              value.slotsIds.add(v.id);
+                                            });
+                                            packageProvider
+                                                    .washesTime[widget.index] =
+                                                '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}';
+                                          },
+                                          child: Row(
+                                            children: [
+                                              TextWidget(
+                                                text:
+                                                    '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt} - ${value.packageSlotsList[employeeIndex].lastOrNull?.endAt}',
+                                                fontWeight: MyFontWeight.medium,
+                                                textSize: MyFontSize.size10,
+                                                color: const Color(0xFF565656),
+                                              ),
+                                              const Spacer(),
+                                              CustomSizedBox(
+                                                height: 14,
+                                                width: 14,
+                                                child:
+                                                    value.selectedSlotIndex ==
+                                                            employeeIndex
+                                                        ? const CircleAvatar(
+                                                            radius: 30,
+                                                            backgroundColor:
+                                                                AppColor
+                                                                    .attributeColor,
+                                                            child:
+                                                                CustomSizedBox(
+                                                              width: 6,
+                                                              height: 6,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundColor:
+                                                                    AppColor
+                                                                        .white,
+                                                                radius: 25,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Image.asset(
+                                                            'assets/images/circleGray.png',
+                                                          ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          verticalSpace(14),
                                     ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    verticalSpace(14),
-                              ),
-                            ),
-                );
-              },
-            )
-                : Consumer<RequestServicesProvider>(
-              builder: (context, value, child) {
-                return Container(
-                  child: (value.isLoading)
-                      ? const DataLoader()
-                      : (value.slotsList.isEmpty)
-                          ? const CustomSizedBox(
-                              height: 300,
-                              child: Center(
-                                  child:
-                                      TextWidget(text: 'No Slots Available')))
-                          : Expanded(
-                              child: ListView.separated(
-                                itemCount: value.slotsList.length,
-                                itemBuilder: (context, employeeIndex) {
-                                  return CustomContainer(
-                                    height: 40,
-                                    backgroundColor:
-                                        value.selectedSlotIndex == employeeIndex
-                                            ? const Color(0xFFBADEF6)
-                                            : AppColor.borderGreyLight,
-                                    borderColor:
-                                        value.selectedSlotIndex == employeeIndex
-                                            ? AppColor.borderBlue
-                                            : Colors.transparent,
-                                    radiusCircular: 3,
-                                    padding: symmetricEdgeInsets(
-                                        vertical: 10, horizontal: 12),
-                                    onTap: () {
-                                      value.selectedTimeSlot(
-                                          index: employeeIndex);
-                                      otherServicesProvider.selectedDate =
-                                          DateFormat(DFormat.ymd.key).format(requestServicesProvider.date);
-                                      value.slotsList[employeeIndex]
-                                          .forEach((v) {
-                                        value.slotsIds.add(v.id);
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        TextWidget(
-                                          text:
-                                              '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
-                                          fontWeight: MyFontWeight.medium,
-                                          textSize: MyFontSize.size10,
-                                          color: const Color(0xFF565656),
-                                        ),
-                                        const Spacer(),
-                                        CustomSizedBox(
-                                          height: 14,
-                                          width: 14,
-                                          child: value.selectedSlotIndex ==
-                                                  employeeIndex
-                                              ? CircleAvatar(
-                                                  radius: 30,
-                                                  backgroundColor:
-                                                      AppColor.attributeColor,
-                                                  child: CustomSizedBox(
-                                                    width: 6,
-                                                    height: 6,
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          AppColor.white,
-                                                      radius: 25,
-                                                    ),
+                                  ),
+                      );
+                    },
+                  )
+                : widget.cameFromOtherServices
+                    ? Consumer<OtherServicesProvider>(
+                        builder: (context, value, child) {
+                          return Container(
+                            child: (value.isLoading)
+                                ? const DataLoader()
+                                : (value.slotsList.isEmpty)
+                                    ? const CustomSizedBox(
+                                        height: 300,
+                                        child: Center(
+                                            child: TextWidget(
+                                                text: 'No Slots Available')))
+                                    : Expanded(
+                                        child: ListView.separated(
+                                          itemCount: value.slotsList.length,
+                                          itemBuilder:
+                                              (context, employeeIndex) {
+                                            return CustomContainer(
+                                              height: 40,
+                                              backgroundColor: value
+                                                          .selectedSlotIndex ==
+                                                      employeeIndex
+                                                  ? const Color(0xFFBADEF6)
+                                                  : AppColor.borderGreyLight,
+                                              borderColor:
+                                                  value.selectedSlotIndex ==
+                                                          employeeIndex
+                                                      ? AppColor.borderBlue
+                                                      : Colors.transparent,
+                                              radiusCircular: 3,
+                                              padding: symmetricEdgeInsets(
+                                                  vertical: 10, horizontal: 12),
+                                              onTap: () {
+                                                value.selectedTimeSlot(
+                                                    index: employeeIndex);
+                                                otherServicesProvider
+                                                    .selectedDate = DateFormat(
+                                                        DFormat.ymd.key)
+                                                    .format(
+                                                        requestServicesProvider
+                                                            .date);
+                                                value.slotsList[employeeIndex]
+                                                    .forEach((v) {
+                                                  value.slotsIds.add(v.id);
+                                                });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  TextWidget(
+                                                    text:
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                                    fontWeight:
+                                                        MyFontWeight.medium,
+                                                    textSize: MyFontSize.size10,
+                                                    color:
+                                                        const Color(0xFF565656),
                                                   ),
-                                                )
-                                              : Image.asset(
-                                                  'assets/images/circleGray.png',
-                                                ),
+                                                  const Spacer(),
+                                                  CustomSizedBox(
+                                                    height: 14,
+                                                    width: 14,
+                                                    child:
+                                                        value.selectedSlotIndex ==
+                                                                employeeIndex
+                                                            ? const CircleAvatar(
+                                                                radius: 30,
+                                                                backgroundColor:
+                                                                    AppColor
+                                                                        .attributeColor,
+                                                                child:
+                                                                    CustomSizedBox(
+                                                                  width: 6,
+                                                                  height: 6,
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    backgroundColor:
+                                                                        AppColor
+                                                                            .white,
+                                                                    radius: 25,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/images/circleGray.png',
+                                                              ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              verticalSpace(14),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    verticalSpace(14),
-                              ),
-                            ),
-                );
-              },
-            ),
+                                      ),
+                          );
+                        },
+                      )
+                    : Consumer<RequestServicesProvider>(
+                        builder: (context, value, child) {
+                          return Container(
+                            child: (value.isLoading)
+                                ? const DataLoader()
+                                : (value.slotsList.isEmpty)
+                                    ? const CustomSizedBox(
+                                        height: 300,
+                                        child: Center(
+                                            child: TextWidget(
+                                                text: 'No Slots Available')))
+                                    : Expanded(
+                                        child: ListView.separated(
+                                          itemCount: value.slotsList.length,
+                                          itemBuilder:
+                                              (context, employeeIndex) {
+                                            return CustomContainer(
+                                              height: 40,
+                                              backgroundColor: value
+                                                          .selectedSlotIndex ==
+                                                      employeeIndex
+                                                  ? const Color(0xFFBADEF6)
+                                                  : AppColor.borderGreyLight,
+                                              borderColor:
+                                                  value.selectedSlotIndex ==
+                                                          employeeIndex
+                                                      ? AppColor.borderBlue
+                                                      : Colors.transparent,
+                                              radiusCircular: 3,
+                                              padding: symmetricEdgeInsets(
+                                                  vertical: 10, horizontal: 12),
+                                              onTap: () {
+                                                value.selectedTimeSlot(
+                                                    index: employeeIndex);
+                                                otherServicesProvider
+                                                    .selectedDate = DateFormat(
+                                                        DFormat.ymd.key)
+                                                    .format(
+                                                        requestServicesProvider
+                                                            .date);
+                                                value.slotsList[employeeIndex]
+                                                    .forEach((v) {
+                                                  value.slotsIds.add(v.id);
+                                                });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  TextWidget(
+                                                    text:
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                                    fontWeight:
+                                                        MyFontWeight.medium,
+                                                    textSize: MyFontSize.size10,
+                                                    color:
+                                                        const Color(0xFF565656),
+                                                  ),
+                                                  const Spacer(),
+                                                  CustomSizedBox(
+                                                    height: 14,
+                                                    width: 14,
+                                                    child:
+                                                        value.selectedSlotIndex ==
+                                                                employeeIndex
+                                                            ? const CircleAvatar(
+                                                                radius: 30,
+                                                                backgroundColor:
+                                                                    AppColor
+                                                                        .attributeColor,
+                                                                child:
+                                                                    CustomSizedBox(
+                                                                  width: 6,
+                                                                  height: 6,
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    backgroundColor:
+                                                                        AppColor
+                                                                            .white,
+                                                                    radius: 25,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/images/circleGray.png',
+                                                              ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              verticalSpace(14),
+                                        ),
+                                      ),
+                          );
+                        },
+                      ),
             const Spacer(),
             DefaultButton(
               text: 'Pay',
-              onPressed: widget.cameFromOtherServices ? (){
-                if (otherServicesProvider.selectedSlotIndex != null ) {
-                  AppLoader.showLoader(context);
-                  requestServicesProvider
-                      .assignEmployee(
-                      slotsIds: otherServicesProvider.slotsIds,
-                      slotsDate: otherServicesProvider.selectedDate!,
-                      id: otherServicesProvider.storeServicesData!.id!)
-                      .then((value) {
-                    if (value.status == Status.success) {
-                      requestServicesProvider
-                          .updateRequestSlots(
-                        requestId: otherServicesProvider.storeServicesData!.id!,
-                        payBy: "cash",
-                      )
-                          .then((value) {
-                        if (value.status == Status.success) {
-                          AppLoader.stopLoader();
-                          navigateTo(context,
-                              RequestDetails(
-                                cameFromOtherServices: true,
-                                requestId: otherServicesProvider.storeServicesData!.id!,
-                              ),
-                          );
-                          otherServicesProvider.clearServices();
-                        } else {
-                          AppLoader.stopLoader();
-                          CustomSnackBars.failureSnackBar(
-                              context, '${value.message}');
+              onPressed: widget.cameFromPackage
+                  ? () {}
+                  : widget.cameFromOtherServices
+                      ? () {
+                          if (otherServicesProvider.selectedSlotIndex != null) {
+                            AppLoader.showLoader(context);
+                            requestServicesProvider
+                                .assignEmployee(
+                                    slotsIds: otherServicesProvider.slotsIds,
+                                    slotsDate:
+                                        otherServicesProvider.selectedDate!,
+                                    id: otherServicesProvider
+                                        .storeServicesData!.id!)
+                                .then((value) {
+                              if (value.status == Status.success) {
+                                requestServicesProvider
+                                    .updateRequestSlots(
+                                  requestId: otherServicesProvider
+                                      .storeServicesData!.id!,
+                                  payBy: "cash",
+                                )
+                                    .then((value) {
+                                  if (value.status == Status.success) {
+                                    AppLoader.stopLoader();
+                                    navigateTo(
+                                      context,
+                                      RequestDetails(
+                                        cameFromOtherServices: true,
+                                        requestId: otherServicesProvider
+                                            .storeServicesData!.id!,
+                                      ),
+                                    );
+                                    otherServicesProvider.clearServices();
+                                  } else {
+                                    AppLoader.stopLoader();
+                                    CustomSnackBars.failureSnackBar(
+                                        context, '${value.message}');
+                                  }
+                                });
+                              } else {
+                                AppLoader.stopLoader();
+                                CustomSnackBars.failureSnackBar(
+                                    context, '${value.message}');
+                              }
+                            });
+                          } else {
+                            CustomSnackBars.failureSnackBar(
+                                context, 'Choose time First!');
+                          }
                         }
-                      });
-                    } else {
-                      AppLoader.stopLoader();
-                      CustomSnackBars.failureSnackBar(
-                          context, '${value.message}');
-                    }
-                  });
-                } else {
-                  CustomSnackBars.failureSnackBar(
-                      context, 'Choose time First!');
-                }
-
-              }
-                  : (){
-                if (requestServicesProvider.selectedSlotIndex != null ) {
-                  AppLoader.showLoader(context);
-                  requestServicesProvider
-                      .assignEmployee(
-                          slotsIds: requestServicesProvider.slotsIds,
-                          slotsDate: requestServicesProvider.selectedDate!,
-                          id: requestServicesProvider.bookServicesData!.id!)
-                      .then((value) {
-                    if (value.status == Status.success) {
-                      requestServicesProvider
-                          .updateRequestSlots(
-                        requestId:
-                            requestServicesProvider.bookServicesData!.id!,
-                        payBy: "wallet",
-                      )
-                          .then((value) {
-                        if (value.status == Status.success) {
-                          AppLoader.stopLoader();
-                          navigateTo(context, RequestDetails(requestId: requestServicesProvider.bookServicesData!.id!,));
-                        } else {
-                          AppLoader.stopLoader();
-                          CustomSnackBars.failureSnackBar(
-                              context, '${value.message}');
-                        }
-                      });
-                    } else {
-                      AppLoader.stopLoader();
-                      CustomSnackBars.failureSnackBar(
-                          context, '${value.message}');
-                    }
-                  });
-                } else {
-                  CustomSnackBars.failureSnackBar(
-                      context, 'Choose time First!');
-                }
-              },
+                      : () {
+                          if (requestServicesProvider.selectedSlotIndex !=
+                              null) {
+                            AppLoader.showLoader(context);
+                            requestServicesProvider
+                                .assignEmployee(
+                                    slotsIds: requestServicesProvider.slotsIds,
+                                    slotsDate:
+                                        requestServicesProvider.selectedDate!,
+                                    id: requestServicesProvider
+                                        .bookServicesData!.id!)
+                                .then((value) {
+                              if (value.status == Status.success) {
+                                requestServicesProvider
+                                    .updateRequestSlots(
+                                  requestId: requestServicesProvider
+                                      .bookServicesData!.id!,
+                                  payBy: "wallet",
+                                )
+                                    .then((value) {
+                                  if (value.status == Status.success) {
+                                    AppLoader.stopLoader();
+                                    navigateTo(
+                                        context,
+                                        RequestDetails(
+                                          requestId: requestServicesProvider
+                                              .bookServicesData!.id!,
+                                        ));
+                                  } else {
+                                    AppLoader.stopLoader();
+                                    CustomSnackBars.failureSnackBar(
+                                        context, '${value.message}');
+                                  }
+                                });
+                              } else {
+                                AppLoader.stopLoader();
+                                CustomSnackBars.failureSnackBar(
+                                    context, '${value.message}');
+                              }
+                            });
+                          } else {
+                            CustomSnackBars.failureSnackBar(
+                                context, 'Choose time First!');
+                          }
+                        },
               fontWeight: MyFontWeight.bold,
               fontSize: 21,
               height: 48,

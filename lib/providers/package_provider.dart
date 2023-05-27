@@ -5,16 +5,23 @@ import 'package:provider/provider.dart';
 import '../models/manufacturersModel.dart';
 
 import '../models/packagesModel.dart';
+import '../models/slotsModel.dart';
 import '../models/vehiclesModelsModel.dart';
 import '../models/vehiclesTypesActiveModel.dart';
 import '../services/package_service.dart';
 import '../utils/enum/statuses.dart';
 
 class PackageProvider with ChangeNotifier {
+  PackageService packageService = PackageService();
+
   bool requiredManufacture = false;
   bool requiredModel = false;
   int vehicleTypeId = 1;
   int selectedVehicleTypeIndex = 0;
+  int? selectedPackageIndex;
+
+  Map washesTime = {};
+  Map washesDate = {};
 
   void setSelectedVehicleType({required int index}) {
     selectedVehicleTypeIndex = index;
@@ -44,7 +51,6 @@ class PackageProvider with ChangeNotifier {
     vehiclesTypesDataList = [];
     manufacturerDataList = [];
     notifyListeners();
-    PackageService packageService = PackageService();
     await packageService.getVehiclesTypes().then((value) {
       if (value.status == Status.success) {
         vehiclesTypesDataList = value.data;
@@ -57,7 +63,6 @@ class PackageProvider with ChangeNotifier {
 
   List<ManufacturerData> manufacturerDataList = [];
   Future getManufacturersOfType({required int vehicleTypeId}) async {
-    PackageService packageService = PackageService();
     resetDropDownValues();
     await packageService
         .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
@@ -70,7 +75,6 @@ class PackageProvider with ChangeNotifier {
   }
 
   Future getManufacturers() async {
-    PackageService packageService = PackageService();
     resetDropDownValues();
     await packageService
         .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
@@ -94,7 +98,6 @@ class PackageProvider with ChangeNotifier {
   Future getVehiclesModels({context, required int manufactureId}) async {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context, listen: false);
-    PackageService packageService = PackageService();
     requestServicesProvider.isLoading = true;
     await packageService
         .getVehiclesModels(manufactureId: manufactureId)
@@ -136,7 +139,6 @@ class PackageProvider with ChangeNotifier {
 
   List<PackagesData> packagesDataList = [];
   Future getPackages() async {
-    PackageService packageService = PackageService();
     await packageService.getPackages().then((value) {
       if (value.status == Status.success) {
         packagesDataList = value.data;
@@ -144,4 +146,49 @@ class PackageProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
+  void setSelectedPackage({required int index}) {
+    selectedPackageIndex = index;
+    notifyListeners();
+  }
+
+  bool isLoading = true;
+  List<List<SlotData>> packageSlotsList = [];
+  Future getPackageTimeSlots({
+    required int cityId,
+    required int packageId,
+    required int packageDuration,
+    required String date,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    await packageService
+        .getPackageTimeSlots(cityId: cityId, packageId: packageId, packageDuration: packageDuration, date: date,)
+        .then((value) {
+      isLoading = false;
+      if (value.status == Status.success) {
+        packageSlotsList = value.data;
+      }
+    });
+    notifyListeners();
+  }
+  int? selectedSlotIndex;
+  List slotsIds = [];
+  String? selectedDate;
+
+  void selectedTimeSlot({int? index}) {
+    if(index == null){
+      selectedSlotIndex = null;
+    }else{
+      selectedSlotIndex = index;
+    }
+    notifyListeners();
+  }
+
+  void clearServices() {
+    slotsIds = [];
+    selectedSlotIndex = null;
+    notifyListeners();
+  }
+
 }

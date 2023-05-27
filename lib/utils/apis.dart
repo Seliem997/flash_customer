@@ -31,6 +31,15 @@ class Api {
           String date = "06/5/2023"}) =>
       "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
 
+  static String getPackageSlots(
+          {
+          int cityId = 2,
+          int packageId = 1,
+          int packageDuration = 10,
+          String date = "5/15/2022",
+          }) =>
+      "$baseUrl/customer/slots-package?city_id=$cityId&package_id=$packageId&date=$date&package_duration=$packageDuration";
+
   static const String updateInitialRequest =
       "$baseUrl/customer/update-initial-request?pay_by";
   static const String submitFinialRequest = "$baseUrl/customer/request";

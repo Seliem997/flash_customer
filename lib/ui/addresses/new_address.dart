@@ -9,24 +9,28 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/addresses_provider.dart';
 import '../../providers/home_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/data_loader.dart';
 import '../widgets/spaces.dart';
 import 'location_dialog.dart';
 
 class NewAddress extends StatefulWidget {
-  const NewAddress({Key? key}) : super(key: key);
+  const NewAddress({Key? key, this.cameFromHomeScreen = false})
+      : super(key: key);
 
+  final bool cameFromHomeScreen;
   @override
   State<NewAddress> createState() => _NewAddressState();
 }
 
 class _NewAddressState extends State<NewAddress> {
-
-  final CameraPosition _initialLocation = const CameraPosition(target: LatLng(0, 0));
+  final CameraPosition _initialLocation =
+      const CameraPosition(target: LatLng(0, 0));
 
   @override
   void initState() {
@@ -35,12 +39,37 @@ class _NewAddressState extends State<NewAddress> {
   }
 
   void loadData() async {
+    final AddressesProvider addressesProvider =
+    Provider.of<AddressesProvider>(context, listen: false);
+    final HomeProvider homeProvider =
+    Provider.of<HomeProvider>(context, listen: false);
+
+    widget.cameFromHomeScreen
+        ? await addressesProvider
+        .getAddresses()
+        .then((value) => addressesProvider.setLoading(false))
+        : null;
+    addressesProvider.addressesDataList.forEach((element) async {
+      await homeProvider.markers.add(Marker(
+          markerId: MarkerId('startCoordinatesString'),
+          position: LatLng(
+              double.parse(element.latitude), double.parse(element.langitude)),
+          infoWindow: InfoWindow(
+            title: "${element.locationName}",
+            // snippet: _startAddress,
+          ),
+          icon: await BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueBlue)));
+    });
+    // addressesProvider.setLoading(false);
+
     await _handleLocationPermission();
     await _getCurrentLocation();
   }
+
   _getCurrentLocation() async {
     final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
+        Provider.of<HomeProvider>(context, listen: false);
     homeProvider.resetMap();
     try {
       AppLoader.showLoader(context);
@@ -48,7 +77,7 @@ class _NewAddressState extends State<NewAddress> {
         AppLoader.stopLoader();
         // print("Cur Position1: ${position.longitude} ${position.latitude}");
         homeProvider.currentPosition = position;
-        homeProvider.startMarker();
+        // homeProvider.startMarker();
         homeProvider.mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -64,6 +93,7 @@ class _NewAddressState extends State<NewAddress> {
       log("Error in accessing current location $e");
     }
   }
+
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -96,23 +126,29 @@ class _NewAddressState extends State<NewAddress> {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    final AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context);
 
     return Scaffold(
-      body: Stack(
+      body: addressesProvider.isLoading ? const DataLoader()
+          : Stack(
         children: [
-      GoogleMap(
-      markers: Set<Marker>.from(homeProvider.markers),
-      initialCameraPosition: _initialLocation,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      mapType: MapType.normal,
-      zoomGesturesEnabled: true,
-      zoomControlsEnabled: false,
-      polylines: Set<Polyline>.of(homeProvider.polylines.values),
-      onMapCreated: (GoogleMapController controller) {
-        homeProvider.mapController = controller;
-      },
-    ),
+          GoogleMap(
+            markers: Set<Marker>.from(homeProvider.markers),
+            initialCameraPosition: _initialLocation,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            mapType: MapType.normal,
+            zoomGesturesEnabled: true,
+            zoomControlsEnabled: false,
+            polylines: Set<Polyline>.of(homeProvider.polylines.values),
+            onLongPress: (latlang) {
+              homeProvider.addMarkerLongPressed(
+                  latlang);
+            },
+            onMapCreated: (GoogleMapController controller) {
+              homeProvider.mapController = controller;
+            },
+          ),
           Column(
             children: [
               CustomAppBar(
@@ -146,4 +182,3 @@ class _NewAddressState extends State<NewAddress> {
     );
   }
 }
-

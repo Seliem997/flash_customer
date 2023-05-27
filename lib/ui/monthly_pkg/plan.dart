@@ -27,38 +27,49 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
   }
 
   void loadData() async {
-    final PackageProvider packageProvider=Provider.of<PackageProvider>(context, listen: false);
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context, listen: false);
 
     packageProvider.getPackages();
   }
+
   @override
   Widget build(BuildContext context) {
-    final PackageProvider packageProvider=Provider.of<PackageProvider>(context);
+    final PackageProvider packageProvider =
+        Provider.of<PackageProvider>(context);
 
     return Scaffold(
         appBar: CustomAppBar(title: 'Monthly pkg'),
         body: packageProvider.packagesDataList.isEmpty
             ? const DataLoader()
             : Padding(
-          padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextWidget(
-                text: 'Select Package',
-                fontWeight: MyFontWeight.semiBold,
-                textSize: MyFontSize.size16,
-              ),
-              verticalSpace(23),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: packageProvider.packagesDataList.length,
-                  itemBuilder: (context, index) => PackageCard(packageProvider: packageProvider,index: index,isSelected: true),
-                  separatorBuilder: (context, index) => verticalSpace(16),
-                ),
-              ),
-
-              verticalSpace(16),
+                padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextWidget(
+                      text: 'Select Package',
+                      fontWeight: MyFontWeight.semiBold,
+                      textSize: MyFontSize.size16,
+                    ),
+                    verticalSpace(23),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: packageProvider.packagesDataList.length,
+                        itemBuilder: (context, index) {
+                          return PackageCard(
+                              packageProvider: packageProvider,
+                              index: index,
+                              isSelected: packageProvider.selectedPackageIndex == index,
+                              onTap: () {
+                                packageProvider.setSelectedPackage(index: index);
+                                navigateTo(context, WashesDate(packagesData: packageProvider.packagesDataList[index],),);
+                              });
+                        },
+                        separatorBuilder: (context, index) => verticalSpace(16),
+                      ),
+                    ),
+                    /*verticalSpace(16),
               CustomContainer(
                 radiusCircular: 6,
                 width: 345,
@@ -147,11 +158,10 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                     ),
                   ],
                 ),
-              ),
-
-            ],
-          ),
-        ));
+              ),*/
+                  ],
+                ),
+              ));
   }
 }
 
@@ -159,24 +169,25 @@ class PackageCard extends StatelessWidget {
   const PackageCard({
     super.key,
     required this.packageProvider,
-    this.isSelected= false, required this.index,
-
+    this.isSelected = false,
+    required this.index,
+    this.onTap,
   });
 
   final PackageProvider packageProvider;
   final bool isSelected;
   final int index;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      onTap: (){
-        navigateTo(context, const WashesDate(),);
-      },
+      onTap: onTap,
       radiusCircular: 6,
       width: 345,
       height: 173,
-      backgroundColor: isSelected ? AppColor.selectedColor : AppColor.borderGreyLight,
+      backgroundColor:
+          isSelected ? AppColor.selectedColor : AppColor.borderGreyLight,
       padding: EdgeInsets.zero,
       borderColor: isSelected ? AppColor.babyBlue : const Color(0xFFCDCDCD),
       child: Column(
@@ -187,13 +198,17 @@ class PackageCard extends StatelessWidget {
                 width: 112,
                 height: 34,
                 radiusCircular: 0,
-                backgroundColor: isSelected ? const Color(0xFF9ACEF2) : const Color(0xFFB8B8B8),
+                backgroundColor: isSelected
+                    ? const Color(0xFF9ACEF2)
+                    : const Color(0xFFB8B8B8),
                 child: Center(
                   child: TextWidget(
                     text: '${packageProvider.packagesDataList[index].name} PKG',
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size10,
-                    color: isSelected ? const Color(0xFF00567B) : const Color(0xFF363636),
+                    color: isSelected
+                        ? const Color(0xFF00567B)
+                        : const Color(0xFF363636),
                   ),
                 ),
               ),
@@ -219,8 +234,7 @@ class PackageCard extends StatelessWidget {
             ],
           ),
           Padding(
-            padding:
-                symmetricEdgeInsets(horizontal: 18, vertical: 16),
+            padding: symmetricEdgeInsets(horizontal: 18, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -235,14 +249,16 @@ class PackageCard extends StatelessWidget {
                     horizontalSpace(8),
                     RichText(
                       text: TextSpan(
-                        text: '${packageProvider.packagesDataList[index].washingQuantity} times ',
+                        text:
+                            '${packageProvider.packagesDataList[index].washingQuantity} times ',
                         style: TextStyle(
                             color: const Color(0xFF0096FF),
                             fontSize: MyFontSize.size10,
                             fontWeight: MyFontWeight.medium),
                         children: [
                           TextSpan(
-                            text: 'per ${packageProvider.packagesDataList[index].per}',
+                            text:
+                                'per ${packageProvider.packagesDataList[index].per}',
                             style: TextStyle(
                               color: const Color(0xFF636363),
                               fontSize: MyFontSize.size10,
@@ -269,11 +285,201 @@ class PackageCard extends StatelessWidget {
                 ),
                 verticalSpace(16),
                 TextWidget(
-                  text: '160 SR',
+                  text:
+                      '${packageProvider.packagesDataList[index].cities![0].price} SR',
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size14,
                   color: AppColor.borderBlue,
                 ),
+
+                /*
+                verticalSpace(24),
+                TextWidget(
+                  text: '2nd wash',
+                  fontWeight: MyFontWeight.semiBold,
+                  textSize: MyFontSize.size15,
+                ),
+                verticalSpace(12),
+                CustomContainer(
+                  clipBehavior: Clip.hardEdge,
+                  width: double.infinity,
+                  height: 75,
+                  backgroundColor: AppColor.borderGreyLight,
+                  child: Row(
+                    children: [
+                      const CustomContainer(
+                        width: 8,
+                        height: double.infinity,
+                        radiusCircular: 0,
+                        backgroundColor: Color(0xFF898A8D),
+                      ),
+                      Padding(
+                        padding:
+                        symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                        child: Row(
+                          children: [
+                            CustomContainer(
+                              borderColor: const Color(0xFF979797),
+                              height: 46,
+                              width: 46,
+                              backgroundColor: Colors.transparent,
+                              radiusCircular: 100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  'assets/svg/about.svg',
+                                ),
+                              ),
+                            ),
+                            horizontalSpace(24),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svg/calendar.svg'),
+                                    horizontalSpace(10),
+                                    TextWidget(
+                                      text: 'Monday, 22 January 2023',
+                                      textSize: MyFontSize.size10,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xff282828),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(10),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svg/clock (1).svg'),
+                                    horizontalSpace(10),
+                                    TextWidget(
+                                      text: '03:15 PM',
+                                      textSize: MyFontSize.size10,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xff282828),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                verticalSpace(24),
+                TextWidget(
+                  text: '3rd wash',
+                  fontWeight: MyFontWeight.semiBold,
+                  textSize: MyFontSize.size15,
+                ),
+                verticalSpace(12),
+                CustomContainer(
+                  clipBehavior: Clip.hardEdge,
+                  width: double.infinity,
+                  height: 75,
+                  backgroundColor: AppColor.borderGreyLight,
+                  child: Row(
+                    children: [
+                      const CustomContainer(
+                        width: 8,
+                        height: double.infinity,
+                        radiusCircular: 0,
+                        backgroundColor: Color(0xFF898A8D),
+                      ),
+                      Padding(
+                        padding:
+                        symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                        child: Row(
+                          children: [
+                            CustomContainer(
+                              borderColor: const Color(0xFF979797),
+                              height: 46,
+                              width: 46,
+                              backgroundColor: Colors.transparent,
+                              radiusCircular: 100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  'assets/svg/about.svg',
+                                ),
+                              ),
+                            ),
+                            horizontalSpace(24),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svg/calendar.svg'),
+                                    horizontalSpace(10),
+                                    TextWidget(
+                                      text: 'Monday, 22 January 2023',
+                                      textSize: MyFontSize.size10,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xff282828),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(10),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svg/clock (1).svg'),
+                                    horizontalSpace(10),
+                                    TextWidget(
+                                      text: '03:15 PM',
+                                      textSize: MyFontSize.size10,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xff282828),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                verticalSpace(24),
+                TextWidget(
+                  text: '4th wash',
+                  fontWeight: MyFontWeight.semiBold,
+                  textSize: MyFontSize.size15,
+                ),
+                verticalSpace(12),
+                CustomContainer(
+                  clipBehavior: Clip.hardEdge,
+                  width: double.infinity,
+                  height: 75,
+                  onTap: (){
+                    navigateTo(context, const SelectDate());
+                  },
+                  backgroundColor: AppColor.borderGreyLight,
+                  child: Row(
+                    children: [
+                      const CustomContainer(
+                        width: 8,
+                        height: double.infinity,
+                        radiusCircular: 0,
+                        backgroundColor: Color(0xFF898A8D),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: TextWidget(
+                            text: 'No date & time',
+                            fontWeight: MyFontWeight.medium,
+                            textSize: MyFontSize.size12,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                verticalSpace(24),
+                */
               ],
             ),
           ),
@@ -282,3 +488,270 @@ class PackageCard extends StatelessWidget {
     );
   }
 }
+
+
+/*child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextWidget(
+                text: '1st wash',
+                fontWeight: MyFontWeight.semiBold,
+                textSize: MyFontSize.size15,
+              ),
+              verticalSpace(12),
+              CustomContainer(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 75,
+                backgroundColor: AppColor.selectedColor,
+                child: Row(
+                  children: [
+                    const CustomContainer(
+                      width: 8,
+                      height: double.infinity,
+                      radiusCircular: 0,
+                      backgroundColor: AppColor.primary,
+                    ),
+                    Padding(
+                      padding:
+                          symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                      child: Row(
+                        children: [
+                          CustomContainer(
+                            borderColor: const Color(0xFF0096FF),
+                            height: 45,
+                            width: 45,
+                            backgroundColor: Colors.transparent,
+                            radiusCircular: 100,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                'assets/svg/about.svg',
+                              ),
+                            ),
+                          ),
+                          horizontalSpace(24),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/calendar.svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: 'Monday, 22 January 2023',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                              verticalSpace(10),
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/clock (1).svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: '03:15 PM',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              verticalSpace(24),
+              TextWidget(
+                text: '2nd wash',
+                fontWeight: MyFontWeight.semiBold,
+                textSize: MyFontSize.size15,
+              ),
+              verticalSpace(12),
+              CustomContainer(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 75,
+                backgroundColor: AppColor.borderGreyLight,
+                child: Row(
+                  children: [
+                    const CustomContainer(
+                      width: 8,
+                      height: double.infinity,
+                      radiusCircular: 0,
+                      backgroundColor: Color(0xFF898A8D),
+                    ),
+                    Padding(
+                      padding:
+                          symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                      child: Row(
+                        children: [
+                          CustomContainer(
+                            borderColor: const Color(0xFF979797),
+                            height: 46,
+                            width: 46,
+                            backgroundColor: Colors.transparent,
+                            radiusCircular: 100,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                'assets/svg/about.svg',
+                              ),
+                            ),
+                          ),
+                          horizontalSpace(24),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/calendar.svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: 'Monday, 22 January 2023',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                              verticalSpace(10),
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/clock (1).svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: '03:15 PM',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              verticalSpace(24),
+              TextWidget(
+                text: '3rd wash',
+                fontWeight: MyFontWeight.semiBold,
+                textSize: MyFontSize.size15,
+              ),
+              verticalSpace(12),
+              CustomContainer(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 75,
+                backgroundColor: AppColor.borderGreyLight,
+                child: Row(
+                  children: [
+                    const CustomContainer(
+                      width: 8,
+                      height: double.infinity,
+                      radiusCircular: 0,
+                      backgroundColor: Color(0xFF898A8D),
+                    ),
+                    Padding(
+                      padding:
+                          symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                      child: Row(
+                        children: [
+                          CustomContainer(
+                            borderColor: const Color(0xFF979797),
+                            height: 46,
+                            width: 46,
+                            backgroundColor: Colors.transparent,
+                            radiusCircular: 100,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                'assets/svg/about.svg',
+                              ),
+                            ),
+                          ),
+                          horizontalSpace(24),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/calendar.svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: 'Monday, 22 January 2023',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                              verticalSpace(10),
+                              Row(
+                                children: [
+                                  SvgPicture.asset('assets/svg/clock (1).svg'),
+                                  horizontalSpace(10),
+                                  TextWidget(
+                                    text: '03:15 PM',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: const Color(0xff282828),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              verticalSpace(24),
+              TextWidget(
+                text: '4th wash',
+                fontWeight: MyFontWeight.semiBold,
+                textSize: MyFontSize.size15,
+              ),
+              verticalSpace(12),
+              CustomContainer(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 75,
+                onTap: (){
+                  navigateTo(context, const SelectDate());
+                },
+                backgroundColor: AppColor.borderGreyLight,
+                child: Row(
+                  children: [
+                    const CustomContainer(
+                      width: 8,
+                      height: double.infinity,
+                      radiusCircular: 0,
+                      backgroundColor: Color(0xFF898A8D),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: TextWidget(
+                          text: 'No date & time',
+                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size12,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              verticalSpace(24),
+            ],
+          ),*/

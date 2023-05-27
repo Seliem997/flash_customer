@@ -56,8 +56,8 @@ class AddressesData {
   int? id;
   String? image;
   String? type;
-  double? latitude;
-  double? langitude;
+  dynamic latitude;
+  dynamic langitude;
   String? locationName;
   int? customerId;
 
