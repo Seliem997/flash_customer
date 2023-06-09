@@ -134,10 +134,15 @@ class SidebarDrawer extends StatelessWidget {
                   },
                   icon: const Icon(Icons.dark_mode_outlined)),
               horizontalSpace(5),
-              SvgPicture.asset('assets/svg/translate.svg',
-                  color: userDataProvider.isDark
-                      ? AppColor.white
-                      : AppColor.black),
+              GestureDetector(
+                onTap: (){
+                  userDataProvider.changeLanguage(context);
+                },
+                child: SvgPicture.asset('assets/svg/translate.svg',
+                    color: userDataProvider.isDark
+                        ? AppColor.white
+                        : AppColor.black),
+              ),
             ],
           ),
         ],

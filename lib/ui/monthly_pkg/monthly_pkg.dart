@@ -307,7 +307,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                           CustomSnackBars.successSnackBar(
                                               context, 'New Vehicle added');
                                           navigateTo(
-                                              context, const MonthlyPlans());
+                                              context, MonthlyPlans(comeFromNewCar: true, vehicleId: myVehiclesProvider.vehicleDetailsData!.id,));
                                         } else {
                                           CustomSnackBars
                                               .somethingWentWrongSnackBar(

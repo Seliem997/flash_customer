@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
 import 'package:flash_customer/providers/home_provider.dart';
@@ -31,6 +33,11 @@ void main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.changeLanguage(newLocale);
+  }
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -45,6 +52,9 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = locale;
     });
+    log(locale.languageCode);
+    CacheHelper.saveData(
+        key: CacheKey.language, value: locale.languageCode);
   }
 
   @override

@@ -38,7 +38,7 @@ class VehicleDetailsData {
   String? vehicleModelName;
   String? vehicleTypeId;
   String? vehicleTypeName;
-  String? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   Customer? customer;
 

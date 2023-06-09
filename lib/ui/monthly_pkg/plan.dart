@@ -19,9 +19,11 @@ import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
 class MonthlyPlans extends StatefulWidget {
-  const MonthlyPlans({Key? key, this.myVehicleIndex}) : super(key: key);
+  const MonthlyPlans({Key? key, this.myVehicleIndex, this.comeFromNewCar= false, this.vehicleId}) : super(key: key);
 
   final int? myVehicleIndex;
+  final bool comeFromNewCar;
+  final int? vehicleId;
   @override
   State<MonthlyPlans> createState() => _MonthlyPlansState();
 }
@@ -87,7 +89,9 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                                 await packageProvider.storeInitialPackageRequest(
                                   context, cityId: requestServicesProvider.cityIdData!.id!,
                                   packageId: packageProvider.packagesDataList[index].id!,
-                                    vehicleId: myVehiclesProvider.myVehiclesData!.collection![widget.myVehicleIndex!].id!,
+                                    vehicleId: widget.comeFromNewCar
+                                        ? widget.vehicleId!
+                                        : myVehiclesProvider.myVehiclesData!.collection![widget.myVehicleIndex!].id!,
                                 ).then((value) {
                                   if(value.status == Status.success){
                                     AppLoader.stopLoader();

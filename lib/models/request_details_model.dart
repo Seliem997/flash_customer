@@ -30,12 +30,13 @@ class DetailsRequestData {
   String? payBy;
   Null? feedback;
   int? packageId;
+  PackageDetails? packageDetails;
   String? amount;
   Null? lateTime;
   Null? actualTime;
-  String? tax;
+  dynamic tax;
   String? discountAmount;
-  String? totalAmount;
+  dynamic totalAmount;
   String? totalDuration;
   String? time;
   String? date;
@@ -159,6 +160,79 @@ class DetailsRequestData {
     if (this.slots != null) {
       data['slots'] = this.slots!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class PackageDetails {
+  int? id;
+  String? nameEn;
+  String? nameAr;
+  String? descriptionEn;
+  String? descriptionAr;
+  int? washingQuantity;
+  String? per;
+  int? maxRequests;
+  int? currentRequest;
+  int? duration;
+  int? vehicleTypeId;
+  int? vehicleSubTypeId;
+  bool? isActive;
+  String? createdAt;
+  String? updatedAt;
+
+  PackageDetails(
+      {this.id,
+        this.nameEn,
+        this.nameAr,
+        this.descriptionEn,
+        this.descriptionAr,
+        this.washingQuantity,
+        this.per,
+        this.maxRequests,
+        this.currentRequest,
+        this.duration,
+        this.vehicleTypeId,
+        this.vehicleSubTypeId,
+        this.isActive,
+        this.createdAt,
+        this.updatedAt});
+
+  PackageDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nameEn = json['name_en'];
+    nameAr = json['name_ar'];
+    descriptionEn = json['description_en'];
+    descriptionAr = json['description_ar'];
+    washingQuantity = json['washing_quantity'];
+    per = json['per'];
+    maxRequests = json['max_requests'];
+    currentRequest = json['current_request'];
+    duration = json['duration'];
+    vehicleTypeId = json['vehicle_type_id'];
+    vehicleSubTypeId = json['vehicle_sub_type_id'];
+    isActive = json['is_active'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_en'] = this.nameEn;
+    data['name_ar'] = this.nameAr;
+    data['description_en'] = this.descriptionEn;
+    data['description_ar'] = this.descriptionAr;
+    data['washing_quantity'] = this.washingQuantity;
+    data['per'] = this.per;
+    data['max_requests'] = this.maxRequests;
+    data['current_request'] = this.currentRequest;
+    data['duration'] = this.duration;
+    data['vehicle_type_id'] = this.vehicleTypeId;
+    data['vehicle_sub_type_id'] = this.vehicleSubTypeId;
+    data['is_active'] = this.isActive;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

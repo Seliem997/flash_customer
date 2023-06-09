@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../main.dart';
 import '../models/profileModel.dart';
 import '../services/authentication_service.dart';
 import '../utils/enum/shared_preference_keys.dart';
@@ -78,6 +80,7 @@ class UserProvider extends ChangeNotifier {
   // }
 
   bool isDark = false;
+  //-------------------------------------------- change App Mode -------
 
   void changeAppMode({bool? modeFromShared}) {
     if (modeFromShared != null) {
@@ -90,4 +93,18 @@ class UserProvider extends ChangeNotifier {
       });
     }
   }
+
+  //-------------------------------------------- change Language -------
+
+  void changeLanguage(context) {
+    if (Intl.getCurrentLocale() == 'ar') {
+      MyApp.setLocale(context, const Locale("en"));
+    } else {
+      MyApp.setLocale(context, const Locale("ar"));
+    }
+    notifyListeners();
+  }
+
+
+
 }
