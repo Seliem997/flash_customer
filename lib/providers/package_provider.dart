@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../models/manufacturersModel.dart';
 
 import '../models/packagesModel.dart';
+import '../models/requestResult.dart';
+import '../models/request_details_model.dart';
 import '../models/slotsModel.dart';
 import '../models/vehiclesModelsModel.dart';
 import '../models/vehiclesTypesActiveModel.dart';
@@ -19,6 +21,7 @@ class PackageProvider with ChangeNotifier {
   int vehicleTypeId = 1;
   int selectedVehicleTypeIndex = 0;
   int? selectedPackageIndex;
+  int? packageWashingQuantities;
 
   Map washesTime = {};
   Map washesDate = {};
@@ -109,6 +112,30 @@ class PackageProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  DetailsRequestData? detailsRequestData;
+  Future<ResponseResult> storeInitialPackageRequest(
+      BuildContext context, {
+        required int cityId,
+        required int packageId,
+        required int vehicleId,
+      }) async {
+    Status state = Status.error;
+    dynamic message;
+
+    await packageService
+        .storeInitialPackageRequest(cityId: cityId, packageId: packageId, vehicleId: vehicleId)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        detailsRequestData = value.data;
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, detailsRequestData, message: message);
+  }
+
   void setSelectedVehicle(VehiclesModelsData vehicle) {
     selectedVehicleModel = vehicle;
     notifyListeners();
@@ -138,8 +165,8 @@ class PackageProvider with ChangeNotifier {
   }
 
   List<PackagesData> packagesDataList = [];
-  Future getPackages() async {
-    await packageService.getPackages().then((value) {
+  Future getPackages({required int cityId}) async {
+    await packageService.getPackages(cityId: cityId).then((value) {
       if (value.status == Status.success) {
         packagesDataList = value.data;
       }

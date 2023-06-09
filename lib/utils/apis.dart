@@ -46,6 +46,8 @@ class Api {
 
   static const String bookServices = "$baseUrl/customer/initial-request";
 
+  static const String storeInitialPackageRequest = "$baseUrl/customer/initial-package-request";
+
   static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
   static const String getAddresses = "$baseUrl/customer/my-addresses";
@@ -67,6 +69,8 @@ class Api {
       "$baseUrl/customer/history-transactions";
 
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
+
+  static const String deleteVehicle = "$baseUrl/customer/vehicles/";
 
   static const String getMyRequests = "$baseUrl/customer/customer-requests";
 

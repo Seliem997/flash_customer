@@ -44,11 +44,11 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
     final MyVehiclesProvider myVehiclesProvider =
-    Provider.of<MyVehiclesProvider>(context, listen: false);
+        Provider.of<MyVehiclesProvider>(context, listen: false);
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
+        Provider.of<RequestServicesProvider>(context, listen: false);
     final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
+        Provider.of<HomeProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
     myVehiclesProvider.getMyVehicles();
@@ -64,7 +64,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
-    Provider.of<MyVehiclesProvider>(context);
+        Provider.of<MyVehiclesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: 'Monthly pkg'),
       body: packageProvider.manufacturerDataList.isEmpty
@@ -78,13 +78,16 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       CustomContainer(
                         padding:
                             symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                        backgroundColor: packageProvider.newVehicleLabel ? AppColor.borderGrey : AppColor.borderGreyLight,
+                        backgroundColor: packageProvider.newVehicleLabel
+                            ? AppColor.borderGrey
+                            : AppColor.borderGreyLight,
                         borderColor: packageProvider.newVehicleLabel
-                            ? AppColor.babyBlue : Colors.transparent,
+                            ? AppColor.babyBlue
+                            : Colors.transparent,
                         width: 162,
                         height: 112,
                         radiusCircular: 6,
-                        onTap: (){
+                        onTap: () {
                           packageProvider.selectedNewVehicleLabel();
                         },
                         child: Column(
@@ -105,9 +108,12 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                       ),
                       horizontalSpace(21),
                       CustomContainer(
-                        backgroundColor: packageProvider.myVehicleLabel ? AppColor.borderGrey : AppColor.borderGreyLight,
+                        backgroundColor: packageProvider.myVehicleLabel
+                            ? AppColor.borderGrey
+                            : AppColor.borderGreyLight,
                         borderColor: packageProvider.myVehicleLabel
-                            ? AppColor.babyBlue : Colors.transparent,
+                            ? AppColor.babyBlue
+                            : Colors.transparent,
                         width: 162,
                         height: 112,
                         padding:
@@ -253,26 +259,26 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                   verticalSpace(20),
                   packageProvider.newVehicleLabel
                       ? (packageProvider.manufacturerDataList.isEmpty)
-                      ? const DataLoader()
-                      : Expanded(
-                    child: NewVehiclesScreenWidget(
-                        packageProvider: packageProvider),
-                  )
+                          ? const DataLoader()
+                          : Expanded(
+                              child: NewVehiclesScreenWidget(
+                                  packageProvider: packageProvider),
+                            )
                       : myVehiclesProvider.loadingMyVehicles
-                      ? const DataLoader(useExpand: true)
-                      : myVehiclesProvider.myVehiclesData == null
-                      ? const NoDataPlaceHolder()
-                      : MyVehiclesScreenWidget(
-                      myVehiclesProvider: myVehiclesProvider),
+                          ? const DataLoader(useExpand: true)
+                          : myVehiclesProvider.myVehiclesData == null
+                              ? const NoDataPlaceHolder()
+                              : MyVehiclesScreenWidget(
+                                  myVehiclesProvider: myVehiclesProvider),
                   packageProvider.newVehicleLabel
                       ? Visibility(
-                    visible: packageProvider.manufacturerDataList.isEmpty,
-                    child: const Spacer(),
-                  )
+                          visible: packageProvider.manufacturerDataList.isEmpty,
+                          child: const Spacer(),
+                        )
                       : Visibility(
-                    visible: myVehiclesProvider.myVehiclesData == null,
-                    child: const Spacer(),
-                  ),
+                          visible: myVehiclesProvider.myVehiclesData == null,
+                          child: const Spacer(),
+                        ),
                   DefaultButton(
                     height: 48,
                     width: double.infinity,
@@ -282,36 +288,39 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                     onPressed: () async {
                       packageProvider.newVehicleLabel
                           ? packageProvider.chooseManufacture
-                          ? packageProvider.chooseModel
-                          ? {
-                        AppLoader.showLoader(context),
-                        await myVehiclesProvider
-                            .addNewVehicle(
-                          vehicleTypeId: '1',
-                          manufacture:
-                          packageProvider.selectedManufacture!.id!,
-                          model:
-                          packageProvider.selectedVehicleModel!.id!,
-                          name: packageProvider
-                              .selectedVehicleModel!.name!,
-                        )
-                            .then((value) {
-                          AppLoader.stopLoader();
-                          if (value.status == Status.success) {
-                            CustomSnackBars.successSnackBar(
-                                context, 'New Vehicle added');
-                            navigateTo(context, const MonthlyPlans());
-                          } else {
-                            CustomSnackBars.somethingWentWrongSnackBar(
-                                context);
-                          }
-                        }),
-                      }
-                          : packageProvider.setRequiredModel()
-                          : packageProvider.setRequiredManufacture()
+                              ? packageProvider.chooseModel
+                                  ? {
+                                      AppLoader.showLoader(context),
+                                      await myVehiclesProvider
+                                          .addNewVehicle(
+                                        vehicleTypeId: '1',
+                                        manufacture: packageProvider
+                                            .selectedManufacture!.id!,
+                                        model: packageProvider
+                                            .selectedVehicleModel!.id!,
+                                        name: packageProvider
+                                            .selectedVehicleModel!.name!,
+                                      )
+                                          .then((value) {
+                                        AppLoader.stopLoader();
+                                        if (value.status == Status.success) {
+                                          CustomSnackBars.successSnackBar(
+                                              context, 'New Vehicle added');
+                                          navigateTo(
+                                              context, const MonthlyPlans());
+                                        } else {
+                                          CustomSnackBars
+                                              .somethingWentWrongSnackBar(
+                                                  context);
+                                        }
+                                      }),
+                                    }
+                                  : packageProvider.setRequiredModel()
+                              : packageProvider.setRequiredManufacture()
                           : myVehiclesProvider.selectedMyVehicleIndex != null
-                          ? navigateTo(context, const MonthlyPlans())
-                          : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
+                              ? navigateTo(context, MonthlyPlans(myVehicleIndex: myVehiclesProvider.selectedMyVehicleIndex,))
+                              : CustomSnackBars.failureSnackBar(
+                                  context, 'Choose Vehicle First');
                     },
                   ),
                 ],

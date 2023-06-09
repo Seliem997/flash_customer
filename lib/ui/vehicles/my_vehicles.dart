@@ -6,6 +6,7 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/myVehicles_provider.dart';
@@ -92,70 +93,95 @@ class MyVehiclesScreenWidget extends StatelessWidget {
         padding: symmetricEdgeInsets(vertical: 30),
         child: ListView.separated(
           itemCount: myVehiclesProvider.myVehiclesData!.collection!.length,
-          itemBuilder: (context, index) => CustomContainer(
-            height: 70,
-            width: 345,
-            borderColor: myVehiclesProvider.selectedMyVehicleIndex == index ? AppColor.borderBlue : Colors.transparent,
-            backgroundColor: myVehiclesProvider.selectedMyVehicleIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
-            onTap: (){
-              myVehiclesProvider.setSelectedMyVehicle(index: index);
-            },
-            child: Padding(
-              padding: symmetricEdgeInsets(vertical: 7, horizontal: 7),
-              child: Row(
-                children: [
-                  CustomContainer(
-                    width: 71,
-                    height: 50,
-                    radiusCircular: 3,
-                    padding: EdgeInsets.zero,
-                    clipBehavior: Clip.hardEdge,
-                    backgroundColor: Colors.transparent,
-                    child: Image.network(
-                      myVehiclesProvider
-                          .myVehiclesData!.collection![index].manufacturerLogo!,
-                      fit: BoxFit.fitHeight,
+          itemBuilder: (context, index) => Slidable(
+            key: ValueKey(index),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  flex: 1,
+                  onPressed: (BuildContext context) {
+                    myVehiclesProvider.deleteVehicle(vehicleID: myVehiclesProvider.myVehiclesData!.collection![index].id!);
+                  },
+                  backgroundColor: const Color(0xFFE74A2A),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete_forever_outlined,
+                  label: 'Delete',
+                ),
+                SlidableAction(
+                  onPressed: (BuildContext context) {},
+                  backgroundColor: const Color(0xFF28A72D),
+                  foregroundColor: Colors.white,
+                  icon: Icons.mode_edit_outline_outlined,
+                  label: 'Edit',
+                ),
+              ],
+            ),
+            child:  CustomContainer(
+              height: 70,
+              width: 345,
+              borderColor: myVehiclesProvider.selectedMyVehicleIndex == index ? AppColor.borderBlue : Colors.transparent,
+              backgroundColor: myVehiclesProvider.selectedMyVehicleIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
+              onTap: (){
+                myVehiclesProvider.setSelectedMyVehicle(index: index);
+              },
+              child: Padding(
+                padding: symmetricEdgeInsets(vertical: 7, horizontal: 7),
+                child: Row(
+                  children: [
+                    CustomContainer(
                       width: 71,
                       height: 50,
-                    ),
-                  ),
-                  horizontalSpace(12),
-                  Expanded(
-                    child: Padding(
-                      padding: onlyEdgeInsets(top: 5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextWidget(
-                            text:
-                                '${myVehiclesProvider.myVehiclesData!.collection![index].manufacturerName}, ${myVehiclesProvider.myVehiclesData!.collection![index].vehicleModelName} /${myVehiclesProvider.myVehiclesData!.collection![index].name} ${myVehiclesProvider.myVehiclesData!.collection![index].year} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
-                            maxLines: 2,
-                            fontWeight: MyFontWeight.semiBold,
-                            textSize: MyFontSize.size10,
-                          ),
-                          verticalSpace(9),
-                          Row(
-                            children: [
-                              const CircleAvatar(
-                                radius: 6,
-                                backgroundColor: Color(0xFF3424F1),
-                              ),
-                              horizontalSpace(6),
-                              TextWidget(
-                                text:
-                                    '${myVehiclesProvider.myVehiclesData!.collection![index].color} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
-                                fontWeight: MyFontWeight.medium,
-                                textSize: MyFontSize.size10,
-                                maxLines: 1,
-                                color: AppColor.textGrey,
-                              ),
-                            ],
-                          )
-                        ],
+                      radiusCircular: 3,
+                      padding: EdgeInsets.zero,
+                      clipBehavior: Clip.hardEdge,
+                      backgroundColor: Colors.transparent,
+                      child: Image.network(
+                        myVehiclesProvider
+                            .myVehiclesData!.collection![index].manufacturerLogo!,
+                        fit: BoxFit.fitHeight,
+                        width: 71,
+                        height: 50,
                       ),
                     ),
-                  ),
-                ],
+                    horizontalSpace(12),
+                    Expanded(
+                      child: Padding(
+                        padding: onlyEdgeInsets(top: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              text:
+                                  '${myVehiclesProvider.myVehiclesData!.collection![index].manufacturerName}, ${myVehiclesProvider.myVehiclesData!.collection![index].vehicleModelName} /${myVehiclesProvider.myVehiclesData!.collection![index].name} ${myVehiclesProvider.myVehiclesData!.collection![index].year} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                              maxLines: 2,
+                              fontWeight: MyFontWeight.semiBold,
+                              textSize: MyFontSize.size10,
+                            ),
+                            verticalSpace(9),
+                            Row(
+                              children: [
+                                const CircleAvatar(
+                                  radius: 6,
+                                  backgroundColor: Color(0xFF3424F1),
+                                ),
+                                horizontalSpace(6),
+                                TextWidget(
+                                  text:
+                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                                  fontWeight: MyFontWeight.medium,
+                                  textSize: MyFontSize.size10,
+                                  maxLines: 1,
+                                  color: AppColor.textGrey,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

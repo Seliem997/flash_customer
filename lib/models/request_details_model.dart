@@ -1,7 +1,6 @@
-
 class DetailsRequestModel {
   int? statusCode;
-  Null? message;
+  dynamic message;
   DetailsRequestData? data;
 
   DetailsRequestModel({this.statusCode, this.message, this.data});
@@ -25,12 +24,12 @@ class DetailsRequestModel {
 
 class DetailsRequestData {
   int? id;
-  String? requestId;
+  dynamic requestId;
   String? status;
   Null? rate;
   String? payBy;
   Null? feedback;
-  Null? packageId;
+  int? packageId;
   String? amount;
   Null? lateTime;
   Null? actualTime;

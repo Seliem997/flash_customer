@@ -89,4 +89,35 @@ class MyVehiclesService extends BaseService {
     }
     return ResponseResult(result, myVehiclesData);
   }
+
+  Future<ResponseResult> deleteVehicle({required int vehicleID}) async {
+    Status result = Status.error;
+    Map<String, String> headers = const {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+    dynamic message;
+
+    try {
+      await requestFutureData(
+          api: '${Api.deleteVehicle}$vehicleID',
+          requestType: Request.delete,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              message = response["message"];
+            } catch (e) {
+              logger.e("Error getting response delete Vehicle\n$e");
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in deleting Vehicle $e");
+    }
+    return ResponseResult(result, '', message: message);
+  }
 }

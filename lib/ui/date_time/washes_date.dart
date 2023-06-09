@@ -21,6 +21,7 @@ class WashesDate extends StatelessWidget {
   Widget build(BuildContext context) {
     final PackageProvider packageProvider =
     Provider.of<PackageProvider>(context);
+    packageProvider.packageWashingQuantities = packagesData.washingQuantity;
     return Scaffold(
       appBar: CustomAppBar(title: 'Date & Time'),
       body: Padding(

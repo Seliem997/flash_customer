@@ -63,4 +63,25 @@ class MyVehiclesProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
+
+  Future deleteVehicle({required int vehicleID}) async {
+    loadingMyVehicles = true;
+    notifyListeners();
+    Status state = Status.error;
+    dynamic message;
+
+    await myVehiclesService.deleteVehicle(vehicleID: vehicleID).then((value) {
+      if (value.status == Status.success) {
+        loadingMyVehicles = false;
+        state = Status.success;
+        message = value.message;
+      }else{
+        message = value.message;
+      }
+    });
+    getMyVehicles();
+    notifyListeners();
+    return ResponseResult(state, '',message: message);
+  }
 }

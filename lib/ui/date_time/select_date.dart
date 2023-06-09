@@ -61,10 +61,10 @@ class _SelectDateState extends State<SelectDate> {
             cityId: requestServicesProvider.cityIdData!.id!,
             packageId: packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!].id!,
-            packageDuration: packageProvider
+            packageDuration:/* packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!]
-                .duration!,
-            date: DateFormat(DFormat.dmy.key)
+                .duration!*/50,
+            date: DateFormat(DFormat.mdy.key)
                 .format(requestServicesProvider.date),
           )
         : widget.cameFromOtherServices
@@ -153,11 +153,11 @@ class _SelectDateState extends State<SelectDate> {
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
                             .id!,
-                        packageDuration: packageProvider
+                        packageDuration: /*packageProvider
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
-                            .duration!,
-                        date: DateFormat(DFormat.dmy.key).format(date),
+                            .duration!*/50,
+                        date: DateFormat(DFormat.mdy.key).format(date),
                         /*cityId: 2,
                   packageId: 1,
                   packageDuration: 10,
@@ -498,9 +498,13 @@ class _SelectDateState extends State<SelectDate> {
                       ),
             const Spacer(),
             DefaultButton(
-              text: 'Pay',
+              text: packageProvider.packageWashingQuantities == packageProvider.washesDate.length ? 'Pay' : 'Done',
               onPressed: widget.cameFromPackage
-                  ? () {}
+                  ? () {
+                packageProvider.packageWashingQuantities == packageProvider.washesDate.length
+                    ? (){}
+                    : Navigator.pop(context);
+              }
                   : widget.cameFromOtherServices
                       ? () {
                           if (otherServicesProvider.selectedSlotIndex != null) {

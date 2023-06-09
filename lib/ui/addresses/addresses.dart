@@ -133,13 +133,13 @@ class _MyAddressesState extends State<MyAddresses> {
                           icon: Icons.delete_forever_outlined,
                           label: 'Delete',
                         ),
-                        SlidableAction(
-                          onPressed: (BuildContext context) {},
-                          backgroundColor: const Color(0xFF28A72D),
-                          foregroundColor: Colors.white,
-                          icon: Icons.mode_edit_outline_outlined,
-                          label: 'Edit',
-                        ),
+                        // SlidableAction(
+                        //   onPressed: (BuildContext context) {},
+                        //   backgroundColor: const Color(0xFF28A72D),
+                        //   foregroundColor: Colors.white,
+                        //   icon: Icons.mode_edit_outline_outlined,
+                        //   label: 'Edit',
+                        // ),
                       ],
                     ),
                     child: CustomContainer(

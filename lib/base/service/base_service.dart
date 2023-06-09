@@ -76,6 +76,27 @@ class BaseService {
               logger.e("Error in $api \nError: ${value.body}");
             }
           });
+        } else if (requestType == Request.delete) {
+          await http
+              .delete(Uri.parse(api), headers: headerWithToken)
+              .timeout(const Duration(seconds: 10), onTimeout: () {
+            AppLoader.stopLoader();
+            // CustomSnackBars.somethingWentWrongSnackBar(context);
+            logger.e("Request Timeout");
+            return http.Response('Request Timeout', 408);
+          }).then((value) async {
+            if (jsonDecode(value.body)['status_code'] == 200 ||
+                jsonDecode(value.body)['code'] == 200) {
+              logger.i("Data Came from $api \nData: ${value.body}");
+              await onSuccess(jsonDecode(value.body));
+            } else if (jsonDecode(value.body)['status_code'] == 401) {
+              await onSuccess(jsonDecode(value.body));
+              logger.w("Something went wrong $api \nData: ${value.body}");
+            } else {
+              onSuccess(jsonDecode(value.body));
+              logger.e("Error in $api \nError: ${value.body}");
+            }
+          });
         } else if (requestType == Request.patch) {
           await http
               .patch(Uri.parse(api),
@@ -137,6 +158,27 @@ class BaseService {
               onSuccess(jsonDecode(value.body));
             } else if (jsonDecode(value.body)['status_code'] == 401) {
               onSuccess(jsonDecode(value.body));
+              logger.w("Something went wrong $api \nData: ${value.body}");
+            } else {
+              onSuccess(jsonDecode(value.body));
+              logger.e("Error in $api \nError: ${value.body}");
+            }
+          });
+        } else if (requestType == Request.delete) {
+          await http
+              .delete(Uri.parse(api), headers: headerWithToken)
+              .timeout(const Duration(seconds: 10), onTimeout: () {
+            AppLoader.stopLoader();
+            // CustomSnackBars.somethingWentWrongSnackBar(context);
+            logger.e("Request Timeout");
+            return http.Response('Request Timeout', 408);
+          }).then((value) async {
+            if (jsonDecode(value.body)['status_code'] == 200 ||
+                jsonDecode(value.body)['code'] == 200) {
+              logger.i("Data Came from $api \nData: ${value.body}");
+              await onSuccess(jsonDecode(value.body));
+            } else if (jsonDecode(value.body)['status_code'] == 401) {
+              await onSuccess(jsonDecode(value.body));
               logger.w("Something went wrong $api \nData: ${value.body}");
             } else {
               onSuccess(jsonDecode(value.body));

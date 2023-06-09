@@ -1,5 +1,7 @@
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/custom_bar_widget.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
@@ -351,17 +353,22 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 text: 'Save',
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
-                onPressed: () {
-                  myVehiclesProvider.addNewVehicle(
+                onPressed: () async{
+                  AppLoader.showLoader(context);
+                  await myVehiclesProvider.addNewVehicle(
                     vehicleTypeId: '1',
-                    manufacture: 2,
-                    model: 2,
+                    manufacture: packageProvider.selectedManufacture!.id!,
+                    model: packageProvider.selectedVehicleModel!.id!,
                     numbers: numbersController.text,
                     letters: lettersController.text,
                     color: '0xFFdedede',
                     name: nameController.text,
                     year: yearController.text,
-                  );
+                  ).then((value) {
+                    AppLoader.stopLoader();
+                    navigateAndFinish(context, const HomeScreen());
+                  });
+
                 },
               ),
             ],

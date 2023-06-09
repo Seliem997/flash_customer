@@ -1,9 +1,15 @@
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/utils/app_loader.dart';
+import 'package:flash_customer/utils/enum/statuses.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/home_provider.dart';
+import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
+import '../../providers/requestServices_provider.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../date_time/washes_date.dart';
@@ -13,8 +19,9 @@ import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
 class MonthlyPlans extends StatefulWidget {
-  const MonthlyPlans({Key? key}) : super(key: key);
+  const MonthlyPlans({Key? key, this.myVehicleIndex}) : super(key: key);
 
+  final int? myVehicleIndex;
   @override
   State<MonthlyPlans> createState() => _MonthlyPlansState();
 }
@@ -29,14 +36,27 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context, listen: false);
+    final HomeProvider homeProvider =
+    Provider.of<HomeProvider>(context, listen: false);
 
-    packageProvider.getPackages();
+    await requestServicesProvider.getCityId(
+      context,
+      lat: homeProvider.currentPosition!.latitude,
+      long: homeProvider.currentPosition!.longitude,
+    );
+    await packageProvider.getPackages(cityId: requestServicesProvider.cityIdData!.id!);
   }
 
   @override
   Widget build(BuildContext context) {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context);
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context);
+    final MyVehiclesProvider myVehiclesProvider =
+    Provider.of<MyVehiclesProvider>(context);
 
     return Scaffold(
         appBar: CustomAppBar(title: 'Monthly pkg'),
@@ -61,9 +81,25 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                               packageProvider: packageProvider,
                               index: index,
                               isSelected: packageProvider.selectedPackageIndex == index,
-                              onTap: () {
+                              onTap: () async{
+                                AppLoader.showLoader(context);
                                 packageProvider.setSelectedPackage(index: index);
-                                navigateTo(context, WashesDate(packagesData: packageProvider.packagesDataList[index],),);
+                                await packageProvider.storeInitialPackageRequest(
+                                  context, cityId: requestServicesProvider.cityIdData!.id!,
+                                  packageId: packageProvider.packagesDataList[index].id!,
+                                    vehicleId: myVehiclesProvider.myVehiclesData!.collection![widget.myVehicleIndex!].id!,
+                                ).then((value) {
+                                  if(value.status == Status.success){
+                                    AppLoader.stopLoader();
+                                    return navigateTo(context, WashesDate(packagesData: packageProvider.packagesDataList[index],),);
+                                  }else{
+                                    AppLoader.stopLoader();
+                                    CustomSnackBars.failureSnackBar(
+                                        context, '${value.message}');
+                                  }
+
+                                });
+
                               });
                         },
                         separatorBuilder: (context, index) => verticalSpace(16),
@@ -278,7 +314,7 @@ class PackageCard extends StatelessWidget {
                 ),
                 verticalSpace(7),
                 TextWidget(
-                  text: 'Inside and outside wash(!)',
+                  text: '${packageProvider.packagesDataList[index].description}',
                   fontWeight: MyFontWeight.medium,
                   textSize: MyFontSize.size10,
                   color: const Color(0xFF636363),
@@ -286,7 +322,7 @@ class PackageCard extends StatelessWidget {
                 verticalSpace(16),
                 TextWidget(
                   text:
-                      '${packageProvider.packagesDataList[index].cities![0].price} SR',
+                      '${packageProvider.packagesDataList[index].selectedPrice} SR',
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size14,
                   color: AppColor.borderBlue,
