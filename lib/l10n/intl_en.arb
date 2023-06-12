@@ -16,5 +16,6 @@
   "enterCodeFirst": "Enter code first",
   "codeIsInvalid": "Code is invalid",
   "codeNotAccepted": "Code not accepted",
-  "offerAppliedSuccessfully": "Offer applied successfully"
+  "offerAppliedSuccessfully": "Offer applied successfully",
+  "dateTime": "Date & Time"
 }

@@ -1,4 +1,5 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:flash_customer/generated/l10n.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
@@ -61,9 +62,10 @@ class _SelectDateState extends State<SelectDate> {
             cityId: requestServicesProvider.cityIdData!.id!,
             packageId: packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!].id!,
-            packageDuration:/* packageProvider
+            packageDuration: /* packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!]
-                .duration!*/50,
+                .duration!*/
+                50,
             date: DateFormat(DFormat.mdy.key)
                 .format(requestServicesProvider.date),
           )
@@ -103,7 +105,7 @@ class _SelectDateState extends State<SelectDate> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Date & Time ',
+        title: S.of(context).dateTime,
         onTap: () {
           navigateAndFinish(context, const HomeScreen());
           requestServicesProvider.clearServices();
@@ -156,7 +158,8 @@ class _SelectDateState extends State<SelectDate> {
                         packageDuration: /*packageProvider
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
-                            .duration!*/50,
+                            .duration!*/
+                            50,
                         date: DateFormat(DFormat.mdy.key).format(date),
                         /*cityId: 2,
                   packageId: 1,
@@ -498,13 +501,17 @@ class _SelectDateState extends State<SelectDate> {
                       ),
             const Spacer(),
             DefaultButton(
-              text: packageProvider.packageWashingQuantities == packageProvider.washesDate.length ? 'Pay' : 'Done',
+              text: packageProvider.packageWashingQuantities ==
+                      packageProvider.washesDate.length
+                  ? 'Pay'
+                  : 'Done',
               onPressed: widget.cameFromPackage
                   ? () {
-                packageProvider.packageWashingQuantities == packageProvider.washesDate.length
-                    ? (){}
-                    : Navigator.pop(context);
-              }
+                      packageProvider.packageWashingQuantities ==
+                              packageProvider.washesDate.length
+                          ? () {}
+                          : Navigator.pop(context);
+                    }
                   : widget.cameFromOtherServices
                       ? () {
                           if (otherServicesProvider.selectedSlotIndex != null) {

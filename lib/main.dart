@@ -10,7 +10,6 @@ import 'package:flash_customer/providers/package_provider.dart';
 import 'package:flash_customer/providers/requestServices_provider.dart';
 import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
-import 'package:flash_customer/ui/contact/contact_us.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
@@ -53,8 +52,7 @@ class _MyAppState extends State<MyApp> {
       _locale = locale;
     });
     log(locale.languageCode);
-    CacheHelper.saveData(
-        key: CacheKey.language, value: locale.languageCode);
+    CacheHelper.saveData(key: CacheKey.language, value: locale.languageCode);
   }
 
   @override
