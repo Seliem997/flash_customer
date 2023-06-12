@@ -65,6 +65,9 @@ dependencies:
   http: ^0.13.5
   provider: ^6.0.5
 
+  flutter_tap_payment: ^0.2.0
+
+
 
 
 dev_dependencies:

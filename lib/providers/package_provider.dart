@@ -25,6 +25,9 @@ class PackageProvider with ChangeNotifier {
 
   Map washesTime = {};
   Map washesDate = {};
+  List employeeIdsList = [];
+  List slotsIdsList = [];
+  Map<String, List> washSlotsIdsMap = {};
 
   void setSelectedVehicleType({required int index}) {
     selectedVehicleTypeIndex = index;
@@ -134,6 +137,34 @@ class PackageProvider with ChangeNotifier {
     });
     notifyListeners();
     return ResponseResult(state, detailsRequestData, message: message);
+  }
+
+  Map<String, dynamic> mapBody={};
+  Future<ResponseResult> saveSlotsPackageRequest({required int requestId}) async {
+    Status state = Status.error;
+
+    dynamic message;
+    mapBody["id"] = requestId;
+    for(int i=0; i<washesDate.length; i++){
+      mapBody["date[$i]"] = washesDate[i];
+      mapBody["employee[$i]"] = employeeIdsList[i];
+      for(int x=0; x<washSlotsIdsMap["$i"]!.length; x++){
+        mapBody["slots_id[$i][$x]"] = washSlotsIdsMap["$i"]![x];
+      }
+    // "slots_id[0][0]": vehicleId,
+    }
+    await packageService
+        .saveSlotsPackageRequest(mapBody: mapBody)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, '', message: message);
   }
 
   void setSelectedVehicle(VehiclesModelsData vehicle) {

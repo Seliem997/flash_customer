@@ -230,4 +230,59 @@ class PackageService extends BaseService {
     }
     return ResponseResult(result, detailsRequestData, message: message);
   }
+
+  Future<ResponseResult> saveSlotsPackageRequest(/*{
+    required int packageWashingQuantities,
+    required int id,
+    required String date,
+    required int employeeId,
+    required int slotsId,
+  }*/{required Map<String, dynamic> mapBody}) async {
+    Status result = Status.error;
+
+    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    dynamic message;
+    Map<String, dynamic> body = /*{
+      "id": id,
+      for(int i=0; i<packageWashingQuantities; i++){
+        "date[0]": date,
+        "employee[0]": vehicleId,
+        "slots_id[0][0]": vehicleId,
+      }
+
+    }*/mapBody;
+    // DetailsRequestData? detailsRequestData;
+    try {
+      await requestFutureData(
+          api: Api.saveSlotsPackageRequest,
+          requestType: Request.post,
+          body: body,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              if (response["status_code"] == 200) {
+                result = Status.success;
+                // detailsRequestData = DetailsRequestModel.fromJson(response).data!;
+              } else if (response["status_code"] == 422 ||
+                  response["status_code"] == 400) {
+                // result = Status.success;
+                result = Status.error;
+                message = response["message"];
+              }
+            } catch (e) {
+              message = response["message"];
+              logger.e(
+                  "Error getting response save Slots Package Request Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting save Slots Package Request Data$e");
+    }
+    return ResponseResult(result, ''/*detailsRequestData*/, message: message);
+  }
+
+
 }

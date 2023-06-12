@@ -62,10 +62,9 @@ class _SelectDateState extends State<SelectDate> {
             cityId: requestServicesProvider.cityIdData!.id!,
             packageId: packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!].id!,
-            packageDuration: /* packageProvider
+            packageDuration: packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!]
-                .duration!*/
-                50,
+                .duration!,
             date: DateFormat(DFormat.mdy.key)
                 .format(requestServicesProvider.date),
           )
@@ -155,11 +154,10 @@ class _SelectDateState extends State<SelectDate> {
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
                             .id!,
-                        packageDuration: /*packageProvider
+                        packageDuration: packageProvider
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
-                            .duration!*/
-                            50,
+                            .duration!,
                         date: DateFormat(DFormat.mdy.key).format(date),
                         /*cityId: 2,
                   packageId: 1,
@@ -241,21 +239,26 @@ class _SelectDateState extends State<SelectDate> {
                                           padding: symmetricEdgeInsets(
                                               vertical: 10, horizontal: 12),
                                           onTap: () {
-                                            value.selectedTimeSlot(
-                                                index: employeeIndex);
+                                            value.selectedTimeSlot(index: employeeIndex);
                                             otherServicesProvider.selectedDate =
                                                 DateFormat(DFormat.ymd.key)
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
-                                            value
+                                           /* value
                                                 .packageSlotsList[employeeIndex]
                                                 .forEach((v) {
                                               value.slotsIds.add(v.id);
-                                            });
+                                            });*/
+                                            value.slotsIds = value.packageSlotsList[employeeIndex].map((e) => e.id).toList();
+                                            value.washSlotsIdsMap.addEntries({"${widget.index}" :
+                                              value.packageSlotsList[employeeIndex].map((e) => e.id).toList()
+                                            }.entries);
                                             packageProvider
                                                     .washesTime[widget.index] =
                                                 '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}';
+                                            value.employeeIdsList.add(value.packageSlotsList[employeeIndex].firstOrNull?.employeeId);
+                                            value.slotsIdsList.add(value.packageSlotsList[employeeIndex][0].id);
                                           },
                                           child: Row(
                                             children: [
@@ -501,17 +504,17 @@ class _SelectDateState extends State<SelectDate> {
                       ),
             const Spacer(),
             DefaultButton(
-              text: packageProvider.packageWashingQuantities ==
-                      packageProvider.washesDate.length
-                  ? 'Pay'
-                  : 'Done',
+              text: packageProvider.packageWashingQuantities == packageProvider.washesDate.length ? 'Pay' : 'Done',
               onPressed: widget.cameFromPackage
                   ? () {
-                      packageProvider.packageWashingQuantities ==
-                              packageProvider.washesDate.length
-                          ? () {}
-                          : Navigator.pop(context);
-                    }
+                packageProvider.packageWashingQuantities == packageProvider.washesDate.length
+                    ? (){
+                  print("in Pay");
+
+                  packageProvider.saveSlotsPackageRequest(requestId: packageProvider.detailsRequestData!.id!);
+                }
+                    : Navigator.pop(context);
+              }
                   : widget.cameFromOtherServices
                       ? () {
                           if (otherServicesProvider.selectedSlotIndex != null) {

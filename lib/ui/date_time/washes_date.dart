@@ -11,6 +11,7 @@ import '../../models/packagesModel.dart';
 import '../../providers/package_provider.dart';
 import '../../utils/number_formats.dart';
 import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
@@ -68,77 +69,98 @@ class WashesDate extends StatelessWidget {
                       ],
                     ),
                   )
-                      : CustomContainer(
+                      : Column(
+                        children: [
+                          CustomContainer(
                     clipBehavior: Clip.hardEdge,
                     width: double.infinity,
                     height: 75,
                     backgroundColor: AppColor.selectedColor,
                     onTap: (){
-                      navigateTo(context, SelectDate(cameFromPackage: true,index: index,),);
+                          navigateTo(context, SelectDate(cameFromPackage: true,index: index,),);
                     },
                     child: Row(
-                      children: [
-                        const CustomContainer(
-                          width: 8,
-                          height: double.infinity,
-                          radiusCircular: 0,
-                          backgroundColor: AppColor.primary,
-                        ),
-                        Padding(
-                          padding:
-                          symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
-                          child: Row(
-                            children: [
-                              CustomContainer(
-                                borderColor: const Color(0xFF0096FF),
-                                height: 45,
-                                width: 45,
-                                backgroundColor: Colors.transparent,
-                                radiusCircular: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    'assets/images/car_wash.png',
-                                  ),
-                                ),
-                              ),
-                              horizontalSpace(24),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomContainer(
+                              width: 8,
+                              height: double.infinity,
+                              radiusCircular: 0,
+                              backgroundColor: AppColor.primary,
+                            ),
+                            Padding(
+                              padding:
+                              symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                              child: Row(
                                 children: [
-                                  Row(
+                                  CustomContainer(
+                                    borderColor: const Color(0xFF0096FF),
+                                    height: 45,
+                                    width: 45,
+                                    backgroundColor: Colors.transparent,
+                                    radiusCircular: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/images/car_wash.png',
+                                      ),
+                                    ),
+                                  ),
+                                  horizontalSpace(24),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      SvgPicture.asset('assets/svg/calendar.svg'),
-                                      horizontalSpace(10),
-                                      TextWidget(
-                                        text: packageProvider.washesDate[index],
-                                        textSize: MyFontSize.size10,
-                                        fontWeight: MyFontWeight.medium,
-                                        color: const Color(0xff282828),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset('assets/svg/calendar.svg'),
+                                          horizontalSpace(10),
+                                          TextWidget(
+                                            text: packageProvider.washesDate[index],
+                                            textSize: MyFontSize.size10,
+                                            fontWeight: MyFontWeight.medium,
+                                            color: const Color(0xff282828),
+                                          ),
+                                        ],
+                                      ),
+                                      verticalSpace(10),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset('assets/svg/clock (1).svg'),
+                                          horizontalSpace(10),
+                                          TextWidget(
+                                            text: packageProvider.washesTime[index],
+                                            textSize: MyFontSize.size10,
+                                            fontWeight: MyFontWeight.medium,
+                                            color: const Color(0xff282828),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                  verticalSpace(10),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset('assets/svg/clock (1).svg'),
-                                      horizontalSpace(10),
-                                      TextWidget(
-                                        text: packageProvider.washesTime[index],
-                                        textSize: MyFontSize.size10,
-                                        fontWeight: MyFontWeight.medium,
-                                        color: const Color(0xff282828),
-                                      ),
-                                    ],
-                                  ),
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                              ),
+                            )
+                          ],
                     ),
                   ),
+                          DefaultButton(
+                            text:  'Pay',
+                            onPressed: packageProvider.packageWashingQuantities == packageProvider.washesDate.length
+                                ? (){
+                              print("in Pay");
+
+                              packageProvider.saveSlotsPackageRequest(requestId: packageProvider.detailsRequestData!.id!);
+                            }:(){
+                              print("in Pay Nothing");
+
+                            },
+                            fontWeight: MyFontWeight.bold,
+                            fontSize: 21,
+                            height: 48,
+                            width: 345,
+                          ),
+
+                        ],
+                      ),
                 ],
               );
             },

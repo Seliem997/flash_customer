@@ -145,4 +145,5 @@ class ExtraServicesItem {
     data['extra_service_count'] = extraServiceCount;
     return data;
 }
+
 }
