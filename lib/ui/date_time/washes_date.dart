@@ -24,147 +24,149 @@ class WashesDate extends StatelessWidget {
     Provider.of<PackageProvider>(context);
     packageProvider.packageWashingQuantities = packagesData.washingQuantity;
     return Scaffold(
-      appBar: CustomAppBar(title: 'Date & Time'),
+      appBar: const CustomAppBar(title: 'Date & Time'),
       body: Padding(
           padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
-          child: ListView.separated(
-            itemCount: packagesData.washingQuantity!,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextWidget(
-                    text: '${index+1}${ordinal(index+1)} wash',
-                    fontWeight: MyFontWeight.semiBold,
-                    textSize: MyFontSize.size15,
-                  ),
-                  verticalSpace(12),
-                  packageProvider.washesTime[index] == null
-                      ? CustomContainer(
-                    clipBehavior: Clip.hardEdge,
-                    width: double.infinity,
-                    height: 75,
-                    onTap: (){
-                      navigateTo(context, SelectDate(cameFromPackage: true, index: index),);
-
-                    },
-                    backgroundColor: AppColor.borderGreyLight,
-                    child: Row(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  itemCount: packagesData.washingQuantity!,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CustomContainer(
-                          width: 8,
-                          height: double.infinity,
-                          radiusCircular: 0,
-                          backgroundColor: Color(0xFF898A8D),
+                        TextWidget(
+                          text: '${index+1}${ordinal(index+1)} wash',
+                          fontWeight: MyFontWeight.semiBold,
+                          textSize: MyFontSize.size15,
                         ),
-                        Expanded(
-                          child: Center(
-                            child: TextWidget(
-                              text: 'No date & time',
-                              fontWeight: MyFontWeight.medium,
-                              textSize: MyFontSize.size12,
-                            ),
+                        verticalSpace(12),
+                        packageProvider.washesTime[index] == null
+                            ? CustomContainer(
+                          clipBehavior: Clip.hardEdge,
+                          width: double.infinity,
+                          height: 75,
+                          onTap: (){
+                            navigateTo(context, SelectDate(cameFromPackage: true, index: index),);
+
+                          },
+                          backgroundColor: AppColor.borderGreyLight,
+                          child: Row(
+                            children: [
+                              const CustomContainer(
+                                width: 8,
+                                height: double.infinity,
+                                radiusCircular: 0,
+                                backgroundColor: Color(0xFF898A8D),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: TextWidget(
+                                    text: 'No date & time',
+                                    fontWeight: MyFontWeight.medium,
+                                    textSize: MyFontSize.size12,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  )
-                      : Column(
-                        children: [
-                          CustomContainer(
-                    clipBehavior: Clip.hardEdge,
-                    width: double.infinity,
-                    height: 75,
-                    backgroundColor: AppColor.selectedColor,
-                    onTap: (){
-                          navigateTo(context, SelectDate(cameFromPackage: true,index: index,),);
-                    },
-                    child: Row(
-                          children: [
-                            const CustomContainer(
-                              width: 8,
-                              height: double.infinity,
-                              radiusCircular: 0,
-                              backgroundColor: AppColor.primary,
-                            ),
-                            Padding(
-                              padding:
-                              symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
-                              child: Row(
-                                children: [
-                                  CustomContainer(
-                                    borderColor: const Color(0xFF0096FF),
-                                    height: 45,
-                                    width: 45,
-                                    backgroundColor: Colors.transparent,
-                                    radiusCircular: 100,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'assets/images/car_wash.png',
+                            : CustomContainer(
+                          clipBehavior: Clip.hardEdge,
+                          width: double.infinity,
+                          height: 75,
+                          backgroundColor: AppColor.selectedColor,
+                          onTap: (){
+                            navigateTo(context, SelectDate(cameFromPackage: true,index: index,),);
+                          },
+                          child: Row(
+                            children: [
+                              const CustomContainer(
+                                width: 8,
+                                height: double.infinity,
+                                radiusCircular: 0,
+                                backgroundColor: AppColor.primary,
+                              ),
+                              Padding(
+                                padding:
+                                symmetricEdgeInsets(horizontal: 12.5, vertical: 13.5),
+                                child: Row(
+                                  children: [
+                                    CustomContainer(
+                                      borderColor: const Color(0xFF0096FF),
+                                      height: 45,
+                                      width: 45,
+                                      backgroundColor: Colors.transparent,
+                                      radiusCircular: 100,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'assets/images/car_wash.png',
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  horizontalSpace(24),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset('assets/svg/calendar.svg'),
-                                          horizontalSpace(10),
-                                          TextWidget(
-                                            text: packageProvider.washesDate[index],
-                                            textSize: MyFontSize.size10,
-                                            fontWeight: MyFontWeight.medium,
-                                            color: const Color(0xff282828),
-                                          ),
-                                        ],
-                                      ),
-                                      verticalSpace(10),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset('assets/svg/clock (1).svg'),
-                                          horizontalSpace(10),
-                                          TextWidget(
-                                            text: packageProvider.washesTime[index],
-                                            textSize: MyFontSize.size10,
-                                            fontWeight: MyFontWeight.medium,
-                                            color: const Color(0xff282828),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                    ),
-                  ),
-                          DefaultButton(
-                            text:  'Pay',
-                            onPressed: packageProvider.packageWashingQuantities == packageProvider.washesDate.length
-                                ? (){
-                              print("in Pay");
-
-                              packageProvider.saveSlotsPackageRequest(requestId: packageProvider.detailsRequestData!.id!);
-                            }:(){
-                              print("in Pay Nothing");
-
-                            },
-                            fontWeight: MyFontWeight.bold,
-                            fontSize: 21,
-                            height: 48,
-                            width: 345,
+                                    horizontalSpace(24),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset('assets/svg/calendar.svg'),
+                                            horizontalSpace(10),
+                                            TextWidget(
+                                              text: '${packageProvider.washesDate[index]}',
+                                              textSize: MyFontSize.size10,
+                                              fontWeight: MyFontWeight.medium,
+                                              color: const Color(0xff282828),
+                                            ),
+                                          ],
+                                        ),
+                                        verticalSpace(10),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset('assets/svg/clock (1).svg'),
+                                            horizontalSpace(10),
+                                            TextWidget(
+                                              text: packageProvider.washesTime[index],
+                                              textSize: MyFontSize.size10,
+                                              fontWeight: MyFontWeight.medium,
+                                              color: const Color(0xff282828),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
+                        ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => verticalSpace(24),
+                ),
+              ),
+              verticalSpace(5),
+              DefaultButton(
+                text:  'Pay',
+                onPressed: packageProvider.packageWashingQuantities == packageProvider.washesDate.length
+                    ? (){
+                  print("in Pay");
 
-                        ],
-                      ),
-                ],
-              );
-            },
-            separatorBuilder: (context, index) => verticalSpace(24),
+                  packageProvider.saveSlotsPackageRequest(requestId: packageProvider.detailsRequestData!.id!);
+                }:(){
+                  print("in Pay Nothing");
+
+                },
+                fontWeight: MyFontWeight.bold,
+                fontSize: 21,
+                height: 48,
+                width: 345,
+              ),
+            ],
           ),
       ),
     );

@@ -239,26 +239,40 @@ class _SelectDateState extends State<SelectDate> {
                                           padding: symmetricEdgeInsets(
                                               vertical: 10, horizontal: 12),
                                           onTap: () {
-                                            value.selectedTimeSlot(index: employeeIndex);
+                                            value.selectedTimeSlot(
+                                                index: employeeIndex);
                                             otherServicesProvider.selectedDate =
                                                 DateFormat(DFormat.ymd.key)
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
-                                           /* value
+                                            /* value
                                                 .packageSlotsList[employeeIndex]
                                                 .forEach((v) {
                                               value.slotsIds.add(v.id);
                                             });*/
-                                            value.slotsIds = value.packageSlotsList[employeeIndex].map((e) => e.id).toList();
-                                            value.washSlotsIdsMap.addEntries({"${widget.index}" :
-                                              value.packageSlotsList[employeeIndex].map((e) => e.id).toList()
+                                            value.slotsIds = value
+                                                .packageSlotsList[employeeIndex]
+                                                .map((e) => e.id)
+                                                .toList();
+                                            value.washSlotsIdsMap.addEntries({
+                                              "${widget.index}": value
+                                                  .packageSlotsList[
+                                                      employeeIndex]
+                                                  .map((e) => e.id)
+                                                  .toList()
                                             }.entries);
                                             packageProvider
                                                     .washesTime[widget.index] =
                                                 '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}';
-                                            value.employeeIdsList.add(value.packageSlotsList[employeeIndex].firstOrNull?.employeeId);
-                                            value.slotsIdsList.add(value.packageSlotsList[employeeIndex][0].id);
+                                            value.employeeIdsList.add(value
+                                                .packageSlotsList[employeeIndex]
+                                                .firstOrNull
+                                                ?.employeeId);
+                                            value.slotsIdsList.add(value
+                                                .packageSlotsList[employeeIndex]
+                                                    [0]
+                                                .id);
                                           },
                                           child: Row(
                                             children: [
@@ -504,17 +518,11 @@ class _SelectDateState extends State<SelectDate> {
                       ),
             const Spacer(),
             DefaultButton(
-              text: packageProvider.packageWashingQuantities == packageProvider.washesDate.length ? 'Pay' : 'Done',
+              text: widget.cameFromPackage ? 'Done' : 'Pay',
               onPressed: widget.cameFromPackage
                   ? () {
-                packageProvider.packageWashingQuantities == packageProvider.washesDate.length
-                    ? (){
-                  print("in Pay");
-
-                  packageProvider.saveSlotsPackageRequest(requestId: packageProvider.detailsRequestData!.id!);
-                }
-                    : Navigator.pop(context);
-              }
+                      Navigator.pop(context);
+                    }
                   : widget.cameFromOtherServices
                       ? () {
                           if (otherServicesProvider.selectedSlotIndex != null) {

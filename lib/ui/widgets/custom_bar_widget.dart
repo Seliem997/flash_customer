@@ -9,7 +9,7 @@ import 'package:sizer/sizer.dart';
 import '../../utils/styles/colors.dart';
 import '../home/home_screen.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final Widget customizePopButton;
   final GestureTapCallback? onTap;
 
-  CustomAppBar({
+  const CustomAppBar({
     Key? key,
     this.withArrow = true,
     this.customizePopButton = const SizedBox(),
