@@ -49,7 +49,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
 
-    myVehiclesProvider.getMyVehicles();
+    await myVehiclesProvider.getMyVehicles().then((value) => packageProvider.selectedMyVehicleLabel());
     packageProvider.getVehiclesTypeActive();
     packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
@@ -70,7 +70,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<RequestServicesProvider>(context);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Vehicle Type'),
+      appBar: const CustomAppBar(title: 'Vehicle Type'),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(

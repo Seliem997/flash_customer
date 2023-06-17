@@ -151,11 +151,11 @@ class PackageProvider with ChangeNotifier {
       for(int x=0; x<washSlotsIdsMap["$i"]!.length; x++){
         mapBody["slots_id[$i][$x]"] = washSlotsIdsMap["$i"]![x];
       }
-    // "slots_id[0][0]": vehicleId,
     }
     await packageService
         .saveSlotsPackageRequest(mapBody: mapBody)
         .then((value) {
+          print('object in provider');
       if (value.status == Status.success) {
         state = Status.success;
 

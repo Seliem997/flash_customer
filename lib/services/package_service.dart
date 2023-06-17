@@ -231,28 +231,15 @@ class PackageService extends BaseService {
     return ResponseResult(result, detailsRequestData, message: message);
   }
 
-  Future<ResponseResult> saveSlotsPackageRequest(/*{
-    required int packageWashingQuantities,
-    required int id,
-    required String date,
-    required int employeeId,
-    required int slotsId,
-  }*/{required Map<String, dynamic> mapBody}) async {
+  Future<ResponseResult> saveSlotsPackageRequest({required Map<String, dynamic> mapBody}) async {
     Status result = Status.error;
 
     Map<String, String> headers = const {'Content-Type': 'application/json'};
     dynamic message;
-    Map<String, dynamic> body = /*{
-      "id": id,
-      for(int i=0; i<packageWashingQuantities; i++){
-        "date[0]": date,
-        "employee[0]": vehicleId,
-        "slots_id[0][0]": vehicleId,
-      }
-
-    }*/mapBody;
+    Map<String, dynamic> body = mapBody;
     // DetailsRequestData? detailsRequestData;
     try {
+      print('object in out of service');
       await requestFutureData(
           api: Api.saveSlotsPackageRequest,
           requestType: Request.post,
@@ -261,6 +248,8 @@ class PackageService extends BaseService {
           withToken: true,
           headers: headers,
           onSuccess: (response) async {
+            print('object in service');
+
             try {
               if (response["status_code"] == 200) {
                 result = Status.success;

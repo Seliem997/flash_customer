@@ -74,7 +74,7 @@ class SummaryRequestDetails extends StatelessWidget {
             verticalSpace(10),
             TextWidget(
               text:
-              "${requestServicesProvider.detailsRequestData!.date!} - ${requestServicesProvider.detailsRequestData!.time!}",
+              "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time!}",
               textSize: MyFontSize.size12,
               fontWeight: MyFontWeight.regular,
               color: AppColor.subTextGrey,
@@ -153,7 +153,12 @@ class SummaryRequestDetails extends StatelessWidget {
                             color: AppColor.subTextGrey,
                           );
                         }
-                        return Container();
+                        return /*TextWidget(
+                          text: 'No extra Services',
+                          textSize: MyFontSize.size12,
+                          fontWeight: MyFontWeight.regular,
+                          color: AppColor.subTextGrey,
+                        )*/ const SizedBox();
                       },
                     ),
                   ),

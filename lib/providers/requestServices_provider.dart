@@ -285,6 +285,7 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, updatedRequestDetailsData, message: message);
   }
 
+  PaymentUrlData? paymentUrlData;
   Future<ResponseResult> submitFinialRequest({
     required int requestId,
     required String payBy,
@@ -296,13 +297,14 @@ class RequestServicesProvider with ChangeNotifier {
         .then((value) {
       if (value.status == Status.success) {
         state = Status.success;
+        paymentUrlData = value.data;
         message = value.message;
       } else {
         message = value.message;
       }
     });
     notifyListeners();
-    return ResponseResult(state, '', message: message);
+    return ResponseResult(state, paymentUrlData, message: message);
   }
 
   EmployeeDetailsData? employeeDetailsData;

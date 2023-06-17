@@ -1,17 +1,22 @@
+import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/image_editable.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/transactionHistory_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/font_styles.dart';
+import '../../utils/snack_bars.dart';
 import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_form_field.dart';
 import '../widgets/data_loader.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -37,6 +42,7 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context);
 
@@ -101,18 +107,55 @@ class _WalletScreenState extends State<WalletScreen> {
                       fontWeight: MyFontWeight.bold,
                     ),
                     horizontalSpace(18),
-                    const Expanded(
+                    Expanded(
                       child: CustomContainer(
-                        height: 24,
-                        backgroundColor: Color(0xFFE1E1E1),
+                        height: 30,
                         radiusCircular: 3,
+                        backgroundColor: AppColor.buttonGrey,
+                        borderColor: AppColor.boldGrey,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: DefaultFormField(
+                            controller: transactionHistoryProvider.rechargeAmountController,
+                            withBorder: false,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            textInputAction: TextInputAction.done,
+                            hintText: '',
+                            padding: symmetricEdgeInsets(
+                                vertical: 8, horizontal: 5),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
                 verticalSpace(28),
                 DefaultButton(
-                    text: 'Pay', onPressed: () {}, width: 217, height: 40),
+                    text: 'Pay', onPressed: () {
+                      /*if(transactionHistoryProvider.rechargeAmountController == null){
+                        CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
+                      }else{
+                        AppLoader.showLoader(context);
+                        transactionHistoryProvider.chargingWalletUrl(
+                          amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
+                          payBy: 'credit_card',
+                        ).then((value) => AppLoader.stopLoader());
+                      }*/
+                  AppLoader.showLoader(context);
+                  transactionHistoryProvider.chargingWalletUrl(
+                    amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/30,
+                    payBy: 'credit_card',
+                  ).then((value) {
+                    AppLoader.stopLoader();
+                    homeProvider.launchExpectedURL(
+                        expectedUrl: '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
+                    );
+                  });
+
+                }, width: 217, height: 40),
                 verticalSpace(45),
                 Row(
                   children: [

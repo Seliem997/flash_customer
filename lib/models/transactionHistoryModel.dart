@@ -29,10 +29,10 @@ class TransactionData {
   int? from;
   int? lastPage;
   String? lastPageUrl;
-  Null? nextPageUrl;
+  dynamic nextPageUrl;
   String? path;
   int? perPage;
-  Null? prevPageUrl;
+  dynamic prevPageUrl;
   int? to;
   int? total;
 
@@ -111,3 +111,44 @@ class TransactionCollection {
     return data;
   }
 }
+
+class ChargeWalletModel {
+  int? statusCode;
+  dynamic message;
+  ChargeWalletUrl? data;
+
+  ChargeWalletModel({this.statusCode, this.message, this.data});
+
+  ChargeWalletModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? new ChargeWalletUrl.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class ChargeWalletUrl {
+  String? chargeUrl;
+
+  ChargeWalletUrl({this.chargeUrl});
+
+  ChargeWalletUrl.fromJson(Map<String, dynamic> json) {
+    chargeUrl = json['charge_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['charge_url'] = this.chargeUrl;
+    return data;
+  }
+}
+

@@ -9,14 +9,14 @@ class RequestDetailsModel {
     statusCode = json['status_code'];
     message = json['message'];
     data = json['data'] != null
-        ? new RequestDetailsData.fromJson(json['data'])
+        ? RequestDetailsData.fromJson(json['data'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status_code'] = this.statusCode;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -32,9 +32,9 @@ class RequestDetailsData {
   String? payBy;
   String? feedback;
   String? amount;
-  String? tax;
-  num? discountAmount;
-  num? totalAmount;
+  dynamic tax;
+  dynamic discountAmount;
+  dynamic totalAmount;
   String? time;
   String? date;
   Employee? employee;
@@ -72,41 +72,41 @@ class RequestDetailsData {
     time = json['time'];
     date = json['date'];
     employee = json['employee'] != null
-        ? new Employee.fromJson(json['employee'])
+        ? Employee.fromJson(json['employee'])
         : null;
     if (json['services'] != null) {
       services = <Services>[];
       json['services'].forEach((v) {
-        services!.add(new Services.fromJson(v));
+        services!.add(Services.fromJson(v));
       });
     }
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ? Customer.fromJson(json['customer'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['request_id'] = this.requestId;
-    data['status'] = this.status;
-    data['rate'] = this.rate;
-    data['pay_by'] = this.payBy;
-    data['feedback'] = this.feedback;
-    data['amount'] = this.amount;
-    data['tax'] = this.tax;
-    data['discount_amount'] = this.discountAmount;
-    data['total_amount'] = this.totalAmount;
-    data['time'] = this.time;
-    data['date'] = this.date;
-    if (this.employee != null) {
-      data['employee'] = this.employee!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['request_id'] = requestId;
+    data['status'] = status;
+    data['rate'] = rate;
+    data['pay_by'] = payBy;
+    data['feedback'] = feedback;
+    data['amount'] = amount;
+    data['tax'] = tax;
+    data['discount_amount'] = discountAmount;
+    data['total_amount'] = totalAmount;
+    data['time'] = time;
+    data['date'] = date;
+    if (employee != null) {
+      data['employee'] = employee!.toJson();
     }
-    if (this.services != null) {
-      data['services'] = this.services!.map((v) => v.toJson()).toList();
+    if (services != null) {
+      data['services'] = services!.map((v) => v.toJson()).toList();
     }
-    if (this.customer != null) {
-      data['customer'] = this.customer!.toJson();
+    if (customer != null) {
+      data['customer'] = customer!.toJson();
     }
     return data;
   }
@@ -124,9 +124,9 @@ class Employee {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }
@@ -160,14 +160,14 @@ class Services {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['image'] = this.image;
-    data['info'] = this.info;
-    data['type'] = this.type;
-    data['duration'] = this.duration;
-    data['countable'] = this.countable;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['image'] = image;
+    data['info'] = info;
+    data['type'] = type;
+    data['duration'] = duration;
+    data['countable'] = countable;
     return data;
   }
 }
@@ -185,17 +185,17 @@ class Customer {
     if (json['vehicle'] != null) {
       vehicle = <Vehicle>[];
       json['vehicle'].forEach((v) {
-        vehicle!.add(new Vehicle.fromJson(v));
+        vehicle!.add(Vehicle.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    if (this.vehicle != null) {
-      data['vehicle'] = this.vehicle!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    if (vehicle != null) {
+      data['vehicle'] = vehicle!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -260,31 +260,31 @@ class Vehicle {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customerDetails = json['customer_details'] != null
-        ? new CustomerDetails.fromJson(json['customer_details'])
+        ? CustomerDetails.fromJson(json['customer_details'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['numbers'] = this.numbers;
-    data['letters'] = this.letters;
-    data['color'] = this.color;
-    data['year'] = this.year;
-    data['main_image'] = this.mainImage;
-    data['customer_id'] = this.customerId;
-    data['manufacturer_id'] = this.manufacturerId;
-    data['manufacturer_name'] = this.manufacturerName;
-    data['manufacturer_logo'] = this.manufacturerLogo;
-    data['vehicle_model_id'] = this.vehicleModelId;
-    data['vehicle_model_name'] = this.vehicleModelName;
-    data['vehicle_type_id'] = this.vehicleTypeId;
-    data['vehicle_type_name'] = this.vehicleTypeName;
-    data['sub_vehicle_type_id'] = this.subVehicleTypeId;
-    data['sub_vehicle_type_name'] = this.subVehicleTypeName;
-    if (this.customerDetails != null) {
-      data['customer_details'] = this.customerDetails!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['numbers'] = numbers;
+    data['letters'] = letters;
+    data['color'] = color;
+    data['year'] = year;
+    data['main_image'] = mainImage;
+    data['customer_id'] = customerId;
+    data['manufacturer_id'] = manufacturerId;
+    data['manufacturer_name'] = manufacturerName;
+    data['manufacturer_logo'] = manufacturerLogo;
+    data['vehicle_model_id'] = vehicleModelId;
+    data['vehicle_model_name'] = vehicleModelName;
+    data['vehicle_type_id'] = vehicleTypeId;
+    data['vehicle_type_name'] = vehicleTypeName;
+    data['sub_vehicle_type_id'] = subVehicleTypeId;
+    data['sub_vehicle_type_name'] = subVehicleTypeName;
+    if (customerDetails != null) {
+      data['customer_details'] = customerDetails!.toJson();
     }
     return data;
   }
@@ -322,15 +322,58 @@ class CustomerDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['fw_id'] = this.fwId;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['country_code'] = this.countryCode;
-    data['image'] = this.image;
-    data['balance'] = this.balance;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['fw_id'] = fwId;
+    data['name'] = name;
+    data['email'] = email;
+    data['phone'] = phone;
+    data['country_code'] = countryCode;
+    data['image'] = image;
+    data['balance'] = balance;
     return data;
   }
 }
+
+
+
+class PaymentUrlModel {
+  int? statusCode;
+  dynamic message;
+  PaymentUrlData? data;
+
+  PaymentUrlModel({this.statusCode, this.message, this.data});
+
+  PaymentUrlModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? PaymentUrlData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class PaymentUrlData {
+  String? paymentUrl;
+
+  PaymentUrlData({this.paymentUrl});
+
+  PaymentUrlData.fromJson(Map<String, dynamic> json) {
+    paymentUrl = json['payment_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['payment_url'] = paymentUrl;
+    return data;
+  }
+}
+

@@ -1,11 +1,14 @@
+import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/requests/summaryRequestDetails.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/requestServices_provider.dart';
@@ -50,6 +53,8 @@ class _RequestDetailsState extends State<RequestDetails> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
+    final HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -721,19 +726,23 @@ class _RequestDetailsState extends State<RequestDetails> {
                           text: 'Confirm and Pay',
                           onPressed: () async {
                             if(requestServicesProvider.selectedCashPayment || requestServicesProvider.selectedCreditCardPayment){
+                              AppLoader.showLoader(context);
                               await requestServicesProvider
                                   .submitFinialRequest(
                                   requestId: requestServicesProvider
                                       .updatedRequestDetailsData!.id!,
-                                  payBy: 'cash')
-                                  .then((value) {
+                                  payBy: 'credit_card')
+                                  .then((value) async {
+                                    AppLoader.stopLoader();
                                 CustomSnackBars.successSnackBar(
                                     context, 'Submit Request Success');
-                                navigateAndFinish(
+
+                                    homeProvider.launchExpectedURL(expectedUrl: '${requestServicesProvider.paymentUrlData!.paymentUrl}');
+                               /* navigateAndFinish(
                                     context,
                                     const HomeScreen(
                                       cameFromNewRequest: true,
-                                    ));
+                                    ));*/
                               });
                             }else{
                               showDialog(
@@ -786,4 +795,3 @@ class _RequestDetailsState extends State<RequestDetails> {
     );
   }
 }
-

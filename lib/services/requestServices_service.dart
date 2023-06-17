@@ -359,6 +359,7 @@ class RequestServicesService extends BaseService {
     dynamic message;
     Map<String, String> header = {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
+    PaymentUrlData? paymentUrlData;
     try {
       await requestFutureData(
           api: Api.submitFinialRequest,
@@ -370,6 +371,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              paymentUrlData =PaymentUrlModel.fromJson(response).data!;
               message = response["message"];
             } else if (response["status_code"] == 422 ||
                 response["status_code"] == 400) {
@@ -381,6 +383,6 @@ class RequestServicesService extends BaseService {
       status = Status.error;
       logger.e("Error in submit Finial Request $e");
     }
-    return ResponseResult(status, '', message: message);
+    return ResponseResult(status, paymentUrlData, message: message);
   }
 }

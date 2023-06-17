@@ -222,7 +222,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: 'Products',
                     textColor: AppColor.black,
                     onPressed: loggedIn
-                        ? _launchUrl
+                        ? (){
+                      homeProvider.launchExpectedURL(expectedUrl: 'https://flashwashstore.com/');
+                    }
                         : () {
                             navigateTo(context, const RegisterPhoneNumber());
                           },
@@ -353,6 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 }
+/*
 
 final Uri _url = Uri.parse('https://flashwashstore.com/');
 
@@ -361,3 +364,4 @@ Future<void> _launchUrl() async {
     throw Exception('Could not launch $_url');
   }
 }
+*/

@@ -30,7 +30,7 @@ class BookServicesData {
   String? payBy;
   String? feedback;
   String? amount;
-  String? tax;
+  double? tax;
   String? discountAmount;
   String? totalAmount;
   String? time;

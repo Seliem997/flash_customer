@@ -70,6 +70,9 @@ class Api {
   static const String getTransactionHistory =
       "$baseUrl/customer/history-transactions";
 
+  static const String chargingWallet =
+      "$baseUrl/customer/charge-wallet";
+
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
 
   static const String deleteVehicle = "$baseUrl/customer/vehicles/";

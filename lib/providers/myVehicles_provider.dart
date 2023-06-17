@@ -53,17 +53,18 @@ class MyVehiclesProvider with ChangeNotifier {
 
   Future getMyVehicles() async {
     myVehiclesData = null;
+    selectedMyVehicleIndex = null;
     loadingMyVehicles = true;
     notifyListeners();
     await myVehiclesService.getMyVehicles().then((value) {
       if (value.status == Status.success) {
+
         myVehiclesData = value.data;
         loadingMyVehicles = false;
       }
     });
     notifyListeners();
   }
-
 
   Future deleteVehicle({required int vehicleID}) async {
     loadingMyVehicles = true;
