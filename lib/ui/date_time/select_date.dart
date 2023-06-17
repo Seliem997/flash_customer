@@ -119,7 +119,7 @@ class _SelectDateState extends State<SelectDate> {
             Row(
               children: [
                 TextWidget(
-                  text: 'Select Date',
+                  text: S.of(context).selectDate,
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size15,
                 ),
@@ -202,7 +202,7 @@ class _SelectDateState extends State<SelectDate> {
             ),
             verticalSpace(20),
             TextWidget(
-              text: 'Select Time',
+              text: S.of(context).selectTime,
               fontWeight: MyFontWeight.semiBold,
               textSize: MyFontSize.size15,
             ),
@@ -214,11 +214,13 @@ class _SelectDateState extends State<SelectDate> {
                         child: (value.isLoading)
                             ? const DataLoader()
                             : (value.packageSlotsList.isEmpty)
-                                ? const CustomSizedBox(
+                                ? CustomSizedBox(
                                     height: 300,
                                     child: Center(
                                         child: TextWidget(
-                                            text: 'No Slots Available')))
+                                            text: S
+                                                .of(context)
+                                                .noSlotsAvailable)))
                                 : Expanded(
                                     child: ListView.separated(
                                       itemCount: value.packageSlotsList.length,
@@ -330,11 +332,13 @@ class _SelectDateState extends State<SelectDate> {
                             child: (value.isLoading)
                                 ? const DataLoader()
                                 : (value.slotsList.isEmpty)
-                                    ? const CustomSizedBox(
+                                    ? CustomSizedBox(
                                         height: 300,
                                         child: Center(
                                             child: TextWidget(
-                                                text: 'No Slots Available')))
+                                                text: S
+                                                    .of(context)
+                                                    .noSlotsAvailable)))
                                     : Expanded(
                                         child: ListView.separated(
                                           itemCount: value.slotsList.length,
@@ -426,11 +430,13 @@ class _SelectDateState extends State<SelectDate> {
                             child: (value.isLoading)
                                 ? const DataLoader()
                                 : (value.slotsList.isEmpty)
-                                    ? const CustomSizedBox(
+                                    ? CustomSizedBox(
                                         height: 300,
                                         child: Center(
                                             child: TextWidget(
-                                                text: 'No Slots Available')))
+                                                text: S
+                                                    .of(context)
+                                                    .noSlotsAvailable)))
                                     : Expanded(
                                         child: ListView.separated(
                                           itemCount: value.slotsList.length,
@@ -518,7 +524,9 @@ class _SelectDateState extends State<SelectDate> {
                       ),
             const Spacer(),
             DefaultButton(
-              text: widget.cameFromPackage ? 'Done' : 'Pay',
+              text: widget.cameFromPackage
+                  ? S.of(context).done
+                  : S.of(context).pay,
               onPressed: widget.cameFromPackage
                   ? () {
                       Navigator.pop(context);
@@ -613,7 +621,7 @@ class _SelectDateState extends State<SelectDate> {
                             });
                           } else {
                             CustomSnackBars.failureSnackBar(
-                                context, 'Choose time First!');
+                                context, S.of(context).chooseTimeFirst);
                           }
                         },
               fontWeight: MyFontWeight.bold,

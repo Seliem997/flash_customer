@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
@@ -66,7 +67,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context);
     return Scaffold(
-      appBar: CustomAppBar(title: 'Monthly pkg'),
+      appBar: CustomAppBar(title: S.of(context).monthlyPkg),
       body: packageProvider.manufacturerDataList.isEmpty
           ? const DataLoader()
           : Padding(
@@ -99,7 +100,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                             ),
                             verticalSpace(8),
                             TextWidget(
-                              text: 'New Car',
+                              text: S.of(context).newCar,
                               fontWeight: MyFontWeight.semiBold,
                               textSize: MyFontSize.size18,
                             )
@@ -132,7 +133,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                             ),
                             verticalSpace(8),
                             TextWidget(
-                              text: 'My Vehicles',
+                              text: S.of(context).myVehicles,
                               fontWeight: MyFontWeight.semiBold,
                               textSize: MyFontSize.size18,
                             ),
@@ -284,7 +285,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                     width: double.infinity,
                     fontWeight: MyFontWeight.bold,
                     fontSize: MyFontSize.size20,
-                    text: 'Next',
+                    text: S.of(context).next,
                     onPressed: () async {
                       packageProvider.newVehicleLabel
                           ? packageProvider.chooseManufacture
@@ -307,7 +308,12 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                           CustomSnackBars.successSnackBar(
                                               context, 'New Vehicle added');
                                           navigateTo(
-                                              context, MonthlyPlans(comeFromNewCar: true, vehicleId: myVehiclesProvider.vehicleDetailsData!.id,));
+                                              context,
+                                              MonthlyPlans(
+                                                comeFromNewCar: true,
+                                                vehicleId: myVehiclesProvider
+                                                    .vehicleDetailsData!.id,
+                                              ));
                                         } else {
                                           CustomSnackBars
                                               .somethingWentWrongSnackBar(
@@ -318,9 +324,14 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                   : packageProvider.setRequiredModel()
                               : packageProvider.setRequiredManufacture()
                           : myVehiclesProvider.selectedMyVehicleIndex != null
-                              ? navigateTo(context, MonthlyPlans(myVehicleIndex: myVehiclesProvider.selectedMyVehicleIndex,))
+                              ? navigateTo(
+                                  context,
+                                  MonthlyPlans(
+                                    myVehicleIndex: myVehiclesProvider
+                                        .selectedMyVehicleIndex,
+                                  ))
                               : CustomSnackBars.failureSnackBar(
-                                  context, 'Choose Vehicle First');
+                                  context, S.of(context).chooseVehicleFirst);
                     },
                   ),
                 ],

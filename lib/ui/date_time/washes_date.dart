@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/font_styles.dart';
+import '../../generated/l10n.dart';
 import '../../models/packagesModel.dart';
 import '../../providers/package_provider.dart';
 import '../../utils/number_formats.dart';
@@ -26,7 +27,7 @@ class WashesDate extends StatelessWidget {
         Provider.of<PackageProvider>(context);
     packageProvider.packageWashingQuantities = packagesData.washingQuantity;
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Date & Time'),
+      appBar: CustomAppBar(title: S.of(context).dateTime),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
@@ -68,7 +69,7 @@ class WashesDate extends StatelessWidget {
                                   Expanded(
                                     child: Center(
                                       child: TextWidget(
-                                        text: 'No date & time',
+                                        text: S.of(context).noDateTime,
                                         fontWeight: MyFontWeight.medium,
                                         textSize: MyFontSize.size12,
                                       ),
@@ -171,18 +172,20 @@ class WashesDate extends StatelessWidget {
             ),
             verticalSpace(5),
             DefaultButton(
-              text: 'Pay',
+              text: S.of(context).pay,
               onPressed: packageProvider.packageWashingQuantities ==
                       packageProvider.washesDate.length
                   ? () {
-                      print("in Pay");
                       AppLoader.showLoader(context);
-                      packageProvider.saveSlotsPackageRequest(
-                          requestId: packageProvider.detailsRequestData!.id!).then((value) => AppLoader.stopLoader());
+                      packageProvider
+                          .saveSlotsPackageRequest(
+                              requestId:
+                                  packageProvider.detailsRequestData!.id!)
+                          .then((value) => AppLoader.stopLoader());
                     }
                   : () {
                       CustomSnackBars.failureSnackBar(
-                          context, 'Choose all washes First!');
+                          context, S.of(context).chooseAllWashesFirst);
                     },
               fontWeight: MyFontWeight.bold,
               fontSize: 21,

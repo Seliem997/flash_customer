@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
 import '../../providers/home_provider.dart';
 import '../../utils/app_loader.dart';
@@ -40,14 +41,14 @@ class _NewAddressState extends State<NewAddress> {
 
   void loadData() async {
     final AddressesProvider addressesProvider =
-    Provider.of<AddressesProvider>(context, listen: false);
+        Provider.of<AddressesProvider>(context, listen: false);
     final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
+        Provider.of<HomeProvider>(context, listen: false);
 
     widget.cameFromHomeScreen
         ? await addressesProvider
-        .getAddresses()
-        .then((value) => addressesProvider.setLoading(false))
+            .getAddresses()
+            .then((value) => addressesProvider.setLoading(false))
         : null;
     addressesProvider.addressesDataList.forEach((element) async {
       await homeProvider.markers.add(Marker(
@@ -100,24 +101,26 @@ class _NewAddressState extends State<NewAddress> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(S
+              .of(context)
+              .locationServicesAreDisabledPleaseEnableTheServices)));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(S.of(context).locationPermissionsAreDenied)));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(S
+              .of(context)
+              .locationPermissionsArePermanentlyDeniedWeCannotRequestPermissions)));
       return false;
     }
     return true;
@@ -126,59 +129,60 @@ class _NewAddressState extends State<NewAddress> {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-    final AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context);
+    final AddressesProvider addressesProvider =
+        Provider.of<AddressesProvider>(context);
 
     return Scaffold(
-      body: addressesProvider.isLoading ? const DataLoader()
+      body: addressesProvider.isLoading
+          ? const DataLoader()
           : Stack(
-        children: [
-          GoogleMap(
-            markers: Set<Marker>.from(homeProvider.markers),
-            initialCameraPosition: _initialLocation,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: false,
-            polylines: Set<Polyline>.of(homeProvider.polylines.values),
-            onLongPress: (latlang) {
-              homeProvider.addMarkerLongPressed(
-                  latlang);
-            },
-            onMapCreated: (GoogleMapController controller) {
-              homeProvider.mapController = controller;
-            },
-          ),
-          Column(
-            children: [
-              CustomAppBar(
-                title: 'My Addresses',
-                backgroundColor: Colors.transparent,
-              ),
-              const Spacer(),
-              Padding(
-                padding: symmetricEdgeInsets(horizontal: 24),
-                child: DefaultButton(
-                  text: 'Save Location',
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const LocationDialog();
-                      },
-                    );
+              children: [
+                GoogleMap(
+                  markers: Set<Marker>.from(homeProvider.markers),
+                  initialCameraPosition: _initialLocation,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                  mapType: MapType.normal,
+                  zoomGesturesEnabled: true,
+                  zoomControlsEnabled: false,
+                  polylines: Set<Polyline>.of(homeProvider.polylines.values),
+                  onLongPress: (latlang) {
+                    homeProvider.addMarkerLongPressed(latlang);
                   },
-                  fontWeight: MyFontWeight.bold,
-                  fontSize: 21,
-                  height: 48,
-                  width: 345,
+                  onMapCreated: (GoogleMapController controller) {
+                    homeProvider.mapController = controller;
+                  },
                 ),
-              ),
-              verticalSpace(50),
-            ],
-          ),
-        ],
-      ),
+                Column(
+                  children: [
+                    CustomAppBar(
+                      title: S.of(context).myAddresses,
+                      backgroundColor: Colors.transparent,
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: symmetricEdgeInsets(horizontal: 24),
+                      child: DefaultButton(
+                        text: S.of(context).saveLocation,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const LocationDialog();
+                            },
+                          );
+                        },
+                        fontWeight: MyFontWeight.bold,
+                        fontSize: 21,
+                        height: 48,
+                        width: 345,
+                      ),
+                    ),
+                    verticalSpace(50),
+                  ],
+                ),
+              ],
+            ),
     );
   }
 }

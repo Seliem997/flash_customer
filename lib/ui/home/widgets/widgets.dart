@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../utils/styles/colors.dart';
 import '../../addresses/new_address.dart';
 import '../../widgets/custom_button.dart';
@@ -46,7 +47,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                         width: 20,
                         child: Image.asset('assets/images/home_light.png')),
                     onPressed: () {},
-                    labelText: 'Home',
+                    labelText: S.of(context).home,
                     textColor: AppColor.black,
                   ),
                   verticalSpace(8),
@@ -60,7 +61,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                       'assets/svg/work.svg',
                     ),
                     onPressed: () {},
-                    labelText: 'Work',
+                    labelText: S.of(context).work,
                     textColor: AppColor.black,
                   ),
                   verticalSpace(8),
@@ -74,13 +75,17 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                       'assets/svg/school.svg',
                     ),
                     onPressed: () {},
-                    labelText: 'School',
+                    labelText: S.of(context).school,
                     textColor: AppColor.black,
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: (){
-                      navigateTo(context, const NewAddress(cameFromHomeScreen: true,));
+                    onTap: () {
+                      navigateTo(
+                          context,
+                          const NewAddress(
+                            cameFromHomeScreen: true,
+                          ));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5),
@@ -111,7 +116,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
           child: Row(
             children: <Widget>[
               TextWidget(
-                text: 'Saved Location',
+                text: S.of(context).savedLocation,
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size15,
                 color: AppColor.white,

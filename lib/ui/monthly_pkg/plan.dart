@@ -5,6 +5,7 @@ import 'package:flash_customer/utils/enum/statuses.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
@@ -19,7 +20,12 @@ import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
 class MonthlyPlans extends StatefulWidget {
-  const MonthlyPlans({Key? key, this.myVehicleIndex, this.comeFromNewCar= false, this.vehicleId}) : super(key: key);
+  const MonthlyPlans(
+      {Key? key,
+      this.myVehicleIndex,
+      this.comeFromNewCar = false,
+      this.vehicleId})
+      : super(key: key);
 
   final int? myVehicleIndex;
   final bool comeFromNewCar;
@@ -39,16 +45,17 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
+        Provider.of<RequestServicesProvider>(context, listen: false);
     final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
+        Provider.of<HomeProvider>(context, listen: false);
 
     await requestServicesProvider.getCityId(
       context,
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
     );
-    await packageProvider.getPackages(cityId: requestServicesProvider.cityIdData!.id!);
+    await packageProvider.getPackages(
+        cityId: requestServicesProvider.cityIdData!.id!);
   }
 
   @override
@@ -58,10 +65,10 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
-    Provider.of<MyVehiclesProvider>(context);
+        Provider.of<MyVehiclesProvider>(context);
 
     return Scaffold(
-        appBar: CustomAppBar(title: 'Monthly pkg'),
+        appBar: CustomAppBar(title: S.of(context).monthlyPkg),
         body: packageProvider.packagesDataList.isEmpty
             ? const DataLoader()
             : Padding(
@@ -70,7 +77,7 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextWidget(
-                      text: 'Select Package',
+                      text: S.of(context).selectPackage,
                       fontWeight: MyFontWeight.semiBold,
                       textSize: MyFontSize.size16,
                     ),
@@ -82,28 +89,42 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                           return PackageCard(
                               packageProvider: packageProvider,
                               index: index,
-                              isSelected: packageProvider.selectedPackageIndex == index,
-                              onTap: () async{
+                              isSelected:
+                                  packageProvider.selectedPackageIndex == index,
+                              onTap: () async {
                                 AppLoader.showLoader(context);
-                                packageProvider.setSelectedPackage(index: index);
-                                await packageProvider.storeInitialPackageRequest(
-                                  context, cityId: requestServicesProvider.cityIdData!.id!,
-                                  packageId: packageProvider.packagesDataList[index].id!,
-                                    vehicleId: widget.comeFromNewCar
-                                        ? widget.vehicleId!
-                                        : myVehiclesProvider.myVehiclesData!.collection![widget.myVehicleIndex!].id!,
-                                ).then((value) {
-                                  if(value.status == Status.success){
+                                packageProvider.setSelectedPackage(
+                                    index: index);
+                                await packageProvider
+                                    .storeInitialPackageRequest(
+                                  context,
+                                  cityId:
+                                      requestServicesProvider.cityIdData!.id!,
+                                  packageId: packageProvider
+                                      .packagesDataList[index].id!,
+                                  vehicleId: widget.comeFromNewCar
+                                      ? widget.vehicleId!
+                                      : myVehiclesProvider
+                                          .myVehiclesData!
+                                          .collection![widget.myVehicleIndex!]
+                                          .id!,
+                                )
+                                    .then((value) {
+                                  if (value.status == Status.success) {
                                     AppLoader.stopLoader();
-                                    return navigateTo(context, WashesDate(packagesData: packageProvider.packagesDataList[index],),);
-                                  }else{
+                                    return navigateTo(
+                                      context,
+                                      WashesDate(
+                                        packagesData: packageProvider
+                                            .packagesDataList[index],
+                                      ),
+                                    );
+                                  } else {
                                     AppLoader.stopLoader();
                                     CustomSnackBars.failureSnackBar(
                                         context, '${value.message}');
                                   }
-
                                 });
-
                               });
                         },
                         separatorBuilder: (context, index) => verticalSpace(16),
@@ -282,7 +303,7 @@ class PackageCard extends StatelessWidget {
                 Row(
                   children: [
                     TextWidget(
-                      text: 'Washes:',
+                      text: S.of(context).washes,
                       fontWeight: MyFontWeight.semiBold,
                       textSize: MyFontSize.size14,
                     ),
@@ -312,13 +333,14 @@ class PackageCard extends StatelessWidget {
                 ),
                 verticalSpace(16),
                 TextWidget(
-                  text: 'Include for each appointment:',
+                  text: S.of(context).includeForEachAppointment,
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
                 ),
                 verticalSpace(7),
                 TextWidget(
-                  text: '${packageProvider.packagesDataList[index].description}',
+                  text:
+                      '${packageProvider.packagesDataList[index].description}',
                   fontWeight: MyFontWeight.medium,
                   textSize: MyFontSize.size10,
                   color: const Color(0xFF636363),
@@ -528,7 +550,6 @@ class PackageCard extends StatelessWidget {
     );
   }
 }
-
 
 /*child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

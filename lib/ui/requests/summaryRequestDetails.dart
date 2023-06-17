@@ -1,6 +1,7 @@
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
@@ -11,7 +12,7 @@ class SummaryRequestDetails extends StatelessWidget {
   const SummaryRequestDetails({
     super.key,
     required this.requestServicesProvider,
-    this.cameFromOtherServices= false,
+    this.cameFromOtherServices = false,
   });
 
   final bool cameFromOtherServices;
@@ -25,13 +26,12 @@ class SummaryRequestDetails extends StatelessWidget {
       borderColor: AppColor.primary,
       backgroundColor: const Color(0xFFF1F6FE),
       child: Padding(
-        padding: symmetricEdgeInsets(
-            vertical: 24, horizontal: 24),
+        padding: symmetricEdgeInsets(vertical: 24, horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextWidget(
-              text: 'Location',
+              text: S.of(context).location,
               textSize: MyFontSize.size15,
               fontWeight: MyFontWeight.semiBold,
             ),
@@ -49,13 +49,14 @@ class SummaryRequestDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: 'Vehicle',
+                    text: S.of(context).vehicle,
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.semiBold,
                   ),
                   verticalSpace(10),
                   TextWidget(
-                    text: '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
+                    text:
+                        '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
                     // text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
                     // text: 'Small Car - Blue Yaris ACWS 2190',
                     textSize: MyFontSize.size12,
@@ -67,21 +68,21 @@ class SummaryRequestDetails extends StatelessWidget {
               ),
             ),
             TextWidget(
-              text: 'Date & Time',
+              text: S.of(context).dateTime,
               textSize: MyFontSize.size15,
               fontWeight: MyFontWeight.semiBold,
             ),
             verticalSpace(10),
             TextWidget(
               text:
-              "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time!}",
+                  "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time!}",
               textSize: MyFontSize.size12,
               fontWeight: MyFontWeight.regular,
               color: AppColor.subTextGrey,
             ),
             verticalSpace(20),
             TextWidget(
-              text: 'Services',
+              text: S.of(context).services,
               textSize: MyFontSize.size15,
               fontWeight: MyFontWeight.semiBold,
             ),
@@ -91,23 +92,17 @@ class SummaryRequestDetails extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: requestServicesProvider
-                    .detailsRequestData!
-                    .services!
-                    .length,
+                    .detailsRequestData!.services!.length,
                 itemBuilder: (context, index) {
                   if (requestServicesProvider
-                      .detailsRequestData!
-                      .services![index]
-                      .type ==
-                      'basic' || requestServicesProvider
-                      .detailsRequestData!
-                      .services![index]
-                      .type == "other" ) {
+                              .detailsRequestData!.services![index].type ==
+                          'basic' ||
+                      requestServicesProvider
+                              .detailsRequestData!.services![index].type ==
+                          "other") {
                     return TextWidget(
                       text: requestServicesProvider
-                          .detailsRequestData!
-                          .services![index]
-                          .title!,
+                          .detailsRequestData!.services![index].title!,
                       textSize: MyFontSize.size12,
                       fontWeight: MyFontWeight.regular,
                       color: AppColor.subTextGrey,
@@ -124,7 +119,7 @@ class SummaryRequestDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: 'Extra Services',
+                    text: S.of(context).extraServices,
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.semiBold,
                   ),
@@ -134,20 +129,14 @@ class SummaryRequestDetails extends StatelessWidget {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: requestServicesProvider
-                          .detailsRequestData!
-                          .services!
-                          .length,
+                          .detailsRequestData!.services!.length,
                       itemBuilder: (context, index) {
                         if (requestServicesProvider
-                            .detailsRequestData!
-                            .services![index]
-                            .type ==
+                                .detailsRequestData!.services![index].type ==
                             'extra') {
                           return TextWidget(
                             text: requestServicesProvider
-                                .detailsRequestData!
-                                .services![index]
-                                .title!,
+                                .detailsRequestData!.services![index].title!,
                             textSize: MyFontSize.size12,
                             fontWeight: MyFontWeight.regular,
                             color: AppColor.subTextGrey,
@@ -158,7 +147,8 @@ class SummaryRequestDetails extends StatelessWidget {
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.regular,
                           color: AppColor.subTextGrey,
-                        )*/ const SizedBox();
+                        )*/
+                            const SizedBox();
                       },
                     ),
                   ),
@@ -169,14 +159,14 @@ class SummaryRequestDetails extends StatelessWidget {
             Row(
               children: [
                 TextWidget(
-                  text: 'Service Duration',
+                  text: S.of(context).serviceDuration,
                   textSize: MyFontSize.size15,
                   fontWeight: MyFontWeight.semiBold,
                 ),
                 horizontalSpace(10),
                 TextWidget(
                   text:
-                  "${requestServicesProvider.detailsRequestData!.totalDuration}",
+                      "${requestServicesProvider.detailsRequestData!.totalDuration}",
                   textSize: MyFontSize.size15,
                   fontWeight: MyFontWeight.medium,
                   color: const Color(0xFF686868),

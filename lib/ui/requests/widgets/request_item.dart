@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../models/myRequestsModel.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
@@ -42,7 +43,7 @@ class RequestItem extends StatelessWidget {
           Row(
             children: [
               TextWidget(
-                text: 'Services : ',
+                text: S.of(context).services,
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.semiBold,
               ),
@@ -105,7 +106,7 @@ class RequestItem extends StatelessWidget {
               ),
               horizontalSpace(8),
               TextWidget(
-                text: myRequestsData.employee?.name ?? "No Employee",
+                text: myRequestsData.employee?.name ?? S.of(context).noEmployee,
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
@@ -118,7 +119,7 @@ class RequestItem extends StatelessWidget {
             child: Row(
               children: [
                 TextWidget(
-                  text: 'Rate : ',
+                  text: S.of(context).rate,
                   textSize: MyFontSize.size12,
                   fontWeight: MyFontWeight.semiBold,
                 ),
@@ -148,7 +149,7 @@ class RequestItem extends StatelessWidget {
                   width: 44,
                   radiusCircular: 3,
                   padding: symmetricEdgeInsets(vertical: 2, horizontal: 4),
-                  text: "Rate",
+                  text: S.of(context).rate,
                   fontSize: MyFontSize.size9,
                   fontWeight: MyFontWeight.semiBold,
                   backgroundColor: const Color(0xFF03B7FD),
@@ -168,7 +169,7 @@ class RequestItem extends StatelessWidget {
           Row(
             children: [
               TextWidget(
-                text: 'Amount : ',
+                text: S.of(context).amount,
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.semiBold,
               ),

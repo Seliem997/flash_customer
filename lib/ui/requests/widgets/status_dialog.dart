@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/spaces.dart';
@@ -30,7 +31,7 @@ class _StatusDialogState extends State<StatusDialog> {
               child: Align(
                 alignment: AlignmentDirectional.topStart,
                 child: TextWidget(
-                  text: 'List of status :',
+                  text: S.of(context).listOfStatus,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size18,
                 ),
@@ -39,7 +40,7 @@ class _StatusDialogState extends State<StatusDialog> {
             verticalSpace(24),
             RadioListTile(
               title: TextWidget(
-                text: 'Pending',
+                text: S.of(context).pending,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
@@ -54,7 +55,7 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             RadioListTile(
               title: TextWidget(
-                text: 'On the way',
+                text: S.of(context).onTheWay,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
@@ -69,7 +70,7 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             RadioListTile(
               title: TextWidget(
-                text: 'Arrived',
+                text: S.of(context).arrived,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
@@ -84,7 +85,7 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             RadioListTile(
               title: TextWidget(
-                text: 'Completed',
+                text: S.of(context).completed,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
@@ -99,7 +100,7 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             RadioListTile(
               title: TextWidget(
-                text: 'Canceled',
+                text: S.of(context).canceled,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
@@ -112,7 +113,6 @@ class _StatusDialogState extends State<StatusDialog> {
                 });
               },
             ),
-
           ],
         ),
       ),

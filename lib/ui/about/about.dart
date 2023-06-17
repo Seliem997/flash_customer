@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/about_provider.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
@@ -42,9 +43,10 @@ class _AboutUsState extends State<AboutUs> {
     );
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'About us',
+        title: S.of(context).aboutUs,
       ),
-      body: aboutProvider.aboutDataList.isEmpty || aboutProvider.aboutImagesDataList.isEmpty
+      body: aboutProvider.aboutDataList.isEmpty ||
+              aboutProvider.aboutImagesDataList.isEmpty
           ? const DataLoader()
           : Column(
               children: [
@@ -73,20 +75,24 @@ class _AboutUsState extends State<AboutUs> {
                               backgroundColor: Color.fromRGBO(22, 22, 22, 0.41),
                             ),
                             Padding(
-                              padding: symmetricEdgeInsets(horizontal: 16,vertical: 16),
+                              padding: symmetricEdgeInsets(
+                                  horizontal: 16, vertical: 16),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWidget(
-                                    text: aboutProvider.aboutImagesDataList[index].title!,
+                                    text: aboutProvider
+                                        .aboutImagesDataList[index].title!,
                                     fontWeight: MyFontWeight.semiBold,
                                     textSize: MyFontSize.size14,
                                     color: AppColor.white,
                                   ),
                                   verticalSpace(6),
                                   TextWidget(
-                                    text: aboutProvider.aboutImagesDataList[index].description!,
+                                    text: aboutProvider
+                                        .aboutImagesDataList[index]
+                                        .description!,
                                     fontWeight: MyFontWeight.regular,
                                     textSize: MyFontSize.size8,
                                     color: AppColor.white,
@@ -144,8 +150,7 @@ class _AboutUsState extends State<AboutUs> {
                           ),
                           verticalSpace(8),
                           TextWidget(
-                            text:
-                            aboutProvider.aboutDataList[0].description!,
+                            text: aboutProvider.aboutDataList[0].description!,
                             fontWeight: MyFontWeight.regular,
                             textSize: MyFontSize.size12,
                             color: AppColor.grey,

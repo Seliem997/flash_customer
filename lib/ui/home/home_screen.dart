@@ -17,6 +17,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
@@ -31,7 +32,8 @@ import '../vehicles/vehicles_type.dart';
 import '../widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.cameFromNewRequest= false}) : super(key: key);
+  const HomeScreen({Key? key, this.cameFromNewRequest = false})
+      : super(key: key);
 
   final bool cameFromNewRequest;
   @override
@@ -51,9 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void loadData() async {
-    widget.cameFromNewRequest ?  navigateTo(context, const MyRequests()) : null;
+    widget.cameFromNewRequest ? navigateTo(context, const MyRequests()) : null;
     final HomeProvider homeProvider =
-    Provider.of<HomeProvider>(context, listen: false);
+        Provider.of<HomeProvider>(context, listen: false);
     homeProvider.markers.clear();
     await _handleLocationPermission();
     await _getCurrentLocation();
@@ -93,24 +95,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(S
+              .of(context)
+              .locationServicesAreDisabledPleaseEnableTheServices)));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(S.of(context).locationPermissionsAreDenied)));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(S
+              .of(context)
+              .locationPermissionsArePermanentlyDeniedWeCannotRequestPermissions)));
       return false;
     }
     return true;
@@ -136,7 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
             zoomControlsEnabled: false,
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
             onLongPress: (latlang) {
-              homeProvider.addMarkerLongPressed(latlang); //we will call this function when pressed on the map
+              homeProvider.addMarkerLongPressed(
+                  latlang); //we will call this function when pressed on the map
             },
             onMapCreated: (GoogleMapController controller) {
               homeProvider.mapController = controller;
@@ -182,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DefaultButton(
                 width: 294,
                 height: 56,
-                text: 'Wash',
+                text: S.of(context).wash,
                 fontSize: 28,
                 fontWeight: MyFontWeight.bold,
                 onPressed: loggedIn
@@ -219,12 +224,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 140,
                     height: 45,
                     backgroundColor: AppColor.buttonGrey,
-                    text: 'Products',
+                    text: S.of(context).products,
                     textColor: AppColor.black,
                     onPressed: loggedIn
-                        ? (){
-                      homeProvider.launchExpectedURL(expectedUrl: 'https://flashwashstore.com/');
-                    }
+                        ? () {
+                            homeProvider.launchExpectedURL(
+                                expectedUrl: 'https://flashwashstore.com/');
+                          }
                         : () {
                             navigateTo(context, const RegisterPhoneNumber());
                           },
@@ -236,33 +242,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 140,
                     height: 45,
                     backgroundColor: AppColor.buttonGrey,
-                    text: 'Other Services',
+                    text: S.of(context).otherServices,
                     textColor: AppColor.black,
                     onPressed: loggedIn
                         ? () async {
-                      AppLoader.showLoader(context);
-                      await addressesProvider
-                          .storeAddress(
-                        lat: homeProvider.currentPosition!.latitude,
-                        long: homeProvider.currentPosition!.longitude,
-                      )
-                          .then((value) {
-                        if (value.status == Status.success) {
-                          AppLoader.stopLoader();
-                          print(addressesProvider.addressDetailsData!.id);
-                          navigateTo(
-                            context,
-                            const OtherServices(),
-                          );
-                          CustomSnackBars.successSnackBar(
-                              context, 'Address Added Successfully');
-                        } else {
-                          print('Faild');
-                          CustomSnackBars.somethingWentWrongSnackBar(context);
-                          AppLoader.stopLoader();
-                        }
-                      });
-                    }
+                            AppLoader.showLoader(context);
+                            await addressesProvider
+                                .storeAddress(
+                              lat: homeProvider.currentPosition!.latitude,
+                              long: homeProvider.currentPosition!.longitude,
+                            )
+                                .then((value) {
+                              if (value.status == Status.success) {
+                                AppLoader.stopLoader();
+                                print(addressesProvider.addressDetailsData!.id);
+                                navigateTo(
+                                  context,
+                                  const OtherServices(),
+                                );
+                                CustomSnackBars.successSnackBar(context,
+                                    S.of(context).addressAddedSuccessfully);
+                              } else {
+                                print('Faild');
+                                CustomSnackBars.somethingWentWrongSnackBar(
+                                    context);
+                                AppLoader.stopLoader();
+                              }
+                            });
+                          }
                         : () {
                             navigateTo(context, const RegisterPhoneNumber());
                           },
@@ -285,10 +292,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Padding(
+          content: Padding(
             padding: EdgeInsets.all(20.0),
             child: TextWidget(
-              text: 'Please Log in First!',
+              text: S.of(context).pleaseLogInFirst,
             ),
           ),
           actions: [
@@ -300,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DefaultButton(
                     width: 90,
                     height: 30,
-                    text: 'Cancel',
+                    text: S.of(context).cancel,
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -310,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DefaultButton(
                     width: 100,
                     height: 30,
-                    text: 'Log in',
+                    text: S.of(context).logIn,
                     onPressed: () {
                       Navigator.pop(context);
                       navigateTo(context, const RegisterPhoneNumber());

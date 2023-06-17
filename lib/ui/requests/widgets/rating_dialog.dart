@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_button.dart';
@@ -90,7 +91,7 @@ class _RatingDialogState extends State<RatingDialog> {
                     ),
                     verticalSpace(20),
                     TextWidget(
-                      text: 'How do you rate the service?',
+                      text: S.of(context).howDoYouRateTheService,
                       textSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.semiBold,
                     ),
@@ -129,14 +130,15 @@ class _RatingDialogState extends State<RatingDialog> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextWidget(
-                        text: 'Feedback',
+                        text: S.of(context).feedback,
                         textSize: MyFontSize.size17,
                         fontWeight: MyFontWeight.bold,
                       ),
                       verticalSpace(10),
                       TextWidget(
-                        text:
-                        'Please give us feedback about why you rated it 3 stars so we can enhance the problem.',
+                        text: S
+                            .of(context)
+                            .pleaseGiveUsFeedbackAboutWhyYouRatedItSo,
                         textSize: MyFontSize.size12,
                         fontWeight: MyFontWeight.medium,
                         color: const Color(0xFF8A8A8A),
@@ -147,20 +149,20 @@ class _RatingDialogState extends State<RatingDialog> {
                           height: 62,
                           child: DefaultFormField(
                             height: 62,
-                            hintText: 'Type',
+                            hintText: S.of(context).type,
                             textSize: MyFontSize.size8,
                             fillColor: const Color(0xFFE0E0E0),
                             filled: true,
                             withBorder: true,
-
                           )),
                       verticalSpace(10),
                       DefaultButton(
                         height: 39,
                         width: 284,
                         radiusCircular: 3,
-                        padding: symmetricEdgeInsets(vertical: 2, horizontal: 4),
-                        text: "Submit",
+                        padding:
+                            symmetricEdgeInsets(vertical: 2, horizontal: 4),
+                        text: S.of(context).submit,
                         fontSize: MyFontSize.size16,
                         fontWeight: MyFontWeight.bold,
                         backgroundColor: const Color(0xFF29A7FF),

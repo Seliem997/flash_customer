@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/home_provider.dart';
 import '../../utils/font_styles.dart';
 import '../home/home_screen.dart';
@@ -42,7 +43,7 @@ class _LocationDialogState extends State<LocationDialog> {
               child: Align(
                 alignment: AlignmentDirectional.topStart,
                 child: TextWidget(
-                  text: 'Types :',
+                  text: S.of(context).types,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size18,
                 ),
@@ -58,7 +59,7 @@ class _LocationDialogState extends State<LocationDialog> {
                       child: Image.asset('assets/images/home_light.png')),
                   horizontalSpace(6),
                   TextWidget(
-                    text: 'Home',
+                    text: S.of(context).home,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF3F3F46),
@@ -85,7 +86,7 @@ class _LocationDialogState extends State<LocationDialog> {
                   ),
                   horizontalSpace(6),
                   TextWidget(
-                    text: 'Work',
+                    text: S.of(context).work,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF3F3F46),
@@ -112,7 +113,7 @@ class _LocationDialogState extends State<LocationDialog> {
                   ),
                   horizontalSpace(6),
                   TextWidget(
-                    text: 'School',
+                    text: S.of(context).school,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF3F3F46),
@@ -139,7 +140,7 @@ class _LocationDialogState extends State<LocationDialog> {
                   ),
                   horizontalSpace(6),
                   TextWidget(
-                    text: 'Shop',
+                    text: S.of(context).shop,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF3F3F46),
@@ -158,7 +159,7 @@ class _LocationDialogState extends State<LocationDialog> {
               title: Row(
                 children: [
                   TextWidget(
-                    text: 'Other',
+                    text: S.of(context).other,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
                     color: const Color(0xFF3F3F46),
@@ -168,7 +169,7 @@ class _LocationDialogState extends State<LocationDialog> {
                       width: 140,
                       height: 24,
                       child: DefaultFormField(
-                        hintText: 'Type',
+                        hintText: S.of(context).type,
                         textSize: MyFontSize.size8,
                         fillColor: AppColor.lightBabyBlue,
                         filled: true,
@@ -185,21 +186,24 @@ class _LocationDialogState extends State<LocationDialog> {
             ),
             verticalSpace(6),
             DefaultButton(
-              text: 'Save',
-              onPressed: () async{
-                print('mmmmmm');
-               if(addressType != null){
-                 print('fffffff');
-                 await addressesProvider.storeAddress(
-                   type: addressType!,
-                   lat: homeProvider.currentPosition!.latitude,
-                   long: homeProvider.currentPosition!.longitude,
-                 ).then((value) {
-                   navigateAndFinish(context, const HomeScreen());
-                 });
-               }else{
-                 CustomSnackBars.failureSnackBar(context, 'Please, Choose Type',);
-               }
+              text: S.of(context).save,
+              onPressed: () async {
+                if (addressType != null) {
+                  await addressesProvider
+                      .storeAddress(
+                    type: addressType!,
+                    lat: homeProvider.currentPosition!.latitude,
+                    long: homeProvider.currentPosition!.longitude,
+                  )
+                      .then((value) {
+                    navigateAndFinish(context, const HomeScreen());
+                  });
+                } else {
+                  CustomSnackBars.failureSnackBar(
+                    context,
+                    S.of(context).pleaseChooseType,
+                  );
+                }
               },
               height: 32,
               width: 225,

@@ -25,7 +25,9 @@ import '../widgets/text_widget.dart';
 import 'myRequests.dart';
 
 class RequestDetails extends StatefulWidget {
-  const RequestDetails({Key? key, required this.requestId, this.cameFromOtherServices = false}) : super(key: key);
+  const RequestDetails(
+      {Key? key, required this.requestId, this.cameFromOtherServices = false})
+      : super(key: key);
 
   final int requestId;
   final bool cameFromOtherServices;
@@ -43,7 +45,7 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   void loadData() async {
     final RequestServicesProvider requestServicesProvider =
-    Provider.of<RequestServicesProvider>(context, listen: false);
+        Provider.of<RequestServicesProvider>(context, listen: false);
     await requestServicesProvider
         .getRequestDetails(requestId: widget.requestId)
         .then((value) => requestServicesProvider.setLoading(false));
@@ -53,13 +55,12 @@ class _RequestDetailsState extends State<RequestDetails> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
-    final HomeProvider homeProvider =
-        Provider.of<HomeProvider>(context);
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
         withArrow: false,
-        title: 'Request details',
+        title: S.of(context).requestDetails,
         customizePopButton: IconButton(
           icon: SvgPicture.asset(
             'assets/svg/arrow-left.svg',
@@ -75,14 +76,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                     padding: symmetricEdgeInsets(horizontal: 36, vertical: 0),
                     child: RichText(
                       text: TextSpan(
-                        text: 'The request will be',
+                        text: S.of(context).theRequestWillBe,
                         style: TextStyle(
                             color: const Color(0xFF0F0F0F),
                             fontSize: MyFontSize.size20,
                             fontWeight: MyFontWeight.medium),
                         children: [
                           TextSpan(
-                            text: ' canceled',
+                            text: S.of(context).canceled,
                             style: TextStyle(
                               color: const Color(0xFFFF3F48),
                               fontSize: MyFontSize.size20,
@@ -90,7 +91,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             ),
                           ),
                           TextSpan(
-                            text: ' Are you sure to go back?',
+                            text: S.of(context).areYouSureToGoBack,
                             style: TextStyle(
                               color: const Color(0xFF0F0F0F),
                               fontSize: MyFontSize.size20,
@@ -111,7 +112,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                           DefaultButton(
                             width: 100,
                             height: 33,
-                            text: 'Cancel',
+                            text: S.of(context).cancel,
                             textColor: AppColor.white,
                             onPressed: () {
                               Navigator.pop(context);
@@ -122,7 +123,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                           DefaultButton(
                             width: 100,
                             height: 33,
-                            text: 'Continue',
+                            text: S.of(context).continu,
                             textColor: AppColor.white,
                             onPressed: () {
                               navigateAndFinish(context, const HomeScreen());
@@ -145,14 +146,17 @@ class _RequestDetailsState extends State<RequestDetails> {
         child: (requestServicesProvider.isLoading)
             ? const DataLoader()
             : requestServicesProvider.detailsRequestData == null
-                ? const CustomSizedBox(
+                ? CustomSizedBox(
                     height: 500,
-                    child: Center(child: TextWidget(text: 'No Data Available')))
+                    child: Center(
+                        child: TextWidget(text: S.of(context).noDataAvailable)))
                 : Padding(
                     padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
                     child: Column(
                       children: [
-                        SummaryRequestDetails(cameFromOtherServices: widget.cameFromOtherServices,requestServicesProvider: requestServicesProvider),
+                        SummaryRequestDetails(
+                            cameFromOtherServices: widget.cameFromOtherServices,
+                            requestServicesProvider: requestServicesProvider),
                         verticalSpace(22),
                         CustomContainer(
                           width: 345,
@@ -165,15 +169,15 @@ class _RequestDetailsState extends State<RequestDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextWidget(
-                                  text: 'Payment methods',
+                                  text: S.of(context).paymentMethods,
                                   textSize: MyFontSize.size15,
                                   fontWeight: MyFontWeight.semiBold,
                                 ),
                                 verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
-                                  backgroundColor:  requestServicesProvider
-                                      .selectedCashPayment
+                                  backgroundColor: requestServicesProvider
+                                          .selectedCashPayment
                                       ? const Color(0xFFD2FFEA)
                                       : AppColor.white,
                                   borderColor: AppColor.borderGreyBold,
@@ -181,8 +185,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   padding: symmetricEdgeInsets(
                                       vertical: 5, horizontal: 12),
                                   onTap: () {
-                                    requestServicesProvider
-                                        .selectCashPayment(
+                                    requestServicesProvider.selectCashPayment(
                                         !requestServicesProvider
                                             .selectedCashPayment);
                                   },
@@ -196,7 +199,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
-                                        text: 'Cash',
+                                        text: S.of(context).cash,
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
@@ -230,7 +233,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
-                                        text: 'Credit card',
+                                        text: S.of(context).creditCard,
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
@@ -252,7 +255,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextWidget(
-                                          text: 'Card number',
+                                          text: S.of(context).cardNumber,
                                           textSize: MyFontSize.size12,
                                           fontWeight: MyFontWeight.medium,
                                           color: const Color(0xFF272727),
@@ -287,7 +290,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         ),
                                         verticalSpace(11),
                                         TextWidget(
-                                          text: 'Cardholder name',
+                                          text: S.of(context).cardholderName,
                                           textSize: MyFontSize.size12,
                                           fontWeight: MyFontWeight.medium,
                                           color: const Color(0xFF272727),
@@ -314,7 +317,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 TextWidget(
-                                                  text: 'Expiry Date',
+                                                  text:
+                                                      S.of(context).expiryDate,
                                                   textSize: MyFontSize.size12,
                                                   fontWeight:
                                                       MyFontWeight.medium,
@@ -413,7 +417,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                             ),
                                             horizontalSpace(8),
                                             TextWidget(
-                                              text: 'Save Card',
+                                              text: S.of(context).saveCard,
                                               textSize: MyFontSize.size12,
                                               fontWeight: MyFontWeight.semiBold,
                                               color: AppColor.black,
@@ -442,7 +446,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
-                                        text: 'Apple Pay',
+                                        text: S.of(context).applePay,
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
@@ -467,7 +471,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
-                                        text: 'STC Pay',
+                                        text: S.of(context).stcPay,
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
@@ -492,7 +496,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
-                                        text: 'Bank Transfer',
+                                        text: S.of(context).bankTransfer,
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
@@ -509,7 +513,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                           child: Row(
                             children: [
                               TextWidget(
-                                text: 'Wallet',
+                                text: S.of(context).wallet,
                                 textSize: MyFontSize.size15,
                                 fontWeight: MyFontWeight.semiBold,
                               ),
@@ -523,41 +527,49 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ),
                               horizontalSpace(10),
                               GestureDetector(
-                                onTap: (){
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: Padding(
-                                          padding: onlyEdgeInsets(
-                                              top: 40, bottom: 32, end: 38, start: 38),
-                                          child: TextWidget(
-                                            textAlign: TextAlign.center,
-                                            text:
-                                            'This amount will decrease from your wallet',
-                                            textSize: MyFontSize.size17,
-                                            fontWeight: MyFontWeight.semiBold,
-                                          ),
-                                        ),
-                                        actions: [
-                                          Padding(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Padding(
                                             padding: onlyEdgeInsets(
-                                                top: 0, bottom: 40, end: 48, start: 48),
-                                            child: DefaultButton(
-                                              width: 225,
-                                              height: 32,
-                                              text: 'Ok',
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
+                                                top: 40,
+                                                bottom: 32,
+                                                end: 38,
+                                                start: 38),
+                                            child: TextWidget(
+                                              textAlign: TextAlign.center,
+                                              text: S
+                                                  .of(context)
+                                                  .thisAmountWillDecreaseFromYourWallet,
+                                              textSize: MyFontSize.size17,
+                                              fontWeight: MyFontWeight.semiBold,
                                             ),
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                  child: Image.asset('assets/images/info-circle.png')),
+                                          actions: [
+                                            Padding(
+                                              padding: onlyEdgeInsets(
+                                                  top: 0,
+                                                  bottom: 40,
+                                                  end: 48,
+                                                  start: 48),
+                                              child: DefaultButton(
+                                                width: 225,
+                                                height: 32,
+                                                text: S.of(context).ok,
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Image.asset(
+                                      'assets/images/info-circle.png')),
                             ],
                           ),
                         ),
@@ -575,7 +587,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Amount :',
+                                      text: S.of(context).amount,
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
@@ -593,7 +605,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Tax :',
+                                      text: S.of(context).tax,
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
@@ -607,12 +619,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                   ],
                                 ),
-
                                 verticalSpace(20),
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Discount code : ',
+                                      text: S.of(context).discountCode,
                                       textSize: MyFontSize.size14,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
@@ -674,13 +685,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Discount Amount :',
+                                      text: S.of(context).discountAmount,
                                       textSize: MyFontSize.size14,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: "${requestServicesProvider.couponData?.discountAmount ?? 0}",
+                                      text:
+                                          "${requestServicesProvider.couponData?.discountAmount ?? 0}",
                                       // "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
@@ -698,14 +710,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Total Amount :',
+                                      text: S.of(context).totalAmount,
                                       textSize: MyFontSize.size20,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.totalAmountAfterDiscount } SR',
+                                          '${requestServicesProvider.totalAmountAfterDiscount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -723,69 +735,74 @@ class _RequestDetailsState extends State<RequestDetails> {
                           fontWeight: MyFontWeight.bold,
                           fontSize: MyFontSize.size20,
                           backgroundColor: const Color(0xFFB6B6B6),
-                          text: 'Confirm and Pay',
+                          text: S.of(context).confirmAndPay,
                           onPressed: () async {
-                            if(requestServicesProvider.selectedCashPayment || requestServicesProvider.selectedCreditCardPayment){
+                            if (requestServicesProvider.selectedCashPayment ||
+                                requestServicesProvider
+                                    .selectedCreditCardPayment) {
                               AppLoader.showLoader(context);
                               await requestServicesProvider
                                   .submitFinialRequest(
-                                  requestId: requestServicesProvider
-                                      .updatedRequestDetailsData!.id!,
-                                  payBy: 'credit_card')
+                                      requestId: requestServicesProvider
+                                          .updatedRequestDetailsData!.id!,
+                                      payBy: 'credit_card')
                                   .then((value) async {
-                                    AppLoader.stopLoader();
+                                AppLoader.stopLoader();
                                 CustomSnackBars.successSnackBar(
                                     context, 'Submit Request Success');
 
-                                    homeProvider.launchExpectedURL(expectedUrl: '${requestServicesProvider.paymentUrlData!.paymentUrl}');
-                               /* navigateAndFinish(
+                                homeProvider.launchExpectedURL(
+                                    expectedUrl:
+                                        '${requestServicesProvider.paymentUrlData!.paymentUrl}');
+                                /* navigateAndFinish(
                                     context,
                                     const HomeScreen(
                                       cameFromNewRequest: true,
                                     ));*/
                               });
-                            }else{
+                            } else {
                               showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Padding(
-                                    padding: symmetricEdgeInsets(
-                                        horizontal: 42, vertical: 20),
-                                    child: TextWidget(
-                                      text: 'Please select a cash payment method ',
-                                      fontWeight: MyFontWeight.semiBold,
-                                      textSize: MyFontSize.size15,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                  actions: [
-                                    Padding(
-                                      padding: onlyEdgeInsets(bottom: 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          DefaultButton(
-                                            width: 154,
-                                            height: 25,
-                                            text: 'Ok',
-                                            textColor: AppColor.black,
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            backgroundColor:
-                                                const Color(0xFFBADEF6),
-                                          ),
-                                        ],
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Padding(
+                                      padding: symmetricEdgeInsets(
+                                          horizontal: 42, vertical: 20),
+                                      child: TextWidget(
+                                        text: S
+                                            .of(context)
+                                            .pleaseSelectACashPaymentMethod,
+                                        fontWeight: MyFontWeight.semiBold,
+                                        textSize: MyFontSize.size15,
+                                        height: 1.5,
                                       ),
                                     ),
-                                  ],
-                                );
-                              },
-                            );
+                                    actions: [
+                                      Padding(
+                                        padding: onlyEdgeInsets(bottom: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            DefaultButton(
+                                              width: 154,
+                                              height: 25,
+                                              text: S.of(context).ok,
+                                              textColor: AppColor.black,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              backgroundColor:
+                                                  const Color(0xFFBADEF6),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             }
-
                           },
                         ),
                       ],

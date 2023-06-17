@@ -3,6 +3,7 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../generated/l10n.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -16,7 +17,7 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Contact us'),
+      appBar: CustomAppBar(title: S.of(context).contactUs),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
@@ -178,7 +179,8 @@ class ContactUs extends StatelessWidget {
                     ),
                     horizontalSpace(14),
                   ],
-                ),),
+                ),
+              ),
             ),
             verticalSpace(24),
             Align(
@@ -192,7 +194,6 @@ class ContactUs extends StatelessWidget {
                 ),
               ),
             )
-
           ],
         ),
       ),
