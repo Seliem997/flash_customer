@@ -46,8 +46,8 @@ dependencies:
   dots_indicator: ^2.1.0
   fl_country_code_picker: ^0.0.4
   carousel_slider: ^4.1.1
-#  intl: ^0.17.0
-  intl: 0.18.0
+  intl: ^0.17.0
+#  intl: 0.18.0
   google_maps_flutter: ^2.2.5
   flutter_polyline_points:
   google_map_polyline_new:

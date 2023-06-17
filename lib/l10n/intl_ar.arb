@@ -17,5 +17,10 @@
   "codeIsInvalid": "Code is invalid",
   "codeNotAccepted": "Code not accepted",
   "offerAppliedSuccessfully": "Offer applied successfully",
-  "dateTime": "التاريخ & الوقت"
+  "dateTime": "التاريخ & الوقت",
+  "otp": "OTP",
+  "codeIsSendTo": "Code is send to",
+  "didNotReceiveCode": "Did not receive code?",
+  "requestAgain": "Request Again",
+  "codeSentSuccessfully": "Code Sent Successfully"
 }

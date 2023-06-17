@@ -24,7 +24,8 @@ import '../register/register.dart';
 import 'otp_cell.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({Key? key, required this.phoneNumber, required this.countryCode})
+  const OTPScreen(
+      {Key? key, required this.phoneNumber, required this.countryCode})
       : super(key: key);
 
   final String phoneNumber;
@@ -50,7 +51,8 @@ class _OTPScreenState extends State<OTPScreen> {
   bool isShow = false;
 
   startTimeout([int? milliseconds]) {
-    final UserProvider userDataProvider = Provider.of<UserProvider>(context,listen: false);
+    final UserProvider userDataProvider =
+        Provider.of<UserProvider>(context, listen: false);
 
     if (userDataProvider.timer != null) {
       userDataProvider.timer!.cancel();
@@ -80,12 +82,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final UserProvider userDataProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'OTP',
+        title: S.of(context).otp,
       ),
       body: Padding(
         padding: symmetricEdgeInsets(vertical: 57, horizontal: 24),
@@ -96,7 +97,7 @@ class _OTPScreenState extends State<OTPScreen> {
               verticalSpace(23),
               RichText(
                 text: TextSpan(
-                  text: 'Code is send to ',
+                  text: S.of(context).codeIsSendTo,
                   style: TextStyle(
                       color: AppColor.black,
                       fontSize: MyFontSize.size14,
@@ -123,8 +124,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   child: ListView.builder(
-
-                    shrinkWrap: true,
+                      shrinkWrap: true,
                       itemCount: 4,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
@@ -135,40 +135,44 @@ class _OTPScreenState extends State<OTPScreen> {
               verticalSpace(30),
               RichText(
                 text: TextSpan(
-                  text: 'Didn\'t receive code? ',
+                  text: S.of(context).didNotReceiveCode,
                   style: TextStyle(
                       color: AppColor.black,
                       fontSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.medium),
                   children: [
                     TextSpan(
-                        text: 'Request Again',
+                        text: S.of(context).requestAgain,
                         style: TextStyle(
-                          color: isShow ? AppColor.boldBlue : AppColor.buttonGrey,
+                          color:
+                              isShow ? AppColor.boldBlue : AppColor.buttonGrey,
                           fontSize: MyFontSize.size14,
                           fontWeight: MyFontWeight.medium,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = isShow ? () {
-                            AppLoader.showLoader(context);
-                            auth
-                                .registerOrLogin(
-                              widget.phoneNumber,
-                              widget.countryCode,
-                            )
-                                .then((value) {
-                              AppLoader.stopLoader();
-                              startTimeout();
-                              isShow = false;
-                              if (value.status == Status.success) {
-                                CustomSnackBars.successSnackBar(context, 'Code Sent Successfully');
-                              } else {
-                                CustomSnackBars.somethingWentWrongSnackBar(context);
-                              }
-                            });
-                          } : null
-                    ),
+                          ..onTap = isShow
+                              ? () {
+                                  AppLoader.showLoader(context);
+                                  auth
+                                      .registerOrLogin(
+                                    widget.phoneNumber,
+                                    widget.countryCode,
+                                  )
+                                      .then((value) {
+                                    AppLoader.stopLoader();
+                                    startTimeout();
+                                    isShow = false;
+                                    if (value.status == Status.success) {
+                                      CustomSnackBars.successSnackBar(context,
+                                          S.of(context).codeSentSuccessfully);
+                                    } else {
+                                      CustomSnackBars
+                                          .somethingWentWrongSnackBar(context);
+                                    }
+                                  });
+                                }
+                              : null),
                   ],
                 ),
               ),
@@ -186,12 +190,12 @@ class _OTPScreenState extends State<OTPScreen> {
                       .then((value) {
                     AppLoader.stopLoader();
                     if (value.status == Status.success) {
-                      if(value.message != "invalid otp"){
+                      if (value.message != "invalid otp") {
                         navigateTo(context, const HomeScreen());
-                      }else{
+                      } else {
                         CustomSnackBars.failureSnackBar(context, value.message);
                       }
-                    }else{
+                    } else {
                       CustomSnackBars.failureSnackBar(context, value.message);
                     }
                   });
@@ -217,5 +221,4 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
-
 }
