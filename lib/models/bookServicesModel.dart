@@ -30,7 +30,7 @@ class BookServicesData {
   String? payBy;
   String? feedback;
   String? amount;
-  double? tax;
+  dynamic tax;
   String? discountAmount;
   String? totalAmount;
   String? time;

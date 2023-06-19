@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
@@ -7,6 +8,7 @@ import 'package:flash_customer/providers/myRequests_provider.dart';
 import 'package:flash_customer/providers/myVehicles_provider.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
+import 'package:flash_customer/providers/payment_provider.dart';
 import 'package:flash_customer/providers/requestServices_provider.dart';
 import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
@@ -16,6 +18,7 @@ import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
 import 'package:flash_customer/utils/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -74,6 +77,7 @@ class _MyAppState extends State<MyApp> {
     // if (CacheHelper.returnData(key: CacheKey.darkMode) != null) {
     //   isDarkMode = CacheHelper.returnData(key: CacheKey.darkMode);
     // }
+
   }
 
   @override
@@ -109,6 +113,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => MyRequestsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PaymentProvider(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

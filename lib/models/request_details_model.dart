@@ -32,7 +32,7 @@ class DetailsRequestData {
   int? packageId;
   PackageDetails? packageDetails;
   String? amount;
-  Null? lateTime;
+  dynamic lateTime;
   Null? actualTime;
   dynamic tax;
   String? discountAmount;

@@ -49,10 +49,10 @@ class MyRequestsData {
   String? amount;
   String? lateTime;
   Null? actualTime;
-  String? tax;
-  String? discountAmount;
-  String? totalAmount;
-  String? totalDuration;
+  dynamic tax;
+  dynamic discountAmount;
+  dynamic totalAmount;
+  dynamic totalDuration;
   String? time;
   String? date;
   String? slotsDate;
@@ -62,7 +62,6 @@ class MyRequestsData {
   Employee? employee;
   List<Services>? services;
   VehicleRequest? vehicleRequest;
-
 
   MyRequestsData(
       {this.id,

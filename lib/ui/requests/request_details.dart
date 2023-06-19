@@ -1,3 +1,4 @@
+import 'package:flash_customer/payment/go_sell_payment.dart';
 import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/requests/summaryRequestDetails.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
@@ -11,6 +12,7 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
+import '../../providers/payment_provider.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/snack_bars.dart';
@@ -46,9 +48,13 @@ class _RequestDetailsState extends State<RequestDetails> {
   void loadData() async {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context, listen: false);
+    // final PaymentProvider paymentProvider =
+    //     Provider.of<PaymentProvider>(context, listen: false);
     await requestServicesProvider
         .getRequestDetails(requestId: widget.requestId)
         .then((value) => requestServicesProvider.setLoading(false));
+    // await paymentProvider.configureSDK();
+
   }
 
   @override
@@ -56,6 +62,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    final PaymentProvider paymentProvider = Provider.of<PaymentProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -729,6 +736,44 @@ class _RequestDetailsState extends State<RequestDetails> {
                           ),
                         ),
                         verticalSpace(40),
+                        SizedBox(
+                          height: 45,
+                          child: ElevatedButton(
+                            clipBehavior: Clip.hardEdge,
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Color(0xff2ace00)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                            ),
+                           /* onPressed: (){
+                              navigateTo(context, GoSellPayment());
+                            },*/
+                            onPressed: (){
+                              paymentProvider.startSDK();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                Text(
+                                  'PAY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                Spacer(),
+                                Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         DefaultButton(
                           height: 48,
                           width: 345,

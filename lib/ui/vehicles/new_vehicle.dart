@@ -6,6 +6,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -300,6 +301,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           textColor: AppColor.textGrey,
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.medium,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                         ),
                       ),
                     ],
@@ -325,6 +330,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           textColor: AppColor.textGrey,
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.medium,
+                          keyboardType: TextInputType.text,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                         ),
                       ),
                     ],

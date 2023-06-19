@@ -128,7 +128,8 @@ class PackageService extends BaseService {
     List<PackagesData> packagesDataList = [];
     try {
       await requestFutureData(
-          api: '${Api.getPackages}per=week&city_id=$cityId',
+          api: '${Api.getPackages}city_id=$cityId',
+          // api: '${Api.getPackages}per=week&city_id=$cityId',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,

@@ -46,8 +46,8 @@ dependencies:
   dots_indicator: ^2.1.0
   fl_country_code_picker: ^0.0.4
   carousel_slider: ^4.1.1
-  intl: ^0.17.0
-#  intl: 0.18.0
+#  intl: ^0.17.0
+  intl: 0.18.0
   google_maps_flutter: ^2.2.5
   flutter_polyline_points:
   google_map_polyline_new:
@@ -59,6 +59,8 @@ dependencies:
 
   calendar_timeline: ^1.1.2
   flutter_rating_bar: ^4.0.1
+  webview_flutter: ^4.2.2
+
 
   #  firebase
   firebase_core: ^2.4.1
@@ -67,6 +69,7 @@ dependencies:
   provider: ^6.0.5
 
 #  flutter_tap_payment: ^0.2.0
+  go_sell_sdk_flutter: ^2.2.2
 
 
 
