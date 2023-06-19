@@ -18,7 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
+import '../../payment/go_sell_payment.dart';
 import '../../providers/addresses_provider.dart';
+import '../../providers/payment_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/enum/statuses.dart';
@@ -49,6 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    final PaymentProvider paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    paymentProvider.configureSDK();
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     super.initState();
   }
@@ -58,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
     homeProvider.markers.clear();
+
     await _handleLocationPermission();
     await _getCurrentLocation();
   }
@@ -126,6 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context);
+    final PaymentProvider paymentProvider =
+        Provider.of<PaymentProvider>(context);
 
     return Scaffold(
       key: globalKey,
@@ -185,6 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
+              DefaultButton(
+                text: "Test Payment",
+                onPressed: () {
+                  navigateTo(context, GoSellPayment());
+                  // paymentProvider.startSDK();
+                },
+              ),
               DefaultButton(
                 width: 294,
                 height: 56,

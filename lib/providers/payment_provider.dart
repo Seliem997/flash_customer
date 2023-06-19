@@ -7,7 +7,7 @@ import 'package:go_sell_sdk_flutter/model/models.dart';
 
 import '../payment/tap_loader/awesome_loader.dart';
 
-class PaymentProvider with ChangeNotifier{
+class PaymentProvider with ChangeNotifier {
   late Map<dynamic, dynamic> tapSDKResult;
   String responseID = "";
   String sdkStatus = "";
@@ -15,8 +15,7 @@ class PaymentProvider with ChangeNotifier{
   String? sdkErrorMessage;
   String? sdkErrorDescription;
   AwesomeLoaderController loaderController = AwesomeLoaderController();
-  Color? payButtonColor= Color(0xff2ace00);
-
+  Color? payButtonColor = Color(0xff2ace00);
 
   // configure SDK
   Future<void> configureSDK() async {
@@ -29,15 +28,18 @@ class PaymentProvider with ChangeNotifier{
   // configure app key and bundle-id (You must get those keys from tap)
   Future<void> configureApp() async {
     GoSellSdkFlutter.configureApp(
-      bundleId: Platform.isAndroid ? "com.flash.customerapp.flash_customer" : "com.flash.customerapp.flashCustomer",
-      productionSecreteKey:
-      Platform.isAndroid ? "sk_live_F8936xNMvjtIQLwle25zGqRC" : "sk_live_RudbTJM5larYPVzy8eKxhQ9B",
-      sandBoxsecretKey:
-      Platform.isAndroid ? "sk_test_hz9y0FNreufbwZA4kHMUCaLB" : "sk_test_6U4oxDwJlzAr5LPdisZ2ycXv",
+      bundleId: Platform.isAndroid
+          ? "com.flash.customerapp.flash_customer"
+          : "com.flash.customerapp.flashCustomer",
+      productionSecreteKey: Platform.isAndroid
+          ? "sk_live_F8936xNMvjtIQLwle25zGqRC"
+          : "sk_live_RudbTJM5larYPVzy8eKxhQ9B",
+      sandBoxsecretKey: Platform.isAndroid
+          ? "sk_test_hz9y0FNreufbwZA4kHMUCaLB"
+          : "sk_test_6U4oxDwJlzAr5LPdisZ2ycXv",
       lang: "en",
     );
   }
-
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> setupSDKSession() async {
@@ -71,7 +73,10 @@ class PaymentProvider with ChangeNotifier{
                 taxes: [
                   Tax(
                       amount: Amount(
-                          type: "Tax amount", value: 44, minimumFee: 1, maximumFee: 10),
+                          type: "Tax amount",
+                          value: 44,
+                          minimumFee: 1,
+                          maximumFee: 10),
                       name: "tax1",
                       description: "tax describtion")
                 ],
@@ -81,12 +86,12 @@ class PaymentProvider with ChangeNotifier{
           taxes: [
             Tax(
                 amount:
-                Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
+                    Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
                 name: "tax1",
                 description: "tax describtion"),
             Tax(
                 amount:
-                Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
+                    Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
                 name: "tax1",
                 description: "tax describtion")
           ],
@@ -106,7 +111,6 @@ class PaymentProvider with ChangeNotifier{
           paymentDescription: "paymentDescription",
           // Payment Metadata
           paymentMetaData: {
-
             "customer_Id": "21",
             "request_Id": "22",
           },
@@ -150,8 +154,7 @@ class PaymentProvider with ChangeNotifier{
     }
 
     tapSDKResult = {};
-    notifyListeners();
-
+    // notifyListeners();
   }
 
   Future<void> startSDK() async {
@@ -162,32 +165,32 @@ class PaymentProvider with ChangeNotifier{
     loaderController.stopWhenFull();
     print('>>>> ${tapSDKResult['sdk_result']}');
 
-      switch (tapSDKResult['sdk_result']) {
-        case "SUCCESS":
-          sdkStatus = "SUCCESS";
-          handleSDKResult();
-          break;
-        case "FAILED":
-          sdkStatus = "FAILED";
-          handleSDKResult();
-          break;
-        case "SDK_ERROR":
-          print('sdk error............');
-          print(tapSDKResult['sdk_error_code']);
-          print(tapSDKResult['sdk_error_message']);
-          print(tapSDKResult['sdk_error_description']);
-          print('sdk error............');
-          sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
-          sdkErrorMessage = tapSDKResult['sdk_error_message'];
-          sdkErrorDescription = tapSDKResult['sdk_error_description'];
-          break;
+    switch (tapSDKResult['sdk_result']) {
+      case "SUCCESS":
+        sdkStatus = "SUCCESS";
+        handleSDKResult();
+        break;
+      case "FAILED":
+        sdkStatus = "FAILED";
+        handleSDKResult();
+        break;
+      case "SDK_ERROR":
+        print('sdk error............');
+        print(tapSDKResult['sdk_error_code']);
+        print(tapSDKResult['sdk_error_message']);
+        print(tapSDKResult['sdk_error_description']);
+        print('sdk error............');
+        sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
+        sdkErrorMessage = tapSDKResult['sdk_error_message'];
+        sdkErrorDescription = tapSDKResult['sdk_error_description'];
+        break;
 
-        case "NOT_IMPLEMENTED":
-          sdkStatus = "NOT_IMPLEMENTED";
-          break;
-      }
-      notifyListeners();
+      case "NOT_IMPLEMENTED":
+        sdkStatus = "NOT_IMPLEMENTED";
+        break;
     }
+    notifyListeners();
+  }
 
   void handleSDKResult() {
     print('>>>> ${tapSDKResult['trx_mode']}');
@@ -243,5 +246,4 @@ class PaymentProvider with ChangeNotifier{
 
     responseID = tapSDKResult['charge_id'];
   }
-
 }
