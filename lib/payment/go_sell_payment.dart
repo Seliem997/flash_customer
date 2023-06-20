@@ -92,7 +92,7 @@ class _GoSellPaymentState extends State<GoSellPayment> {
                 //       name: "tax1",
                 //       description: "tax describtion")
                 // ],
-                totalAmount: 500),
+                totalAmount: 300),
           ],
           // List of taxes
           taxes: [],

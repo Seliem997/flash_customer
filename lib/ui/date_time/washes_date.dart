@@ -11,8 +11,11 @@ import '../../../utils/font_styles.dart';
 import '../../generated/l10n.dart';
 import '../../models/packagesModel.dart';
 import '../../providers/package_provider.dart';
+import '../../providers/requestServices_provider.dart';
+import '../../utils/enum/statuses.dart';
 import '../../utils/number_formats.dart';
 import '../../utils/snack_bars.dart';
+import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/spaces.dart';
@@ -25,6 +28,8 @@ class WashesDate extends StatelessWidget {
   Widget build(BuildContext context) {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context);
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context);
     packageProvider.packageWashingQuantities = packagesData.washingQuantity;
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).dateTime),
@@ -181,7 +186,36 @@ class WashesDate extends StatelessWidget {
                           .saveSlotsPackageRequest(
                               requestId:
                                   packageProvider.detailsRequestData!.id!)
-                          .then((value) => AppLoader.stopLoader());
+                          .then((value) {
+                            // AppLoader.stopLoader();
+                            if (value.status == Status.success) {
+                              requestServicesProvider
+                                  .updateRequestSlots(
+                                requestId: packageProvider.detailsRequestData!.id!,
+                                payBy: "cash",
+                              )
+                                  .then((value) {
+                                if (value.status == Status.success) {
+                                  AppLoader.stopLoader();
+                                  navigateTo(
+                                      context,
+                                      RequestDetails(
+                                        requestId: packageProvider.detailsRequestData!.id!,
+                                      ));
+                                } else {
+                                  AppLoader.stopLoader();
+                                  CustomSnackBars.failureSnackBar(
+                                      context, '${value.message}');
+                                }
+                              });
+                            } else {
+                              AppLoader.stopLoader();
+                              CustomSnackBars.failureSnackBar(
+                                  context, '${value.message}');
+                            }
+
+
+                          });
                     }
                   : () {
                       CustomSnackBars.failureSnackBar(
