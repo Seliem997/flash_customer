@@ -16,8 +16,7 @@ import '../utils/enum/statuses.dart';
 class PackageProvider with ChangeNotifier {
   PackageService packageService = PackageService();
 
-  bool requiredManufacture = false;
-  bool requiredModel = false;
+
   int vehicleTypeId = 1;
   int selectedVehicleTypeIndex = 0;
   int? selectedPackageIndex;
@@ -39,18 +38,21 @@ class PackageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setRequiredManufacture() {
-    requiredManufacture = true;
-    notifyListeners();
-  }
 
-  void setRequiredModel() {
-    requiredModel = true;
-    notifyListeners();
-  }
-
+  bool requiredManufacture = false;
+  bool requiredModel = false;
   bool chooseManufacture = false;
   bool chooseModel = false;
+
+  void chooseRequiredManufacture({required bool value}) {
+    requiredManufacture = value;
+    notifyListeners();
+  }
+
+  void chooseRequiredModel({required bool value}) {
+    requiredModel = value;
+    notifyListeners();
+  }
 
   List<VehiclesActiveTypesData> vehiclesTypesDataList = [];
   Future getVehiclesTypeActive() async {
@@ -246,6 +248,14 @@ class PackageProvider with ChangeNotifier {
   void clearServices() {
     slotsIds = [];
     selectedSlotIndex = null;
+    notifyListeners();
+  }
+
+  void clearBorder() {
+    requiredManufacture = false;
+    requiredModel = false;
+    chooseManufacture = false;
+    chooseModel = false;
     notifyListeners();
   }
 

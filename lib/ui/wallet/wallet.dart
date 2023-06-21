@@ -146,7 +146,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       }*/
                   AppLoader.showLoader(context);
                   transactionHistoryProvider.chargingWalletUrl(
-                    amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/30,
+                    amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
                     payBy: 'credit_card',
                   ).then((value) {
                     AppLoader.stopLoader();

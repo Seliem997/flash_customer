@@ -39,7 +39,7 @@ class RequestDetailsData {
   String? date;
   Employee? employee;
   List<Services>? services;
-  Customer? customer;
+  CustomerData? customer;
 
   RequestDetailsData(
       {this.id,
@@ -81,7 +81,7 @@ class RequestDetailsData {
       });
     }
     customer = json['customer'] != null
-        ? Customer.fromJson(json['customer'])
+        ? CustomerData.fromJson(json['customer'])
         : null;
   }
 
@@ -172,14 +172,14 @@ class Services {
   }
 }
 
-class Customer {
+class CustomerData {
   int? id;
   String? name;
   List<Vehicle>? vehicle;
 
-  Customer({this.id, this.name, this.vehicle});
+  CustomerData({this.id, this.name, this.vehicle});
 
-  Customer.fromJson(Map<String, dynamic> json) {
+  CustomerData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     if (json['vehicle'] != null) {

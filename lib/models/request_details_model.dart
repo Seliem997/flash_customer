@@ -41,7 +41,7 @@ class DetailsRequestData {
   String? time;
   String? date;
   String? slotsDate;
-  Customer? customer;
+  CustomerDetails? customer;
   City? city;
   Location? requestAddress;
   Employee? employee;
@@ -94,7 +94,7 @@ class DetailsRequestData {
     date = json['date'];
     slotsDate = json['slots_date'];
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ? new CustomerDetails.fromJson(json['customer'])
         : null;
     city = json['city'] != null ? new City.fromJson(json['city']) : null;
     requestAddress = json['request_address'] != null
@@ -237,7 +237,7 @@ class PackageDetails {
   }
 }
 
-class Customer {
+class CustomerDetails {
   int? id;
   String? fwid;
   String? phone;
@@ -245,10 +245,10 @@ class Customer {
   List<Location>? location;
   List<Vehicle>? vehicle;
 
-  Customer(
+  CustomerDetails(
       {this.id, this.fwid, this.phone, this.name, this.location, this.vehicle});
 
-  Customer.fromJson(Map<String, dynamic> json) {
+  CustomerDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fwid = json['fwid'];
     phone = json['phone'];
@@ -342,7 +342,7 @@ class Vehicle {
   String? vehicleTypeName;
   int? subVehicleTypeId;
   String? subVehicleTypeName;
-  Customer? customer;
+  CustomerDetails? customer;
 
   Vehicle(
       {this.id,
@@ -383,7 +383,7 @@ class Vehicle {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ? new CustomerDetails.fromJson(json['customer'])
         : null;
   }
 
@@ -573,7 +573,7 @@ class VehicleRequest {
   String? vehicleTypeName;
   int? subVehicleTypeId;
   String? subVehicleTypeName;
-  Customer? customer;
+  CustomerDetails? customer;
 
   VehicleRequest(
       {this.id,
@@ -614,7 +614,7 @@ class VehicleRequest {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ? new CustomerDetails.fromJson(json['customer'])
         : null;
   }
 

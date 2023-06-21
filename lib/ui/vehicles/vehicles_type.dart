@@ -49,7 +49,9 @@ class _VehicleTypesState extends State<VehicleTypes> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
 
-    await myVehiclesProvider.getMyVehicles().then((value) => packageProvider.selectedMyVehicleLabel());
+    await myVehiclesProvider
+        .getMyVehicles()
+        .then((value) => packageProvider.selectedMyVehicleLabel());
     packageProvider.getVehiclesTypeActive();
     packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
@@ -172,6 +174,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                     ? packageProvider.chooseManufacture
                         ? packageProvider.chooseModel
                             ? {
+                                packageProvider.clearBorder(),
                                 AppLoader.showLoader(context),
                                 await myVehiclesProvider
                                     .addNewVehicle(
@@ -203,8 +206,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                   }
                                 }),
                               }
-                            : packageProvider.setRequiredModel()
-                        : packageProvider.setRequiredManufacture()
+                            : packageProvider.chooseRequiredModel(value: true)
+                        : packageProvider.chooseRequiredManufacture(value: true)
                     : myVehiclesProvider.selectedMyVehicleIndex != null
                         ? navigateTo(
                             context,
@@ -217,7 +220,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                   .id!,
                             ),
                           )
-                        : CustomSnackBars.failureSnackBar(context, 'Choose Vehicle First');
+                        : CustomSnackBars.failureSnackBar(
+                            context, 'Choose Vehicle First');
               },
             ),
             verticalSpace(10),
@@ -411,11 +415,13 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               onChanged: (value) async {
                 packageProvider.setSelectedManufacture(value!);
                 packageProvider.chooseManufacture = true;
+                packageProvider.chooseRequiredManufacture(value: false);
                 AppLoader.showLoader(context);
                 await packageProvider
                     .getVehiclesModels(
                         context: context, manufactureId: value.id!)
                     .then((result) {
+                  // packageProvider.chooseManufacture = false;
                   AppLoader.stopLoader();
                 });
               },
@@ -435,7 +441,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               text: '(Required)',
               textSize: MyFontSize.size8,
               fontWeight: MyFontWeight.regular,
-              color: packageProvider.requiredManufacture
+              color: packageProvider.requiredModel
                   ? Colors.red
                   : AppColor.lightGrey,
             ),
@@ -447,7 +453,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
           height: 40,
           radiusCircular: 3,
           padding: symmetricEdgeInsets(horizontal: 16),
-          borderColor: packageProvider.requiredManufacture
+          borderColor: packageProvider.requiredModel
               ? Colors.red
               : const Color(0xFF979797),
           backgroundColor: AppColor.borderGreyLight,
@@ -476,6 +482,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               onChanged: (value) async {
                 packageProvider.setSelectedVehicle(value!);
                 packageProvider.chooseModel = true;
+                packageProvider.chooseRequiredModel(value: false);
               },
               menuMaxHeight: 25.h,
             ),

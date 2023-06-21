@@ -17,6 +17,7 @@ import '../requests/myRequests.dart';
 import '../user/profile/edit_profile.dart';
 import '../vehicles/my_vehicles.dart';
 import '../wallet/wallet.dart';
+import '../wallet/wallet_payment.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_container.dart';
 import '../widgets/spaces.dart';
@@ -221,7 +222,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                navigateTo(context, const WalletScreen());
+                navigateTo(context, const WalletPayment());
               },
             ),
             ListTile(

@@ -4,17 +4,45 @@ import 'dart:io';
 import 'package:flash_customer/payment/tap_loader/awesome_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
 import 'package:go_sell_sdk_flutter/model/models.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
-class GoSellPayment extends StatefulWidget {
-  const GoSellPayment({Key? key}) : super(key: key);
+import '../generated/l10n.dart';
+import '../models/requestDetailsModel.dart';
+import '../models/request_details_model.dart';
+import '../providers/home_provider.dart';
+import '../providers/requestServices_provider.dart';
+import '../ui/home/home_screen.dart';
+import '../ui/requests/summaryRequestDetails.dart';
+import '../ui/widgets/custom_bar_widget.dart';
+import '../ui/widgets/custom_button.dart';
+import '../ui/widgets/custom_container.dart';
+import '../ui/widgets/custom_form_field.dart';
+import '../ui/widgets/data_loader.dart';
+import '../ui/widgets/navigate.dart';
+import '../ui/widgets/spaces.dart';
+import '../ui/widgets/text_widget.dart';
+import '../utils/app_loader.dart';
+import '../utils/font_styles.dart';
+import '../utils/snack_bars.dart';
+import '../utils/styles/colors.dart';
+
+class RequestDetails extends StatefulWidget {
+  const RequestDetails(
+      {Key? key, required this.requestId, this.cameFromOtherServices = false})
+      : super(key: key);
+
+  final int requestId;
+  final bool cameFromOtherServices;
 
   @override
-  State<GoSellPayment> createState() => _GoSellPaymentState();
+  State<RequestDetails> createState() => _RequestDetailsState();
 }
 
-class _GoSellPaymentState extends State<GoSellPayment> {
+class _RequestDetailsState extends State<RequestDetails> {
   late Map<dynamic, dynamic> tapSDKResult;
   String responseID = "";
   String sdkStatus = "";
@@ -26,17 +54,34 @@ class _GoSellPaymentState extends State<GoSellPayment> {
 
   @override
   void initState() {
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context, listen: false);
     super.initState();
     payButtonColor = Color(0xff2ace00);
-    configureSDK();
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    configureSDK(
+        updatedRequestDetailsData:
+            requestServicesProvider.updatedRequestDetailsData!);
+  }
+
+  void loadData() async {
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context, listen: false);
+    await requestServicesProvider
+        .getRequestDetails(requestId: widget.requestId)
+        .then((value) {
+      requestServicesProvider.setLoading(false);
+    });
   }
 
   // configure SDK
-  Future<void> configureSDK() async {
+  Future<void> configureSDK({
+    required RequestDetailsData updatedRequestDetailsData,
+  }) async {
     // configure app
     configureApp();
     // sdk session configurations
-    setupSDKSession();
+    setupSDKSession(updatedRequestDetailsData: updatedRequestDetailsData);
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -55,8 +100,10 @@ class _GoSellPaymentState extends State<GoSellPayment> {
     );
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> setupSDKSession() async {
+  // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
+  Future<void> setupSDKSession({
+    required RequestDetailsData updatedRequestDetailsData,
+  }) async {
     try {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
@@ -76,8 +123,10 @@ class _GoSellPaymentState extends State<GoSellPayment> {
             PaymentItem(
                 name: "service_item1",
                 //TODO : change the price
-                amountPerUnit: 500,
+                amountPerUnit: 33,
+                // amountPerUnit: (updatedRequestDetailsData.id!).toDouble(),
                 quantity: Quantity(value: 1),
+                // quantity: Quantity(value: updatedRequestDetailsData.id!),
                 // discount: {
                 //   "type": "F",
                 //   "value": 10,
@@ -269,6 +318,11 @@ class _GoSellPaymentState extends State<GoSellPayment> {
 
   @override
   Widget build(BuildContext context) {
+    final RequestServicesProvider requestServicesProvider =
+        Provider.of<RequestServicesProvider>(context);
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+
+/*
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -336,6 +390,846 @@ class _GoSellPaymentState extends State<GoSellPayment> {
             ],
           ),
         ),
+      ),
+    );
+*/
+    return Scaffold(
+      appBar: CustomAppBar(
+        withArrow: false,
+        title: S.of(context).requestDetails,
+        customizePopButton: IconButton(
+          icon: SvgPicture.asset(
+            'assets/svg/arrow-left.svg',
+            color: Colors.black,
+            width: 5.w,
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Padding(
+                    padding: symmetricEdgeInsets(horizontal: 36, vertical: 0),
+                    child: RichText(
+                      text: TextSpan(
+                        text: S.of(context).theRequestWillBe,
+                        style: TextStyle(
+                            color: const Color(0xFF0F0F0F),
+                            fontSize: MyFontSize.size20,
+                            fontWeight: MyFontWeight.medium),
+                        children: [
+                          TextSpan(
+                            text: S.of(context).canceled,
+                            style: TextStyle(
+                              color: const Color(0xFFFF3F48),
+                              fontSize: MyFontSize.size20,
+                              fontWeight: MyFontWeight.medium,
+                            ),
+                          ),
+                          TextSpan(
+                            text: S.of(context).areYouSureToGoBack,
+                            style: TextStyle(
+                              color: const Color(0xFF0F0F0F),
+                              fontSize: MyFontSize.size20,
+                              fontWeight: MyFontWeight.medium,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    Padding(
+                      padding:
+                          symmetricEdgeInsets(vertical: 21, horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DefaultButton(
+                            width: 100,
+                            height: 33,
+                            text: S.of(context).cancel,
+                            textColor: AppColor.white,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            backgroundColor: AppColor.textRed,
+                          ),
+                          horizontalSpace(21),
+                          DefaultButton(
+                            width: 100,
+                            height: 33,
+                            text: S.of(context).continu,
+                            textColor: AppColor.white,
+                            onPressed: () {
+                              navigateAndFinish(context, const HomeScreen());
+                            },
+                            backgroundColor: AppColor.boldGreen,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          color: Colors.black,
+          iconSize: 20.0,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: (requestServicesProvider.isLoading)
+            ? const DataLoader()
+            : requestServicesProvider.detailsRequestData == null
+                ? CustomSizedBox(
+                    height: 500,
+                    child: Center(
+                        child: TextWidget(text: S.of(context).noDataAvailable)))
+                : Padding(
+                    padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
+                    child: Column(
+                      children: [
+                        SummaryRequestDetails(
+                            cameFromOtherServices: widget.cameFromOtherServices,
+                            requestServicesProvider: requestServicesProvider),
+                        verticalSpace(22),
+                        CustomContainer(
+                          width: 345,
+                          radiusCircular: 4,
+                          backgroundColor: const Color(0xFFE2E2F5),
+                          child: Padding(
+                            padding: symmetricEdgeInsets(
+                                vertical: 11, horizontal: 24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextWidget(
+                                  text: S.of(context).paymentMethods,
+                                  textSize: MyFontSize.size15,
+                                  fontWeight: MyFontWeight.semiBold,
+                                ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: requestServicesProvider
+                                          .selectedCashPayment
+                                      ? const Color(0xFFD2FFEA)
+                                      : AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  onTap: () {
+                                    requestServicesProvider.selectCashPayment(
+                                        !requestServicesProvider
+                                            .selectedCashPayment);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/cash.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: S.of(context).cash,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: requestServicesProvider
+                                          .selectedCreditCardPayment
+                                      ? const Color(0xFFD2FFEA)
+                                      : AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  onTap: () {
+                                    requestServicesProvider
+                                        .selectCreditCardPayment(
+                                            !requestServicesProvider
+                                                .selectedCreditCardPayment);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/card.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: S.of(context).creditCard,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: requestServicesProvider
+                                      .selectedCreditCardPayment,
+                                  child: CustomContainer(
+                                    backgroundColor: const Color(0xFFF4FFFA),
+                                    borderColor: AppColor.borderGreyBold,
+                                    radiusCircular: 7,
+                                    padding: symmetricEdgeInsets(
+                                        vertical: 16, horizontal: 14),
+                                    margin: onlyEdgeInsets(top: 12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextWidget(
+                                          text: S.of(context).cardNumber,
+                                          textSize: MyFontSize.size12,
+                                          fontWeight: MyFontWeight.medium,
+                                          color: const Color(0xFF272727),
+                                        ),
+                                        verticalSpace(8),
+                                        CustomContainer(
+                                          height: 28,
+                                          backgroundColor: AppColor.white,
+                                          borderColor: AppColor.borderGreyBold,
+                                          radiusCircular: 3,
+                                          padding: symmetricEdgeInsets(
+                                              vertical: 6, horizontal: 10),
+                                          child: Row(
+                                            children: [
+                                              TextWidget(
+                                                text: '*********8729',
+                                                textSize: MyFontSize.size8,
+                                                fontWeight:
+                                                    MyFontWeight.regular,
+                                              ),
+                                              const Spacer(),
+                                              CustomSizedBox(
+                                                height: 16,
+                                                width: 16,
+                                                child: Image.asset(
+                                                  'assets/images/card.png',
+                                                  fit: BoxFit.fitWidth,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        verticalSpace(11),
+                                        TextWidget(
+                                          text: S.of(context).cardholderName,
+                                          textSize: MyFontSize.size12,
+                                          fontWeight: MyFontWeight.medium,
+                                          color: const Color(0xFF272727),
+                                        ),
+                                        verticalSpace(8),
+                                        CustomContainer(
+                                          height: 28,
+                                          backgroundColor: AppColor.white,
+                                          borderColor: AppColor.borderGreyBold,
+                                          radiusCircular: 3,
+                                          padding: symmetricEdgeInsets(
+                                              vertical: 6, horizontal: 10),
+                                          child: TextWidget(
+                                            text: '*********8729',
+                                            textSize: MyFontSize.size8,
+                                            fontWeight: MyFontWeight.regular,
+                                          ),
+                                        ),
+                                        verticalSpace(16),
+                                        Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextWidget(
+                                                  text:
+                                                      S.of(context).expiryDate,
+                                                  textSize: MyFontSize.size12,
+                                                  fontWeight:
+                                                      MyFontWeight.medium,
+                                                  color:
+                                                      const Color(0xFF272727),
+                                                ),
+                                                verticalSpace(8),
+                                                CustomContainer(
+                                                  height: 28,
+                                                  width: 117,
+                                                  backgroundColor:
+                                                      AppColor.white,
+                                                  borderColor:
+                                                      AppColor.borderGreyBold,
+                                                  radiusCircular: 3,
+                                                  padding: symmetricEdgeInsets(
+                                                      vertical: 6,
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    children: [
+                                                      TextWidget(
+                                                        text: 'MM/YY',
+                                                        textSize:
+                                                            MyFontSize.size8,
+                                                        fontWeight: MyFontWeight
+                                                            .regular,
+                                                      ),
+                                                      const Spacer(),
+                                                      CustomSizedBox(
+                                                        height: 16,
+                                                        width: 16,
+                                                        child: Image.asset(
+                                                          'assets/images/calendar.png',
+                                                          fit: BoxFit.fitWidth,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            horizontalSpace(50),
+                                            Column(
+                                              children: [
+                                                TextWidget(
+                                                  text: 'CVV/CVC',
+                                                  textSize: MyFontSize.size12,
+                                                  fontWeight:
+                                                      MyFontWeight.medium,
+                                                  color:
+                                                      const Color(0xFF272727),
+                                                ),
+                                                verticalSpace(8),
+                                                CustomContainer(
+                                                  height: 28,
+                                                  width: 97,
+                                                  backgroundColor:
+                                                      AppColor.white,
+                                                  borderColor:
+                                                      AppColor.borderGreyBold,
+                                                  radiusCircular: 3,
+                                                  padding: symmetricEdgeInsets(
+                                                      vertical: 6,
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    children: [
+                                                      TextWidget(
+                                                        text: '***',
+                                                        textSize:
+                                                            MyFontSize.size8,
+                                                        fontWeight: MyFontWeight
+                                                            .regular,
+                                                      ),
+                                                      const Spacer(),
+                                                      CustomSizedBox(
+                                                        height: 16,
+                                                        width: 16,
+                                                        child: Image.asset(
+                                                            'assets/images/info-circle.png'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        verticalSpace(16),
+                                        Row(
+                                          children: [
+                                            CustomSizedBox(
+                                              height: 16,
+                                              width: 16,
+                                              child: Image.asset(
+                                                  'assets/images/empty_circle.png'),
+                                            ),
+                                            horizontalSpace(8),
+                                            TextWidget(
+                                              text: S.of(context).saveCard,
+                                              textSize: MyFontSize.size12,
+                                              fontWeight: MyFontWeight.semiBold,
+                                              color: AppColor.black,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/apple.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: S.of(context).applePay,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/stc.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: S.of(context).stcPay,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                verticalSpace(12),
+                                CustomContainer(
+                                  height: 34,
+                                  backgroundColor: AppColor.white,
+                                  borderColor: AppColor.borderGreyBold,
+                                  radiusCircular: 4,
+                                  padding: symmetricEdgeInsets(
+                                      vertical: 5, horizontal: 12),
+                                  child: Row(
+                                    children: [
+                                      CustomSizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Image.asset(
+                                            'assets/images/bank.png'),
+                                      ),
+                                      horizontalSpace(10),
+                                      TextWidget(
+                                        text: S.of(context).bankTransfer,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.semiBold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        verticalSpace(22),
+                        Padding(
+                          padding: symmetricEdgeInsets(horizontal: 24),
+                          child: Row(
+                            children: [
+                              TextWidget(
+                                text: S.of(context).wallet,
+                                textSize: MyFontSize.size15,
+                                fontWeight: MyFontWeight.semiBold,
+                              ),
+                              horizontalSpace(12),
+                              TextWidget(
+                                /*${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance}*/
+                                text: '20 SR',
+                                textSize: MyFontSize.size14,
+                                fontWeight: MyFontWeight.semiBold,
+                                color: const Color(0xFF0084DF),
+                              ),
+                              horizontalSpace(10),
+                              GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Padding(
+                                            padding: onlyEdgeInsets(
+                                                top: 40,
+                                                bottom: 32,
+                                                end: 38,
+                                                start: 38),
+                                            child: TextWidget(
+                                              textAlign: TextAlign.center,
+                                              text: S
+                                                  .of(context)
+                                                  .thisAmountWillDecreaseFromYourWallet,
+                                              textSize: MyFontSize.size17,
+                                              fontWeight: MyFontWeight.semiBold,
+                                            ),
+                                          ),
+                                          actions: [
+                                            Padding(
+                                              padding: onlyEdgeInsets(
+                                                  top: 0,
+                                                  bottom: 40,
+                                                  end: 48,
+                                                  start: 48),
+                                              child: DefaultButton(
+                                                width: 225,
+                                                height: 32,
+                                                text: S.of(context).ok,
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Image.asset(
+                                      'assets/images/info-circle.png')),
+                            ],
+                          ),
+                        ),
+                        verticalSpace(22),
+                        CustomContainer(
+                          width: 345,
+                          // height: 235,
+                          borderColor: AppColor.primary,
+                          backgroundColor: const Color(0xFFF1F6FE),
+                          child: Padding(
+                            padding: symmetricEdgeInsets(
+                                vertical: 16, horizontal: 24),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: S.of(context).amount,
+                                      textSize: MyFontSize.size15,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    const Spacer(),
+                                    TextWidget(
+                                      text:
+                                          '${requestServicesProvider.updatedRequestDetailsData!.amount!} SR',
+                                      textSize: MyFontSize.size12,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xFF383838),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(14),
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: S.of(context).tax,
+                                      textSize: MyFontSize.size15,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    const Spacer(),
+                                    TextWidget(
+                                      text:
+                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!}%",
+                                      textSize: MyFontSize.size12,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xFF383838),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(20),
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: S.of(context).discountCode,
+                                      textSize: MyFontSize.size14,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    CustomContainer(
+                                      width: 112,
+                                      height: 30,
+                                      radiusCircular: 3,
+                                      backgroundColor: AppColor.buttonGrey,
+                                      borderColor: AppColor.boldGrey,
+                                      alignment: Alignment.center,
+                                      child: Center(
+                                        child: DefaultFormField(
+                                          controller: requestServicesProvider
+                                              .discountCodeController,
+                                          withBorder: false,
+                                          // padding: 10,
+                                          // contentPadding: onlyEdgeInsets(start: 10),
+                                          textInputAction: TextInputAction.done,
+                                          hintText: '',
+                                          enabled: requestServicesProvider
+                                                  .couponData ==
+                                              null,
+                                          padding: symmetricEdgeInsets(
+                                              vertical: 9, horizontal: 5),
+                                        ),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    TextButton(
+                                      onPressed: requestServicesProvider
+                                                  .couponData !=
+                                              null
+                                          ? () {
+                                              requestServicesProvider
+                                                  .resetCoupon();
+                                            }
+                                          : () {
+                                              requestServicesProvider
+                                                  .checkOfferCoupon(context);
+                                            },
+                                      child: TextWidget(
+                                        text: requestServicesProvider
+                                                    .couponData !=
+                                                null
+                                            ? S.of(context).remove
+                                            : S.of(context).apply,
+                                        textSize: MyFontSize.size12,
+                                        fontWeight: MyFontWeight.medium,
+                                        color: requestServicesProvider
+                                                    .couponData !=
+                                                null
+                                            ? AppColor.textRed
+                                            : AppColor.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(14),
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: S.of(context).discountAmount,
+                                      textSize: MyFontSize.size14,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    const Spacer(),
+                                    TextWidget(
+                                      text:
+                                          "${requestServicesProvider.couponData?.discountAmount ?? 0}",
+                                      // "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
+                                      textSize: MyFontSize.size12,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xFF383838),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: symmetricEdgeInsets(
+                                      horizontal: 10, vertical: 28),
+                                  child: const Divider(
+                                    color: Color(0xFF898A8D),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      text: S.of(context).totalAmount,
+                                      textSize: MyFontSize.size20,
+                                      fontWeight: MyFontWeight.semiBold,
+                                    ),
+                                    const Spacer(),
+                                    TextWidget(
+                                      text:
+                                          '${requestServicesProvider.totalAmountAfterDiscount} SR',
+                                      textSize: MyFontSize.size12,
+                                      fontWeight: MyFontWeight.medium,
+                                      color: const Color(0xFF383838),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        verticalSpace(40),
+                        // SizedBox(
+                        //   height: 45,
+                        //   child: ElevatedButton(
+                        //     clipBehavior: Clip.hardEdge,
+                        //     style: ButtonStyle(
+                        //       backgroundColor:
+                        //           MaterialStateProperty.all(Color(0xff2ace00)),
+                        //       shape: MaterialStateProperty.all(
+                        //         RoundedRectangleBorder(
+                        //           borderRadius: BorderRadius.circular(30),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     onPressed: () {
+                        //       navigateTo(context, GoSellPayment());
+                        //       // paymentProvider.startSDK();
+                        //     },
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Text(
+                        //           'PAY',
+                        //           style: TextStyle(
+                        //             color: Colors.white,
+                        //             fontSize: 16.0,
+                        //           ),
+                        //         ),
+                        //         Spacer(),
+                        //         Icon(
+                        //           Icons.lock_outline,
+                        //           color: Colors.white,
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        /*SizedBox(
+                          child: Text(
+                            "Status: [$sdkStatus $responseID ]",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Roboto",
+                              fontStyle: FontStyle.normal,
+                              fontSize: 15.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+              SizedBox(
+                height: 45,
+                child: ElevatedButton(
+                  clipBehavior: Clip.hardEdge,
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.all(payButtonColor),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                  onPressed: startSDK,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'PAY',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.lock_outline,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),*/
+                        DefaultButton(
+                          height: 48,
+                          width: 345,
+                          fontWeight: MyFontWeight.bold,
+                          fontSize: MyFontSize.size20,
+                          backgroundColor: requestServicesProvider
+                              .selectedCashPayment ? AppColor.primary : const Color(0xFFB6B6B6),
+                          text: S.of(context).confirmAndPay,
+                          onPressed: () async {
+                            if (requestServicesProvider
+                                    .selectedCashPayment /*||
+                      requestServicesProvider
+                          .selectedCreditCardPayment*/
+                                ) {
+                              AppLoader.showLoader(context);
+                              await requestServicesProvider
+                                  .submitFinialRequest(
+                                requestId: requestServicesProvider
+                                    .updatedRequestDetailsData!.id!,
+                                payBy: 'cash',
+                              )
+                                  .then((value) async {
+                                AppLoader.stopLoader();
+                                CustomSnackBars.successSnackBar(
+                                    context, 'Submit Request Success');
+
+                                // homeProvider.launchExpectedURL(
+                                //     expectedUrl:
+                                //     '${requestServicesProvider.paymentUrlData!.paymentUrl}');
+                                navigateAndFinish(
+                                    context,
+                                    const HomeScreen(
+                                      cameFromNewRequest: true,
+                                    ));
+                              });
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Padding(
+                                      padding: symmetricEdgeInsets(
+                                          horizontal: 42, vertical: 20),
+                                      child: TextWidget(
+                                        text: S
+                                            .of(context)
+                                            .pleaseSelectACashPaymentMethod,
+                                        fontWeight: MyFontWeight.semiBold,
+                                        textSize: MyFontSize.size15,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                    actions: [
+                                      Padding(
+                                        padding: onlyEdgeInsets(bottom: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            DefaultButton(
+                                              width: 154,
+                                              height: 25,
+                                              text: S.of(context).ok,
+                                              textColor: AppColor.black,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              backgroundColor:
+                                                  const Color(0xFFBADEF6),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
       ),
     );
   }

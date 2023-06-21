@@ -19,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../../payment/go_sell_payment.dart';
+import '../../payment/test.dart';
 import '../../providers/addresses_provider.dart';
 import '../../providers/payment_provider.dart';
 import '../../utils/app_loader.dart';
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DefaultButton(
                 text: "Test Payment",
                 onPressed: () {
-                  navigateTo(context, GoSellPayment());
+                  navigateTo(context, TestPayment());
                   // paymentProvider.startSDK();
                 },
               ),

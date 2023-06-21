@@ -137,12 +137,12 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                                 CustomSnackBars.failureSnackBar(context,
                                     S.of(context).phoneNumberCannotBeEmpty);
                                 return "";
-                              } else if (v.length < 9) {
+                              } else if (v.length < 7) {
                                 CustomSnackBars.failureSnackBar(
                                     context,
                                     S
                                         .of(context)
-                                        .phoneNumberLengthCanNotBeLessThan9Digits);
+                                        .phoneNumberLengthCanNotBeLessThan7Digits);
                                 return "";
                               }
                             },

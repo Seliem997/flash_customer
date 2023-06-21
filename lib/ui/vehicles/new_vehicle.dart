@@ -28,7 +28,6 @@ class VehicleInfo extends StatefulWidget {
 }
 
 class _VehicleInfoState extends State<VehicleInfo> {
-
   TextEditingController nameController = TextEditingController();
   TextEditingController yearController = TextEditingController();
   TextEditingController numbersController = TextEditingController();
@@ -76,7 +75,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     text: '(Required)',
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
-                    color: AppColor.lightGrey,
+                    color: packageProvider.requiredManufacture
+                        ? Colors.red
+                        : AppColor.lightGrey,
                   ),
                 ],
               ),
@@ -85,7 +86,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 width: double.infinity,
                 height: 44,
                 radiusCircular: 3,
-                borderColor: const Color(0xFF979797),
+                borderColor: packageProvider.requiredManufacture
+                    ? Colors.red
+                    : const Color(0xFF979797),
                 backgroundColor: AppColor.borderGreyLight,
                 padding: symmetricEdgeInsets(horizontal: 16),
                 child: DropdownButtonHideUnderline(
@@ -112,11 +115,14 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     color: Colors.black, fontSize: 16)))),
                     onChanged: (value) async {
                       packageProvider.setSelectedManufacture(value!);
+                      packageProvider.chooseManufacture = true;
+                      packageProvider.chooseRequiredManufacture(value: false);
                       // manufacture = value.vehicleTypeId!;
                       AppLoader.showLoader(context);
 
                       await packageProvider
-                          .getVehiclesModels(context: context,manufactureId: value.id!)
+                          .getVehiclesModels(
+                              context: context, manufactureId: value.id!)
                           .then((result) {
                         AppLoader.stopLoader();
                       });
@@ -137,7 +143,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     text: '(Required)',
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
-                    color: AppColor.lightGrey,
+                    color: packageProvider.requiredModel
+                        ? Colors.red
+                        : AppColor.lightGrey,
                   ),
                 ],
               ),
@@ -147,7 +155,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 height: 44,
                 radiusCircular: 3,
                 padding: symmetricEdgeInsets(horizontal: 16),
-                borderColor: const Color(0xFF979797),
+                borderColor: packageProvider.requiredModel
+                    ? Colors.red
+                    : const Color(0xFF979797),
                 backgroundColor: AppColor.borderGreyLight,
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -174,7 +184,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     color: Colors.black, fontSize: 16)))),
                     onChanged: (value) async {
                       packageProvider.setSelectedVehicle(value!);
-                      // model = value.id!;
+                      packageProvider.chooseModel = true;
+                      packageProvider.chooseRequiredModel(value: false);
                     },
                     menuMaxHeight: 25.h,
                   ),
@@ -362,22 +373,32 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 text: 'Save',
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
-                onPressed: () async{
-                  AppLoader.showLoader(context);
-                  await myVehiclesProvider.addNewVehicle(
-                    vehicleTypeId: '1',
-                    manufacture: packageProvider.selectedManufacture!.id!,
-                    model: packageProvider.selectedVehicleModel!.id!,
-                    numbers: numbersController.text,
-                    letters: lettersController.text,
-                    color: '0xFFdedede',
-                    name: nameController.text,
-                    year: yearController.text,
-                  ).then((value) {
-                    AppLoader.stopLoader();
-                    navigateAndFinish(context, const HomeScreen());
-                  });
-
+                onPressed: () async {
+                  packageProvider.chooseManufacture
+                      ? packageProvider.chooseModel
+                          ? {
+                              AppLoader.showLoader(context),
+                              packageProvider.clearBorder(),
+                              await myVehiclesProvider
+                                  .addNewVehicle(
+                                vehicleTypeId: '1',
+                                manufacture:
+                                    packageProvider.selectedManufacture!.id!,
+                                model:
+                                    packageProvider.selectedVehicleModel!.id!,
+                                numbers: numbersController.text,
+                                letters: lettersController.text,
+                                color: '0xFFdedede',
+                                name: nameController.text,
+                                year: yearController.text,
+                              )
+                                  .then((value) {
+                                AppLoader.stopLoader();
+                                navigateAndFinish(context, const HomeScreen());
+                              })
+                            }
+                          : packageProvider.chooseRequiredModel(value: true)
+                      : packageProvider.chooseRequiredManufacture(value: true);
                 },
               ),
             ],

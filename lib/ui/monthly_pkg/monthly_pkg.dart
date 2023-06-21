@@ -291,6 +291,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                           ? packageProvider.chooseManufacture
                               ? packageProvider.chooseModel
                                   ? {
+                                      packageProvider.clearBorder(),
                                       AppLoader.showLoader(context),
                                       await myVehiclesProvider
                                           .addNewVehicle(
@@ -321,8 +322,10 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                         }
                                       }),
                                     }
-                                  : packageProvider.setRequiredModel()
-                              : packageProvider.setRequiredManufacture()
+                                  : packageProvider.chooseRequiredModel(
+                                      value: true)
+                              : packageProvider.chooseRequiredManufacture(
+                                  value: true)
                           : myVehiclesProvider.selectedMyVehicleIndex != null
                               ? navigateTo(
                                   context,

@@ -8,7 +8,7 @@ import '../utils/enum/statuses.dart';
 
 class TransactionHistoryProvider with ChangeNotifier{
 
-  TextEditingController? rechargeAmountController ;
+  TextEditingController? rechargeAmountController= TextEditingController() ;
 
 
   TransactionData? transactionData;
