@@ -467,6 +467,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                   ],
                 ),
                 verticalSpace(28),
+/*
                 SizedBox(
                   height: 45,
                   child: ElevatedButton(
@@ -502,6 +503,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                     ),
                   ),
                 ),
+*/
                 DefaultButton(
                     text: 'Pay', onPressed: () {
                   /*if(transactionHistoryProvider.rechargeAmountController == null){
@@ -593,17 +595,17 @@ class _WalletPaymentState extends State<WalletPayment> {
                                     ),
                                     horizontalSpace(4),
                                     TextWidget(
-                                      text: '18/3/2023  -  ',
+                                      text: '${transactionHistoryProvider.transactionData!.collection![index].createdAt}',
                                       textSize: MyFontSize.size8,
                                       fontWeight: MyFontWeight.regular,
                                       color: AppColor.subTitleGrey,
                                     ),
-                                    TextWidget(
+                                    /*TextWidget(
                                       text: '11:06 PM',
                                       textSize: MyFontSize.size8,
                                       fontWeight: MyFontWeight.regular,
                                       color: AppColor.subTitleGrey,
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ],

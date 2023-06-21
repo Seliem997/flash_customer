@@ -94,20 +94,23 @@ class TransactionCollection {
   int? id;
   String? type;
   String? amount;
+  String? createdAt;
 
-  TransactionCollection({this.id, this.type, this.amount});
+  TransactionCollection({this.id, this.type, this.amount, this.createdAt});
 
   TransactionCollection.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['type'];
     amount = json['amount'];
+    createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['type'] = type;
-    data['amount'] = amount;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['amount'] = this.amount;
+    data['created_at'] = this.createdAt;
     return data;
   }
 }

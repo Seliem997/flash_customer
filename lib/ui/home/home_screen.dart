@@ -52,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    final PaymentProvider paymentProvider =
+    /*final PaymentProvider paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
-    paymentProvider.configureSDK();
+    paymentProvider.configureSDK();*/
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     super.initState();
   }
@@ -243,14 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: AppColor.buttonGrey,
                     text: S.of(context).products,
                     textColor: AppColor.black,
-                    onPressed: loggedIn
-                        ? () {
-                            homeProvider.launchExpectedURL(
-                                expectedUrl: 'https://flashwashstore.com/');
-                          }
-                        : () {
-                            navigateTo(context, const RegisterPhoneNumber());
-                          },
+                    onPressed:() {
+                      homeProvider.launchExpectedURL(
+                                expectedUrl: 'https://flashwashstore.com/');},
                     fontWeight: MyFontWeight.medium,
                     fontSize: MyFontSize.size14,
                   ),
