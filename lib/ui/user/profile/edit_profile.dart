@@ -157,6 +157,7 @@ class EditProfile extends StatelessWidget {
                             padding: EdgeInsets.all(20.0),
                             child: TextWidget(
                               text: 'Are you sure to delete the account?',
+                              color: AppColor.black ,
                             ),
                           ),
                           actions: [

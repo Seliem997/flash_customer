@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 import '../models/manufacturersModel.dart';
 import '../models/otherServicesModel.dart';
@@ -123,13 +125,12 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getPackages({required int cityId}) async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json','lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<PackagesData> packagesDataList = [];
     try {
       await requestFutureData(
           api: '${Api.getPackages}city_id=$cityId',
-          // api: '${Api.getPackages}per=week&city_id=$cityId',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
