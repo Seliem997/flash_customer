@@ -126,7 +126,7 @@ class SidebarDrawer extends StatelessWidget {
                                     onPressed: () {
                                       MyApp.changeThemeMode(context);
                                       Navigator.pop(context);
-                                      // Restart.restartApp();
+                                      Restart.restartApp();
                                     },
                                     backgroundColor: AppColor.textRed,
                                   ),

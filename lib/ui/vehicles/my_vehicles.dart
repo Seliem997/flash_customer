@@ -126,6 +126,10 @@ class MyVehiclesScreenWidget extends StatelessWidget {
               borderColor: myVehiclesProvider.selectedMyVehicleIndex == index
                   ? AppColor.borderBlue
                   : Colors.transparent,
+              borderColorDark:
+                  myVehiclesProvider.selectedMyVehicleIndex == index
+                      ? AppColor.borderBlue
+                      : null,
               backgroundColor:
                   myVehiclesProvider.selectedMyVehicleIndex == index
                       ? const Color(0xFFE6EEFB)
