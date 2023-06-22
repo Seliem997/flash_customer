@@ -66,3 +66,89 @@ class ProfileData {
     return data;
   }
 }
+
+
+class SocialLinksModel {
+  int? id;
+  String? facebook;
+  String? instagram;
+  String? twitter;
+  String? tiktok;
+  String? snapchat;
+  String? telegram;
+  String? gmail;
+  String? whatsapp;
+  String? website;
+  String? appAndroid;
+  String? appIos;
+  String? appOther;
+  Null? phone0;
+  Null? phone1;
+  Null? phone2;
+  String? createdAt;
+  String? updatedAt;
+
+  SocialLinksModel(
+      {this.id,
+        this.facebook,
+        this.instagram,
+        this.twitter,
+        this.tiktok,
+        this.snapchat,
+        this.telegram,
+        this.gmail,
+        this.whatsapp,
+        this.website,
+        this.appAndroid,
+        this.appIos,
+        this.appOther,
+        this.phone0,
+        this.phone1,
+        this.phone2,
+        this.createdAt,
+        this.updatedAt});
+
+  SocialLinksModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    facebook = json['facebook'];
+    instagram = json['instagram'];
+    twitter = json['twitter'];
+    tiktok = json['tiktok'];
+    snapchat = json['snapchat'];
+    telegram = json['telegram'];
+    gmail = json['gmail'];
+    whatsapp = json['whatsapp'];
+    website = json['website'];
+    appAndroid = json['app_android'];
+    appIos = json['app_ios'];
+    appOther = json['app_other'];
+    phone0 = json['phone0'];
+    phone1 = json['phone1'];
+    phone2 = json['phone2'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['facebook'] = this.facebook;
+    data['instagram'] = this.instagram;
+    data['twitter'] = this.twitter;
+    data['tiktok'] = this.tiktok;
+    data['snapchat'] = this.snapchat;
+    data['telegram'] = this.telegram;
+    data['gmail'] = this.gmail;
+    data['whatsapp'] = this.whatsapp;
+    data['website'] = this.website;
+    data['app_android'] = this.appAndroid;
+    data['app_ios'] = this.appIos;
+    data['app_other'] = this.appOther;
+    data['phone0'] = this.phone0;
+    data['phone1'] = this.phone1;
+    data['phone2'] = this.phone2;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    return data;
+  }
+}

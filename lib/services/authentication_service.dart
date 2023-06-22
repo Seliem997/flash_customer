@@ -339,6 +339,31 @@ class AuthenticationService extends BaseService {
   //   return ResponseResult(result, userData);
   // }
 
+  Future<ResponseResult> getSocialLinks() async {
+    Status result = Status.error;
+    SocialLinksModel? socialLinksData;
+
+    try {
+      await requestFutureData(
+          api: Api.getSocialLinks,
+          withToken: true,
+          requestType: Request.get,
+          onSuccess: (response) async {
+            if (response['status_code'] == 200) {
+              result = Status.success;
+              socialLinksData = SocialLinksModel.fromJson(response);
+            } else {
+              result = Status.error;
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      logger.e("Error in creating user $e");
+    }
+    return ResponseResult(result, socialLinksData);
+  }
+
+
   void signOut() async {
     try {
       CacheHelper.saveData(key: CacheKey.loggedIn, value: false);
