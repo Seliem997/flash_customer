@@ -2,8 +2,10 @@ import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../../providers/about_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -11,11 +13,29 @@ import '../widgets/custom_container.dart';
 import '../widgets/custom_form_field.dart';
 import '../widgets/spaces.dart';
 
-class ContactUs extends StatelessWidget {
+class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);
 
   @override
+  State<ContactUs> createState() => _ContactUsState();
+}
+
+class _ContactUsState extends State<ContactUs> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
+    super.initState();
+  }
+
+  void loadData() async {
+    final AboutProvider aboutProvider =
+        Provider.of<AboutProvider>(context, listen: false);
+    await aboutProvider.getSocialLinks();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final AboutProvider aboutProvider = Provider.of<AboutProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).contactUs),
       body: Padding(
@@ -24,7 +44,8 @@ class ContactUs extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextWidget(
-              text: 'Lorem ipsum dolor sit amet',
+              text:
+                  'Lorem ipsum dolor sit amet${aboutProvider.socialLinksData?.id}',
               fontWeight: MyFontWeight.semiBold,
               textSize: MyFontSize.size16,
             ),
@@ -108,7 +129,7 @@ class ContactUs extends StatelessWidget {
                 fontWeight: MyFontWeight.regular,
               ),
             ),
-            verticalSpace(32),
+            verticalSpace(15),
             DefaultButton(
               height: 37,
               width: 345,
@@ -119,63 +140,51 @@ class ContactUs extends StatelessWidget {
             Padding(
               padding: symmetricEdgeInsets(horizontal: 9),
               child: CustomSizedBox(
-                height: 35,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/telephone.svg',
-                      ),
+                      child: Image.asset('assets/images/telephonee.png'),
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/whatsapp.svg',
-                      ),
+                      child: Image.asset('assets/images/whatsapp.png'),
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/instagram.svg',
-                      ),
+                      child: Image.asset('assets/images/instagram.png'),
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/snapchat.svg',
-                      ),
+                      child: Image.asset('assets/images/snapChat.png'),
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/tiktok.svg',
-                      ),
+                      child: Image.asset('assets/images/tiktok.png'),
+
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/telegram.svg',
-                      ),
+                      child: Image.asset('assets/images/telegram.png'),
                     ),
                     horizontalSpace(14),
                     CustomSizedBox(
-                      height: 30,
+                      // height: 30,
                       width: 30,
-                      child: SvgPicture.asset(
-                        'assets/svg/gmail.svg',
-                      ),
+                      child: Image.asset('assets/images/gMail.png'),
+
                     ),
                     horizontalSpace(14),
                   ],

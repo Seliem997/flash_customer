@@ -6,6 +6,7 @@ class Api {
   static const String updateMyProfile = "$baseUrl/customer/update-my-profile";
 
   static const String getAbout = "$baseUrl/about";
+  static const String getSocialLinks = "$baseUrl/social-links";
   static const String getAboutImages =
       "$baseUrl/get-images?related_to=about_us_slider_images";
 
