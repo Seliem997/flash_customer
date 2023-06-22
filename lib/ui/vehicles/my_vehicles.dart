@@ -1,3 +1,4 @@
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -101,7 +102,9 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                 SlidableAction(
                   flex: 1,
                   onPressed: (BuildContext context) {
-                    myVehiclesProvider.deleteVehicle(vehicleID: myVehiclesProvider.myVehiclesData!.collection![index].id!);
+                    myVehiclesProvider.deleteVehicle(
+                        vehicleID: myVehiclesProvider
+                            .myVehiclesData!.collection![index].id!);
                   },
                   backgroundColor: const Color(0xFFE74A2A),
                   foregroundColor: Colors.white,
@@ -117,12 +120,17 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                 ),
               ],
             ),
-            child:  CustomContainer(
+            child: CustomContainer(
               height: 70,
               width: 345,
-              borderColor: myVehiclesProvider.selectedMyVehicleIndex == index ? AppColor.borderBlue : Colors.transparent,
-              backgroundColor: myVehiclesProvider.selectedMyVehicleIndex == index ? const Color(0xFFE6EEFB) : AppColor.borderGreyLight,
-              onTap: (){
+              borderColor: myVehiclesProvider.selectedMyVehicleIndex == index
+                  ? AppColor.borderBlue
+                  : Colors.transparent,
+              backgroundColor:
+                  myVehiclesProvider.selectedMyVehicleIndex == index
+                      ? const Color(0xFFE6EEFB)
+                      : AppColor.borderGreyLight,
+              onTap: () {
                 myVehiclesProvider.setSelectedMyVehicle(index: index);
               },
               child: Padding(
@@ -136,9 +144,10 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       clipBehavior: Clip.hardEdge,
                       backgroundColor: Colors.transparent,
-                      child: Image.network(
-                        myVehiclesProvider
-                            .myVehiclesData!.collection![index].manufacturerLogo!,
+                      borderColorDark: Colors.transparent,
+                      child: FastCachedImage(
+                        url: myVehiclesProvider.myVehiclesData!
+                            .collection![index].manufacturerLogo!,
                         fit: BoxFit.fitHeight,
                         width: 71,
                         height: 50,

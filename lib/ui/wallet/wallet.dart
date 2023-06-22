@@ -116,7 +116,8 @@ class _WalletScreenState extends State<WalletScreen> {
                         alignment: Alignment.center,
                         child: Center(
                           child: DefaultFormField(
-                            controller: transactionHistoryProvider.rechargeAmountController,
+                            controller: transactionHistoryProvider
+                                .rechargeAmountController,
                             withBorder: false,
                             keyboardType: TextInputType.phone,
                             inputFormatters: [
@@ -124,8 +125,8 @@ class _WalletScreenState extends State<WalletScreen> {
                             ],
                             textInputAction: TextInputAction.done,
                             hintText: '',
-                            padding: symmetricEdgeInsets(
-                                vertical: 8, horizontal: 5),
+                            padding:
+                                symmetricEdgeInsets(vertical: 8, horizontal: 5),
                           ),
                         ),
                       ),
@@ -134,7 +135,8 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 verticalSpace(28),
                 DefaultButton(
-                    text: 'Pay', onPressed: () {
+                    text: 'Pay',
+                    onPressed: () {
                       /*if(transactionHistoryProvider.rechargeAmountController == null){
                         CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
                       }else{
@@ -144,18 +146,25 @@ class _WalletScreenState extends State<WalletScreen> {
                           payBy: 'credit_card',
                         ).then((value) => AppLoader.stopLoader());
                       }*/
-                  AppLoader.showLoader(context);
-                  transactionHistoryProvider.chargingWalletUrl(
-                    amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
-                    payBy: 'credit_card',
-                  ).then((value) {
-                    AppLoader.stopLoader();
-                    homeProvider.launchExpectedURL(
-                        expectedUrl: '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
-                    );
-                  });
-
-                }, width: 217, height: 40),
+                      AppLoader.showLoader(context);
+                      transactionHistoryProvider
+                          .chargingWalletUrl(
+                        amount: int.parse(
+                          transactionHistoryProvider
+                              .rechargeAmountController!.text,
+                        ),
+                        payBy: 'credit_card',
+                      )
+                          .then((value) {
+                        AppLoader.stopLoader();
+                        homeProvider.launchExpectedURL(
+                          expectedUrl:
+                              '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
+                        );
+                      });
+                    },
+                    width: 217,
+                    height: 40),
                 verticalSpace(45),
                 Row(
                   children: [

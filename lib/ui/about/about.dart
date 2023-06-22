@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:change_case/change_case.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
@@ -57,6 +58,7 @@ class _AboutUsState extends State<AboutUs> {
                       return CustomContainer(
                         width: 325,
                         height: 144,
+                        margin: symmetricEdgeInsets(horizontal: 4),
                         padding: symmetricEdgeInsets(horizontal: 4),
                         clipBehavior: Clip.hardEdge,
                         backgroundColor: Colors.transparent,
@@ -83,7 +85,8 @@ class _AboutUsState extends State<AboutUs> {
                                 children: [
                                   TextWidget(
                                     text: aboutProvider
-                                        .aboutImagesDataList[index].title!,
+                                        .aboutImagesDataList[index].title!
+                                        .toCapitalCase(),
                                     fontWeight: MyFontWeight.semiBold,
                                     textSize: MyFontSize.size14,
                                     color: AppColor.white,
@@ -139,12 +142,13 @@ class _AboutUsState extends State<AboutUs> {
                   child: Padding(
                     padding: symmetricEdgeInsets(horizontal: 24),
                     child: ListView.separated(
-                      itemCount: aboutProvider.aboutDataList.length,
+                      itemCount: aboutProvider.aboutDataList.length - 1,
                       itemBuilder: (context, index) => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextWidget(
-                            text: aboutProvider.aboutDataList[0].title!,
+                            text: aboutProvider.aboutDataList[0].title!
+                                .toCapitalCase(),
                             fontWeight: MyFontWeight.semiBold,
                             textSize: MyFontSize.size16,
                           ),

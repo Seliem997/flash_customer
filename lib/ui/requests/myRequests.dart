@@ -93,6 +93,7 @@ class _MyRequestsState extends State<MyRequests> {
                         CustomContainer(
                           width: double.infinity,
                           height: 560,
+                          borderColorDark: Colors.transparent,
                           child: ListView.separated(
                             itemCount:
                                 myRequestsProvider.myRequestsDataList.length,

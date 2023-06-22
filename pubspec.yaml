@@ -46,7 +46,7 @@ dependencies:
   dots_indicator: ^2.1.0
   fl_country_code_picker: ^0.0.4
   carousel_slider: ^4.1.1
-  intl: 0.18.0
+  intl: 0.17.0
   google_maps_flutter: ^2.2.5
   flutter_polyline_points:
   google_map_polyline_new:
@@ -69,6 +69,10 @@ dependencies:
 
 #  flutter_tap_payment: ^0.2.0
   go_sell_sdk_flutter: ^2.2.2
+  restart_app: ^1.1.0+1
+  flutter_statusbarcolor_ns: ^0.5.0
+  fast_cached_network_image: ^1.1.1
+  change_case: ^1.1.0
 
 
 
@@ -105,6 +109,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - assets/map_styles/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

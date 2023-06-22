@@ -113,6 +113,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
           height: 38,
           padding: symmetricEdgeInsets(horizontal: 30),
           backgroundColor: AppColor.primary,
+          backgroundColorDark: AppColor.dark,
           child: Row(
             children: <Widget>[
               TextWidget(

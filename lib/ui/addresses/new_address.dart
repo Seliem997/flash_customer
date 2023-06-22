@@ -4,12 +4,14 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../providers/addresses_provider.dart';
 import '../../providers/home_provider.dart';
 import '../../utils/app_loader.dart';
@@ -39,7 +41,30 @@ class _NewAddressState extends State<NewAddress> {
     super.initState();
   }
 
+  String? _darkMapStyle;
+  String? _lightMapStyle;
+
+  Future _loadMapStyles() async {
+    _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
+    _lightMapStyle =
+        await rootBundle.loadString('assets/map_styles/light.json');
+    _setMapStyle();
+  }
+
+  Future _setMapStyle() async {
+    final HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: false);
+
+    if (MyApp.themeMode(context)) {
+      homeProvider.mapController.setMapStyle(_darkMapStyle);
+      setState(() {});
+    } else {
+      // homeProvider.mapController.setMapStyle(_lightMapStyle);
+    }
+  }
+
   void loadData() async {
+    _loadMapStyles();
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context, listen: false);
     final HomeProvider homeProvider =

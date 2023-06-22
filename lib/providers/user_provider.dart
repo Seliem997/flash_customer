@@ -79,20 +79,7 @@ class UserProvider extends ChangeNotifier {
   //   return status;
   // }
 
-  bool isDark = false;
   //-------------------------------------------- change App Mode -------
-
-  void changeAppMode({bool? modeFromShared}) {
-    if (modeFromShared != null) {
-      isDark = modeFromShared;
-      notifyListeners();
-    } else {
-      isDark = !isDark;
-      CacheHelper.saveData(key: CacheKey.darkMode, value: isDark).then((value) {
-        notifyListeners();
-      });
-    }
-  }
 
   //-------------------------------------------- change Language -------
 
@@ -104,7 +91,4 @@ class UserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-
-
 }

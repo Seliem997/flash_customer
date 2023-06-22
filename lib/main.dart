@@ -1,6 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
 import 'package:flash_customer/providers/home_provider.dart';
@@ -15,10 +15,11 @@ import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -28,7 +29,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await CacheHelper.init();
-
+  FastCachedImageConfig.init();
   runApp(const MyApp());
 }
 
@@ -40,6 +41,16 @@ class MyApp extends StatefulWidget {
     state.changeLanguage(newLocale);
   }
 
+  static void changeThemeMode(BuildContext context) async {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.changeThemeMode();
+  }
+
+  static bool themeMode(BuildContext context) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    return state.isDarkMode;
+  }
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -48,7 +59,17 @@ class _MyAppState extends State<MyApp> {
   late Locale _locale;
   late bool loggedIn = false;
   late bool showOnBoarding = false;
-  // late bool isDarkMode = false;
+  bool isDarkMode = false;
+
+  void changeThemeMode() {
+    isDarkMode = !isDarkMode;
+    setState(() {});
+    if (isDarkMode) {
+      CacheHelper.saveData(key: CacheKey.darkMode, value: true);
+    } else {
+      CacheHelper.saveData(key: CacheKey.darkMode, value: false);
+    }
+  }
 
   changeLanguage(Locale locale) {
     setState(() {
@@ -61,6 +82,9 @@ class _MyAppState extends State<MyApp> {
   @override
   initState() {
     loadData();
+    if (CacheHelper.returnData(key: CacheKey.darkMode) != null) {
+      isDarkMode = CacheHelper.returnData(key: CacheKey.darkMode);
+    }
     super.initState();
   }
 
@@ -77,11 +101,13 @@ class _MyAppState extends State<MyApp> {
     // if (CacheHelper.returnData(key: CacheKey.darkMode) != null) {
     //   isDarkMode = CacheHelper.returnData(key: CacheKey.darkMode);
     // }
-
   }
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        isDarkMode ? true : false);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -123,9 +149,19 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flash Customer',
-          theme: lightTheme,
+          theme: isDarkMode
+              ? ThemeData.dark().copyWith(
+                  appBarTheme: const AppBarTheme(
+                      color: AppColor.darkScaffoldColor,
+                      iconTheme: IconThemeData(color: Colors.white)),
+                  scaffoldBackgroundColor: AppColor.darkScaffoldColor)
+              : ThemeData(
+                  primarySwatch: Colors.blue,
+                  appBarTheme: const AppBarTheme(
+                      color: AppColor.white,
+                      iconTheme: IconThemeData(color: Colors.black)),
+                  scaffoldBackgroundColor: AppColor.lightScaffoldColor),
           darkTheme: darkTheme,
-          themeMode: userProvider.isDark ? ThemeMode.dark : ThemeMode.light,
           localizationsDelegates: const [
             S.delegate,
             GlobalMaterialLocalizations.delegate,

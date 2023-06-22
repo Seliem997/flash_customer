@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:developer';
 
+import 'package:flash_customer/main.dart';
 import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/home/widgets/widgets.dart';
 import 'package:flash_customer/ui/requests/myRequests.dart';
@@ -11,6 +12,7 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -49,6 +51,27 @@ class _HomeScreenState extends State<HomeScreen> {
       const CameraPosition(target: LatLng(0, 0));
   final bool loggedIn = CacheHelper.returnData(key: CacheKey.loggedIn);
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
+  String? _darkMapStyle;
+  String? _lightMapStyle;
+
+  Future _loadMapStyles() async {
+    _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
+    _lightMapStyle =
+        await rootBundle.loadString('assets/map_styles/light.json');
+    _setMapStyle();
+  }
+
+  Future _setMapStyle() async {
+    final HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: false);
+
+    if (MyApp.themeMode(context)) {
+      homeProvider.mapController.setMapStyle(_darkMapStyle);
+      setState(() {});
+    } else {
+      // homeProvider.mapController.setMapStyle(_lightMapStyle);
+    }
+  }
 
   @override
   void initState() {
@@ -61,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void loadData() async {
     widget.cameFromNewRequest ? navigateTo(context, const MyRequests()) : null;
+    _loadMapStyles();
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
     homeProvider.markers.clear();
@@ -194,13 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
-              DefaultButton(
-                text: "Test Payment",
-                onPressed: () {
-                  navigateTo(context, TestPayment());
-                  // paymentProvider.startSDK();
-                },
-              ),
+              // DefaultButton(
+              //   text: "Test Payment",
+              //   onPressed: () {
+              //     navigateTo(context, TestPayment());
+              //     // paymentProvider.startSDK();
+              //   },
+              // ),
               DefaultButton(
                 width: 294,
                 height: 56,
@@ -240,7 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   DefaultButton(
                     width: 140,
                     height: 45,
-                    backgroundColor: AppColor.buttonGrey,
+                    backgroundColor: MyApp.themeMode(context)
+                        ? AppColor.dark
+                        : AppColor.buttonGrey,
                     text: S.of(context).products,
                     textColor: AppColor.black,
                     onPressed: loggedIn
@@ -258,7 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   DefaultButton(
                     width: 140,
                     height: 45,
-                    backgroundColor: AppColor.buttonGrey,
+                    backgroundColor: MyApp.themeMode(context)
+                        ? AppColor.dark
+                        : AppColor.buttonGrey,
                     text: S.of(context).otherServices,
                     textColor: AppColor.black,
                     onPressed: loggedIn
@@ -359,7 +387,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 24,
                 height: 24,
                 onTap: onTap,
-                child: SvgPicture.asset('assets/svg/menu.svg'),
+                child: SvgPicture.asset(
+                  'assets/svg/menu.svg',
+                  color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+                ),
               ),
               horizontalSpace(122),
               CustomSizedBox(

@@ -1,3 +1,4 @@
+import 'package:flash_customer/main.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
@@ -15,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final String title;
   final bool withArrow;
-  final Color? backgroundColor;
+  final Color? backgroundColor, backgroundColorDark;
   final Widget customizePopButton;
   final GestureTapCallback? onTap;
 
@@ -26,6 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.backgroundColor,
     this.onTap,
+    this.backgroundColorDark,
   })  : preferredSize = const Size.fromHeight(50.0),
         super(key: key);
 
@@ -38,12 +40,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         textSize: 18,
         fontWeight: FontWeight.bold,
       ),
-      backgroundColor: backgroundColor ?? Colors.white,
+      backgroundColor: backgroundColor ??
+          (MyApp.themeMode(context)
+              ? (backgroundColorDark ?? AppColor.darkScaffoldColor)
+              : Colors.white),
       leading: withArrow
           ? IconButton(
               icon: SvgPicture.asset(
                 'assets/svg/arrow-left.svg',
-                color: Colors.black,
+                color: MyApp.themeMode(context) ? Colors.white : Colors.black,
                 width: 5.w,
               ),
               onPressed: () => Navigator.pop(context),
@@ -59,12 +64,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: onlyEdgeInsets(end: 24),
           child: CustomContainer(
               backgroundColor: Colors.transparent,
+              borderColorDark: Colors.transparent,
               height: 26,
               width: 26,
-              onTap: onTap ??() {
-                navigateAndFinish(context, const HomeScreen());
-              },
-              child: Image.asset('assets/images/home_icon.png')),
+              onTap: onTap ??
+                  () {
+                    navigateAndFinish(context, const HomeScreen());
+                  },
+              child: Image.asset(
+                'assets/images/home_icon.png',
+                color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+              )),
         ),
       ],
     );

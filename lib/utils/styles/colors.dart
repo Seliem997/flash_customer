@@ -4,6 +4,10 @@ class AppColor {
   static const Color primary = Color(0xFF29ABE2);
   static const Color primaryDark = Color(0xFF444444);
   static const Color secondary = Color(0xFF1D0E55);
+  static const Color darkScaffoldColor = Color(0xff131517);
+  static const Color secondaryDarkColor = Color(0xff131517);
+  static const Color thirdDarkColor = Color(0xff444444);
+  static const Color lightScaffoldColor = Colors.white;
 
   static const Color attributeColor = Color(0xFF148BF4);
   static const Color selectedColor = Color(0xFFEDF6FD);

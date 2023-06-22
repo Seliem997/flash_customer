@@ -4,8 +4,10 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../main.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
@@ -32,7 +34,7 @@ class SidebarDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor:
-          userDataProvider.isDark ? AppColor.primaryDark : Colors.white,
+          MyApp.themeMode(context) ? AppColor.darkScaffoldColor : Colors.white,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,10 +49,11 @@ class SidebarDrawer extends StatelessWidget {
 
   Widget buildHeader(context, UserProvider userDataProvider) {
     return CustomContainer(
-      backgroundColor:
-          userDataProvider.isDark ? AppColor.boldDark : AppColor.lightBabyBlue,
+      backgroundColor: AppColor.lightBabyBlue,
+      backgroundColorDark: AppColor.boldDark,
+      borderColorDark: Colors.transparent,
       width: 272,
-      height: 175,
+      // height: 175,
       padding: onlyEdgeInsets(top: 32, bottom: 16, start: 24, end: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +80,7 @@ class SidebarDrawer extends StatelessWidget {
                   verticalSpace(6),
                   TextWidget(
                     text: userDataProvider.phone ?? 'phone Number',
-                    color: !userDataProvider.isDark
+                    color: MyApp.themeMode(context)
                         ? const Color(0xff1E1E1E)
                         : const Color(0xffDBDBDB),
                     fontWeight: MyFontWeight.regular,
@@ -95,7 +98,8 @@ class SidebarDrawer extends StatelessWidget {
                           content: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: TextWidget(
-                              text: 'Want Switch to ${userDataProvider.isDark ? 'Light Mode' : 'Dark Mode'}?',
+                              text:
+                                  'Want Switch to ${MyApp.themeMode(context) ? 'Light Mode' : 'Dark Mode'}?',
                               color: AppColor.black,
                             ),
                           ),
@@ -120,8 +124,9 @@ class SidebarDrawer extends StatelessWidget {
                                     height: 30,
                                     text: 'Switch',
                                     onPressed: () {
+                                      MyApp.changeThemeMode(context);
                                       Navigator.pop(context);
-                                      userDataProvider.changeAppMode();
+                                      // Restart.restartApp();
                                     },
                                     backgroundColor: AppColor.textRed,
                                   ),
@@ -136,11 +141,11 @@ class SidebarDrawer extends StatelessWidget {
                   icon: const Icon(Icons.dark_mode_outlined)),
               horizontalSpace(5),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   userDataProvider.changeLanguage(context);
                 },
                 child: SvgPicture.asset('assets/svg/translate.svg',
-                    color: userDataProvider.isDark
+                    color: MyApp.themeMode(context)
                         ? AppColor.white
                         : AppColor.black),
               ),
@@ -156,7 +161,7 @@ class SidebarDrawer extends StatelessWidget {
       padding: symmetricEdgeInsets(horizontal: 30, vertical: 42),
       child: CustomContainer(
         backgroundColor:
-            userDataProvider.isDark ? AppColor.primaryDark : Colors.white,
+            MyApp.themeMode(context) ? AppColor.primaryDark : Colors.white,
         child: Column(
           children: [
             ListTile(
@@ -166,13 +171,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/profile.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Profile',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -188,13 +194,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/requests.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Requests',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -210,13 +217,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/wallet.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Wallet',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -232,13 +240,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/car.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Vehicles',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -254,13 +263,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/map.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Addresses',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -279,13 +289,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/money.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Monthly pkg',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -304,13 +315,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/about.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'About us',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),
@@ -329,13 +341,14 @@ class SidebarDrawer extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/svg/messages.svg',
                   color:
-                      userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 ),
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
                 text: 'Contact us',
-                color: userDataProvider.isDark ? AppColor.white : AppColor.grey,
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
                 fontWeight: MyFontWeight.medium,
               ),

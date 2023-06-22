@@ -1,4 +1,4 @@
-
+import 'package:flash_customer/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
@@ -27,10 +27,8 @@ import '../widgets/image_editable.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
-
 class WalletPayment extends StatefulWidget {
   const WalletPayment({Key? key}) : super(key: key);
-
 
   @override
   State<WalletPayment> createState() => _WalletPaymentState();
@@ -49,20 +47,19 @@ class _WalletPaymentState extends State<WalletPayment> {
   @override
   void initState() {
     final TransactionHistoryProvider transactionHistoryProvider =
-    Provider.of<TransactionHistoryProvider>(context, listen: false);
+        Provider.of<TransactionHistoryProvider>(context, listen: false);
     super.initState();
     payButtonColor = Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
-    configureSDK(/*amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text)*/);
-
+    configureSDK(
+        /*amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text)*/);
   }
 
   void loadData() async {
     final TransactionHistoryProvider transactionHistoryProvider =
-    Provider.of<TransactionHistoryProvider>(context, listen: false);
+        Provider.of<TransactionHistoryProvider>(context, listen: false);
     await transactionHistoryProvider.getTransactionHistory();
   }
-
 
   // configure SDK
   Future<void> configureSDK(/*{required double amount}*/) async {
@@ -307,7 +304,7 @@ class _WalletPaymentState extends State<WalletPayment> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final TransactionHistoryProvider transactionHistoryProvider =
-    Provider.of<TransactionHistoryProvider>(context);
+        Provider.of<TransactionHistoryProvider>(context);
 
 /*
     return MaterialApp(
@@ -381,9 +378,10 @@ class _WalletPaymentState extends State<WalletPayment> {
     );
 */
     return Scaffold(
+      backgroundColor: MyApp.themeMode(context) ? AppColor.boldDark : null,
       appBar: CustomAppBar(
         title: 'My Wallet',
-        backgroundColor: AppColor.lightBabyBlue,
+        // backgroundColor: AppColor.lightBabyBlue,
       ),
       body: ListView(
         shrinkWrap: true,
@@ -393,6 +391,8 @@ class _WalletPaymentState extends State<WalletPayment> {
                 bottomLeft: Radius.circular(44),
                 bottomRight: Radius.circular(44)),
             width: double.infinity,
+            backgroundColorDark: AppColor.darkScaffoldColor,
+            borderColorDark: Colors.transparent,
             height: 211,
             backgroundColor: AppColor.lightBabyBlue,
             child: Column(
@@ -429,208 +429,216 @@ class _WalletPaymentState extends State<WalletPayment> {
             ),
           ),
           verticalSpace(32),
-          Padding(
-            padding: symmetricEdgeInsets(horizontal: 24),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    TextWidget(
-                      text: 'Recharge Amount',
-                      textSize: MyFontSize.size14,
-                      fontWeight: MyFontWeight.bold,
-                    ),
-                    horizontalSpace(18),
-                    Expanded(
-                      child: CustomContainer(
-                        height: 30,
-                        radiusCircular: 3,
-                        backgroundColor: AppColor.buttonGrey,
-                        borderColor: AppColor.boldGrey,
-                        alignment: Alignment.center,
-                        child: Center(
-                          child: DefaultFormField(
-                            controller: transactionHistoryProvider.rechargeAmountController,
-                            withBorder: false,
-                            keyboardType: TextInputType.phone,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            textInputAction: TextInputAction.done,
-                            hintText: '',
-                            padding: symmetricEdgeInsets(
-                                vertical: 8, horizontal: 5),
+          CustomContainer(
+            borderColorDark: Colors.transparent,
+            child: Padding(
+              padding: symmetricEdgeInsets(horizontal: 24),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      TextWidget(
+                        text: 'Recharge Amount',
+                        textSize: MyFontSize.size14,
+                        fontWeight: MyFontWeight.bold,
+                      ),
+                      horizontalSpace(18),
+                      Expanded(
+                        child: CustomContainer(
+                          height: 30,
+                          radiusCircular: 3,
+                          backgroundColor: AppColor.buttonGrey,
+                          borderColor: AppColor.boldGrey,
+                          alignment: Alignment.center,
+                          child: Center(
+                            child: DefaultFormField(
+                              controller: transactionHistoryProvider
+                                  .rechargeAmountController,
+                              withBorder: false,
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              textInputAction: TextInputAction.done,
+                              hintText: '',
+                              padding: symmetricEdgeInsets(
+                                  vertical: 8, horizontal: 5),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                verticalSpace(28),
-                SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    clipBehavior: Clip.hardEdge,
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all(payButtonColor),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                    ],
+                  ),
+                  verticalSpace(28),
+                  SizedBox(
+                    height: 45,
+                    child: ElevatedButton(
+                      clipBehavior: Clip.hardEdge,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(payButtonColor),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
                       ),
-                    ),
-                    onPressed: ()async{
-                      startSDK();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'PAY',
-                          style: TextStyle(
+                      onPressed: () async {
+                        startSDK();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'PAY',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          Spacer(),
+                          Icon(
+                            Icons.lock_outline,
                             color: Colors.white,
-                            fontSize: 16.0,
                           ),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.lock_outline,
-                          color: Colors.white,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                DefaultButton(
-                    text: 'Pay', onPressed: () {
-                  /*if(transactionHistoryProvider.rechargeAmountController == null){
-                        CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
-                      }else{
+                  DefaultButton(
+                      text: 'Pay',
+                      onPressed: () {
+                        /*if(transactionHistoryProvider.rechargeAmountController == null){
+                          CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
+                        }else{
+                          AppLoader.showLoader(context);
+                          transactionHistoryProvider.chargingWalletUrl(
+                            amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
+                            payBy: 'credit_card',
+                          ).then((value) => AppLoader.stopLoader());
+                        }*/
                         AppLoader.showLoader(context);
-                        transactionHistoryProvider.chargingWalletUrl(
-                          amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
+                        transactionHistoryProvider
+                            .chargingWalletUrl(
+                          amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/ 30,
                           payBy: 'credit_card',
-                        ).then((value) => AppLoader.stopLoader());
-                      }*/
-                  AppLoader.showLoader(context);
-                  transactionHistoryProvider.chargingWalletUrl(
-                    amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/30,
-                    payBy: 'credit_card',
-                  ).then((value) {
-                    AppLoader.stopLoader();
-                    homeProvider.launchExpectedURL(
-                      expectedUrl: '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
-                    );
-                  });
-
-                }, width: 217, height: 40),
-                verticalSpace(45),
-                Row(
-                  children: [
-                    TextWidget(
-                      text: 'Transactions history',
-                      textSize: MyFontSize.size14,
-                      fontWeight: MyFontWeight.bold,
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {},
-                      child: TextWidget(
-                        text: 'See All',
-                        textSize: MyFontSize.size10,
-                        fontWeight: MyFontWeight.medium,
-                        color: AppColor.boldBlue,
+                        )
+                            .then((value) {
+                          AppLoader.stopLoader();
+                          homeProvider.launchExpectedURL(
+                            expectedUrl:
+                                '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
+                          );
+                        });
+                      },
+                      width: 217,
+                      height: 40),
+                  verticalSpace(45),
+                  Row(
+                    children: [
+                      TextWidget(
+                        text: 'Transactions history',
+                        textSize: MyFontSize.size14,
+                        fontWeight: MyFontWeight.bold,
                       ),
-                    )
-                  ],
-                ),
-                verticalSpace(6),
-                transactionHistoryProvider.transactionData == null
-                    ? const DataLoader()
-                    : CustomSizedBox(
-                  height: 300,
-                  child: ListView.separated(
-                    itemCount: transactionHistoryProvider
-                        .transactionData!.collection!.length,
-                    itemBuilder: (context, index) => CustomContainer(
-                      height: 60,
-                      width: 345,
-                      radiusCircular: 4,
-                      padding: symmetricEdgeInsets(
-                          horizontal: 16, vertical: 12),
-                      /*backgroundColor: int.parse(transactionHistoryProvider
-                                        .transactionData!
-                                        .collection![index]
-                                        .amount!) >=
-                                    0
-                                ? AppColor.acceptGreen
-                                : AppColor.canceledRed,*/
-                      backgroundColor: AppColor.acceptGreen,
-                      child: Center(
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                TextWidget(
-                                  text: transactionHistoryProvider
-                                      .transactionData!
-                                      .collection![index]
-                                      .type!,
-                                  textSize: MyFontSize.size14,
-                                  fontWeight: MyFontWeight.medium,
-                                ),
-                                verticalSpace(9),
-                                Row(
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () {},
+                        child: TextWidget(
+                          text: 'See All',
+                          textSize: MyFontSize.size10,
+                          fontWeight: MyFontWeight.medium,
+                          color: AppColor.boldBlue,
+                        ),
+                      )
+                    ],
+                  ),
+                  verticalSpace(6),
+                  transactionHistoryProvider.transactionData == null
+                      ? const DataLoader()
+                      : CustomSizedBox(
+                          height: 300,
+                          child: ListView.separated(
+                            itemCount: transactionHistoryProvider
+                                .transactionData!.collection!.length,
+                            itemBuilder: (context, index) => CustomContainer(
+                              height: 60,
+                              width: 345,
+                              radiusCircular: 4,
+                              padding: symmetricEdgeInsets(
+                                  horizontal: 16, vertical: 12),
+                              /*backgroundColor: int.parse(transactionHistoryProvider
+                                          .transactionData!
+                                          .collection![index]
+                                          .amount!) >=
+                                      0
+                                  ? AppColor.acceptGreen
+                                  : AppColor.canceledRed,*/
+                              backgroundColor: AppColor.acceptGreen,
+                              child: Center(
+                                child: Row(
                                   children: [
-                                    CustomSizedBox(
-                                      width: 8,
-                                      height: 8,
-                                      child: SvgPicture.asset(
-                                          'assets/svg/clock.svg'),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextWidget(
+                                          text: transactionHistoryProvider
+                                              .transactionData!
+                                              .collection![index]
+                                              .type!,
+                                          textSize: MyFontSize.size14,
+                                          fontWeight: MyFontWeight.medium,
+                                        ),
+                                        verticalSpace(9),
+                                        Row(
+                                          children: [
+                                            CustomSizedBox(
+                                              width: 8,
+                                              height: 8,
+                                              child: SvgPicture.asset(
+                                                  'assets/svg/clock.svg'),
+                                            ),
+                                            horizontalSpace(4),
+                                            TextWidget(
+                                              text: '18/3/2023  -  ',
+                                              textSize: MyFontSize.size8,
+                                              fontWeight: MyFontWeight.regular,
+                                              color: AppColor.subTitleGrey,
+                                            ),
+                                            TextWidget(
+                                              text: '11:06 PM',
+                                              textSize: MyFontSize.size8,
+                                              fontWeight: MyFontWeight.regular,
+                                              color: AppColor.subTitleGrey,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    horizontalSpace(4),
+                                    const Spacer(),
                                     TextWidget(
-                                      text: '18/3/2023  -  ',
-                                      textSize: MyFontSize.size8,
-                                      fontWeight: MyFontWeight.regular,
-                                      color: AppColor.subTitleGrey,
-                                    ),
-                                    TextWidget(
-                                      text: '11:06 PM',
-                                      textSize: MyFontSize.size8,
-                                      fontWeight: MyFontWeight.regular,
-                                      color: AppColor.subTitleGrey,
+                                      text: transactionHistoryProvider
+                                          .transactionData!
+                                          .collection![index]
+                                          .amount!,
+                                      textSize: MyFontSize.size14,
+                                      fontWeight: MyFontWeight.semiBold,
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                            const Spacer(),
-                            TextWidget(
-                              text: transactionHistoryProvider
-                                  .transactionData!
-                                  .collection![index]
-                                  .amount!,
-                              textSize: MyFontSize.size14,
-                              fontWeight: MyFontWeight.semiBold,
-                            ),
-                          ],
+                            separatorBuilder: (context, index) =>
+                                verticalSpace(14),
+                          ),
                         ),
-                      ),
-                    ),
-                    separatorBuilder: (context, index) =>
-                        verticalSpace(14),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],
       ),
     );
-
   }
 }
