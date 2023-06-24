@@ -85,6 +85,10 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                         borderColor: packageProvider.newVehicleLabel
                             ? AppColor.babyBlue
                             : Colors.transparent,
+                        borderColorDark:
+                        packageProvider.newVehicleLabel
+                            ? AppColor.borderBlue
+                            : null,
                         width: 162,
                         height: 112,
                         radiusCircular: 6,
@@ -115,6 +119,10 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                         borderColor: packageProvider.myVehicleLabel
                             ? AppColor.babyBlue
                             : Colors.transparent,
+                        borderColorDark:
+                        packageProvider.myVehicleLabel
+                            ? AppColor.borderBlue
+                            : null,
                         width: 162,
                         height: 112,
                         padding:

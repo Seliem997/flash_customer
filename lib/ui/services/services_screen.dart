@@ -50,7 +50,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       cityId: widget.cityId,
       vehicleId: widget.vehicleId,
     );
-    await servicesProvider.getTax();
+    // await servicesProvider.getTax();
     servicesProvider.setLoading(false);
   }
 
@@ -64,8 +64,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
     return Scaffold(
       appBar: CustomAppBar(title: 'Services'),
       body: SingleChildScrollView(
-        child: (requestServicesProvider.isLoading ||
-                requestServicesProvider.taxData == null)
+        child: (requestServicesProvider.isLoading /*||
+                requestServicesProvider.taxData == null*/)
             ? const DataLoader()
             : (requestServicesProvider.basicServicesList.isEmpty ||
                     requestServicesProvider.extraServicesList.isEmpty)
@@ -113,6 +113,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           .selectedBasicServiceId =
                                       requestServicesProvider
                                           .basicServicesList[index].id!;
+
                                 },
                                 index: index,
                                 infoOnPressed: () {
@@ -506,8 +507,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text:
-                                          '${double.parse(requestServicesProvider.taxData!.percent!)} SR',
+                                      text: '${requestServicesProvider.totalTaxes} ' + 'SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -591,8 +591,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text:
-                                          '${(requestServicesProvider.totalAmount + (double.parse(requestServicesProvider.taxData!.percent!).toInt())) - requestServicesProvider.discountAmount} SR',
+                                      text: '${(requestServicesProvider.totalAmount + requestServicesProvider.totalTaxes)} '+ 'SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),

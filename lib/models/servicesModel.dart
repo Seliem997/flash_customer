@@ -29,6 +29,7 @@ class ServiceData {
   bool isSelected = false;
   int quantity = 0;
   String? selectedPrice;
+  num? tax;
   List<ServicePrices>? servicePrices;
 
 
@@ -42,6 +43,7 @@ class ServiceData {
         this.duration,
         this.countable,
         this.selectedPrice,
+        this.tax,
         this.servicePrices,
        });
 
@@ -55,6 +57,7 @@ class ServiceData {
     duration = json['duration'];
     countable = json['countable'];
     selectedPrice = json['selected_price'];
+    tax = json['tax'];
     if (json['service_prices'] != null) {
       servicePrices = <ServicePrices>[];
       json['service_prices'].forEach((v) {
@@ -74,6 +77,7 @@ class ServiceData {
     data['duration'] = this.duration;
     data['countable'] = this.countable;
     data['selected_price'] = this.selectedPrice;
+    data['tax'] = this.tax;
     if (this.servicePrices != null) {
       data['service_prices'] =
           this.servicePrices!.map((v) => v.toJson()).toList();

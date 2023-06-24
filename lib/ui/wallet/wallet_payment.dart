@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
 import 'package:go_sell_sdk_flutter/model/models.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/requestDetailsModel.dart';
@@ -16,6 +17,7 @@ import '../../providers/requestServices_provider.dart';
 import '../../providers/transactionHistory_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/app_loader.dart';
+import '../../utils/enum/date_formats.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -470,6 +472,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                     ],
                   ),
                   verticalSpace(28),
+/*
                   SizedBox(
                     height: 45,
                     child: ElevatedButton(
@@ -505,6 +508,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                       ),
                     ),
                   ),
+*/
                   DefaultButton(
                       text: 'Pay',
                       onPressed: () {
@@ -601,13 +605,14 @@ class _WalletPaymentState extends State<WalletPayment> {
                                             ),
                                             horizontalSpace(4),
                                             TextWidget(
-                                              text: '18/3/2023  -  ',
+                                              text: DateFormat(DFormat.dmy.key).format(DateTime.parse(transactionHistoryProvider.transactionData!.collection![index].createdAt!)),
                                               textSize: MyFontSize.size8,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),
+                                            horizontalSpace(10),
                                             TextWidget(
-                                              text: '11:06 PM',
+                                              text: DateFormat(DFormat.hm.key).format(DateTime.parse(transactionHistoryProvider.transactionData!.collection![index].createdAt!)),
                                               textSize: MyFontSize.size8,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,

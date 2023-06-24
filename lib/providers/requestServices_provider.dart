@@ -24,6 +24,7 @@ class RequestServicesProvider with ChangeNotifier {
   double totalDuration = 0;
   num? totalAmountAfterDiscount = 0;
   num discountAmount = 0;
+  dynamic totalTaxes = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
   int selectedBasicServiceId = 0;
@@ -46,11 +47,15 @@ class RequestServicesProvider with ChangeNotifier {
   void calculateTotal() {
     totalAmount = 0;
     totalDuration = 0;
+    totalTaxes = 0;
     if (selectedBasicIndex != null) {
-      totalAmount +=
-          (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!))
-              .toInt();
+      totalAmount += (double.parse(
+              basicServicesList[selectedBasicIndex!].selectedPrice!))
+          .toInt() /*+ (basicServicesList[selectedBasicIndex!].tax!).toInt()*/;
       totalDuration += basicServicesList[selectedBasicIndex!].duration!;
+      totalTaxes = (((basicServicesList[selectedBasicIndex!].tax!) *
+          (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!))
+              /*.toInt()*/)/100);
     }
     if (selectedExtraServices != []) {
       for (int i = 0; i < extraServicesList.length; i++) {
@@ -59,17 +64,23 @@ class RequestServicesProvider with ChangeNotifier {
                 totalAmount += (extraServicesList[i].quantity *
                     double.parse(extraServicesList[i].selectedPrice!).toInt()),
                 totalDuration += extraServicesList[i].duration!,
+                totalTaxes += extraServicesList[i].tax!,
               }
             : extraServicesList[i].isSelected
                 ? {
                     totalAmount +=
                         double.parse(extraServicesList[i].selectedPrice!)
                             .toInt(),
+                    totalTaxes += extraServicesList[i].tax!,
                     totalDuration += extraServicesList[i].duration!,
                   }
                 : totalAmount = totalAmount;
       }
     }
+    print('Selected Basic is -  $selectedBasicIndex');
+    print('Selected Extra is -  $selectedExtraServices');
+    print(
+        'total amount is  -  $totalAmount Duration is $totalDuration Taxes is $totalTaxes');
     notifyListeners();
   }
 
@@ -106,6 +117,7 @@ class RequestServicesProvider with ChangeNotifier {
         basicServicesList = value.data;
       }
     });
+    print('basic ${basicServicesList[0].tax}');
     notifyListeners();
   }
 
@@ -125,7 +137,7 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  TaxData? taxData;
+  /*TaxData? taxData;
   Future getTax() async {
     RequestServicesService servicesService = RequestServicesService();
     await servicesService.getTax().then((value) {
@@ -134,7 +146,7 @@ class RequestServicesProvider with ChangeNotifier {
       }
     });
     notifyListeners();
-  }
+  }*/
 
   CouponData? couponData;
   Future checkOfferCoupon(BuildContext context) async {
@@ -348,6 +360,7 @@ class RequestServicesProvider with ChangeNotifier {
     totalDuration = 0;
     totalAmountAfterDiscount = 0;
     discountAmount = 0;
+    totalTaxes = 0;
     resetCoupon();
     selectedBasicIndex = null;
     selectedSlotIndex = null;

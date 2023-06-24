@@ -84,13 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void loadData() async {
     widget.cameFromNewRequest ? navigateTo(context, const MyRequests()) : null;
+    final AddressesProvider addressesProvider =
+    Provider.of<AddressesProvider>(context, listen: false);
     _loadMapStyles();
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
     homeProvider.markers.clear();
-
     await _handleLocationPermission();
     await _getCurrentLocation();
+    addressesProvider.getAddresses();
   }
 
   _getCurrentLocation() async {
@@ -157,8 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context);
-    final PaymentProvider paymentProvider =
-        Provider.of<PaymentProvider>(context);
 
     return Scaffold(
       key: globalKey,
@@ -218,13 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
-              // DefaultButton(
-              //   text: "Test Payment",
-              //   onPressed: () {
-              //     navigateTo(context, TestPayment());
-              //     // paymentProvider.startSDK();
-              //   },
-              // ),
+              DefaultButton(
+                text: "Test Payment",
+                onPressed: () {
+                  navigateTo(context, TestPayment());
+                  // paymentProvider.startSDK();
+                },
+              ),
               DefaultButton(
                 width: 294,
                 height: 56,

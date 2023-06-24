@@ -82,7 +82,7 @@ class SidebarDrawer extends StatelessWidget {
                     text: userDataProvider.phone ?? 'phone Number',
                     color: MyApp.themeMode(context)
                         ? const Color(0xff1E1E1E)
-                        : const Color(0xffDBDBDB),
+                        : const Color(0xff1E1E1E),
                     fontWeight: MyFontWeight.regular,
                     textSize: MyFontSize.size12,
                   ),

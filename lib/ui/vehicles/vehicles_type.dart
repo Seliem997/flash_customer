@@ -86,6 +86,10 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColor: packageProvider.myVehicleLabel
                       ? AppColor.babyBlue
                       : AppColor.borderGrey,
+                  borderColorDark:
+                  packageProvider.myVehicleLabel
+                      ? AppColor.borderBlue
+                      : null,
                   width: 162,
                   height: 50,
                   radiusCircular: 4,
@@ -115,6 +119,10 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColor: packageProvider.newVehicleLabel
                       ? AppColor.babyBlue
                       : AppColor.borderGrey,
+                  borderColorDark:
+                  packageProvider.newVehicleLabel
+                      ? AppColor.borderBlue
+                      : null,
                   width: 162,
                   height: 50,
                   radiusCircular: 4,
@@ -253,6 +261,10 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               backgroundColor: packageProvider.selectedVehicleTypeIndex == index
                   ? const Color(0xFFE6EEFB)
                   : AppColor.borderGreyLight,
+              borderColorDark:
+              packageProvider.selectedVehicleTypeIndex == index
+                  ? AppColor.borderBlue
+                  : null,
               width: 105,
               height: 112,
               padding: symmetricEdgeInsets(horizontal: 4, vertical: 19),

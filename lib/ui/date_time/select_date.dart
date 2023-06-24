@@ -242,6 +242,7 @@ class _SelectDateState extends State<SelectDate> {
                                           padding: symmetricEdgeInsets(
                                               vertical: 10, horizontal: 12),
                                           onTap: () {
+                                            value.slotsIds= [];
                                             value.selectedTimeSlot(
                                                 index: employeeIndex);
                                             otherServicesProvider.selectedDate =
@@ -361,6 +362,7 @@ class _SelectDateState extends State<SelectDate> {
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
                                               onTap: () {
+                                                value.slotsIds= [];
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
                                                 otherServicesProvider
@@ -459,6 +461,7 @@ class _SelectDateState extends State<SelectDate> {
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
                                               onTap: () {
+                                                value.slotsIds=[];
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
                                                 otherServicesProvider
