@@ -7,6 +7,7 @@ import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/about_provider.dart';
@@ -50,7 +51,7 @@ class _ContactUsState extends State<ContactUs> {
             children: [
               TextWidget(
                 text:
-                    'Lorem ipsum dolor sit amet${aboutProvider.socialLinksData?.id}',
+                    'Lorem ipsum dolor sit amet',
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size16,
               ),
@@ -186,45 +187,67 @@ class _ContactUsState extends State<ContactUs> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
+                        onTap: (){
+                          aboutProvider.socialLinksData!.data!.phone0 == null
+                              ? CustomSnackBars.failureSnackBar(context, "Phone is null")
+                              : aboutProvider.makingPhoneCall(phoneNum: aboutProvider.socialLinksData!.data!.phone0);
+                        },
                         width: 30,
                         child: Image.asset('assets/images/telephonee.png'),
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/whatsapp.png'),
+                        onTap: () async {
+                          //To remove the keyboard when button is pressed
+                          FocusManager.instance.primaryFocus?.unfocus();
+
+                          final url = "https://wa.me/+955${aboutProvider.socialLinksData!.data!.phone1}?text=Hello";
+
+
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            CustomSnackBars.failureSnackBar(context, "Unable to open whatsapp",);
+                          }
+                          if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
+
+                        /*  var whatsappUrl =
+                              "whatsapp://send?phone=+955${aboutProvider.socialLinksData!.data!.phone1}" +
+                                  "&text=${Uri.encodeComponent("I need help in ")}";
+                          try {
+                            launch(whatsappUrl);
+                          } catch (e) {
+                            //To handle error and display error message
+                           CustomSnackBars.failureSnackBar(context, "Unable to open whatsapp",);
+                          }*/
+                        },
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/instagram.png'),
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/snapChat.png'),
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/tiktok.png'),
 
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/telegram.png'),
                       ),
                       horizontalSpace(14),
-                      CustomSizedBox(
-                        // height: 30,
+                      CustomContainer(
                         width: 30,
                         child: Image.asset('assets/images/gMail.png'),
 

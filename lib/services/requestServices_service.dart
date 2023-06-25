@@ -326,7 +326,8 @@ class RequestServicesService extends BaseService {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
-    List<List<SlotData>>? slots = [];
+    // List<List<SlotData>>? slots = [];
+    Map? slotsMap;
     try {
       await requestFutureData(
           api: Api.getTimeSlots(
@@ -342,7 +343,9 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              slots = SlotsModel.fromJson(response).data!;
+              // slots = SlotsModel.fromJson(response).data!;
+              slotsMap = SlotsModel.fromJson(response).data!;
+
             } catch (e) {
               logger.e("Error getting response Get Time Slot\n$e");
             }
@@ -351,7 +354,7 @@ class RequestServicesService extends BaseService {
       result = Status.error;
       log("Error in getting Request Details Data$e");
     }
-    return ResponseResult(result, slots);
+    return ResponseResult(result, slotsMap);
   }
 
   Future<ResponseResult> submitFinialRequest({

@@ -181,7 +181,7 @@ class PackageService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              slots = SlotsModel.fromJson(response).data!;
+              // slots = SlotsModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Get Package Time Slot\n$e");
             }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/aboutModel.dart';
 import '../models/profileModel.dart';
@@ -67,6 +68,16 @@ class AboutProvider with ChangeNotifier{
   void setCurrentDotsIndex(double index) {
     currentDotsIndex = index;
     notifyListeners();
+  }
+
+  //----------------------- making phone Call--------------------
+  makingPhoneCall({required String phoneNum}) async {
+    var url = Uri.parse("tel:$phoneNum");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void resetFields(){

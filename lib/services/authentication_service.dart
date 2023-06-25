@@ -51,6 +51,7 @@ class AuthenticationService extends BaseService {
       "otp": otp,
       "country_code": countryCode
     };
+    ProfileData? profileData;
     try {
       await requestFutureData(
           api: Api.checkCode,
@@ -62,12 +63,15 @@ class AuthenticationService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               message = response["message"];
+              profileData= UpdateProfileModel.fromJson(response).data;
 
               print("Bearer ${response["data"]["token"]}");
               CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
+              CacheHelper.saveData(key: CacheKey.userName, value: profileData?.name == null ? "New User" : profileData!.name );
+
               CacheHelper.saveData(
                   key: CacheKey.token,
                   value: "Bearer ${response["data"]["token"]}");
@@ -78,9 +82,9 @@ class AuthenticationService extends BaseService {
           });
     } catch (e) {
       status = Status.error;
-      logger.e("Error in checking code $e");
+      logger.e("Error in checking OTP code $e");
     }
-    return ResponseResult(status, "", message: message);
+    return ResponseResult(status, profileData, message: message);
   }
 
   Future<ResponseResult> updateProfile({
@@ -121,6 +125,7 @@ class AuthenticationService extends BaseService {
               await CacheHelper.saveData(
                   key: CacheKey.userId, value: userData!.fwId);
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
+              await CacheHelper.saveData(key: CacheKey.userImage, value: userData!.image);
               await CacheHelper.saveData(key: CacheKey.email, value: email);
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
@@ -133,121 +138,14 @@ class AuthenticationService extends BaseService {
     return ResponseResult(status, userData);
   }
 
-  // Future<ResponseResult> resetPassword(
-  //     String email, String code, String password) async {
-  //   Status status = Status.error;
-  //   Map<String, dynamic> body = {
-  //     "email": email,
-  //     "code": code,
-  //     "password": password,
-  //     "password_confirmation": password
-  //   };
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.resetPassword,
-  //         body: body,
-  //         requestType: Request.post,
-  //         onSuccess: (response) {
-  //           if (response["status_code"] == 200) {
-  //             status = Status.success;
-  //           } else if (response["status_code"] == 400) {
-  //             status = Status.codeNotCorrect;
-  //           }
-  //         });
-  //   } catch (e) {
-  //     status = Status.error;
-  //     logger.e("Error in checking code $e");
-  //   }
-  //   return ResponseResult(status, "");
-  // }
-  //
-  // Future<ResponseResult> signUp(
-  //     String phoneNumber, String name, String email, String password) async {
-  //   Status status = Status.error;
-  //   String updatedPhone = phoneNumber;
-  //   if (updatedPhone.length == 10) {
-  //     updatedPhone = "0$updatedPhone";
-  //   }
-  //   Map<String, dynamic> body = {
-  //     "phone": updatedPhone,
-  //     "name": name,
-  //     "email": email,
-  //     "password": password,
-  //     "country_id": "1",
-  //     "city_id": "1",
-  //   };
-  //
-  //   Map<String, String> headers = {
-  //     "Content-Type": "application/json",
-  //     "Accept": "application/json"
-  //   };
-  //
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.register,
-  //         body: body,
-  //         jsonBody: true,
-  //         headers: headers,
-  //         requestType: Request.post,
-  //         onSuccess: (response) async {
-  //           if (response['status_code'] == 200) {
-  //             status = Status.success;
-  //             // userDataModel = RegistrationModel.fromJson(response);
-  //           } /*else if (response['code'] == 401) {
-  //             status = Status.emailAlreadyInUse.toString();
-  //           }*/
-  //         });
-  //   } catch (e) {
-  //     status = Status.error;
-  //     log("Error in creating user $e");
-  //   }
-  //   return ResponseResult(status, "");
-  // }
-  //
-  // Future<ResponseResult> sendContactService(
-  //     {required String name,
-  //     required String email,
-  //     required String message}) async {
-  //   Status status = Status.error;
-  //   Map<String, dynamic> body = {
-  //     "name": name,
-  //     "email": email,
-  //     "message": message,
-  //   };
-  //
-  //   Map<String, String> headers = {
-  //     "Content-Type": "application/json",
-  //     "Accept": "application/json"
-  //   };
-  //
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.contactUs,
-  //         body: body,
-  //         jsonBody: true,
-  //         headers: headers,
-  //         requestType: Request.post,
-  //         onSuccess: (response) async {
-  //           if (response['status_code'] == 200) {
-  //             status = Status.success;
-  //           }
-  //         });
-  //   } catch (e) {
-  //     status = Status.error;
-  //     log("Error in creating user $e");
-  //   }
-  //   return ResponseResult(status, "");
-  // }
 
   Future<ResponseResult> registerOrLogin(
       String phoneNumber, String countryCode) async {
     Status status = Status.error;
-    // Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, String> headers = {
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     dynamic message;
-    late LoginModel loginModel;
     UserData? userData;
     Map<String, dynamic> body = {
       "phone": phoneNumber,

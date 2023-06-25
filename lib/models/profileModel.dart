@@ -69,6 +69,30 @@ class ProfileData {
 
 
 class SocialLinksModel {
+  int? statusCode;
+  Null? message;
+  SocialLinksData? data;
+
+  SocialLinksModel({this.statusCode, this.message, this.data});
+
+  SocialLinksModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? new SocialLinksData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class SocialLinksData {
   int? id;
   String? facebook;
   String? instagram;
@@ -82,13 +106,13 @@ class SocialLinksModel {
   String? appAndroid;
   String? appIos;
   String? appOther;
-  Null? phone0;
-  Null? phone1;
-  Null? phone2;
+  dynamic phone0;
+  dynamic phone1;
+  dynamic phone2;
   String? createdAt;
   String? updatedAt;
 
-  SocialLinksModel(
+  SocialLinksData(
       {this.id,
         this.facebook,
         this.instagram,
@@ -108,7 +132,7 @@ class SocialLinksModel {
         this.createdAt,
         this.updatedAt});
 
-  SocialLinksModel.fromJson(Map<String, dynamic> json) {
+  SocialLinksData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     facebook = json['facebook'];
     instagram = json['instagram'];

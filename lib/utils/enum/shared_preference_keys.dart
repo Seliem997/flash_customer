@@ -11,8 +11,6 @@ enum CacheKey {
   token('token'),
   phoneNumber('phoneNumber'),
   countryCode('countryCode'),
-  address('address'),
-  hasAddress('hasAddress'),
   balance('balance');
 
   const CacheKey(this.key);

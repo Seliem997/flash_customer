@@ -243,7 +243,8 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<List<SlotData>> slotsList = [];
+  // List<List<SlotData>> slotsList = [];
+  Map<String, dynamic>? slotsMap;
   Future getTimeSlots({
     required int cityId,
     required int basicId,
@@ -268,9 +269,17 @@ class RequestServicesProvider with ChangeNotifier {
         .then((value) {
       isLoading = false;
       if (value.status == Status.success) {
-        slotsList = value.data;
+        /*slotsList = value.data;
         print('Time Slot in provider Success');
-        print(slotsList);
+        print(slotsList);*/
+        slotsMap = value.data;
+        /*for(var v in slotsMap!.values) {
+          print(v);
+          //below is the solution
+          v.asMap().forEach((i, value) {
+            print('index=$i, value=${value}');
+          });
+              }*/
       }
     });
     notifyListeners();

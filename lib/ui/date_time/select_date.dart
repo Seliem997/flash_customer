@@ -445,7 +445,8 @@ class _SelectDateState extends State<SelectDate> {
                           return Container(
                             child: (value.isLoading)
                                 ? const DataLoader()
-                                : (value.slotsList.isEmpty)
+                                : (value.slotsMap!.isEmpty)
+                                // : (value.slotsList.isEmpty)
                                     ? CustomSizedBox(
                                         height: 300,
                                         child: Center(
@@ -455,7 +456,8 @@ class _SelectDateState extends State<SelectDate> {
                                                     .noSlotsAvailable)))
                                     : Expanded(
                                         child: ListView.separated(
-                                          itemCount: value.slotsList.length,
+                                          // itemCount: value.slotsList.length,
+                                          itemCount: value.slotsMap!.length,
                                           itemBuilder:
                                               (context, employeeIndex) {
                                             return CustomContainer(
@@ -474,6 +476,7 @@ class _SelectDateState extends State<SelectDate> {
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
                                               onTap: () {
+
                                                 value.slotsIds=[];
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
@@ -483,22 +486,35 @@ class _SelectDateState extends State<SelectDate> {
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
-                                                value.slotsList[employeeIndex]
-                                                    .forEach((v) {
-                                                  value.slotsIds.add(v.id);
-                                                });
+                                                // requestServicesProvider.slotsMap!.keys.forEach((element) {
+                                                //   element.
+                                                // });
+                                                for(var v in requestServicesProvider.slotsMap!.values[0]) {
+                                                  print(v);
+                                                  //below is the solution
+                                                  v.asMap().forEach((i, mapValue) {
+                                                    print('index=$i, value=${mapValue}');
+                                                    value.slotsIds.add(mapValue['id']);
+
+                                                  });
+                                                }
+                                                print('value=${value.slotsIds}');
+                                                // value.slotsList[employeeIndex]
+                                                //     .forEach((v) {
+                                                //   value.slotsIds.add(v.id);
+                                                // });
                                               },
                                               child: Row(
                                                 children: [
-                                                  TextWidget(
-                                                    text:
-                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
-                                                    fontWeight:
-                                                        MyFontWeight.medium,
-                                                    textSize: MyFontSize.size10,
-                                                    color:
-                                                        const Color(0xFF565656),
-                                                  ),
+                                                  // TextWidget(
+                                                  //   text:
+                                                  //       '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                                  //   fontWeight:
+                                                  //       MyFontWeight.medium,
+                                                  //   textSize: MyFontSize.size10,
+                                                  //   color:
+                                                  //       const Color(0xFF565656),
+                                                  // ),
                                                   const Spacer(),
                                                   CustomSizedBox(
                                                     height: 14,
