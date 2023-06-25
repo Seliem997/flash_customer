@@ -50,7 +50,6 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
         Provider.of<HomeProvider>(context, listen: false);
 
     await requestServicesProvider.getCityId(
-      context,
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
     );

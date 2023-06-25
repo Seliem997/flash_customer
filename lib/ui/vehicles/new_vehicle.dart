@@ -5,12 +5,14 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../main.dart';
 import '../../models/manufacturersModel.dart';
 import '../../models/vehiclesModelsModel.dart';
 import '../../providers/myVehicles_provider.dart';
@@ -28,10 +30,7 @@ class VehicleInfo extends StatefulWidget {
 }
 
 class _VehicleInfoState extends State<VehicleInfo> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController yearController = TextEditingController();
-  TextEditingController numbersController = TextEditingController();
-  TextEditingController lettersController = TextEditingController();
+
   // int manufacture=2, model=2;
 
   @override
@@ -43,9 +42,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
-
     await packageProvider.getManufacturers();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +89,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     ? Colors.red
                     : const Color(0xFF979797),
                 backgroundColor: AppColor.borderGreyLight,
+                borderColorDark: packageProvider.requiredManufacture
+                    ? Colors.red
+                    : const Color(0xFF979797),
                 padding: symmetricEdgeInsets(horizontal: 16),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -104,6 +106,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     icon: SvgPicture.asset(
                       'assets/svg/arrow_down.svg',
                     ),
+                    dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
                     items: List.generate(
                         packageProvider.manufacturerDataList.length,
                         (index) => DropdownMenuItem<ManufacturerData>(
@@ -111,8 +114,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                             child: Text(
                                 packageProvider
                                     .manufacturerDataList[index].name!,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)))),
+                                style: TextStyle(
+                                    color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
                     onChanged: (value) async {
                       packageProvider.setSelectedManufacture(value!);
                       packageProvider.chooseManufacture = true;
@@ -158,6 +161,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 borderColor: packageProvider.requiredModel
                     ? Colors.red
                     : const Color(0xFF979797),
+                borderColorDark: packageProvider.requiredModel
+                    ? Colors.red
+                    : const Color(0xFF979797),
                 backgroundColor: AppColor.borderGreyLight,
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -180,8 +186,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                             child: Text(
                                 packageProvider
                                     .vehiclesModelsDataList[index].name!,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)))),
+                                style: TextStyle(
+                                    color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
+                    dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
                     onChanged: (value) async {
                       packageProvider.setSelectedVehicle(value!);
                       packageProvider.chooseModel = true;
@@ -212,7 +219,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 height: 44,
                 width: double.infinity,
                 child: DefaultFormField(
-                  controller: nameController,
+                  controller: myVehiclesProvider.nameController,
                   hintText: 'Type name......',
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
@@ -242,54 +249,46 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 height: 44,
                 width: double.infinity,
                 child: DefaultFormField(
-                  controller: yearController,
+                  controller: myVehiclesProvider.yearController,
                   hintText: 'Enter Year',
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
                   textSize: MyFontSize.size12,
                   fontWeight: MyFontWeight.medium,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                 ),
               ),
               verticalSpace(24),
-              TextWidget(
-                text: 'Color',
-                textSize: MyFontSize.size15,
-                fontWeight: MyFontWeight.medium,
-              ),
-              verticalSpace(12),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomSizedBox(
-                      height: 25,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 2.w),
-                              child: const CircleAvatar(
-                                backgroundColor: AppColor.black,
-                                radius: 16,
-                                child: CircleAvatar(
-                                  backgroundColor: Color(0xFFFF9900),
-                                  radius: 13,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+              CustomSizedBox(
+                width: double.infinity,
+                child: ColorPicker(
+                  // Use the screenPickerColor as start color.
+                  color: myVehiclesProvider.screenPickerColor,
+                  enableShadesSelection: false,
+                  hasBorder: true,
+                  title: TextWidget(
+                    text: 'Color',
+                    textSize: MyFontSize.size15,
+                    fontWeight: MyFontWeight.medium,
                   ),
-                  const Icon(Icons.arrow_forward_ios_sharp)
-                ],
+                  // Update the screenPickerColor using the callback.
+                  onColorChanged: (Color color) {
+                    setState(() => myVehiclesProvider.screenPickerColor = color);
+                    myVehiclesProvider.vehicleColor  = ColorTools.nameThatColor(color);
+                  },
+                  borderColor: Colors.black,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 22,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  showColorName: true,
+                ),
               ),
-              verticalSpace(54),
+              verticalSpace(24),
               Row(
                 children: [
                   Column(
@@ -305,7 +304,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         height: 44,
                         width: 160,
                         child: DefaultFormField(
-                          controller: numbersController,
+                          controller: myVehiclesProvider.numbersController,
                           hintText: 'Type Numbers',
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
@@ -334,7 +333,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         height: 44,
                         width: 160,
                         child: DefaultFormField(
-                          controller: lettersController,
+                          controller: myVehiclesProvider.lettersController,
                           hintText: 'Type Letters',
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
@@ -342,9 +341,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.medium,
                           keyboardType: TextInputType.text,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
                         ),
                       ),
                     ],
@@ -386,14 +382,15 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     packageProvider.selectedManufacture!.id!,
                                 model:
                                     packageProvider.selectedVehicleModel!.id!,
-                                numbers: numbersController.text,
-                                letters: lettersController.text,
-                                color: '0xFFdedede',
-                                name: nameController.text,
-                                year: yearController.text,
+                                numbers: myVehiclesProvider.numbersController.text,
+                                letters: myVehiclesProvider.lettersController.text,
+                                color: myVehiclesProvider.vehicleColor,
+                                name: myVehiclesProvider.nameController.text,
+                                year: myVehiclesProvider.yearController.text,
                               )
                                   .then((value) {
                                 AppLoader.stopLoader();
+                                myVehiclesProvider.resetFields();
                                 navigateAndFinish(context, const HomeScreen());
                               })
                             }

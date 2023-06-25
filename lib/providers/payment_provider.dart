@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
 import 'package:go_sell_sdk_flutter/model/models.dart';
 
-import '../payment/tap_loader/awesome_loader.dart';
+import '../ui/payment/tap_loader/awesome_loader.dart';
+
 
 class PaymentProvider with ChangeNotifier {
   late Map<dynamic, dynamic> tapSDKResult;

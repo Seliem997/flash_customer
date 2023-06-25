@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 import '../models/loginModel.dart';
 import '../models/profileModel.dart';
@@ -39,8 +41,8 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
     Status status = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
-    Map<String, String> header = {'Content-Type' : 'application/json'};
     Map<String, dynamic> body = {
       "phone": phoneNumber,
       "otp": otp,
@@ -50,7 +52,7 @@ class AuthenticationService extends BaseService {
       await requestFutureData(
           api: Api.checkCode,
           body: body,
-          headers: header,
+          headers: headers,
           jsonBody: true,
           requestType: Request.post,
           onSuccess: (response) {
@@ -79,7 +81,7 @@ class AuthenticationService extends BaseService {
 
   Future<ResponseResult> updateProfile({required String name,required String email,}) async {
     Status status = Status.error;
-    Map<String, String> header = {'Content-Type' : 'application/json'};
+    Map<String, String> header = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "phone": CacheHelper.returnData(key: CacheKey.phoneNumber),
       "country_code": '+966',
@@ -229,6 +231,7 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> registerOrLogin(
       String phoneNumber, String countryCode) async {
     Status status = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
     late LoginModel loginModel;
     UserData? userData;
@@ -240,6 +243,7 @@ class AuthenticationService extends BaseService {
       await requestFutureData(
           api: Api.registerOrLogin,
           body: body,
+          headers: headers,
           requestType: Request.post,
           onSuccess: (response) async {
             if (response["status_code"] == 200) {
@@ -341,6 +345,7 @@ class AuthenticationService extends BaseService {
 
   Future<ResponseResult> getSocialLinks() async {
     Status result = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     SocialLinksModel? socialLinksData;
 
     try {
@@ -348,6 +353,7 @@ class AuthenticationService extends BaseService {
           api: Api.getSocialLinks,
           withToken: true,
           requestType: Request.get,
+          headers: headers,
           onSuccess: (response) async {
             if (response['status_code'] == 200) {
               result = Status.success;

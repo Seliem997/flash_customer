@@ -18,6 +18,7 @@ import '../utils/enum/statuses.dart';
 class PackageService extends BaseService {
   Future<ResponseResult> getVehiclesTypes() async {
     Status result = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<VehiclesActiveTypesData> vehiclesTypesDataList = [];
     try {
@@ -26,6 +27,7 @@ class PackageService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -44,8 +46,8 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getManufacturers() async {
     Status result = Status.error;
-    /*Map<String, String> headers = const {
-      'Content-Type': 'application/json'};*/
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+
 
     List<ManufacturerData> manufacturerDataList = [];
     try {
@@ -54,7 +56,7 @@ class PackageService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
-          // headers: headers,
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -74,6 +76,7 @@ class PackageService extends BaseService {
   Future<ResponseResult> getManufacturersOfType(
       {required int vehicleTypeId}) async {
     Status result = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     List<ManufacturerData> manufacturerDataList = [];
     try {
       await requestFutureData(
@@ -81,6 +84,7 @@ class PackageService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -99,6 +103,7 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getVehiclesModels({required int manufactureId}) async {
     Status result = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<VehiclesModelsData> vehiclesModelsDataList = [];
     try {
@@ -107,6 +112,7 @@ class PackageService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -125,7 +131,7 @@ class PackageService extends BaseService {
 
   Future<ResponseResult> getPackages({required int cityId}) async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json','lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<PackagesData> packagesDataList = [];
     try {
@@ -157,7 +163,7 @@ class PackageService extends BaseService {
     required String date,
   }) async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<List<SlotData>>? slots = [];
     try {
@@ -193,7 +199,7 @@ class PackageService extends BaseService {
     required int vehicleId,
   }) async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
     Map<String, dynamic> body = {
       "city_id": cityId,
@@ -236,7 +242,7 @@ class PackageService extends BaseService {
   Future<ResponseResult> saveSlotsPackageRequest({required Map<String, dynamic> mapBody}) async {
     Status result = Status.error;
 
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
     Map<String, dynamic> body = mapBody;
     // DetailsRequestData? detailsRequestData;

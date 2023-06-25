@@ -73,6 +73,7 @@ dependencies:
   flutter_statusbarcolor_ns: ^0.5.0
   fast_cached_network_image: ^1.1.1
   change_case: ^1.1.0
+  flex_color_picker: ^3.2.2
 
 
 

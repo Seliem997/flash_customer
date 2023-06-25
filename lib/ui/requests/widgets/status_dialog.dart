@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../providers/myRequests_provider.dart';
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/spaces.dart';
@@ -18,6 +20,9 @@ class _StatusDialogState extends State<StatusDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final MyRequestsProvider myRequestsProvider =
+    Provider.of<MyRequestsProvider>(context);
+
     return Dialog(
       child: CustomContainer(
         width: 321,
@@ -50,6 +55,8 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.changeStatusFilter(myRequestsProvider.pendingRequestsDataList);
+                  Navigator.pop(context);
                 });
               },
             ),
@@ -65,6 +72,8 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.changeStatusFilter(myRequestsProvider.onTheWayRequestsDataList);
+                  Navigator.pop(context);
                 });
               },
             ),
@@ -80,6 +89,8 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.changeStatusFilter(myRequestsProvider.arrivedRequestsDataList);
+                  Navigator.pop(context);
                 });
               },
             ),
@@ -95,6 +106,8 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.changeStatusFilter(myRequestsProvider.completedRequestsDataList);
+                  Navigator.pop(context);
                 });
               },
             ),
@@ -110,6 +123,8 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.changeStatusFilter(myRequestsProvider.canceledRequestsDataList);
+                  Navigator.pop(context);
                 });
               },
             ),

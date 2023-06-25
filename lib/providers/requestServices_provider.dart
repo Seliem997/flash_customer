@@ -3,9 +3,11 @@ import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 
 import '../generated/l10n.dart';
+import '../models/bankAccountsModel.dart';
 import '../models/bookServicesModel.dart';
 import '../models/cityIdModel.dart';
 import '../models/offerCouponModel.dart';
+import '../models/rateDetailsModel.dart';
 import '../models/requestDetailsModel.dart';
 import '../models/requestResult.dart';
 import '../models/request_details_model.dart';
@@ -20,6 +22,9 @@ class RequestServicesProvider with ChangeNotifier {
 
   TextEditingController discountCodeController =
       TextEditingController(text: '');
+  TextEditingController ratingFeedbackController =
+      TextEditingController(text: '');
+  int ratingValue  = 0;
   double totalAmount = 0;
   double totalDuration = 0;
   num? totalAmountAfterDiscount = 0;
@@ -45,10 +50,13 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   void calculateTotal() {
+    print('Start calc');
     totalAmount = 0;
     totalDuration = 0;
     totalTaxes = 0;
     if (selectedBasicIndex != null) {
+      print(
+          'total amount before if 1 is  -  $totalAmount Duration is $totalDuration Taxes is $totalTaxes');
       totalAmount += (double.parse(
               basicServicesList[selectedBasicIndex!].selectedPrice!))
           .toInt() /*+ (basicServicesList[selectedBasicIndex!].tax!).toInt()*/;
@@ -58,6 +66,8 @@ class RequestServicesProvider with ChangeNotifier {
               /*.toInt()*/)/100);
     }
     if (selectedExtraServices != []) {
+      print(
+          'total amount before if 2 is  -  $totalAmount Duration is $totalDuration Taxes is $totalTaxes');
       for (int i = 0; i < extraServicesList.length; i++) {
         extraServicesList[i].countable!
             ? {
@@ -109,8 +119,7 @@ class RequestServicesProvider with ChangeNotifier {
     required int cityId,
     required int vehicleId,
   }) async {
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService
+      await servicesService
         .getBasicServices(cityId: cityId, vehicleId: vehicleId)
         .then((value) {
       if (value.status == Status.success) {
@@ -123,8 +132,7 @@ class RequestServicesProvider with ChangeNotifier {
 
   List<ServiceData> extraServicesList = [];
   Future getExtraServices({required int cityId, required int vehicleId}) async {
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService
+      await servicesService
         .getExtraServices(
       cityId: cityId,
       vehicleId: vehicleId,
@@ -139,8 +147,7 @@ class RequestServicesProvider with ChangeNotifier {
 
   /*TaxData? taxData;
   Future getTax() async {
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getTax().then((value) {
+      await servicesService.getTax().then((value) {
       if (value.status == Status.success) {
         taxData = value.data;
       }
@@ -180,7 +187,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   CityIdData? cityIdData;
-  Future getCityId(BuildContext context,
+  Future getCityId(
       {required double lat, required double long}) async {
     await servicesService.getCityId(lat: lat, lng: long).then((value) {
       if (value.status == Status.success) {
@@ -228,8 +235,7 @@ class RequestServicesProvider with ChangeNotifier {
   DetailsRequestData? detailsRequestData;
   Future getRequestDetails({required int requestId}) async {
     setLoading(true);
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService.getRequestDetails(requestId: requestId).then((value) {
+      await servicesService.getRequestDetails(requestId: requestId).then((value) {
       if (value.status == Status.success) {
         detailsRequestData = value.data;
       }
@@ -251,8 +257,7 @@ class RequestServicesProvider with ChangeNotifier {
       services +=
           "&services[${i + 1}]= ${selectedExtraServices[i].extraServiceId}";
     }
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService
+      await servicesService
         .getTimeSlots(
       cityId: cityId,
       basicId: basicId,
@@ -278,8 +283,7 @@ class RequestServicesProvider with ChangeNotifier {
   }) async {
     Status state = Status.error;
     dynamic message;
-    RequestServicesService servicesService = RequestServicesService();
-    await servicesService
+      await servicesService
         .updateRequestSlots(
       requestId: requestId,
       payBy: payBy,
@@ -319,6 +323,31 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, paymentUrlData, message: message);
   }
 
+
+
+  RatingData? ratingData;
+  Future<ResponseResult> rateRequest({
+    required int requestId,
+    required int rate,
+    required String feedBack,
+  }) async {
+    Status state = Status.error;
+    dynamic message;
+    await servicesService
+        .rateRequest(requestId: requestId, rate: rate, feedBack: feedBack)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        ratingData = value.data;
+        message = value.message;
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, ratingData, message: message);
+  }
+
   EmployeeDetailsData? employeeDetailsData;
   Future<ResponseResult> assignEmployee({
     required List slotsIds,
@@ -341,6 +370,17 @@ class RequestServicesProvider with ChangeNotifier {
     });
     notifyListeners();
     return ResponseResult(state, employeeDetailsData, message: message);
+  }
+
+  List<BankAccountsData> bankAccountsList= [];
+  Future getBankAccounts() async {
+    setLoading(true);
+    await servicesService.getBankAccounts().then((value) {
+      if (value.status == Status.success) {
+        bankAccountsList = value.data;
+      }
+    });
+    notifyListeners();
   }
 
   void resetCoupon() {

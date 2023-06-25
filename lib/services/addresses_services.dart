@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 import '../models/addressesModel.dart';
 import '../models/requestResult.dart';
@@ -16,7 +18,7 @@ class AddressesService extends BaseService {
     required double long,
   }) async {
     Status status = Status.error;
-    Map<String, String> header = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "type": type ?? "Home",
       "latitude": lat,
@@ -28,7 +30,7 @@ class AddressesService extends BaseService {
       await requestFutureData(
           api: Api.storeAddress,
           body: body,
-          headers: header,
+          headers: headers,
           jsonBody: true,
           withToken: true,
           requestType: Request.post,
@@ -51,12 +53,14 @@ class AddressesService extends BaseService {
 
   Future<ResponseResult> getAddresses() async {
     Status result = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<AddressesData> addressesDataList = [];
     try {
       await requestFutureData(
           api: Api.getAddresses,
           requestType: Request.get,
+          headers: headers,
           jsonBody: true,
           withToken: true,
           onSuccess: (response) async {

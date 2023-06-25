@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flash_customer/payment/tap_loader/awesome_loader.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
@@ -20,6 +19,7 @@ import '../../utils/app_loader.dart';
 import '../../utils/enum/date_formats.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
+import '../payment/tap_loader/awesome_loader.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_container.dart';

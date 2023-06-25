@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flash_customer/payment/tap_loader/awesome_loader.dart';
+import 'package:flash_customer/ui/payment/tap_loader/awesome_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,25 +10,27 @@ import 'package:go_sell_sdk_flutter/model/models.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../generated/l10n.dart';
-import '../models/requestDetailsModel.dart';
-import '../models/request_details_model.dart';
-import '../providers/home_provider.dart';
-import '../providers/requestServices_provider.dart';
-import '../ui/home/home_screen.dart';
-import '../ui/requests/summaryRequestDetails.dart';
-import '../ui/widgets/custom_bar_widget.dart';
-import '../ui/widgets/custom_button.dart';
-import '../ui/widgets/custom_container.dart';
-import '../ui/widgets/custom_form_field.dart';
-import '../ui/widgets/data_loader.dart';
-import '../ui/widgets/navigate.dart';
-import '../ui/widgets/spaces.dart';
-import '../ui/widgets/text_widget.dart';
-import '../utils/app_loader.dart';
-import '../utils/font_styles.dart';
-import '../utils/snack_bars.dart';
-import '../utils/styles/colors.dart';
+import '../../generated/l10n.dart';
+import '../../providers/requestServices_provider.dart';
+import '../../models/requestDetailsModel.dart';
+import '../../models/request_details_model.dart';
+import '../../providers/home_provider.dart';
+import '../../providers/requestServices_provider.dart';
+import '../../ui/home/home_screen.dart';
+import '../../ui/requests/summaryRequestDetails.dart';
+import '../../ui/widgets/custom_bar_widget.dart';
+import '../../ui/widgets/custom_button.dart';
+import '../../ui/widgets/custom_container.dart';
+import '../../ui/widgets/custom_form_field.dart';
+import '../../ui/widgets/data_loader.dart';
+import '../../ui/widgets/navigate.dart';
+import '../../ui/widgets/spaces.dart';
+import '../../ui/widgets/text_widget.dart';
+import '../../utils/app_loader.dart';
+import '../../utils/font_styles.dart';
+import '../../utils/snack_bars.dart';
+import '../../utils/styles/colors.dart';
+import 'bank_transfer/transfer_method.dart';
 
 class RequestDetails extends StatefulWidget {
   const RequestDetails(
@@ -57,7 +59,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context, listen: false);
     super.initState();
-    payButtonColor = Color(0xff2ace00);
+    payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     configureSDK(
         updatedRequestDetailsData:
@@ -822,6 +824,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   radiusCircular: 4,
                                   padding: symmetricEdgeInsets(
                                       vertical: 5, horizontal: 12),
+                                  onTap: (){
+                                    navigateTo(context, const BankTransferMethod(),);
+                                  },
                                   child: Row(
                                     children: [
                                       CustomSizedBox(
@@ -948,7 +953,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!}%",
+                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!} " "SR",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),

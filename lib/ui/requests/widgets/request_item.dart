@@ -16,20 +16,18 @@ import '../../widgets/text_widget.dart';
 class RequestItem extends StatelessWidget {
   const RequestItem({
     Key? key,
-    this.statusCompleted = true,
-    required this.myRequestsData,
+    required this.myRequestData,
     this.onTap,
   }) : super(key: key);
 
-  final bool statusCompleted;
-  final MyRequestsData myRequestsData;
+  final MyRequestsData myRequestData;
   final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     String services = '';
-    for (int i = 0; i < myRequestsData.services!.length; i++) {
-      services += "${myRequestsData.services![i].title}, ";
+    for (int i = 0; i < myRequestData.services!.length; i++) {
+      services += "${myRequestData.services![i].title}, ";
     }
     return CustomContainer(
       onTap: onTap,
@@ -67,7 +65,7 @@ class RequestItem extends StatelessWidget {
                   child: SvgPicture.asset('assets/svg/alarm.svg')),
               horizontalSpace(8),
               TextWidget(
-                text: '${myRequestsData.time}',
+                text: '${myRequestData.time}',
                 textSize: MyFontSize.size10,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
@@ -88,7 +86,7 @@ class RequestItem extends StatelessWidget {
               ),
               horizontalSpace(8),
               TextWidget(
-                text: '${myRequestsData.date}',
+                text: '${myRequestData.date}',
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
@@ -106,16 +104,16 @@ class RequestItem extends StatelessWidget {
               ),
               horizontalSpace(8),
               TextWidget(
-                text: myRequestsData.employee?.name ?? S.of(context).noEmployee,
+                text: myRequestData.employee?.name ?? S.of(context).noEmployee,
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
               ),
             ],
           ),
-          Visibility(visible: statusCompleted, child: verticalSpace(10)),
+          Visibility(visible: myRequestData.status == 'Complete', child: verticalSpace(10)),
           Visibility(
-            visible: statusCompleted,
+            visible: myRequestData.status == 'Complete',
             child: Row(
               children: [
                 TextWidget(
@@ -125,31 +123,31 @@ class RequestItem extends StatelessWidget {
                 ),
                 horizontalSpace(8),
                 CustomSizedBox(
-                    height: 12,
-                    width: 12,
-                    child: Image.asset('assets/images/star.png')),
-                horizontalSpace(4),
-                CustomSizedBox(
-                    height: 12,
-                    width: 12,
-                    child: Image.asset('assets/images/star.png')),
-                horizontalSpace(4),
-                CustomSizedBox(
-                    height: 12,
-                    width: 12,
-                    child: Image.asset('assets/images/star.png')),
-                horizontalSpace(4),
-                CustomSizedBox(
-                    height: 12,
-                    width: 12,
-                    child: Image.asset('assets/images/star.png')),
-                horizontalSpace(6),
-                DefaultButton(
                   height: 15,
-                  width: 44,
+                  width: 100,
+                  child: myRequestData.rate == null
+                      ? ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) =>CustomSizedBox(
+                      height: 12,
+                      width: 12,
+                      child: Image.asset('assets/images/star.png')),
+                      separatorBuilder: (context, index) => horizontalSpace(4), itemCount: 5,)
+                      : ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) =>CustomSizedBox(
+                      height: 12,
+                      width: 12,
+                      child: Image.asset('assets/images/star.png',color: Colors.amber),),
+                      separatorBuilder: (context, index) => horizontalSpace(4), itemCount: myRequestData.rate,),
+                ),
+                horizontalSpace(6),
+                myRequestData.rate == null ? DefaultButton(
+                  height: 20,
+                  width: 50,
                   radiusCircular: 3,
                   padding: symmetricEdgeInsets(vertical: 2, horizontal: 4),
-                  text: S.of(context).rate,
+                  text: 'Rate',
                   fontSize: MyFontSize.size9,
                   fontWeight: MyFontWeight.semiBold,
                   backgroundColor: const Color(0xFF03B7FD),
@@ -157,11 +155,11 @@ class RequestItem extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return RatingDialog();
+                        return RatingDialog(requestId: myRequestData.id!,);
                       },
                     );
                   },
-                ),
+                ) : const SizedBox(),
               ],
             ),
           ),
@@ -174,7 +172,7 @@ class RequestItem extends StatelessWidget {
                 fontWeight: MyFontWeight.semiBold,
               ),
               TextWidget(
-                text: '${myRequestsData.amount}',
+                text: '${myRequestData.totalAmount}',
                 textSize: MyFontSize.size10,
                 fontWeight: MyFontWeight.bold,
                 color: AppColor.borderBlue,
@@ -184,10 +182,10 @@ class RequestItem extends StatelessWidget {
                 height: 21,
                 width: 64,
                 padding: EdgeInsets.zero,
-                text: "${myRequestsData.status}",
+                text: "${myRequestData.status}",
                 fontSize: MyFontSize.size9,
                 fontWeight: MyFontWeight.semiBold,
-                backgroundColor: myRequestsData.status == 'Complete'
+                backgroundColor: myRequestData.status == 'Complete'
                     ? Colors.green
                     : AppColor.textRed,
                 onPressed: () {},

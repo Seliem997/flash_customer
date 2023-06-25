@@ -1,10 +1,17 @@
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/image_editable.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../providers/requestServices_provider.dart';
+import '../../../utils/enum/statuses.dart';
 import '../../../utils/font_styles.dart';
+import '../../../utils/snack_bars.dart';
 import '../../../utils/styles/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_container.dart';
@@ -13,17 +20,21 @@ import '../../widgets/spaces.dart';
 import '../../widgets/text_widget.dart';
 
 class RatingDialog extends StatefulWidget {
-  RatingDialog({Key? key, this.isRated = false}) : super(key: key);
+  RatingDialog({Key? key, this.isRated = false, required this.requestId}) : super(key: key);
 
   bool isRated;
+  int requestId;
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
 }
 
 class _RatingDialogState extends State<RatingDialog> {
+
   @override
   Widget build(BuildContext context) {
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context);
     return Dialog(
       child: SingleChildScrollView(
         child: CustomContainer(
@@ -108,7 +119,7 @@ class _RatingDialogState extends State<RatingDialog> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        requestServicesProvider.ratingValue= rating.toInt();
                         setState(() {
                           widget.isRated = true;
                         });
@@ -148,6 +159,7 @@ class _RatingDialogState extends State<RatingDialog> {
                           width: 284,
                           height: 62,
                           child: DefaultFormField(
+                            controller: requestServicesProvider.ratingFeedbackController,
                             height: 62,
                             hintText: S.of(context).type,
                             textSize: MyFontSize.size8,
@@ -166,7 +178,22 @@ class _RatingDialogState extends State<RatingDialog> {
                         fontSize: MyFontSize.size16,
                         fontWeight: MyFontWeight.bold,
                         backgroundColor: const Color(0xFF29A7FF),
-                        onPressed: () {},
+                        onPressed: () {
+                          AppLoader.showLoader(context);
+                          requestServicesProvider.rateRequest(
+                            requestId: widget.requestId, rate: requestServicesProvider.ratingValue, feedBack: requestServicesProvider.ratingFeedbackController.text,
+                          ).then((value) {
+                            AppLoader.stopLoader();
+                            if(value.status == Status.success){
+                              CustomSnackBars.successSnackBar(
+                                  context, 'Request Rated Successfully');
+                              navigateAndFinish(context, const HomeScreen(cameFromNewRequest: true,));
+                            }else{
+                              CustomSnackBars.failureSnackBar(context, '${value.message}');
+                            }
+
+                          });
+                        },
                       ),
                     ],
                   ),

@@ -20,8 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
-import '../../payment/go_sell_payment.dart';
-import '../../payment/test.dart';
 import '../../providers/addresses_provider.dart';
 import '../../providers/payment_provider.dart';
 import '../../utils/app_loader.dart';
@@ -31,10 +29,10 @@ import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
 import '../date_time/select_date.dart';
+import '../payment/test.dart';
 import '../services/other_services_screen.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
-import '../../payment/web_view.dart';
 import '../widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -218,13 +216,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
-              DefaultButton(
-                text: "Test Payment",
-                onPressed: () {
-                  navigateTo(context, TestPayment());
-                  // paymentProvider.startSDK();
-                },
-              ),
+              // DefaultButton(
+              //   text: "Test Payment",
+              //   onPressed: () {
+              //     navigateTo(context, TestPayment());
+              //     // paymentProvider.startSDK();
+              //   },
+              // ),
               DefaultButton(
                 width: 294,
                 height: 56,

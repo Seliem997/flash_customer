@@ -1,6 +1,8 @@
 
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 import '../models/bookServicesModel.dart';
 import '../models/otherServicesModel.dart';
@@ -15,7 +17,7 @@ class OtherServicesService extends BaseService {
     required int cityId,
 }) async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
 
     List<OtherServicesData> otherServicesData = [];
@@ -53,19 +55,19 @@ class OtherServicesService extends BaseService {
   }) async {
     Status status = Status.error;
     dynamic message;
-    Map<String, String> header = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "city_id": cityId,
       "address_id": addressId,
       "other_service_id": otherServiceId,
-      "number_of_units": otherServiceId,
+      "number_of_units": numberOfUnits,
     };
     BookServicesData? storeServicesData;
     try {
       await requestFutureData(
           api: Api.bookServices,
           body: body,
-          headers: header,
+          headers: headers,
           jsonBody: true,
           withToken: true,
           requestType: Request.post,

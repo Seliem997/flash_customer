@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flash_customer/payment/tap_loader/awesome_loader.dart';
+import 'package:flash_customer/ui/payment/tap_loader/awesome_loader.dart';
 import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

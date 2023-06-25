@@ -34,6 +34,7 @@ class _MyRequestsState extends State<MyRequests> {
   void loadData() async {
     final MyRequestsProvider myRequestsProvider =
         Provider.of<MyRequestsProvider>(context, listen: false);
+    myRequestsProvider.setLoading(true);
     await myRequestsProvider.getMyRequests();
   }
 
@@ -41,82 +42,92 @@ class _MyRequestsState extends State<MyRequests> {
   Widget build(BuildContext context) {
     final MyRequestsProvider myRequestsProvider =
         Provider.of<MyRequestsProvider>(context);
+
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).myRequests),
       body: SingleChildScrollView(
-        child: (myRequestsProvider.loadingMyRequests)
-            ? const DataLoader()
-            : (myRequestsProvider.myRequestsDataList.isEmpty)
-                ? CustomSizedBox(
-                    height: 500,
-                    child: Center(
-                        child: TextWidget(
-                            text: S.of(context).noRequestsAvailable)))
-                : Padding(
-                    padding: symmetricEdgeInsets(horizontal: 24, vertical: 41),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: onlyEdgeInsets(top: 40, start: 24, ),
+              child: Row(
+                children: [
+                  DefaultButtonWithIcon(
+                    padding: symmetricEdgeInsets(horizontal: 10),
+                    icon: SvgPicture.asset('assets/svg/filter.svg'),
+                    onPressed: () {},
+                    labelText: S.of(context).dateFilter,
+                    textColor: AppColor.boldGrey,
+                    backgroundButton: const Color(0xFFF0F0F0),
+                    borderColor: AppColor.boldGrey,
+                    border: true,
+                  ),
+                  horizontalSpace(20),
+                  DefaultButtonWithIcon(
+                    padding: symmetricEdgeInsets(horizontal: 10),
+                    icon: SvgPicture.asset('assets/svg/filter.svg'),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const StatusDialog();
+                        },
+                      );
+                    },
+                    labelText: S.of(context).statusFilter,
+                    textColor: AppColor.boldGrey,
+                    backgroundButton: const Color(0xFFF0F0F0),
+                    borderColor: AppColor.boldGrey,
+                    border: true,
+                  ),
+                ],
+              ),
+            ),
+            verticalSpace(24),
+            (myRequestsProvider.loadingMyRequests)
+                ? const DataLoader()
+                : (myRequestsProvider.myRequestsDataList.isEmpty)
+                    ? CustomSizedBox(
+                        height: 500,
+                        child: Center(
+                            child: TextWidget(
+                                text: S.of(context).noRequestsAvailable)))
+                    : Padding(
+                        padding: symmetricEdgeInsets(horizontal: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            DefaultButtonWithIcon(
-                              padding: symmetricEdgeInsets(horizontal: 10),
-                              icon: SvgPicture.asset('assets/svg/filter.svg'),
-                              onPressed: () {},
-                              labelText: S.of(context).dateFilter,
-                              textColor: AppColor.boldGrey,
-                              backgroundButton: const Color(0xFFF0F0F0),
-                              borderColor: AppColor.boldGrey,
-                              border: true,
-                            ),
-                            horizontalSpace(20),
-                            DefaultButtonWithIcon(
-                              padding: symmetricEdgeInsets(horizontal: 10),
-                              icon: SvgPicture.asset('assets/svg/filter.svg'),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const StatusDialog();
+
+                            CustomContainer(
+                              width: double.infinity,
+                              height: 560,
+                              borderColorDark: Colors.transparent,
+                              child: ListView.separated(
+                                itemCount:
+                                    myRequestsProvider.myRequestsDataList.length,
+                                itemBuilder: (context, index) => RequestItem(
+                                  myRequestData:
+                                      myRequestsProvider.myRequestsDataList[index],
+                                  onTap: () {
+                                    navigateTo(
+                                        context,
+                                        RequestDetailsScreen(
+                                          requestId: myRequestsProvider
+                                              .myRequestsDataList[index].id!,
+                                        ));
                                   },
-                                );
-                              },
-                              labelText: S.of(context).statusFilter,
-                              textColor: AppColor.boldGrey,
-                              backgroundButton: const Color(0xFFF0F0F0),
-                              borderColor: AppColor.boldGrey,
-                              border: true,
+                                ),
+                                separatorBuilder: (context, index) =>
+                                    verticalSpace(14),
+                              ),
                             ),
+                            /*RequestItem(),*/
                           ],
                         ),
-                        verticalSpace(24),
-                        CustomContainer(
-                          width: double.infinity,
-                          height: 560,
-                          borderColorDark: Colors.transparent,
-                          child: ListView.separated(
-                            itemCount:
-                                myRequestsProvider.myRequestsDataList.length,
-                            itemBuilder: (context, index) => RequestItem(
-                              myRequestsData:
-                                  myRequestsProvider.myRequestsDataList[index],
-                              onTap: () {
-                                navigateTo(
-                                    context,
-                                    RequestDetailsScreen(
-                                      requestId: myRequestsProvider
-                                          .myRequestsDataList[index].id!,
-                                    ));
-                              },
-                            ),
-                            separatorBuilder: (context, index) =>
-                                verticalSpace(14),
-                          ),
-                        ),
-                        /*RequestItem(),*/
-                      ],
-                    ),
-                  ),
+                      ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 
 import '../models/requestResult.dart';
@@ -13,8 +15,8 @@ class TransactionHistoryService extends BaseService {
 
   Future<ResponseResult> getTransactionHistory () async {
     Status result = Status.error;
-    /*Map<String, String> headers = const {
-      'Content-Type': 'application/json'};*/
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+
 
     TransactionData? transactionData;
     try {
@@ -23,7 +25,7 @@ class TransactionHistoryService extends BaseService {
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
-          // headers: headers,
+          headers: headers,
           onSuccess: (response) async {
             try {
               result = Status.success;
@@ -42,7 +44,7 @@ class TransactionHistoryService extends BaseService {
 
   Future<ResponseResult> chargingWalletUrl ({required int amount, required String payBy,}) async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "amount": amount,
       "pay_by": payBy,

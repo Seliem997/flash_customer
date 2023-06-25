@@ -9,6 +9,14 @@ import '../utils/enum/statuses.dart';
 class MyVehiclesProvider with ChangeNotifier {
 
   MyVehiclesService myVehiclesService = MyVehiclesService();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController yearController = TextEditingController();
+  TextEditingController numbersController = TextEditingController();
+  TextEditingController lettersController = TextEditingController();
+  String vehicleColor= 'White';
+  Color screenPickerColor= Colors.white;
+
   bool loadingMyVehicles = true;
   MyVehiclesData? myVehiclesData;
   int? selectedMyVehicleIndex;
@@ -84,5 +92,15 @@ class MyVehiclesProvider with ChangeNotifier {
     getMyVehicles();
     notifyListeners();
     return ResponseResult(state, '',message: message);
+  }
+
+  void resetFields(){
+    nameController = TextEditingController();
+    yearController = TextEditingController();
+    numbersController = TextEditingController();
+    lettersController = TextEditingController();
+    vehicleColor= 'White';
+    screenPickerColor= Colors.white;
+    notifyListeners();
   }
 }

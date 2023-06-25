@@ -32,6 +32,11 @@ class Api {
           String date = "06/5/2023"}) =>
       "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
 
+  static String rateRequest(
+          {required int requestId}) =>
+      "$baseUrl/customer/set-request-rate/$requestId";
+
+
   static String getPackageSlots(
           {
           int cityId = 2,
@@ -85,4 +90,8 @@ class Api {
   static const String checkOfferCoupon = "$baseUrl/customer/check-offer";
 
   static const String getActiveTax = "$baseUrl/customer/get-active-tax";
+
+  static const String contactUs = "$baseUrl/contact_us";
+
+  static const String bankAccounts = "$baseUrl/bank_accounts";
 }

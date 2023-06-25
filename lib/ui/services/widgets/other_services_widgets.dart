@@ -141,9 +141,9 @@ class OtherServicesItem extends StatelessWidget {
               horizontalSpace(15),
               CustomContainer(
                 onTap: () {
+                  otherServicesProvider.increaseQuantityService();
                   otherServicesProvider.selectedService(
                       index: index);
-                  otherServicesProvider.increaseQuantityService();
                 },
                 width: 20,
                 height: 20,

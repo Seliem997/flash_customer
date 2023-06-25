@@ -1,5 +1,3 @@
-import 'package:flash_customer/models/manufacturersModel.dart';
-import 'package:flash_customer/models/vehiclesModelsModel.dart';
 import 'package:flash_customer/ui/monthly_pkg/plan.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
@@ -7,9 +5,7 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/home_provider.dart';
@@ -52,9 +48,11 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
         Provider.of<HomeProvider>(context, listen: false);
 
     await packageProvider.getManufacturers();
-    myVehiclesProvider.getMyVehicles();
+    await myVehiclesProvider.getMyVehicles().then((value) => myVehiclesProvider.myVehiclesData!.collection!.isNotEmpty
+        ? packageProvider.selectedMyVehicleLabel()
+        : packageProvider.selectedNewVehicleLabel(),
+    );
     requestServicesProvider.getCityId(
-      context,
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
     );

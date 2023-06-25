@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 
 import '../models/myVehiclesModel.dart';
@@ -22,7 +24,7 @@ class MyVehiclesService extends BaseService {
     String? year,
   }) async {
     Status status = Status.error;
-    Map<String, String> header = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "vehicle_type_id": vehicleTypeId,
       "name_en": name,
@@ -38,7 +40,7 @@ class MyVehiclesService extends BaseService {
       await requestFutureData(
           api: Api.addNewVehicle,
           body: body,
-          headers: header,
+          headers: headers,
           jsonBody: true,
           withToken: true,
           requestType: Request.post,
@@ -62,9 +64,10 @@ class MyVehiclesService extends BaseService {
 
   Future<ResponseResult> getMyVehicles() async {
     Status result = Status.error;
-    Map<String, String> headers = const {
+    Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
 
     MyVehiclesData? myVehiclesData;
@@ -92,9 +95,10 @@ class MyVehiclesService extends BaseService {
 
   Future<ResponseResult> deleteVehicle({required int vehicleID}) async {
     Status result = Status.error;
-    Map<String, String> headers = const {
+    Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     dynamic message;
 

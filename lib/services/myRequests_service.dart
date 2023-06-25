@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 
 import '../models/myRequestsModel.dart';
@@ -15,9 +17,10 @@ class MyRequestsService extends BaseService {
 
   Future<ResponseResult> getMyRequests() async {
     Status result = Status.error;
-    Map<String, String> headers = const {
+    Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
 
     List<MyRequestsData>? myRequestsDataList;

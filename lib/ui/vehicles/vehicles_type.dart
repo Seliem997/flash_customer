@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../main.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../../providers/package_provider.dart';
@@ -56,7 +57,6 @@ class _VehicleTypesState extends State<VehicleTypes> {
     packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
     requestServicesProvider.getCityId(
-      context,
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
     );
@@ -422,8 +422,9 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                       value: packageProvider.manufacturerDataList[index],
                       child: Text(
                           packageProvider.manufacturerDataList[index].name!,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 16)))),
+                          style: TextStyle(
+                              color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
+              dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
               onChanged: (value) async {
                 packageProvider.setSelectedManufacture(value!);
                 packageProvider.chooseManufacture = true;
@@ -488,9 +489,10 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                     value: packageProvider.vehiclesModelsDataList[index],
                     child: Text(
                         packageProvider.vehiclesModelsDataList[index].name!,
-                        style: const TextStyle(
-                            color: Colors.black, fontSize: 16))),
+                        style: TextStyle(
+                            color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16))),
               ),
+              dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
               onChanged: (value) async {
                 packageProvider.setSelectedVehicle(value!);
                 packageProvider.chooseModel = true;

@@ -99,6 +99,7 @@ class _AboutUsState extends State<AboutUs> {
                                     fontWeight: MyFontWeight.regular,
                                     textSize: MyFontSize.size8,
                                     color: AppColor.white,
+                                    maxLines: 4,
                                   ),
                                 ],
                               ),
@@ -112,7 +113,7 @@ class _AboutUsState extends State<AboutUs> {
                     height: (144 / screenHeight) * 100.h,
                     initialPage: 0,
                     viewportFraction: 0.70,
-                    enableInfiniteScroll: true,
+                    enableInfiniteScroll: false,
                     reverse: false,
                     autoPlay: true,
                     autoPlayInterval: const Duration(seconds: 3),
@@ -120,16 +121,15 @@ class _AboutUsState extends State<AboutUs> {
                     autoPlayCurve: Curves.fastOutSlowIn,
                     scrollDirection: Axis.horizontal,
                     onScrolled: (value) {
-                      setState(() {
-                        currentIndex = value!;
-                      });
+                      aboutProvider.setCurrentDotsIndex(value!);
                     },
+
                   ),
                 ),
                 verticalSpace(12),
                 DotsIndicator(
                   dotsCount: aboutProvider.aboutImagesDataList.length,
-                  position: currentIndex,
+                  position: aboutProvider.currentDotsIndex,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
                     activeSize: const Size(18.0, 9.0),

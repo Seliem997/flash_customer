@@ -1,6 +1,8 @@
 
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 import '../base/service/base_service.dart';
 import '../models/aboutModel.dart';
 import '../models/otherServicesModel.dart';
@@ -13,7 +15,7 @@ class AboutService extends BaseService {
 
   Future<ResponseResult> getAbout() async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<AboutData> aboutDataList = [];
     try {
@@ -39,7 +41,7 @@ class AboutService extends BaseService {
 
   Future<ResponseResult> getAboutImages() async {
     Status result = Status.error;
-    Map<String, String> headers = const {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<AboutImagesData> aboutImagesDataList = [];
     try {
@@ -62,4 +64,41 @@ class AboutService extends BaseService {
     }
     return ResponseResult(result, aboutImagesDataList);
   }
+
+
+  Future<ResponseResult> contactUs({
+    required String phoneNumber,
+    required String message,
+    String? name,
+    String? email,
+  }) async {
+    Status status = Status.error;
+    dynamic responseMessage;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, dynamic> body = {"phone_number": phoneNumber, "phone_dial": '+966', "message": message, "name": name, "email": email};
+    try {
+      await requestFutureData(
+          api: Api.contactUs,
+          body: body,
+          headers: headers,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.post,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              responseMessage = response["message"];
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
+              status = Status.codeNotCorrect;
+              responseMessage = response["message"];
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in Contact us $e");
+    }
+    return ResponseResult(status, '', message: responseMessage);
+  }
+
 }

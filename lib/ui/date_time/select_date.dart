@@ -12,12 +12,12 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../../../utils/font_styles.dart';
-import '../../payment/go_sell_payment.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/enum/date_formats.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../home/home_screen.dart';
+import '../payment/go_sell_payment.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -57,6 +57,19 @@ class _SelectDateState extends State<SelectDate> {
 
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+
+    requestServicesProvider.selectedSlotIndex = null;
+    otherServicesProvider.selectedTimeSlot();
+    packageProvider.selectedSlotIndex = null;
+
+    widget.cameFromPackage
+        ? packageProvider.washesDate[widget.index] =
+        DateFormat(DFormat.ymd.key).format(DateTime.now())
+        : widget.cameFromOtherServices
+        ? otherServicesProvider.selectedDate =
+        DateFormat(DFormat.ymd.key).format(DateTime.now())
+        : requestServicesProvider.selectedDate =
+        DateFormat(DFormat.ymd.key).format(DateTime.now());
 
     widget.cameFromPackage
         ? await packageProvider.getPackageTimeSlots(

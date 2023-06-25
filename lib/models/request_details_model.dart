@@ -26,14 +26,14 @@ class DetailsRequestData {
   int? id;
   dynamic requestId;
   String? status;
-  Null? rate;
+  dynamic rate;
   String? payBy;
-  Null? feedback;
+  dynamic feedback;
   int? packageId;
   PackageDetails? packageDetails;
   String? amount;
   dynamic lateTime;
-  Null? actualTime;
+  dynamic actualTime;
   dynamic tax;
   String? discountAmount;
   dynamic totalAmount;

@@ -37,7 +37,7 @@ class OtherServicesProvider with ChangeNotifier{
 
   void decreaseQuantityService(){
     if (otherServicesList[selectedServiceIndex!].quantity > 0) {
-      otherServicesList[selectedServiceIndex!].quantity--;
+      otherServicesList[selectedServiceIndex!].quantity = otherServicesList[selectedServiceIndex!].quantity -1;
       notifyListeners();
     }else{
       selectedServiceIndex = null;
