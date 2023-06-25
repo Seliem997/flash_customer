@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cross_file/src/types/interface.dart';
 import 'package:intl/intl.dart';
 
 import '../base/service/base_service.dart';
@@ -11,6 +13,7 @@ import '../utils/cache_helper.dart';
 import '../utils/enum/request_types.dart';
 import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
+import 'package:http/http.dart' as http;
 
 class AuthenticationService extends BaseService {
   // final fb = FacebookLogin(debug: true);
@@ -63,14 +66,18 @@ class AuthenticationService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               message = response["message"];
-              profileData= UpdateProfileModel.fromJson(response).data;
+              profileData = UpdateProfileModel.fromJson(response).data;
 
               print("Bearer ${response["data"]["token"]}");
               CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
-              CacheHelper.saveData(key: CacheKey.userName, value: profileData?.name == null ? "New User" : profileData!.name );
+              CacheHelper.saveData(
+                  key: CacheKey.userName,
+                  value: profileData?.name == null
+                      ? "New User"
+                      : profileData!.name);
 
               CacheHelper.saveData(
                   key: CacheKey.token,
@@ -125,7 +132,8 @@ class AuthenticationService extends BaseService {
               await CacheHelper.saveData(
                   key: CacheKey.userId, value: userData!.fwId);
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
-              await CacheHelper.saveData(key: CacheKey.userImage, value: userData!.image);
+              await CacheHelper.saveData(
+                  key: CacheKey.userImage, value: userData!.image);
               await CacheHelper.saveData(key: CacheKey.email, value: email);
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
@@ -137,7 +145,6 @@ class AuthenticationService extends BaseService {
     }
     return ResponseResult(status, userData);
   }
-
 
   Future<ResponseResult> registerOrLogin(
       String phoneNumber, String countryCode) async {
@@ -292,5 +299,49 @@ class AuthenticationService extends BaseService {
     } catch (e) {
       log("Error Signing out $e");
     }
+  }
+
+  Future<ResponseResult> updateProfilePicture(String imagePath) async {
+    Status status = Status.error;
+    UpdateProfileModel? userDataResponse;
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer ${CacheHelper.returnData(key: CacheKey.token)}"
+    };
+
+    try {
+      var request = http.MultipartRequest("POST", Uri.parse(Api.updateProfile));
+
+      request.headers.addAll(headers);
+
+      request.fields['_method'] = "PUT";
+
+      request.files.add(await http.MultipartFile.fromPath("image", imagePath));
+
+      logger.i(
+          "Request Called: ${Api.updateProfile}\nHeaders: ${request.headers}\nBody:${request.fields}\nFiles:${request.files}");
+
+      await request.send().then((stream) async {
+        await http.Response.fromStream(stream).then((value) {
+          final response = jsonDecode(value.body);
+          // userDataResponse = UpdateProfileModel.fromJson(response);
+          logger.i("Response: $response");
+          // if (userDataResponse!.statusCode == 200) {
+          //   log("Successss");
+          //   status = Status.success;
+          // } else if (userDataResponse!.statusCode == 400) {
+          //   status = Status.codeNotCorrect;
+          //   log("Failureee");
+          // }
+        });
+      }).timeout(const Duration(seconds: 30));
+    } catch (e) {
+      logger.e("Error in checking code $e");
+      status = Status.error;
+    }
+    log("Status ${status.key}");
+    return ResponseResult(status, userDataResponse?.data?.image ?? "");
   }
 }

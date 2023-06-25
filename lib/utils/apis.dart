@@ -10,7 +10,8 @@ class Api {
   static const String getAboutImages =
       "$baseUrl/get-images?related_to=about_us_slider_images";
 
-  static const String getOtherServices = "$baseUrl/customer/services?type=other";
+  static const String getOtherServices =
+      "$baseUrl/customer/services?type=other";
 
   static const String getCityId = "$baseUrl/customer/cities/check/If/FoundIn";
 
@@ -24,6 +25,8 @@ class Api {
 
   static const String getRequestDetails = "$baseUrl/customer/request-details/";
 
+  static const String updateProfile = "$baseUrl/customer/update-my-profile";
+
   static String getTimeSlots(
           {int cityId = 1,
           int basicId = 27,
@@ -32,18 +35,15 @@ class Api {
           String date = "06/5/2023"}) =>
       "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
 
-  static String rateRequest(
-          {required int requestId}) =>
+  static String rateRequest({required int requestId}) =>
       "$baseUrl/customer/set-request-rate/$requestId";
 
-
-  static String getPackageSlots(
-          {
-          int cityId = 2,
-          int packageId = 1,
-          int packageDuration = 10,
-          String date = "5/15/2022",
-          }) =>
+  static String getPackageSlots({
+    int cityId = 2,
+    int packageId = 1,
+    int packageDuration = 10,
+    String date = "5/15/2022",
+  }) =>
       "$baseUrl/customer/slots-package?city_id=$cityId&package_id=$packageId&date=$date&package_duration=$packageDuration";
 
   static const String updateInitialRequest =
@@ -52,9 +52,11 @@ class Api {
 
   static const String bookServices = "$baseUrl/customer/initial-request";
 
-  static const String storeInitialPackageRequest = "$baseUrl/customer/initial-package-request";
+  static const String storeInitialPackageRequest =
+      "$baseUrl/customer/initial-package-request";
 
-  static const String saveSlotsPackageRequest = "$baseUrl/customer/request-package-employee-id";
+  static const String saveSlotsPackageRequest =
+      "$baseUrl/customer/request-package-employee-id";
 
   static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
@@ -76,8 +78,7 @@ class Api {
   static const String getTransactionHistory =
       "$baseUrl/customer/history-transactions";
 
-  static const String chargingWallet =
-      "$baseUrl/customer/charge-wallet";
+  static const String chargingWallet = "$baseUrl/customer/charge-wallet";
 
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
 

@@ -7,6 +7,7 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
@@ -23,10 +24,10 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    TextEditingController nameTextController = TextEditingController(
-        text: userProvider.userName);
-    TextEditingController emailTextController = TextEditingController(
-        text: userProvider.userEmail);
+    TextEditingController nameTextController =
+        TextEditingController(text: userProvider.userName);
+    TextEditingController emailTextController =
+        TextEditingController(text: userProvider.userEmail);
     TextEditingController phoneTextController = TextEditingController(
         text: CacheHelper.returnData(key: CacheKey.phoneNumber));
     return Scaffold(
@@ -36,9 +37,19 @@ class EditProfile extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const ImageEditable(
+            ImageEditable(
               imageUrl: '',
               showEditIcon: true,
+              onTap: () async {
+                await ImagePicker.platform
+                    .getImage(source: ImageSource.gallery, imageQuality: 30)
+                    .then((image) async {
+                  if (image != null) {
+                    await userProvider.updateProfilePicture(
+                        context, image.path);
+                  }
+                });
+              },
             ),
             verticalSpace(21),
             Padding(
@@ -59,7 +70,8 @@ class EditProfile extends StatelessWidget {
                         fillColor: AppColor.borderGreyLight,
                         filled: true,
                         enabled: false,
-                        controller: TextEditingController(text: userProvider.userId),
+                        controller:
+                            TextEditingController(text: userProvider.userId),
                       )),
                   verticalSpace(27),
                   Row(
@@ -157,7 +169,7 @@ class EditProfile extends StatelessWidget {
                             padding: EdgeInsets.all(20.0),
                             child: TextWidget(
                               text: 'Are you sure to delete the account?',
-                              color: AppColor.black ,
+                              color: AppColor.black,
                             ),
                           ),
                           actions: [

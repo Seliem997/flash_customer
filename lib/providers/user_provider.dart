@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cross_file/src/types/interface.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +8,10 @@ import 'package:intl/intl.dart';
 import '../main.dart';
 import '../models/profileModel.dart';
 import '../services/authentication_service.dart';
+import '../utils/app_loader.dart';
 import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
+import '../utils/snack_bars.dart';
 
 class UserProvider extends ChangeNotifier {
   String? userName = CacheHelper.returnData(key: CacheKey.userName);
@@ -90,5 +93,21 @@ class UserProvider extends ChangeNotifier {
       MyApp.setLocale(context, const Locale("ar"));
     }
     notifyListeners();
+  }
+
+  Future<void> updateProfilePicture(BuildContext context, String imagePath) async {
+    final AuthenticationService authenticationService = AuthenticationService();
+
+    AppLoader.showLoader(context);
+    await authenticationService.updateProfilePicture(imagePath).then((value) {
+      AppLoader.stopLoader();
+      if (value.status == Status.success) {
+        CustomSnackBars.successSnackBar(context, "Updated Successfully");
+        userImage = value.data;
+        CacheHelper.saveData(key: CacheKey.userImage, value: value.data);
+      } else {
+        CustomSnackBars.failureSnackBar(context, "Something went wrong");
+      }
+    });
   }
 }
