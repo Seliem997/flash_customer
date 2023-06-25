@@ -41,7 +41,10 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
     Status status = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     dynamic message;
     Map<String, dynamic> body = {
       "phone": phoneNumber,
@@ -61,7 +64,9 @@ class AuthenticationService extends BaseService {
               message = response["message"];
 
               print("Bearer ${response["data"]["token"]}");
-              CacheHelper.saveData(key: CacheKey.balance, value: response["data"]["users"]["balance"]);
+              CacheHelper.saveData(
+                  key: CacheKey.balance,
+                  value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
               CacheHelper.saveData(
                   key: CacheKey.token,
@@ -78,10 +83,15 @@ class AuthenticationService extends BaseService {
     return ResponseResult(status, "", message: message);
   }
 
-
-  Future<ResponseResult> updateProfile({required String name,required String email,}) async {
+  Future<ResponseResult> updateProfile({
+    required String name,
+    required String email,
+  }) async {
     Status status = Status.error;
-    Map<String, String> header = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> header = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {
       "phone": CacheHelper.returnData(key: CacheKey.phoneNumber),
       "country_code": '+966',
@@ -102,13 +112,14 @@ class AuthenticationService extends BaseService {
           withToken: true,
           headers: header,
           requestType: Request.post,
-          onSuccess: (response) async{
+          onSuccess: (response) async {
             if (response["status_code"] == 200) {
               print('service updated done');
               status = Status.success;
               userData = UpdateProfileModel.fromJson(response).data;
 
-              await CacheHelper.saveData(key: CacheKey.userId, value: userData!.fwId);
+              await CacheHelper.saveData(
+                  key: CacheKey.userId, value: userData!.fwId);
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
               await CacheHelper.saveData(key: CacheKey.email, value: email);
             } else if (response["status_code"] == 400) {
@@ -231,7 +242,10 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> registerOrLogin(
       String phoneNumber, String countryCode) async {
     Status status = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    // Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     dynamic message;
     late LoginModel loginModel;
     UserData? userData;
@@ -345,7 +359,10 @@ class AuthenticationService extends BaseService {
 
   Future<ResponseResult> getSocialLinks() async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     SocialLinksModel? socialLinksData;
 
     try {
@@ -368,7 +385,6 @@ class AuthenticationService extends BaseService {
     }
     return ResponseResult(result, socialLinksData);
   }
-
 
   void signOut() async {
     try {
