@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/myVehicles_provider.dart';
@@ -72,7 +73,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<RequestServicesProvider>(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Vehicle Type'),
+      appBar: CustomAppBar(title: S.of(context).vehicleType),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
@@ -86,8 +87,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColor: packageProvider.myVehicleLabel
                       ? AppColor.babyBlue
                       : AppColor.borderGrey,
-                  borderColorDark:
-                  packageProvider.myVehicleLabel
+                  borderColorDark: packageProvider.myVehicleLabel
                       ? AppColor.borderBlue
                       : null,
                   width: 162,
@@ -98,7 +98,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   },
                   child: Center(
                     child: TextWidget(
-                      text: 'My Vehicles',
+                      text: S.of(context).myVehicles,
                       fontWeight: packageProvider.myVehicleLabel
                           ? MyFontWeight.semiBold
                           : MyFontWeight.medium,
@@ -119,8 +119,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColor: packageProvider.newVehicleLabel
                       ? AppColor.babyBlue
                       : AppColor.borderGrey,
-                  borderColorDark:
-                  packageProvider.newVehicleLabel
+                  borderColorDark: packageProvider.newVehicleLabel
                       ? AppColor.borderBlue
                       : null,
                   width: 162,
@@ -131,7 +130,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   },
                   child: Center(
                     child: TextWidget(
-                      text: 'New Vehicles',
+                      text: S.of(context).newVehicles,
                       fontWeight: packageProvider.newVehicleLabel
                           ? MyFontWeight.semiBold
                           : MyFontWeight.medium,
@@ -175,7 +174,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
               width: double.infinity,
               fontWeight: MyFontWeight.bold,
               fontSize: MyFontSize.size20,
-              text: 'Next',
+              text: S.of(context).next,
               onPressed: () async {
                 requestServicesProvider.clearServices();
                 packageProvider.newVehicleLabel
@@ -229,7 +228,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                             ),
                           )
                         : CustomSnackBars.failureSnackBar(
-                            context, 'Choose Vehicle First');
+                            context, S.of(context).chooseVehicleFirst);
               },
             ),
             verticalSpace(10),
@@ -261,8 +260,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               backgroundColor: packageProvider.selectedVehicleTypeIndex == index
                   ? const Color(0xFFE6EEFB)
                   : AppColor.borderGreyLight,
-              borderColorDark:
-              packageProvider.selectedVehicleTypeIndex == index
+              borderColorDark: packageProvider.selectedVehicleTypeIndex == index
                   ? AppColor.borderBlue
                   : null,
               width: 105,
@@ -379,12 +377,12 @@ class NewVehiclesScreenWidget extends StatelessWidget {
         Row(
           children: [
             TextWidget(
-                text: 'Select Manufacturer',
+                text: S.of(context).selectManufacturer,
                 textSize: MyFontSize.size18,
                 fontWeight: MyFontWeight.medium),
             horizontalSpace(6),
             TextWidget(
-              text: '(Required)',
+              text: S.of(context).required,
               textSize: MyFontSize.size8,
               fontWeight: MyFontWeight.regular,
               color: packageProvider.requiredManufacture
@@ -408,7 +406,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               value: packageProvider.selectedManufacture,
               iconEnabledColor: Colors.black,
               hint: TextWidget(
-                text: 'Select',
+                text: S.of(context).select,
                 fontWeight: MyFontWeight.medium,
                 textSize: MyFontSize.size10,
                 color: const Color(0xFF909090),
@@ -423,8 +421,12 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                       child: Text(
                           packageProvider.manufacturerDataList[index].name!,
                           style: TextStyle(
-                              color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
-              dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+                              color: MyApp.themeMode(context)
+                                  ? const Color(0xFF909090)
+                                  : Colors.black,
+                              fontSize: 16)))),
+              dropdownColor:
+                  MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
               onChanged: (value) async {
                 packageProvider.setSelectedManufacture(value!);
                 packageProvider.chooseManufacture = true;
@@ -446,12 +448,12 @@ class NewVehiclesScreenWidget extends StatelessWidget {
         Row(
           children: [
             TextWidget(
-                text: 'Model',
+                text: S.of(context).model,
                 textSize: MyFontSize.size18,
                 fontWeight: MyFontWeight.medium),
             horizontalSpace(6),
             TextWidget(
-              text: '(Required)',
+              text: S.of(context).required,
               textSize: MyFontSize.size8,
               fontWeight: MyFontWeight.regular,
               color: packageProvider.requiredModel
@@ -475,7 +477,7 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               value: packageProvider.selectedVehicleModel,
               iconEnabledColor: Colors.black,
               hint: TextWidget(
-                text: 'Select',
+                text: S.of(context).select,
                 fontWeight: MyFontWeight.medium,
                 textSize: MyFontSize.size10,
                 color: const Color(0xFF909090),
@@ -490,9 +492,13 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                     child: Text(
                         packageProvider.vehiclesModelsDataList[index].name!,
                         style: TextStyle(
-                            color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16))),
+                            color: MyApp.themeMode(context)
+                                ? const Color(0xFF909090)
+                                : Colors.black,
+                            fontSize: 16))),
               ),
-              dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+              dropdownColor:
+                  MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
               onChanged: (value) async {
                 packageProvider.setSelectedVehicle(value!);
                 packageProvider.chooseModel = true;

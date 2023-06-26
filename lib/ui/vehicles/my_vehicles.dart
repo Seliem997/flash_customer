@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/myVehicles_provider.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
@@ -43,7 +44,7 @@ class _MyVehiclesState extends State<MyVehicles> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'My Vehicles',
+        title: S.of(context).myVehicles,
       ),
       /*
       *  myVehiclesProvider.loadingMyVehicles
@@ -62,7 +63,7 @@ class _MyVehiclesState extends State<MyVehicles> {
                       : MyVehiclesScreenWidget(
                           myVehiclesProvider: myVehiclesProvider),
                   DefaultButton(
-                    text: 'Add new Vehicle',
+                    text: S.of(context).addNewVehicle,
                     onPressed: () {
                       navigateTo(context, const VehicleInfo());
                     },
@@ -116,7 +117,7 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                   backgroundColor: const Color(0xFF28A72D),
                   foregroundColor: Colors.white,
                   icon: Icons.mode_edit_outline_outlined,
-                  label: 'Edit',
+                  label: S.of(context).edit,
                 ),
               ],
             ),

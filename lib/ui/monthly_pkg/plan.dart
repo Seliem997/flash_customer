@@ -263,7 +263,7 @@ class PackageCard extends StatelessWidget {
                     : const Color(0xFFB8B8B8),
                 child: Center(
                   child: TextWidget(
-                    text: '${packageProvider.packagesDataList[index].name} PKG',
+                    text: '${packageProvider.packagesDataList[index].name} ${S.of(context).pkg}',
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size10,
                     color: isSelected
@@ -347,7 +347,7 @@ class PackageCard extends StatelessWidget {
                 verticalSpace(16),
                 TextWidget(
                   text:
-                      '${packageProvider.packagesDataList[index].selectedPrice} SR',
+                      '${packageProvider.packagesDataList[index].selectedPrice} ${S.of(context).sr}',
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size14,
                   color: AppColor.borderBlue,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../models/otherServicesModel.dart';
 import '../../../providers/otherServices_provider.dart';
 import '../../../utils/styles/colors.dart';
@@ -33,10 +34,10 @@ class OtherServicesItem extends StatelessWidget {
   final int index;
   final OtherServicesData service;
 
-
   @override
   Widget build(BuildContext context) {
-    final OtherServicesProvider otherServicesProvider=Provider.of<OtherServicesProvider>(context);
+    final OtherServicesProvider otherServicesProvider =
+        Provider.of<OtherServicesProvider>(context);
 
     return CustomContainer(
       width: 108,
@@ -46,7 +47,9 @@ class OtherServicesItem extends StatelessWidget {
       backgroundColor: otherServicesProvider.selectedServiceIndex == index
           ? const Color(0xFFE1ECFF)
           : AppColor.borderGreyLight,
-      borderColor: otherServicesProvider.selectedServiceIndex == index ? const Color(0xFF0285E0) : Colors.transparent,
+      borderColor: otherServicesProvider.selectedServiceIndex == index
+          ? const Color(0xFF0285E0)
+          : Colors.transparent,
       padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
       onTap: onTap,
       child: Column(
@@ -74,7 +77,7 @@ class OtherServicesItem extends StatelessWidget {
           verticalSpace(8),
           seeMore
               ? TextWidget(
-                  text: 'See more',
+                  text: S.of(context).seeMore,
                   fontWeight: MyFontWeight.medium,
                   textSize: MyFontSize.size8,
                   color: const Color(0xFF636363),
@@ -87,7 +90,7 @@ class OtherServicesItem extends StatelessWidget {
                       color: AppColor.attributeColor,
                     )
                   : FittedBox(
-                    child: Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextWidget(
@@ -98,7 +101,7 @@ class OtherServicesItem extends StatelessWidget {
                           ),
                           horizontalSpace(5),
                           TextWidget(
-                            text: 'per',
+                            text: S.of(context).per,
                             fontWeight: MyFontWeight.medium,
                             textSize: MyFontSize.size8,
                             color: const Color(0xFF575757),
@@ -112,15 +115,14 @@ class OtherServicesItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                  ),
+                    ),
           verticalSpace(15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomContainer(
                 onTap: () {
-                  otherServicesProvider.selectedService(
-                      index: index);
+                  otherServicesProvider.selectedService(index: index);
                   otherServicesProvider.decreaseQuantityService();
                 },
                 width: 20,
@@ -142,8 +144,7 @@ class OtherServicesItem extends StatelessWidget {
               CustomContainer(
                 onTap: () {
                   otherServicesProvider.increaseQuantityService();
-                  otherServicesProvider.selectedService(
-                      index: index);
+                  otherServicesProvider.selectedService(index: index);
                 },
                 width: 20,
                 height: 20,

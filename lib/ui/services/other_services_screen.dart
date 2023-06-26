@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/otherServices_provider.dart';
@@ -64,7 +65,7 @@ class _OtherServicesState extends State<OtherServices> {
         Provider.of<RequestServicesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Other Services',
+        title: S.of(context).otherServices,
         onTap: () {
           navigateAndFinish(context, const HomeScreen());
           otherServicesProvider.clearServices();
@@ -73,9 +74,10 @@ class _OtherServicesState extends State<OtherServices> {
       body: otherServicesProvider.isLoading
           ? const DataLoader()
           : otherServicesProvider.otherServicesList.isEmpty
-              ? const Expanded(
-                  child:
-                      Center(child: TextWidget(text: 'There are No Services')))
+              ? Expanded(
+                  child: Center(
+                      child:
+                          TextWidget(text: S.of(context).thereAreNoServices)))
               : Padding(
                   padding: symmetricEdgeInsets(horizontal: 12, vertical: 40),
                   child: Column(
@@ -95,7 +97,7 @@ class _OtherServicesState extends State<OtherServices> {
                                 imageName: otherServicesProvider
                                     .otherServicesList[index].image!,
                                 serviceValue:
-                                    '${otherServicesProvider.otherServicesList[index].selectedPrice} SR',
+                                    '${otherServicesProvider.otherServicesList[index].selectedPrice} ${S.of(context).sr}',
                                 serviceUnit: otherServicesProvider
                                     .otherServicesList[index].costType,
                                 onlyValue: otherServicesProvider
@@ -127,7 +129,7 @@ class _OtherServicesState extends State<OtherServices> {
                                                 DefaultButton(
                                                   width: 130,
                                                   height: 30,
-                                                  text: 'Cancel',
+                                                  text: S.of(context).cancel,
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
@@ -172,10 +174,15 @@ class _OtherServicesState extends State<OtherServices> {
                           width: double.infinity,
                           fontWeight: MyFontWeight.bold,
                           fontSize: MyFontSize.size20,
-                          text: 'Next',
+                          text: S.of(context).next,
                           onPressed: () {
-                            if (otherServicesProvider.selectedServiceIndex != null) {
-                              if (otherServicesProvider.otherServicesList[otherServicesProvider.selectedServiceIndex!].quantity != 0) {
+                            if (otherServicesProvider.selectedServiceIndex !=
+                                null) {
+                              if (otherServicesProvider
+                                      .otherServicesList[otherServicesProvider
+                                          .selectedServiceIndex!]
+                                      .quantity !=
+                                  0) {
                                 AppLoader.showLoader(context);
                                 otherServicesProvider
                                     .storeInitialOtherServices(
@@ -205,12 +212,12 @@ class _OtherServicesState extends State<OtherServices> {
                                   }
                                 });
                               } else {
-                                CustomSnackBars.failureSnackBar(
-                                    context, 'increase your value first');
+                                CustomSnackBars.failureSnackBar(context,
+                                    S.of(context).increaseYourValueFirst);
                               }
-                            }else {
+                            } else {
                               CustomSnackBars.failureSnackBar(
-                                  context, 'Please Select Service');
+                                  context, S.of(context).pleaseSelectService);
                             }
                           },
                         ),

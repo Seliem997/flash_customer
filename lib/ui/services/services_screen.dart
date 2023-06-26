@@ -58,28 +58,31 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
- final AddressesProvider addressesProvider =
+    final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Services'),
+      appBar: CustomAppBar(title: S.of(context).services),
       body: SingleChildScrollView(
-        child: (requestServicesProvider.isLoading /*||
-                requestServicesProvider.taxData == null*/)
+        child: (requestServicesProvider
+                .isLoading /*||
+                requestServicesProvider.taxData == null*/
+            )
             ? const DataLoader()
             : (requestServicesProvider.basicServicesList.isEmpty ||
                     requestServicesProvider.extraServicesList.isEmpty)
-                ? const CustomSizedBox(
+                ? CustomSizedBox(
                     height: 500,
                     child: Center(
-                        child: TextWidget(text: 'No Services Available')))
+                        child: TextWidget(
+                            text: S.of(context).noServicesAvailable)))
                 : Padding(
                     padding: symmetricEdgeInsets(horizontal: 24, vertical: 41),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          text: 'Basic Services',
+                          text: S.of(context).basicServices,
                           textSize: MyFontSize.size16,
                           fontWeight: MyFontWeight.semiBold,
                           color: const Color(0xFF4B4B4B),
@@ -113,7 +116,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           .selectedBasicServiceId =
                                       requestServicesProvider
                                           .basicServicesList[index].id!;
-
                                 },
                                 index: index,
                                 infoOnPressed: () {
@@ -139,7 +141,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                                 DefaultButton(
                                                   width: 130,
                                                   height: 30,
-                                                  text: 'Cancel',
+                                                  text: S.of(context).cancel,
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
@@ -164,7 +166,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         ),
                         verticalSpace(40),
                         TextWidget(
-                          text: 'Extra Services',
+                          text: S.of(context).extraServices,
                           textSize: MyFontSize.size16,
                           fontWeight: MyFontWeight.semiBold,
                           color: const Color(0xFF4B4B4B),
@@ -174,69 +176,74 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           width: double.infinity,
                           radiusCircular: 4,
                           backgroundColor: const Color(0xFFF9F9F9),
-                          child:
-                              requestServicesProvider.extraServicesList.isEmpty
-                                  ? const DataLoader()
-                                  : Padding(
-                                      padding: onlyEdgeInsets(
-                                        start: 11,
-                                        end: 21,
-                                        bottom: 22,
-                                        top: 22,
-                                      ),
-                                      child: ListView.separated(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) =>
-                                            ExtraServicesWidget(
-                                          extraService: requestServicesProvider
-                                              .extraServicesList[index],
-                                              infoOnPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return AlertDialog(
-                                                      content: Padding(
-                                                        padding: const EdgeInsets.all(20.0),
-                                                        child: TextWidget(
-                                                          text:
-                                                          '${requestServicesProvider.extraServicesList[index].info}',
-                                                        ),
+                          child: requestServicesProvider
+                                  .extraServicesList.isEmpty
+                              ? const DataLoader()
+                              : Padding(
+                                  padding: onlyEdgeInsets(
+                                    start: 11,
+                                    end: 21,
+                                    bottom: 22,
+                                    top: 22,
+                                  ),
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) =>
+                                        ExtraServicesWidget(
+                                      extraService: requestServicesProvider
+                                          .extraServicesList[index],
+                                      infoOnPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(20.0),
+                                                child: TextWidget(
+                                                  text:
+                                                      '${requestServicesProvider.extraServicesList[index].info}',
+                                                ),
+                                              ),
+                                              actions: [
+                                                Padding(
+                                                  padding: symmetricEdgeInsets(
+                                                      vertical: 5),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      DefaultButton(
+                                                        width: 130,
+                                                        height: 30,
+                                                        text: S
+                                                            .of(context)
+                                                            .cancel,
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        backgroundColor:
+                                                            AppColor.boldGreen,
                                                       ),
-                                                      actions: [
-                                                        Padding(
-                                                          padding: symmetricEdgeInsets(
-                                                              vertical: 5),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment.center,
-                                                            children: [
-                                                              DefaultButton(
-                                                                width: 130,
-                                                                height: 30,
-                                                                text: 'Cancel',
-                                                                onPressed: () {
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                backgroundColor:
-                                                                AppColor.boldGreen,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                        ),
-                                        separatorBuilder: (context, index) =>
-                                            verticalSpace(14),
-                                        itemCount: requestServicesProvider
-                                            .extraServicesList.length,
-                                      ),
-                                      /*child: SingleChildScrollView(
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    separatorBuilder: (context, index) =>
+                                        verticalSpace(14),
+                                    itemCount: requestServicesProvider
+                                        .extraServicesList.length,
+                                  ),
+                                  /*child: SingleChildScrollView(
                     child: Column(
                       children: [
                         CustomContainer(
@@ -446,7 +453,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       ],
                     ),
                   ),*/
-                                    ),
+                                ),
                         ),
                         verticalSpace(25),
                         Row(
@@ -457,13 +464,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 child: Image.asset('assets/images/clock.png')),
                             horizontalSpace(4),
                             TextWidget(
-                              text: 'Service Duration :',
+                              text: S.of(context).serviceDuration,
                               textSize: MyFontSize.size15,
                               fontWeight: MyFontWeight.bold,
                             ),
                             TextWidget(
                               text:
-                                  ' ${(requestServicesProvider.totalDuration)} Min',
+                                  ' ${(requestServicesProvider.totalDuration)} ${S.of(context).min}',
                               textSize: MyFontSize.size15,
                               fontWeight: MyFontWeight.medium,
                               color: const Color(0xFF686868),
@@ -483,13 +490,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Amount :',
+                                      text: S.of(context).amount,
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.totalAmount} SR',
+                                      text:
+                                          '${requestServicesProvider.totalAmount} ${S.of(context).sr}',
                                       // text: '${requestServicesProvider.basicAmount + requestServicesProvider.extraAmount} SR',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
@@ -501,13 +509,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Tax :',
+                                      text: S.of(context).tax,
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${requestServicesProvider.totalTaxes} ' + 'SR',
+                                      text:
+                                          '${requestServicesProvider.totalTaxes} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -591,7 +600,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const Spacer(),
                                     TextWidget(
-                                      text: '${(requestServicesProvider.totalAmount + requestServicesProvider.totalTaxes)} '+ 'SR',
+                                      text:
+                                          '${(requestServicesProvider.totalAmount + requestServicesProvider.totalTaxes)} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -606,28 +616,35 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         DefaultButton(
                           width: 345,
                           height: 48,
-                          text: 'Book',
+                          text: S.of(context).book,
                           fontSize: 21,
                           fontWeight: MyFontWeight.bold,
                           onPressed: () {
-                            if(requestServicesProvider.selectedBasicIndex != null){
+                            if (requestServicesProvider.selectedBasicIndex !=
+                                null) {
                               AppLoader.showLoader(context);
-                              requestServicesProvider.bookServices(
+                              requestServicesProvider
+                                  .bookServices(
                                 context,
                                 cityId: widget.cityId,
                                 vehicleId: widget.vehicleId,
-                                basicServiceId: requestServicesProvider.selectedBasicServiceId,
-                                addressId: addressesProvider.addressDetailsData!.id!,
-                              ).then((value) {
+                                basicServiceId: requestServicesProvider
+                                    .selectedBasicServiceId,
+                                addressId:
+                                    addressesProvider.addressDetailsData!.id!,
+                              )
+                                  .then((value) {
                                 AppLoader.stopLoader();
-                                if(value.status == Status.success){
+                                if (value.status == Status.success) {
                                   navigateTo(context, const SelectDate());
-                                }else{
-                                  CustomSnackBars.failureSnackBar(context, '${value.message}');
+                                } else {
+                                  CustomSnackBars.failureSnackBar(
+                                      context, '${value.message}');
                                 }
                               });
-                            }else{
-                              CustomSnackBars.failureSnackBar(context, 'Please Select Basic Service');
+                            } else {
+                              CustomSnackBars.failureSnackBar(context,
+                                  S.of(context).pleaseSelectBasicService);
                             }
                           },
                         ),

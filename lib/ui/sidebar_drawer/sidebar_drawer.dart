@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/styles/colors.dart';
@@ -72,14 +73,14 @@ class SidebarDrawer extends StatelessWidget {
                 children: [
                   TextWidget(
                     text: userDataProvider.userName == ""
-                        ? "User Name"
-                        : userDataProvider.userName ?? "User Name",
+                        ? S.of(context).userName
+                        : userDataProvider.userName ?? S.of(context).userName,
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size15,
                   ),
                   verticalSpace(6),
                   TextWidget(
-                    text: userDataProvider.phone ?? 'phone Number',
+                    text: userDataProvider.phone ?? S.of(context).phoneNumber,
                     color: MyApp.themeMode(context)
                         ? const Color(0xff1E1E1E)
                         : const Color(0xff1E1E1E),
@@ -99,7 +100,7 @@ class SidebarDrawer extends StatelessWidget {
                             padding: const EdgeInsets.all(20.0),
                             child: TextWidget(
                               text:
-                                  'Want Switch to ${MyApp.themeMode(context) ? 'Light Mode' : 'Dark Mode'}?',
+                                  'Want Switch to ${MyApp.themeMode(context) ? S.of(context).light : S.of(context).dark}${S.of(context).mode}',
                               color: AppColor.black,
                             ),
                           ),
@@ -113,7 +114,7 @@ class SidebarDrawer extends StatelessWidget {
                                   DefaultButton(
                                     width: 130,
                                     height: 30,
-                                    text: 'Cancel',
+                                    text: S.of(context).cancel,
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
@@ -122,7 +123,7 @@ class SidebarDrawer extends StatelessWidget {
                                   DefaultButton(
                                     width: 130,
                                     height: 30,
-                                    text: 'Switch',
+                                    text: S.of(context).switchh ,
                                     onPressed: () {
                                       MyApp.changeThemeMode(context);
                                       Navigator.pop(context);
@@ -176,7 +177,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Profile',
+                text: S.of(context).profile,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -199,7 +200,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Requests',
+                text: S.of(context).requests,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -222,7 +223,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Wallet',
+                text: S.of(context).wallet,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -245,7 +246,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Vehicles',
+                text: S.of(context).vehicles,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -268,7 +269,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Addresses',
+                text: S.of(context).addresses,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -294,7 +295,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Monthly pkg',
+                text: S.of(context).monthlyPkg,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -320,7 +321,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'About us',
+                text: S.of(context).aboutUs,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -346,7 +347,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Contact us',
+                text: S.of(context).contactUs,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -371,7 +372,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: "Log out",
+                text: S.of(context).logOut,
                 color: const Color(0xFFCC4A50),
                 textSize: MyFontSize.size16,
                 fontWeight: MyFontWeight.medium,

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/transactionHistory_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/font_styles.dart';
@@ -48,7 +49,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'My Wallet',
+        title: S.of(context).myWallet,
         backgroundColor: AppColor.lightBabyBlue,
       ),
       body: ListView(
@@ -79,14 +80,14 @@ class _WalletScreenState extends State<WalletScreen> {
                 verticalSpace(14),
                 TextWidget(
                   text: userProvider.userName == ""
-                      ? "User Name"
-                      : userProvider.userName ?? "User Name",
+                      ? S.of(context).userName
+                      : userProvider.userName ?? S.of(context).userName,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size16,
                 ),
                 verticalSpace(10),
                 TextWidget(
-                  text: '${userProvider.userBalance} SR',
+                  text: '${userProvider.userBalance}${S.of(context).sr}',
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
                   color: const Color(0xFF00567B),
@@ -102,7 +103,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 Row(
                   children: [
                     TextWidget(
-                      text: 'Recharge Amount',
+                      text: S.of(context).rechargeAmount,
                       textSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.bold,
                     ),
@@ -135,7 +136,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 verticalSpace(28),
                 DefaultButton(
-                    text: 'Pay',
+                    text: S.of(context).pay,
                     onPressed: () {
                       /*if(transactionHistoryProvider.rechargeAmountController == null){
                         CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
@@ -169,20 +170,11 @@ class _WalletScreenState extends State<WalletScreen> {
                 Row(
                   children: [
                     TextWidget(
-                      text: 'Transactions history',
+                      text: S.of(context).transactionsHistory,
                       textSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.bold,
                     ),
                     const Spacer(),
-                    TextButton(
-                      onPressed: () {},
-                      child: TextWidget(
-                        text: 'See All',
-                        textSize: MyFontSize.size10,
-                        fontWeight: MyFontWeight.medium,
-                        color: AppColor.boldBlue,
-                      ),
-                    )
                   ],
                 ),
                 verticalSpace(6),

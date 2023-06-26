@@ -10,6 +10,7 @@ import 'package:go_sell_sdk_flutter/model/models.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../models/requestDetailsModel.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/requestServices_provider.dart';
@@ -382,7 +383,7 @@ class _WalletPaymentState extends State<WalletPayment> {
     return Scaffold(
       backgroundColor: MyApp.themeMode(context) ? AppColor.boldDark : null,
       appBar: CustomAppBar(
-        title: 'My Wallet',
+        title: S.of(context).myWallet,
         // backgroundColor: AppColor.lightBabyBlue,
       ),
       body: ListView(
@@ -415,14 +416,14 @@ class _WalletPaymentState extends State<WalletPayment> {
                 verticalSpace(14),
                 TextWidget(
                   text: userProvider.userName == ""
-                      ? "User Name"
-                      : userProvider.userName ?? "User Name",
+                      ? S.of(context).userName
+                      : userProvider.userName ?? S.of(context).userName,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size16,
                 ),
                 verticalSpace(10),
                 TextWidget(
-                  text: '${userProvider.userBalance} SR',
+                  text: '${userProvider.userBalance} ${S.of(context).sr}',
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
                   color: const Color(0xFF00567B),
@@ -440,7 +441,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                   Row(
                     children: [
                       TextWidget(
-                        text: 'Recharge Amount',
+                        text: S.of(context).rechargeAmount,
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.bold,
                       ),
@@ -510,7 +511,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                   ),
 */
                   DefaultButton(
-                      text: 'Pay',
+                      text: S.of(context).pay,
                       onPressed: () {
                         /*if(transactionHistoryProvider.rechargeAmountController == null){
                           CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
@@ -524,7 +525,8 @@ class _WalletPaymentState extends State<WalletPayment> {
                         AppLoader.showLoader(context);
                         transactionHistoryProvider
                             .chargingWalletUrl(
-                          amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/ 30,
+                          amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/
+                              30,
                           payBy: 'credit_card',
                         )
                             .then((value) {
@@ -541,7 +543,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                   Row(
                     children: [
                       TextWidget(
-                        text: 'Transactions history',
+                        text: S.of(context).transactionsHistory,
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.bold,
                       ),
@@ -549,7 +551,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                       TextButton(
                         onPressed: () {},
                         child: TextWidget(
-                          text: 'See All',
+                          text: S.of(context).seeAll,
                           textSize: MyFontSize.size10,
                           fontWeight: MyFontWeight.medium,
                           color: AppColor.boldBlue,
@@ -605,14 +607,24 @@ class _WalletPaymentState extends State<WalletPayment> {
                                             ),
                                             horizontalSpace(4),
                                             TextWidget(
-                                              text: DateFormat(DFormat.dmy.key).format(DateTime.parse(transactionHistoryProvider.transactionData!.collection![index].createdAt!)),
+                                              text: DateFormat(DFormat.dmy.key)
+                                                  .format(DateTime.parse(
+                                                      transactionHistoryProvider
+                                                          .transactionData!
+                                                          .collection![index]
+                                                          .createdAt!)),
                                               textSize: MyFontSize.size8,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),
                                             horizontalSpace(10),
                                             TextWidget(
-                                              text: DateFormat(DFormat.hm.key).format(DateTime.parse(transactionHistoryProvider.transactionData!.collection![index].createdAt!)),
+                                              text: DateFormat(DFormat.hm.key)
+                                                  .format(DateTime.parse(
+                                                      transactionHistoryProvider
+                                                          .transactionData!
+                                                          .collection![index]
+                                                          .createdAt!)),
                                               textSize: MyFontSize.size8,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,

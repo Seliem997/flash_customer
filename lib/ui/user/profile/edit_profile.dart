@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/app_loader.dart';
 import '../../../utils/styles/colors.dart';
@@ -32,7 +33,7 @@ class EditProfile extends StatelessWidget {
         text: CacheHelper.returnData(key: CacheKey.phoneNumber));
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'My Profile',
+        title: S.of(context).myProfile,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -58,7 +59,7 @@ class EditProfile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                      text: 'ID',
+                      text: S.of(context).id,
                       textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   verticalSpace(10),
@@ -66,7 +67,7 @@ class EditProfile extends StatelessWidget {
                       height: 40,
                       width: double.infinity,
                       child: DefaultFormField(
-                        hintText: 'Enter ID',
+                        hintText: S.of(context).enterId,
                         fillColor: AppColor.borderGreyLight,
                         filled: true,
                         enabled: false,
@@ -77,12 +78,12 @@ class EditProfile extends StatelessWidget {
                   Row(
                     children: [
                       TextWidget(
-                          text: 'Name',
+                          text: S.of(context).name,
                           textSize: MyFontSize.size18,
                           fontWeight: MyFontWeight.medium),
                       horizontalSpace(3),
                       TextWidget(
-                        text: '(Optional)',
+                        text: S.of(context).optional,
                         textSize: MyFontSize.size8,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.lightGrey,
@@ -95,7 +96,7 @@ class EditProfile extends StatelessWidget {
                     width: double.infinity,
                     child: DefaultFormField(
                       controller: nameTextController,
-                      hintText: 'Enter Name',
+                      hintText: S.of(context).enterName,
                       fillColor: AppColor.lightBabyBlue,
                       filled: true,
                       textColor: AppColor.grey,
@@ -107,12 +108,12 @@ class EditProfile extends StatelessWidget {
                   Row(
                     children: [
                       TextWidget(
-                          text: 'Email',
+                          text: S.of(context).email,
                           textSize: MyFontSize.size18,
                           fontWeight: MyFontWeight.medium),
                       horizontalSpace(3),
                       TextWidget(
-                        text: '(Optional)',
+                        text: S.of(context).optional,
                         textSize: MyFontSize.size8,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.lightGrey,
@@ -125,7 +126,7 @@ class EditProfile extends StatelessWidget {
                     width: double.infinity,
                     child: DefaultFormField(
                       controller: emailTextController,
-                      hintText: 'Enter Email',
+                      hintText: S.of(context).enterEmail,
                       fillColor: AppColor.lightBabyBlue,
                       filled: true,
                       textColor: AppColor.grey,
@@ -135,7 +136,7 @@ class EditProfile extends StatelessWidget {
                   ),
                   verticalSpace(27),
                   TextWidget(
-                      text: 'Phone Number',
+                      text: S.of(context).phoneNumber,
                       textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   verticalSpace(10),
@@ -145,7 +146,7 @@ class EditProfile extends StatelessWidget {
                     child: DefaultFormField(
                       enabled: false,
                       controller: phoneTextController,
-                      hintText: 'Enter Phone Number',
+                      hintText: S.of(context).enterPhoneNumber,
                       fillColor: AppColor.borderGreyLight,
                       filled: true,
                       textColor: AppColor.grey,
@@ -165,10 +166,10 @@ class EditProfile extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: const Padding(
+                          content: Padding(
                             padding: EdgeInsets.all(20.0),
                             child: TextWidget(
-                              text: 'Are you sure to delete the account?',
+                              text: S.of(context).areYouSureToDeleteTheAccount,
                               color: AppColor.black,
                             ),
                           ),
@@ -182,7 +183,7 @@ class EditProfile extends StatelessWidget {
                                   DefaultButton(
                                     width: 130,
                                     height: 30,
-                                    text: 'Cancel',
+                                    text: S.of(context).cancel,
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
@@ -191,7 +192,7 @@ class EditProfile extends StatelessWidget {
                                   DefaultButton(
                                     width: 130,
                                     height: 30,
-                                    text: 'Delete',
+                                    text: S.of(context).delete,
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
@@ -206,14 +207,14 @@ class EditProfile extends StatelessWidget {
                     );
                   },
                   child: TextWidget(
-                      text: 'Delete account',
+                      text: S.of(context).deleteAccount,
                       fontWeight: MyFontWeight.semiBold,
                       textSize: MyFontSize.size17,
                       color: const Color(0xFFFF2A34)),
                 ),
                 verticalSpace(12),
                 DefaultButton(
-                  text: 'Save',
+                  text: S.of(context).save,
                   onPressed: () async {
                     print('on Tap is ${phoneTextController.text}');
                     FocusScope.of(context).unfocus();
@@ -225,7 +226,7 @@ class EditProfile extends StatelessWidget {
                         .then((value) {
                       if (value == Status.success) {
                         CustomSnackBars.successSnackBar(
-                            context, 'Profile Updated');
+                            context, S.of(context).profileUpdated);
                       } else {
                         CustomSnackBars.somethingWentWrongSnackBar(context);
                       }

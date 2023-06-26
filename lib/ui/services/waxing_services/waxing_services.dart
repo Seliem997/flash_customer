@@ -1,6 +1,7 @@
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flutter/material.dart';
 
+import '../../../generated/l10n.dart';
 import '../../widgets/custom_bar_widget.dart';
 import '../widgets/other_services_widgets.dart';
 
@@ -10,7 +11,7 @@ class WaxingServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Waxing Services'),
+      appBar: CustomAppBar(title: S.of(context).waxingServices),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 40),
         child: Column(

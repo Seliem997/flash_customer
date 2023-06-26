@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../generated/l10n.dart';
 
 class CustomSnackBars {
   static successSnackBar(BuildContext context, String text) {
@@ -16,8 +17,8 @@ class CustomSnackBars {
   }
 
   static somethingWentWrongSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('somethingWentWrong'),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(S.of(context).somethingwentwrong),
         backgroundColor: Colors.red));
   }
 }

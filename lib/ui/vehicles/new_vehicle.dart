@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../models/manufacturersModel.dart';
 import '../../models/vehiclesModelsModel.dart';
@@ -30,7 +31,6 @@ class VehicleInfo extends StatefulWidget {
 }
 
 class _VehicleInfoState extends State<VehicleInfo> {
-
   // int manufacture=2, model=2;
 
   @override
@@ -45,7 +45,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
     await packageProvider.getManufacturers();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final PackageProvider packageProvider =
@@ -55,7 +54,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Vehicle Info',
+        title: S.of(context).vehicleInfo,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -66,12 +65,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Row(
                 children: [
                   TextWidget(
-                      text: 'Manufacturer',
+                      text: S.of(context).manufacturer,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
-                    text: '(Required)',
+                    text: S.of(context).required,
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
                     color: packageProvider.requiredManufacture
@@ -98,7 +97,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     value: packageProvider.selectedManufacture,
                     iconEnabledColor: Colors.black,
                     hint: TextWidget(
-                      text: 'Choose Manufacturer',
+                      text: S.of(context).chooseManufacturer,
                       fontWeight: MyFontWeight.medium,
                       textSize: MyFontSize.size10,
                       color: const Color(0xFF909090),
@@ -106,7 +105,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     icon: SvgPicture.asset(
                       'assets/svg/arrow_down.svg',
                     ),
-                    dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+                    dropdownColor: MyApp.themeMode(context)
+                        ? AppColor.borderGreyLight
+                        : null,
                     items: List.generate(
                         packageProvider.manufacturerDataList.length,
                         (index) => DropdownMenuItem<ManufacturerData>(
@@ -115,7 +116,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 packageProvider
                                     .manufacturerDataList[index].name!,
                                 style: TextStyle(
-                                    color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
+                                    color: MyApp.themeMode(context)
+                                        ? const Color(0xFF909090)
+                                        : Colors.black,
+                                    fontSize: 16)))),
                     onChanged: (value) async {
                       packageProvider.setSelectedManufacture(value!);
                       packageProvider.chooseManufacture = true;
@@ -138,12 +142,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Row(
                 children: [
                   TextWidget(
-                      text: 'Model',
+                      text: S.of(context).model,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
-                    text: '(Required)',
+                    text: S.of(context).required,
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
                     color: packageProvider.requiredModel
@@ -170,7 +174,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     value: packageProvider.selectedVehicleModel,
                     iconEnabledColor: Colors.black,
                     hint: TextWidget(
-                      text: 'Choose Model',
+                      text: S.of(context).chooseModel,
                       fontWeight: MyFontWeight.medium,
                       textSize: MyFontSize.size10,
                       color: const Color(0xFF909090),
@@ -187,8 +191,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 packageProvider
                                     .vehiclesModelsDataList[index].name!,
                                 style: TextStyle(
-                                    color: MyApp.themeMode(context) ? const Color(0xFF909090) : Colors.black, fontSize: 16)))),
-                    dropdownColor: MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+                                    color: MyApp.themeMode(context)
+                                        ? const Color(0xFF909090)
+                                        : Colors.black,
+                                    fontSize: 16)))),
+                    dropdownColor: MyApp.themeMode(context)
+                        ? AppColor.borderGreyLight
+                        : null,
                     onChanged: (value) async {
                       packageProvider.setSelectedVehicle(value!);
                       packageProvider.chooseModel = true;
@@ -202,12 +211,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Row(
                 children: [
                   TextWidget(
-                      text: 'Nickname',
+                      text: S.of(context).nickname,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
-                    text: '(Optional)',
+                    text: S.of(context).optional,
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.lightGrey,
@@ -220,7 +229,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 width: double.infinity,
                 child: DefaultFormField(
                   controller: myVehiclesProvider.nameController,
-                  hintText: 'Type name......',
+                  hintText: S.of(context).typeName,
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
@@ -232,12 +241,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Row(
                 children: [
                   TextWidget(
-                      text: 'Year',
+                      text: S.of(context).year,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
-                    text: '(Optional)',
+                    text: S.of(context).optional,
                     textSize: MyFontSize.size8,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.lightGrey,
@@ -250,7 +259,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 width: double.infinity,
                 child: DefaultFormField(
                   controller: myVehiclesProvider.yearController,
-                  hintText: 'Enter Year',
+                  hintText: S.of(context).enterYear,
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
@@ -271,14 +280,16 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   enableShadesSelection: false,
                   hasBorder: true,
                   title: TextWidget(
-                    text: 'Color',
+                    text: S.of(context).color,
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.medium,
                   ),
                   // Update the screenPickerColor using the callback.
                   onColorChanged: (Color color) {
-                    setState(() => myVehiclesProvider.screenPickerColor = color);
-                    myVehiclesProvider.vehicleColor  = ColorTools.nameThatColor(color);
+                    setState(
+                        () => myVehiclesProvider.screenPickerColor = color);
+                    myVehiclesProvider.vehicleColor =
+                        ColorTools.nameThatColor(color);
                   },
                   borderColor: Colors.black,
                   width: 40,
@@ -295,7 +306,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextWidget(
-                        text: 'Numbers',
+                        text: S.of(context).numbers,
                         textSize: MyFontSize.size15,
                         fontWeight: MyFontWeight.medium,
                       ),
@@ -305,7 +316,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         width: 160,
                         child: DefaultFormField(
                           controller: myVehiclesProvider.numbersController,
-                          hintText: 'Type Numbers',
+                          hintText: S.of(context).typeNumbers,
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
                           textColor: AppColor.textGrey,
@@ -324,7 +335,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextWidget(
-                        text: 'Letters',
+                        text: S.of(context).letters,
                         textSize: MyFontSize.size15,
                         fontWeight: MyFontWeight.medium,
                       ),
@@ -334,7 +345,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         width: 160,
                         child: DefaultFormField(
                           controller: myVehiclesProvider.lettersController,
-                          hintText: 'Type Letters',
+                          hintText: S.of(context).typeLetters,
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
                           textColor: AppColor.textGrey,
@@ -356,7 +367,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Align(
                 alignment: Alignment.center,
                 child: TextWidget(
-                  text: 'Vehicle registration plate',
+                  text: S.of(context).vehicleRegistrationPlate,
                   textSize: MyFontSize.size14,
                   fontWeight: MyFontWeight.medium,
                   color: AppColor.grey,
@@ -366,7 +377,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
               DefaultButton(
                 width: 345,
                 height: 48,
-                text: 'Save',
+                text: S.of(context).save,
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
                 onPressed: () async {
@@ -382,8 +393,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     packageProvider.selectedManufacture!.id!,
                                 model:
                                     packageProvider.selectedVehicleModel!.id!,
-                                numbers: myVehiclesProvider.numbersController.text,
-                                letters: myVehiclesProvider.lettersController.text,
+                                numbers:
+                                    myVehiclesProvider.numbersController.text,
+                                letters:
+                                    myVehiclesProvider.lettersController.text,
                                 color: myVehiclesProvider.vehicleColor,
                                 name: myVehiclesProvider.nameController.text,
                                 year: myVehiclesProvider.yearController.text,
