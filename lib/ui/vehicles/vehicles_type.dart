@@ -53,7 +53,11 @@ class _VehicleTypesState extends State<VehicleTypes> {
 
     await myVehiclesProvider
         .getMyVehicles()
-        .then((value) => packageProvider.selectedMyVehicleLabel());
+        .then((value) {
+          if(myVehiclesProvider.myVehiclesData!.collection!.isNotEmpty) {
+            packageProvider.selectedMyVehicleLabel();
+          }
+        });
     packageProvider.getVehiclesTypeActive();
     packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
@@ -156,7 +160,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                       )
                 : myVehiclesProvider.loadingMyVehicles
                     ? const DataLoader(useExpand: true)
-                    : myVehiclesProvider.myVehiclesData == null
+                    : myVehiclesProvider.myVehiclesData!.collection!.isEmpty
                         ? const NoDataPlaceHolder()
                         : MyVehiclesScreenWidget(
                             myVehiclesProvider: myVehiclesProvider),
@@ -185,7 +189,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                 AppLoader.showLoader(context),
                                 await myVehiclesProvider
                                     .addNewVehicle(
-                                  vehicleTypeId: '1',
+                                  vehicleTypeId: packageProvider.selectedManufacture!.vehicleTypeId!,
                                   manufacture:
                                       packageProvider.selectedManufacture!.id!,
                                   model:
@@ -298,81 +302,6 @@ class NewVehiclesScreenWidget extends StatelessWidget {
             separatorBuilder: (context, index) => horizontalSpace(11),
           ),
         ),
-        /* Row(
-          children: [
-            CustomContainer(
-              backgroundColor: const Color(0xFFE6EEFB),
-              width: 105,
-              height: 112,
-              padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
-              onTap: () {},
-              radiusCircular: 5,
-              child: Column(
-                children: [
-                  CustomSizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.network(packageProvider.vehiclesTypesDataList[0].image!),
-                  ),
-                  verticalSpace(8),
-                  TextWidget(
-                    text: 'Car',
-                    fontWeight: MyFontWeight.bold,
-                    textSize: MyFontSize.size14,
-                  ),
-                ],
-              ),
-            ),
-            horizontalSpace(11),
-            CustomContainer(
-              backgroundColor: AppColor.borderGreyLight,
-              width: 105,
-              height: 112,
-              padding: symmetricEdgeInsets(horizontal: 24, vertical: 19),
-              onTap: () {},
-              radiusCircular: 5,
-              child: Column(
-                children: [
-                  CustomSizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.asset('assets/images/vehicle_van.png'),
-                  ),
-                  verticalSpace(8),
-                  TextWidget(
-                    text: 'Van',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size12,
-                  ),
-                ],
-              ),
-            ),
-            horizontalSpace(11),
-            CustomContainer(
-              backgroundColor: AppColor.borderGreyLight,
-              width: 108,
-              height: 112,
-              padding: symmetricEdgeInsets(horizontal: 14, vertical: 19),
-              onTap: () {},
-              radiusCircular: 5,
-              child: Column(
-                children: [
-                  CustomSizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.asset('assets/images/vehicle_motorcycle.png'),
-                  ),
-                  verticalSpace(8),
-                  TextWidget(
-                    text: 'Motorcycle',
-                    fontWeight: MyFontWeight.medium,
-                    textSize: MyFontSize.size12,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),*/
         verticalSpace(38),
         Row(
           children: [

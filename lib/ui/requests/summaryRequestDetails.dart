@@ -13,9 +13,11 @@ class SummaryRequestDetails extends StatelessWidget {
     super.key,
     required this.requestServicesProvider,
     this.cameFromOtherServices = false,
+    this.cameFromMonthlyPackage = false,
   });
 
   final bool cameFromOtherServices;
+  final bool cameFromMonthlyPackage;
   final RequestServicesProvider requestServicesProvider;
 
   @override
@@ -80,46 +82,14 @@ class SummaryRequestDetails extends StatelessWidget {
               fontWeight: MyFontWeight.regular,
               color: AppColor.subTextGrey,
             ),
-            verticalSpace(20),
-            TextWidget(
-              text: S.of(context).services,
-              textSize: MyFontSize.size15,
-              fontWeight: MyFontWeight.semiBold,
-            ),
-            verticalSpace(10),
-            CustomSizedBox(
-              // height: 25,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: requestServicesProvider
-                    .detailsRequestData!.services!.length,
-                itemBuilder: (context, index) {
-                  if (requestServicesProvider
-                              .detailsRequestData!.services![index].type ==
-                          'basic' ||
-                      requestServicesProvider
-                              .detailsRequestData!.services![index].type ==
-                          "other") {
-                    return TextWidget(
-                      text: requestServicesProvider
-                          .detailsRequestData!.services![index].title!,
-                      textSize: MyFontSize.size12,
-                      fontWeight: MyFontWeight.regular,
-                      color: AppColor.subTextGrey,
-                    );
-                  }
-                  return Container();
-                },
-              ),
-            ),
-            verticalSpace(20),
             Visibility(
-              visible: !cameFromOtherServices,
+              visible: !cameFromMonthlyPackage,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  verticalSpace(20),
                   TextWidget(
-                    text: S.of(context).extraServices,
+                    text: S.of(context).services,
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.semiBold,
                   ),
@@ -132,8 +102,11 @@ class SummaryRequestDetails extends StatelessWidget {
                           .detailsRequestData!.services!.length,
                       itemBuilder: (context, index) {
                         if (requestServicesProvider
-                                .detailsRequestData!.services![index].type ==
-                            'extra') {
+                                    .detailsRequestData!.services![index].type ==
+                                'basic' ||
+                            requestServicesProvider
+                                    .detailsRequestData!.services![index].type ==
+                                "other") {
                           return TextWidget(
                             text: requestServicesProvider
                                 .detailsRequestData!.services![index].title!,
@@ -142,37 +115,135 @@ class SummaryRequestDetails extends StatelessWidget {
                             color: AppColor.subTextGrey,
                           );
                         }
-                        return /*TextWidget(
-                          text: 'No extra Services',
-                          textSize: MyFontSize.size12,
-                          fontWeight: MyFontWeight.regular,
-                          color: AppColor.subTextGrey,
-                        )*/
-                            const SizedBox();
+                        return Container();
                       },
                     ),
                   ),
                   verticalSpace(20),
+                  Visibility(
+                    visible: !cameFromOtherServices,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWidget(
+                          text: S.of(context).extraServices,
+                          textSize: MyFontSize.size15,
+                          fontWeight: MyFontWeight.semiBold,
+                        ),
+                        verticalSpace(10),
+                        CustomSizedBox(
+                          // height: 25,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: requestServicesProvider
+                                .detailsRequestData!.services!.length,
+                            itemBuilder: (context, index) {
+                              if (requestServicesProvider
+                                      .detailsRequestData!.services![index].type ==
+                                  'extra') {
+                                return TextWidget(
+                                  text: requestServicesProvider
+                                      .detailsRequestData!.services![index].title!,
+                                  textSize: MyFontSize.size12,
+                                  fontWeight: MyFontWeight.regular,
+                                  color: AppColor.subTextGrey,
+                                );
+                              }
+                              return /*TextWidget(
+                                text: 'No extra Services',
+                                textSize: MyFontSize.size12,
+                                fontWeight: MyFontWeight.regular,
+                                color: AppColor.subTextGrey,
+                              )*/
+                                  const SizedBox();
+                            },
+                          ),
+                        ),
+                        verticalSpace(20),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      TextWidget(
+                        text: S.of(context).serviceDuration,
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.semiBold,
+                      ),
+                      horizontalSpace(10),
+                      TextWidget(
+                        text:
+                            "${requestServicesProvider.detailsRequestData!.totalDuration}",
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.medium,
+                        color: const Color(0xFF686868),
+                      ),
+                      verticalSpace(20),
+                    ],
+                  ),
                 ],
               ),
             ),
-            Row(
-              children: [
-                TextWidget(
-                  text: S.of(context).serviceDuration,
-                  textSize: MyFontSize.size15,
-                  fontWeight: MyFontWeight.semiBold,
-                ),
-                horizontalSpace(10),
-                TextWidget(
-                  text:
-                      "${requestServicesProvider.detailsRequestData!.totalDuration}",
-                  textSize: MyFontSize.size15,
-                  fontWeight: MyFontWeight.medium,
-                  color: const Color(0xFF686868),
-                ),
-                verticalSpace(20),
-              ],
+            Visibility(
+              visible: cameFromMonthlyPackage,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  verticalSpace(20),
+                  TextWidget(
+                    text: 'Package Name',
+                    textSize: MyFontSize.size15,
+                    fontWeight: MyFontWeight.semiBold,
+                  ),
+                  verticalSpace(10),
+                  CustomSizedBox(
+                    // height: 25,
+                    child: TextWidget(
+                      text: '${requestServicesProvider.detailsRequestData!.packageDetails?.nameEn}',
+                      textSize: MyFontSize.size12,
+                      fontWeight: MyFontWeight.regular,
+                      color: AppColor.subTextGrey,
+                    ),
+                  ),
+                  verticalSpace(20),
+                  Row(
+                    children: [
+                      TextWidget(
+                        text: 'Washing Quantity',
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.semiBold,
+                      ),
+                      horizontalSpace(10),
+                      TextWidget(
+                        text: '${requestServicesProvider.detailsRequestData!.packageDetails?.washingQuantity}',
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.medium,
+                        color: const Color(0xFF686868),
+                      ),
+                      verticalSpace(20),
+                    ],
+                  ),
+                  verticalSpace(20),
+                  Row(
+                    children: [
+                      TextWidget(
+                        text: S.of(context).serviceDuration,
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.semiBold,
+                      ),
+                      horizontalSpace(10),
+                      TextWidget(
+                        text:
+                            "${requestServicesProvider.detailsRequestData!.packageDetails?.duration}",
+                        textSize: MyFontSize.size15,
+                        fontWeight: MyFontWeight.medium,
+                        color: const Color(0xFF686868),
+                      ),
+                      verticalSpace(20),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

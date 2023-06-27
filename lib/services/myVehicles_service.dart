@@ -14,7 +14,7 @@ import '../utils/enum/statuses.dart';
 class MyVehiclesService extends BaseService {
 
   Future<ResponseResult> addVehicle({
-    required String vehicleTypeId,
+    required int vehicleTypeId,
     required int manufacture,
     required int model,
     String? numbers,
@@ -52,6 +52,60 @@ class MyVehiclesService extends BaseService {
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
               print("Error in response Added New Vehicle ");
+
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in Added New Vehicle $e");
+    }
+    return ResponseResult(status, vehicleDetailsData);
+  }
+
+  Future<ResponseResult> updateVehicle({
+    required int vehicleId,
+    required int vehicleTypeId,
+    required int subVehicleTypeId,
+    required int manufacture,
+    required int model,
+    required int customerId,
+    String? numbers,
+    String? letters,
+    String? color,
+    String? name,
+    String? year,
+  }) async {
+    Status status = Status.error;
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, dynamic> body = {
+      "vehicle_type_id": vehicleTypeId,
+      "name_en": name,
+      "year": year,
+      "color": color,
+      "letters": letters,
+      "numbers": numbers,
+      "manufacturer_id": manufacture,
+      "vehicle_model_id": model,
+      "sub_vehicle_type_id":subVehicleTypeId,
+      "customer_id":customerId
+    };
+    VehicleDetailsData? vehicleDetailsData;
+    try {
+      await requestFutureData(
+          api: Api.updateVehicle(requestId: vehicleId),
+          body: body,
+          headers: headers,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.put,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              vehicleDetailsData = VehicleDetailsModel.fromJson(response).data!;
+              print('Added Update Vehicle Service Successfully');
+            } else if (response["status_code"] == 400) {
+              status = Status.codeNotCorrect;
+              print("Error in response updated New Vehicle ");
 
             }
           });

@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flash_customer/models/servicesModel.dart';
-import 'package:flash_customer/models/taxModel.dart';
 import 'package:intl/intl.dart';
 
 import '../base/service/base_service.dart';
@@ -15,8 +15,11 @@ import '../models/requestResult.dart';
 import '../models/request_details_model.dart';
 import '../models/slotsModel.dart';
 import '../utils/apis.dart';
+import '../utils/cache_helper.dart';
 import '../utils/enum/request_types.dart';
+import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
+import 'package:http/http.dart' as http;
 
 class RequestServicesService extends BaseService {
   Future<ResponseResult> getBasicServices({
@@ -75,33 +78,6 @@ class RequestServicesService extends BaseService {
       log("Error in getting Services Data$e");
     }
     return ResponseResult(result, extraServicesDataList);
-  }
-
-  Future<ResponseResult> getTax() async {
-    Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
-
-    TaxData? taxData;
-    try {
-      await requestFutureData(
-          api: Api.getActiveTax,
-          requestType: Request.get,
-          jsonBody: true,
-          withToken: true,
-          headers: headers,
-          onSuccess: (response) async {
-            try {
-              result = Status.success;
-              taxData = TaxModel.fromJson(response).data!;
-            } catch (e) {
-              logger.e("Error getting response Tax Data\n$e");
-            }
-          });
-    } catch (e) {
-      result = Status.error;
-      log("Error in getting Tax Data$e");
-    }
-    return ResponseResult(result, taxData);
   }
 
   Future<ResponseResult> checkCoupon({
@@ -326,8 +302,7 @@ class RequestServicesService extends BaseService {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
-    // List<List<SlotData>>? slots = [];
-    Map? slotsMap;
+    List<List<SlotData>>? slots = [];
     try {
       await requestFutureData(
           api: Api.getTimeSlots(
@@ -343,9 +318,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              // slots = SlotsModel.fromJson(response).data!;
-              slotsMap = SlotsModel.fromJson(response).data!;
-
+              slots = SlotsModel.fromJson(response).data!;
             } catch (e) {
               logger.e("Error getting response Get Time Slot\n$e");
             }
@@ -354,7 +327,7 @@ class RequestServicesService extends BaseService {
       result = Status.error;
       log("Error in getting Request Details Data$e");
     }
-    return ResponseResult(result, slotsMap);
+    return ResponseResult(result, slots);
   }
 
   Future<ResponseResult> submitFinialRequest({
@@ -454,5 +427,53 @@ class RequestServicesService extends BaseService {
     }
     return ResponseResult(result, bankAccountsList);
   }
+
+  Future<ResponseResult> uploadPaymentFile(String imagePath,{required int bankAccountId, required int requestId,}) async {
+    Status status = Status.error;
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer ${CacheHelper.returnData(key: CacheKey.token)}"
+    };
+
+    try {
+      var request = http.MultipartRequest("POST", Uri.parse(Api.submitFinialRequest));
+
+      request.headers.addAll(headers);
+
+      request.fields['id'] = '$requestId';
+      request.fields['pay_by'] = 'bank_transfer';
+      // request.fields['_method'] = "PUT";
+      request.fields['bank_account_id'] = '$bankAccountId';
+
+
+      request.files.add(await http.MultipartFile.fromPath("image", imagePath));
+
+      logger.i(
+          "Request Called: ${Api.submitFinialRequest}\nHeaders: ${request.headers}\nBody:${request.fields}\nFiles:${request.files}");
+
+      await request.send().then((stream) async {
+        await http.Response.fromStream(stream).then((value) {
+          final response = jsonDecode(value.body);
+          // userDataResponse = UpdateProfileModel.fromJson(response);
+          logger.i("Response: $response");
+          // if (userDataResponse!.statusCode == 200) {
+          //   log("Successss");
+          //   status = Status.success;
+          // } else if (userDataResponse!.statusCode == 400) {
+          //   status = Status.codeNotCorrect;
+          //   log("Failureee");
+          // }
+        });
+      }).timeout(const Duration(seconds: 30));
+    } catch (e) {
+      logger.e("Error in Uploading payment file $e");
+      status = Status.error;
+    }
+    log("Status ${status.key}");
+    return ResponseResult(status,/* userDataResponse?.data?.image ??*/ "");
+  }
+
 
 }

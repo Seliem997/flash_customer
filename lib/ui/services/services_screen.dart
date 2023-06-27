@@ -63,13 +63,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).services),
-      body: SingleChildScrollView(
-        child: (requestServicesProvider
-                .isLoading /*||
-                requestServicesProvider.taxData == null*/
-            )
-            ? const DataLoader()
-            : (requestServicesProvider.basicServicesList.isEmpty ||
+      body: (requestServicesProvider.isLoading )
+          ? const DataLoader()
+          : SingleChildScrollView(
+            child: (requestServicesProvider.basicServicesList.isEmpty ||
                     requestServicesProvider.extraServicesList.isEmpty)
                 ? CustomSizedBox(
                     height: 500,
@@ -651,7 +648,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       ],
                     ),
                   ),
-      ),
+          ),
     );
   }
 }

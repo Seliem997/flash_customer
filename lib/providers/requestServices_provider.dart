@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:flash_customer/models/taxModel.dart';
 import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 
@@ -235,8 +233,7 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // List<List<SlotData>> slotsList = [];
-  Map<String, dynamic>? slotsMap;
+  List<List<SlotData>> slotsList = [];
   Future getTimeSlots({
     required int cityId,
     required int basicId,
@@ -261,17 +258,9 @@ class RequestServicesProvider with ChangeNotifier {
         .then((value) {
       isLoading = false;
       if (value.status == Status.success) {
-        /*slotsList = value.data;
+        slotsList = value.data;
         print('Time Slot in provider Success');
-        print(slotsList);*/
-        slotsMap = value.data;
-        /*for(var v in slotsMap!.values) {
-          print(v);
-          //below is the solution
-          v.asMap().forEach((i, value) {
-            print('index=$i, value=${value}');
-          });
-              }*/
+        print(slotsList);
       }
     });
     notifyListeners();
@@ -382,6 +371,21 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> uploadPaymentFile(BuildContext context, String imagePath, {required int bankAccountId, required int requestId}) async {
+
+    AppLoader.showLoader(context);
+    await servicesService.uploadPaymentFile(imagePath, bankAccountId: bankAccountId, requestId: requestId).then((value) {
+      AppLoader.stopLoader();
+      CustomSnackBars.successSnackBar(context, "Requested Successfully");
+      /*if (value.status == Status.success) {
+        CustomSnackBars.successSnackBar(context, "Uploaded Successfully");
+      } else {
+        CustomSnackBars.failureSnackBar(context, "Something went wrong");
+      }*/
+    });
+  }
+
+
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController();
@@ -403,6 +407,8 @@ class RequestServicesProvider with ChangeNotifier {
     resetCoupon();
     selectedBasicIndex = null;
     selectedSlotIndex = null;
+    selectedCreditCardPayment = false;
+    selectedCashPayment = false;
     notifyListeners();
   }
 }

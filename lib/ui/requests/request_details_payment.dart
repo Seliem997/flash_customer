@@ -16,29 +16,30 @@ import '../../models/requestDetailsModel.dart';
 import '../../models/request_details_model.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/requestServices_provider.dart';
-import '../../ui/home/home_screen.dart';
-import '../../ui/requests/summaryRequestDetails.dart';
-import '../../ui/widgets/custom_bar_widget.dart';
-import '../../ui/widgets/custom_button.dart';
-import '../../ui/widgets/custom_container.dart';
-import '../../ui/widgets/custom_form_field.dart';
-import '../../ui/widgets/data_loader.dart';
-import '../../ui/widgets/navigate.dart';
-import '../../ui/widgets/spaces.dart';
-import '../../ui/widgets/text_widget.dart';
+import '../home/home_screen.dart';
+import 'summaryRequestDetails.dart';
+import '../widgets/custom_bar_widget.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_container.dart';
+import '../widgets/custom_form_field.dart';
+import '../widgets/data_loader.dart';
+import '../widgets/navigate.dart';
+import '../widgets/spaces.dart';
+import '../widgets/text_widget.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
-import 'bank_transfer/transfer_method.dart';
+import '../payment/bank_transfer/transfer_method.dart';
 
 class RequestDetails extends StatefulWidget {
   const RequestDetails(
-      {Key? key, required this.requestId, this.cameFromOtherServices = false})
+      {Key? key, required this.requestId, this.cameFromOtherServices = false, this.cameFromMonthlyPackage = false})
       : super(key: key);
 
   final int requestId;
   final bool cameFromOtherServices;
+  final bool cameFromMonthlyPackage;
 
   @override
   State<RequestDetails> createState() => _RequestDetailsState();
@@ -480,10 +481,10 @@ class _RequestDetailsState extends State<RequestDetails> {
           iconSize: 20.0,
         ),
       ),
-      body: SingleChildScrollView(
-        child: (requestServicesProvider.isLoading)
-            ? const DataLoader()
-            : requestServicesProvider.detailsRequestData == null
+      body: (requestServicesProvider.isLoading)
+          ? const DataLoader()
+          : SingleChildScrollView(
+            child: requestServicesProvider.detailsRequestData == null
                 ? CustomSizedBox(
                     height: 500,
                     child: Center(
@@ -494,6 +495,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       children: [
                         SummaryRequestDetails(
                             cameFromOtherServices: widget.cameFromOtherServices,
+                            cameFromMonthlyPackage: widget.cameFromMonthlyPackage,
                             requestServicesProvider: requestServicesProvider),
                         verticalSpace(22),
                         CustomContainer(
@@ -791,7 +793,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ],
                                   ),
                                 ),
-                                verticalSpace(12),
+                               /* verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
                                   backgroundColor: AppColor.white,
@@ -815,7 +817,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ),*/
                                 verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
@@ -1235,7 +1237,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       ],
                     ),
                   ),
-      ),
+          ),
     );
   }
 }

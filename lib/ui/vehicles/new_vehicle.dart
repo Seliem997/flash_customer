@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/custom_bar_widget.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
@@ -24,14 +26,15 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_form_field.dart';
 
 class VehicleInfo extends StatefulWidget {
-  const VehicleInfo({Key? key}) : super(key: key);
+  const VehicleInfo({Key? key, this.updateVehicle = false, this.index,}) : super(key: key);
 
+  final bool updateVehicle;
+  final int? index;
   @override
   State<VehicleInfo> createState() => _VehicleInfoState();
 }
 
 class _VehicleInfoState extends State<VehicleInfo> {
-  // int manufacture=2, model=2;
 
   @override
   void initState() {
@@ -42,7 +45,19 @@ class _VehicleInfoState extends State<VehicleInfo> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+    final MyVehiclesProvider myVehiclesProvider =
+    Provider.of<MyVehiclesProvider>(context, listen: false);
     await packageProvider.getManufacturers();
+    if(widget.updateVehicle){
+      log('In Widget Update');
+      var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
+      myVehiclesProvider.nameController = vehicleData.name == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.name);
+      myVehiclesProvider.yearController = vehicleData.year == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.year);
+      myVehiclesProvider.numbersController = vehicleData.numbers == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.numbers);
+      myVehiclesProvider.lettersController = vehicleData.letters == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.letters);
+      myVehiclesProvider.screenPickerColor = vehicleData.color == null ? Colors.white : Color(int.parse(vehicleData.color!));
+      log(myVehiclesProvider.nameController.text);
+    }//
   }
 
   @override
@@ -51,6 +66,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
         Provider.of<PackageProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context);
+    var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -97,7 +113,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     value: packageProvider.selectedManufacture,
                     iconEnabledColor: Colors.black,
                     hint: TextWidget(
-                      text: S.of(context).chooseManufacturer,
+                      text: widget.updateVehicle ? vehicleData.manufacturerName! : S.of(context).chooseManufacturer,
                       fontWeight: MyFontWeight.medium,
                       textSize: MyFontSize.size10,
                       color: const Color(0xFF909090),
@@ -174,7 +190,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     value: packageProvider.selectedVehicleModel,
                     iconEnabledColor: Colors.black,
                     hint: TextWidget(
-                      text: S.of(context).chooseModel,
+                      text: widget.updateVehicle ? vehicleData.vehicleModelName! : S.of(context).chooseModel,
                       fontWeight: MyFontWeight.medium,
                       textSize: MyFontSize.size10,
                       color: const Color(0xFF909090),
@@ -287,9 +303,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   // Update the screenPickerColor using the callback.
                   onColorChanged: (Color color) {
                     setState(
-                        () => myVehiclesProvider.screenPickerColor = color);
-                    myVehiclesProvider.vehicleColor =
-                        ColorTools.nameThatColor(color);
+                        () {
+                          myVehiclesProvider.screenPickerColor = color;
+                          myVehiclesProvider.vehicleColor = color.value.toString();
+                        });
+                    log(myVehiclesProvider.vehicleColor);
+
+                        // ColorTools.nameThatColor(color);
                   },
                   borderColor: Colors.black,
                   width: 40,
@@ -380,7 +400,35 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 text: S.of(context).save,
                 fontSize: 21,
                 fontWeight: MyFontWeight.bold,
-                onPressed: () async {
+                onPressed: widget.updateVehicle
+                    ? ()async {
+
+                  AppLoader.showLoader(context);
+                  await myVehiclesProvider
+                      .updateVehicle(
+                    vehicleId: vehicleData.id!,
+                      vehicleTypeId: packageProvider.selectedManufacture == null ? vehicleData.vehicleTypeId! : packageProvider.selectedManufacture!.vehicleTypeId!,
+                      subVehicleTypeId: packageProvider.selectedManufacture == null ? vehicleData.subVehicleTypeId! : packageProvider.selectedManufacture!.subVehicleTypeId!,
+                      manufacture: packageProvider.selectedManufacture == null ? vehicleData.manufacturerId! : packageProvider.selectedManufacture!.id!,
+                      model: packageProvider.selectedVehicleModel == null ? vehicleData.vehicleModelId! : packageProvider.selectedVehicleModel!.id!,
+                      customerId: vehicleData.customerId!,
+                      numbers:
+                      myVehiclesProvider.numbersController.text,
+                      letters:
+                      myVehiclesProvider.lettersController.text,
+                      color: myVehiclesProvider.vehicleColor,
+                      name: myVehiclesProvider.nameController.text,
+                      year: myVehiclesProvider.yearController.text,
+                  ).then((value) {
+                    log(myVehiclesProvider.nameController.text);
+                    log(myVehiclesProvider.vehicleColor);
+                    log(myVehiclesProvider.screenPickerColor.toString());
+                  AppLoader.stopLoader();
+                  myVehiclesProvider.resetFields();
+                  navigateAndFinish(context, const HomeScreen());
+                  });
+                }
+                    : () async {
                   packageProvider.chooseManufacture
                       ? packageProvider.chooseModel
                           ? {
@@ -388,7 +436,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                               packageProvider.clearBorder(),
                               await myVehiclesProvider
                                   .addNewVehicle(
-                                vehicleTypeId: '1',
+                                vehicleTypeId: packageProvider.selectedManufacture!.vehicleTypeId!,
                                 manufacture:
                                     packageProvider.selectedManufacture!.id!,
                                 model:

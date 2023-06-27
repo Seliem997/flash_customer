@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flash_customer/main.dart';
@@ -17,19 +16,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
-import '../../providers/payment_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
-import '../date_time/select_date.dart';
-import '../payment/test.dart';
 import '../services/other_services_screen.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
@@ -73,24 +68,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    /*final PaymentProvider paymentProvider =
-        Provider.of<PaymentProvider>(context, listen: false);
-    paymentProvider.configureSDK();*/
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     super.initState();
   }
 
   void loadData() async {
-    widget.cameFromNewRequest ? navigateTo(context, const MyRequests()) : null;
-    final AddressesProvider addressesProvider =
-    Provider.of<AddressesProvider>(context, listen: false);
-    _loadMapStyles();
-    final HomeProvider homeProvider =
-        Provider.of<HomeProvider>(context, listen: false);
-    homeProvider.markers.clear();
-    await _handleLocationPermission();
-    await _getCurrentLocation();
-    addressesProvider.getAddresses();
+    if(widget.cameFromNewRequest){
+      navigateTo(context, const MyRequests());
+    }else{
+      final AddressesProvider addressesProvider =
+      Provider.of<AddressesProvider>(context, listen: false);
+      _loadMapStyles();
+      final HomeProvider homeProvider =
+      Provider.of<HomeProvider>(context, listen: false);
+      homeProvider.markers.clear();
+      await _handleLocationPermission();
+      await _getCurrentLocation();
+      addressesProvider.getAddresses();
+    }
   }
 
   _getCurrentLocation() async {
@@ -240,12 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             .then((value) {
                           if (value.status == Status.success) {
                             AppLoader.stopLoader();
-                            print(addressesProvider.addressDetailsData!.id);
                             navigateTo(context, const VehicleTypes());
-                            CustomSnackBars.successSnackBar(
-                                context, 'Address Added Successfully');
                           } else {
-                            print('Faild');
                             CustomSnackBars.somethingWentWrongSnackBar(context);
                             AppLoader.stopLoader();
                           }
@@ -293,15 +284,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .then((value) {
                               if (value.status == Status.success) {
                                 AppLoader.stopLoader();
-                                print(addressesProvider.addressDetailsData!.id);
                                 navigateTo(
                                   context,
                                   const OtherServices(),
                                 );
-                                CustomSnackBars.successSnackBar(context,
-                                    S.of(context).addressAddedSuccessfully);
+
                               } else {
-                                print('Faild');
                                 CustomSnackBars.somethingWentWrongSnackBar(
                                     context);
                                 AppLoader.stopLoader();
@@ -331,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: TextWidget(
               text: S.of(context).pleaseLogInFirst,
             ),

@@ -1,11 +1,14 @@
 import 'package:flash_customer/ui/widgets/custom_button.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../providers/requestServices_provider.dart';
 import '../../../utils/font_styles.dart';
+import '../../home/home_screen.dart';
 import '../../widgets/custom_bar_widget.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/data_loader.dart';
@@ -120,15 +123,31 @@ class SubmitBankTransferMethod extends StatelessWidget {
                 child: CustomSizedBox(
                   height: 100,
                     width: 140,
-                    child: Image.asset('assets/images/uploadFile.png')),
+                    onTap: () async{
+                      await ImagePicker.platform
+                          .getImage(source: ImageSource.gallery, imageQuality: 30)
+                          .then((image) async {
+                        if (image != null) {
+                          await requestServicesProvider.uploadPaymentFile(
+                              context, image.path,
+                            bankAccountId: requestServicesProvider.bankAccountsList[index].id!,
+                            requestId: requestServicesProvider.updatedRequestDetailsData!.id!,
+                          ).then((value) {
+                            navigateAndFinish(context, const HomeScreen(cameFromNewRequest: true,));
+                          });
+                        }
+                      });
+
+                    },
+                    child: Image.asset('assets/images/uploadFiles.png')),
               ),
               verticalSpace(50),
-              DefaultButton(
+/*              DefaultButton(
                 height: 37,
                 width: 345,
                 text: 'Submit',
                 onPressed: () {},
-              )
+              )*/
             ],
           )),
     );

@@ -301,7 +301,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                       AppLoader.showLoader(context),
                                       await myVehiclesProvider
                                           .addNewVehicle(
-                                        vehicleTypeId: '1',
+                                        vehicleTypeId: packageProvider.selectedManufacture!.vehicleTypeId!,
                                         manufacture: packageProvider
                                             .selectedManufacture!.id!,
                                         model: packageProvider

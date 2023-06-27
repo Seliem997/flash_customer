@@ -14,7 +14,7 @@ class MyVehiclesProvider with ChangeNotifier {
   TextEditingController yearController = TextEditingController();
   TextEditingController numbersController = TextEditingController();
   TextEditingController lettersController = TextEditingController();
-  String vehicleColor= 'White';
+  String vehicleColor= '4294967295';
   Color screenPickerColor= Colors.white;
 
   bool loadingMyVehicles = true;
@@ -28,7 +28,7 @@ class MyVehiclesProvider with ChangeNotifier {
 
   VehicleDetailsData? vehicleDetailsData;
   Future<ResponseResult> addNewVehicle({
-    required String vehicleTypeId,
+    required int vehicleTypeId,
     required int manufacture,
     required int model,
     String? numbers,
@@ -54,6 +54,46 @@ class MyVehiclesProvider with ChangeNotifier {
         state = Status.success;
         vehicleDetailsData = value.data;
         print('Added New Vehicle In Provider Successfully');
+      }
+    });
+    return ResponseResult(state, vehicleDetailsData);
+  }
+
+
+
+  Future<ResponseResult> updateVehicle({
+    required int vehicleId,
+    required int vehicleTypeId,
+    required int subVehicleTypeId,
+    required int manufacture,
+    required int model,
+    required int customerId,
+    String? numbers,
+    String? letters,
+    String? color,
+    String? name,
+    String? year,
+  }) async {
+    Status state = Status.error;
+    await myVehiclesService
+        .updateVehicle(
+      vehicleId: vehicleId,
+      vehicleTypeId: vehicleTypeId,
+      subVehicleTypeId: subVehicleTypeId,
+      manufacture: manufacture,
+      model: model,
+      customerId: customerId,
+      year: year,
+      letters: letters,
+      numbers: numbers,
+      color: color,
+      name: name
+    )
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        vehicleDetailsData = value.data;
+        print('Update Vehicle In Provider Successfully');
       }
     });
     return ResponseResult(state, vehicleDetailsData);
@@ -99,7 +139,7 @@ class MyVehiclesProvider with ChangeNotifier {
     yearController = TextEditingController();
     numbersController = TextEditingController();
     lettersController = TextEditingController();
-    vehicleColor= 'White';
+    vehicleColor= '4294967295';
     screenPickerColor= Colors.white;
     notifyListeners();
   }

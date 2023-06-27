@@ -1,4 +1,5 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:flash_customer/ui/vehicles/vehicles_type.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -6,6 +7,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flash_customer/utils/font_styles.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -113,7 +115,9 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                   label: 'Delete',
                 ),
                 SlidableAction(
-                  onPressed: (BuildContext context) {},
+                  onPressed: (BuildContext context) {
+                    navigateTo(context, VehicleInfo(updateVehicle: true,index: index,));
+                  },
                   backgroundColor: const Color(0xFF28A72D),
                   foregroundColor: Colors.white,
                   icon: Icons.mode_edit_outline_outlined,
@@ -175,14 +179,14 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                             verticalSpace(9),
                             Row(
                               children: [
-                                const CircleAvatar(
+                                CircleAvatar(
                                   radius: 6,
-                                  backgroundColor: Color(0xFF3424F1),
+                                  backgroundColor: Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)),
                                 ),
                                 horizontalSpace(6),
                                 TextWidget(
                                   text:
-                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                                      '${ColorTools.nameThatColor(Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)))} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
                                   fontWeight: MyFontWeight.medium,
                                   textSize: MyFontSize.size10,
                                   maxLines: 1,
@@ -201,261 +205,6 @@ class MyVehiclesScreenWidget extends StatelessWidget {
           ),
           separatorBuilder: (context, index) => verticalSpace(14),
         ),
-        /*child: Column(
-    children: [
-      CustomContainer(
-        height: 64,
-        width: 345,
-        backgroundColor: AppColor.borderGrey,
-        child: Padding(
-          padding:
-          symmetricEdgeInsets(vertical: 7, horizontal: 7),
-          child: Row(
-            children: [
-              CustomContainer(
-                width: 71,
-                height: 50,
-                radiusCircular: 3,
-                padding: EdgeInsets.zero,
-                clipBehavior: Clip.hardEdge,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/mazda.png',
-                  fit: BoxFit.fitHeight,
-                  width: 71,
-                  height: 50,
-                ),
-              ),
-              horizontalSpace(12),
-              Expanded(
-                child: Padding(
-                  padding: onlyEdgeInsets(top: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        text:
-                        'Mazda, Cx3 2020 /Tarut 32626 (WRQA 1514)',
-                        maxLines: 2,
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size10,
-                      ),
-                      verticalSpace(9),
-                      Row(
-                        children: [
-                          const CircleAvatar(
-                            radius: 6,
-                            backgroundColor: Color(0xFF3424F1),
-                          ),
-                          horizontalSpace(6),
-                          TextWidget(
-                            text: 'Blue ,Small car (WRQA 1514)',
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            maxLines: 1,
-                            color: AppColor.textGrey,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      verticalSpace(14),
-      CustomContainer(
-        height: 64,
-        width: 345,
-        backgroundColor: AppColor.borderGrey,
-        child: Padding(
-          padding:
-          symmetricEdgeInsets(vertical: 7, horizontal: 7),
-          child: Row(
-            children: [
-              CustomContainer(
-                width: 71,
-                height: 50,
-                radiusCircular: 3,
-                padding: EdgeInsets.zero,
-                clipBehavior: Clip.hardEdge,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/mazda.png',
-                  fit: BoxFit.fitHeight,
-                  width: 71,
-                  height: 50,
-                ),
-              ),
-              horizontalSpace(12),
-              Expanded(
-                child: Padding(
-                  padding: onlyEdgeInsets(top: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        text:
-                        'Mazda, Cx3 2020 /Tarut 32626 (WRQA 1514)',
-                        maxLines: 2,
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size10,
-                      ),
-                      verticalSpace(9),
-                      Row(
-                        children: [
-                          const CircleAvatar(
-                            radius: 6,
-                            backgroundColor: Color(0xFFF12424),
-                          ),
-                          horizontalSpace(6),
-                          TextWidget(
-                            text: 'Blue ,Small car (WRQA 1514)',
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            maxLines: 1,
-                            color: AppColor.textGrey,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      verticalSpace(14),
-      CustomContainer(
-        height: 64,
-        width: 345,
-        backgroundColor: AppColor.borderGrey,
-        child: Padding(
-          padding:
-          symmetricEdgeInsets(vertical: 7, horizontal: 7),
-          child: Row(
-            children: [
-              CustomContainer(
-                width: 71,
-                height: 50,
-                radiusCircular: 3,
-                padding: EdgeInsets.zero,
-                clipBehavior: Clip.hardEdge,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/mazda.png',
-                  fit: BoxFit.fitHeight,
-                  width: 71,
-                  height: 50,
-                ),
-              ),
-              horizontalSpace(12),
-              Expanded(
-                child: Padding(
-                  padding: onlyEdgeInsets(top: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        text:
-                        'Mazda, Cx3 2020 /Tarut 32626 (WRQA 1514)',
-                        maxLines: 2,
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size10,
-                      ),
-                      verticalSpace(9),
-                      Row(
-                        children: [
-                          const CircleAvatar(
-                            radius: 6,
-                            backgroundColor: Color(0xFF000000),
-                          ),
-                          horizontalSpace(6),
-                          TextWidget(
-                            text: 'Blue ,Small car (WRQA 1514)',
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            maxLines: 1,
-                            color: AppColor.textGrey,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      verticalSpace(14),
-      CustomContainer(
-        height: 64,
-        width: 345,
-        backgroundColor: AppColor.borderGrey,
-        child: Padding(
-          padding:
-          symmetricEdgeInsets(vertical: 7, horizontal: 7),
-          child: Row(
-            children: [
-              CustomContainer(
-                width: 71,
-                height: 50,
-                radiusCircular: 3,
-                padding: EdgeInsets.zero,
-                clipBehavior: Clip.hardEdge,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/mazda.png',
-                  fit: BoxFit.fitHeight,
-                  width: 71,
-                  height: 50,
-                ),
-              ),
-              horizontalSpace(12),
-              Expanded(
-                child: Padding(
-                  padding: onlyEdgeInsets(top: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        text:
-                        'Mazda, Cx3 2020 /Tarut 32626 (WRQA 1514)',
-                        maxLines: 2,
-                        fontWeight: MyFontWeight.semiBold,
-                        textSize: MyFontSize.size10,
-                      ),
-                      verticalSpace(9),
-                      Row(
-                        children: [
-                          const CircleAvatar(
-                            radius: 6,
-                            backgroundColor: Color(0xFF7C7A89),
-                          ),
-                          horizontalSpace(6),
-                          TextWidget(
-                            text: 'Blue ,Small car (WRQA 1514)',
-                            fontWeight: MyFontWeight.medium,
-                            textSize: MyFontSize.size10,
-                            maxLines: 1,
-                            color: AppColor.textGrey,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ],
-                ),*/
       ),
     );
   }

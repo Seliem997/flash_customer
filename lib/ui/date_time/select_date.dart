@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flash_customer/generated/l10n.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
@@ -19,7 +17,7 @@ import '../../utils/enum/date_formats.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../home/home_screen.dart';
-import '../payment/go_sell_payment.dart';
+import '../requests/request_details_payment.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -66,12 +64,12 @@ class _SelectDateState extends State<SelectDate> {
 
     widget.cameFromPackage
         ? packageProvider.washesDate[widget.index] =
-            DateFormat(DFormat.ymd.key).format(DateTime.now())
+        DateFormat(DFormat.ymd.key).format(DateTime.now())
         : widget.cameFromOtherServices
-            ? otherServicesProvider.selectedDate =
-                DateFormat(DFormat.ymd.key).format(DateTime.now())
-            : requestServicesProvider.selectedDate =
-                DateFormat(DFormat.ymd.key).format(DateTime.now());
+        ? otherServicesProvider.selectedDate =
+        DateFormat(DFormat.ymd.key).format(DateTime.now())
+        : requestServicesProvider.selectedDate =
+        DateFormat(DFormat.ymd.key).format(DateTime.now());
 
     widget.cameFromPackage
         ? await packageProvider.getPackageTimeSlots(
@@ -228,7 +226,7 @@ class _SelectDateState extends State<SelectDate> {
                     builder: (context, value, child) {
                       return Container(
                         child: (value.isLoading)
-                            ? const DataLoader()
+                            ? const DataLoader(useExpand: true,)
                             : (value.packageSlotsList.isEmpty)
                                 ? CustomSizedBox(
                                     height: 300,
@@ -257,7 +255,7 @@ class _SelectDateState extends State<SelectDate> {
                                           padding: symmetricEdgeInsets(
                                               vertical: 10, horizontal: 12),
                                           onTap: () {
-                                            value.slotsIds = [];
+                                            value.slotsIds= [];
                                             value.selectedTimeSlot(
                                                 index: employeeIndex);
                                             otherServicesProvider.selectedDate =
@@ -347,7 +345,7 @@ class _SelectDateState extends State<SelectDate> {
                         builder: (context, value, child) {
                           return Container(
                             child: (value.isLoading)
-                                ? const DataLoader()
+                                ? const DataLoader(useExpand: true,)
                                 : (value.slotsList.isEmpty)
                                     ? CustomSizedBox(
                                         height: 300,
@@ -377,7 +375,7 @@ class _SelectDateState extends State<SelectDate> {
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
                                               onTap: () {
-                                                value.slotsIds = [];
+                                                value.slotsIds= [];
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
                                                 otherServicesProvider
@@ -443,12 +441,11 @@ class _SelectDateState extends State<SelectDate> {
                         },
                       )
                     : Consumer<RequestServicesProvider>(
-                        builder: (context, provider, child) {
+                        builder: (context, value, child) {
                           return Container(
-                            child: (provider.isLoading)
-                                ? const DataLoader()
-                                : (provider.slotsMap!.isEmpty)
-                                    // : (value.slotsList.isEmpty)
+                            child: (value.isLoading)
+                                ? const DataLoader(useExpand: true,)
+                                : (value.slotsList.isEmpty)
                                     ? CustomSizedBox(
                                         height: 300,
                                         child: Center(
@@ -458,19 +455,18 @@ class _SelectDateState extends State<SelectDate> {
                                                     .noSlotsAvailable)))
                                     : Expanded(
                                         child: ListView.separated(
-                                          // itemCount: value.slotsList.length,
-                                          itemCount: provider.slotsMap!.length,
+                                          itemCount: value.slotsList.length,
                                           itemBuilder:
                                               (context, employeeIndex) {
                                             return CustomContainer(
                                               height: 40,
-                                              backgroundColor: provider
+                                              backgroundColor: value
                                                           .selectedSlotIndex ==
                                                       employeeIndex
                                                   ? const Color(0xFFBADEF6)
                                                   : AppColor.borderGreyLight,
                                               borderColor:
-                                                  provider.selectedSlotIndex ==
+                                                  value.selectedSlotIndex ==
                                                           employeeIndex
                                                       ? AppColor.borderBlue
                                                       : Colors.transparent,
@@ -478,38 +474,25 @@ class _SelectDateState extends State<SelectDate> {
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
                                               onTap: () {
-                                                provider.slotsIds = [];
-                                                provider.selectedTimeSlot(
-                                                  index: employeeIndex,
-                                                );
+                                                value.slotsIds=[];
+                                                value.selectedTimeSlot(
+                                                    index: employeeIndex);
                                                 otherServicesProvider
                                                     .selectedDate = DateFormat(
                                                         DFormat.ymd.key)
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
-                                                provider.slotsMap!.forEach(
-                                                    (key, selectedSlot) {
-                                                  if (key ==
-                                                      provider.slotsMap!.keys
-                                                          .elementAt(
-                                                              employeeIndex)) {
-                                                    selectedSlot
-                                                        .forEach((element) {
-                                                      print(
-                                                          'element: ${element['id']}');
-                                                      provider.slotsIds = [];
-                                                      provider.slotsIds
-                                                          .add(element['id']);
-                                                    });
-                                                  }
+                                                value.slotsList[employeeIndex]
+                                                    .forEach((v) {
+                                                  value.slotsIds.add(v.id);
                                                 });
                                               },
                                               child: Row(
                                                 children: [
                                                   TextWidget(
                                                     text:
-                                                        '${provider.slotsMap!.values.elementAt(employeeIndex)[0]['start_at']} - ${(provider.slotsMap!.values.elementAt(employeeIndex)[(provider.slotsMap!.values.elementAt(employeeIndex) as List).length - 1])['end_at']}',
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
                                                     fontWeight:
                                                         MyFontWeight.medium,
                                                     textSize: MyFontSize.size10,
@@ -520,30 +503,30 @@ class _SelectDateState extends State<SelectDate> {
                                                   CustomSizedBox(
                                                     height: 14,
                                                     width: 14,
-                                                    child: provider
-                                                                .selectedSlotIndex ==
-                                                            employeeIndex
-                                                        ? const CircleAvatar(
-                                                            radius: 30,
-                                                            backgroundColor:
-                                                                AppColor
-                                                                    .attributeColor,
-                                                            child:
-                                                                CustomSizedBox(
-                                                              width: 6,
-                                                              height: 6,
-                                                              child:
-                                                                  CircleAvatar(
+                                                    child:
+                                                        value.selectedSlotIndex ==
+                                                                employeeIndex
+                                                            ? const CircleAvatar(
+                                                                radius: 30,
                                                                 backgroundColor:
                                                                     AppColor
-                                                                        .white,
-                                                                radius: 25,
+                                                                        .attributeColor,
+                                                                child:
+                                                                    CustomSizedBox(
+                                                                  width: 6,
+                                                                  height: 6,
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    backgroundColor:
+                                                                        AppColor
+                                                                            .white,
+                                                                    radius: 25,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/images/circleGray.png',
                                                               ),
-                                                            ),
-                                                          )
-                                                        : Image.asset(
-                                                            'assets/images/circleGray.png',
-                                                          ),
                                                   ),
                                                 ],
                                               ),
@@ -556,7 +539,7 @@ class _SelectDateState extends State<SelectDate> {
                           );
                         },
                       ),
-            const Spacer(),
+            // const Spacer(),
             DefaultButton(
               text: widget.cameFromPackage
                   ? S.of(context).done

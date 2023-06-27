@@ -140,9 +140,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                               } else if (v.length < 7) {
                                 CustomSnackBars.failureSnackBar(
                                     context,
-                                    S
-                                        .of(context)
-                                        .phoneNumberLengthCanNotBeLessThan7Digits);
+                                    S.of(context).phoneNumberLengthCanNotBeLessThan7Digits);
                                 return "";
                               }
                             },
@@ -166,7 +164,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                     AppLoader.showLoader(context);
                     auth
                         .registerOrLogin(
-                      phoneController.text,
+                      (phoneController.text)[0] == '0' ? (phoneController.text).substring(1) : (phoneController.text) ,
                       countryCode!.dialCode,
                     )
                         .then((value) {
@@ -176,7 +174,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                             context,
                             OTPScreen(
                                 countryCode: countryCode!.dialCode,
-                                phoneNumber: phoneController.text));
+                                phoneNumber: (phoneController.text)[0] == '0' ? (phoneController.text).substring(1) : (phoneController.text),));
                       } else {
                         CustomSnackBars.failureSnackBar(context, value.message);
                       }

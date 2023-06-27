@@ -160,7 +160,8 @@ class PackageProvider with ChangeNotifier {
           print('object in provider');
       if (value.status == Status.success) {
         state = Status.success;
-
+        washesTime = {};
+        washesDate = {};
       } else {
         message = value.message;
       }
@@ -248,6 +249,8 @@ class PackageProvider with ChangeNotifier {
   void clearServices() {
     slotsIds = [];
     selectedSlotIndex = null;
+    washesTime = {};
+    washesDate = {};
     notifyListeners();
   }
 

@@ -95,6 +95,7 @@ class MyVehiclesCollection {
   String? name;
   String? numbers;
   String? letters;
+  String? lettersOthers;
   String? color;
   String? year;
   String? mainImage;
@@ -106,6 +107,8 @@ class MyVehiclesCollection {
   String? vehicleModelName;
   int? vehicleTypeId;
   String? vehicleTypeName;
+  int? subVehicleTypeId;
+  String? subVehicleTypeName;
   Customer? customer;
 
   MyVehiclesCollection(
@@ -113,6 +116,7 @@ class MyVehiclesCollection {
         this.name,
         this.numbers,
         this.letters,
+        this.lettersOthers,
         this.color,
         this.year,
         this.mainImage,
@@ -124,6 +128,8 @@ class MyVehiclesCollection {
         this.vehicleModelName,
         this.vehicleTypeId,
         this.vehicleTypeName,
+        this.subVehicleTypeId,
+        this.subVehicleTypeName,
         this.customer});
 
   MyVehiclesCollection.fromJson(Map<String, dynamic> json) {
@@ -131,6 +137,7 @@ class MyVehiclesCollection {
     name = json['name'];
     numbers = json['numbers'];
     letters = json['letters'];
+    lettersOthers = json['letters_others'];
     color = json['color'];
     year = json['year'];
     mainImage = json['main_image'];
@@ -142,30 +149,35 @@ class MyVehiclesCollection {
     vehicleModelName = json['vehicle_model_name'];
     vehicleTypeId = json['vehicle_type_id'];
     vehicleTypeName = json['vehicle_type_name'];
+    subVehicleTypeId = json['sub_vehicle_type_id'];
+    subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? Customer.fromJson(json['customer'])
+        ? new Customer.fromJson(json['customer'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['numbers'] = numbers;
-    data['letters'] = letters;
-    data['color'] = color;
-    data['year'] = year;
-    data['main_image'] = mainImage;
-    data['customer_id'] = customerId;
-    data['manufacturer_id'] = manufacturerId;
-    data['manufacturer_name'] = manufacturerName;
-    data['manufacturer_logo'] = manufacturerLogo;
-    data['vehicle_model_id'] = vehicleModelId;
-    data['vehicle_model_name'] = vehicleModelName;
-    data['vehicle_type_id'] = vehicleTypeId;
-    data['vehicle_type_name'] = vehicleTypeName;
-    if (customer != null) {
-      data['customer'] = customer!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['numbers'] = this.numbers;
+    data['letters'] = this.letters;
+    data['letters_others'] = this.lettersOthers;
+    data['color'] = this.color;
+    data['year'] = this.year;
+    data['main_image'] = this.mainImage;
+    data['customer_id'] = this.customerId;
+    data['manufacturer_id'] = this.manufacturerId;
+    data['manufacturer_name'] = this.manufacturerName;
+    data['manufacturer_logo'] = this.manufacturerLogo;
+    data['vehicle_model_id'] = this.vehicleModelId;
+    data['vehicle_model_name'] = this.vehicleModelName;
+    data['vehicle_type_id'] = this.vehicleTypeId;
+    data['vehicle_type_name'] = this.vehicleTypeName;
+    data['sub_vehicle_type_id'] = this.subVehicleTypeId;
+    data['sub_vehicle_type_name'] = this.subVehicleTypeName;
+    if (this.customer != null) {
+      data['customer'] = this.customer!.toJson();
     }
     return data;
   }

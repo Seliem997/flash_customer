@@ -1,4 +1,4 @@
-// import 'package:flash_customer/payment/go_sell_payment.dart';
+// import 'package:flash_customer/payment/request_details_payment.dart';
 // import 'package:flash_customer/providers/home_provider.dart';
 // import 'package:flash_customer/ui/requests/summaryRequestDetails.dart';
 // import 'package:flash_customer/ui/widgets/custom_button.dart';

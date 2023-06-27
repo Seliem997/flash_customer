@@ -15,7 +15,7 @@ import '../../providers/requestServices_provider.dart';
 import '../../utils/enum/statuses.dart';
 import '../../utils/number_formats.dart';
 import '../../utils/snack_bars.dart';
-import '../payment/go_sell_payment.dart';
+import '../requests/request_details_payment.dart';
 import '../requests/request_details.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -202,6 +202,7 @@ class WashesDate extends StatelessWidget {
                                       context,
                                       RequestDetails(
                                         requestId: packageProvider.detailsRequestData!.id!,
+                                        cameFromMonthlyPackage: true,
                                       ));
                                 } else {
                                   AppLoader.stopLoader();

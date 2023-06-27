@@ -82,11 +82,14 @@ class Api {
 
   static const String getMyVehicles = "$baseUrl/customer/vehicle/my-vehicles";
 
+  static const String addNewVehicle = "$baseUrl/customer/vehicles";
+
+  static String updateVehicle({required int requestId}) =>
+      "$baseUrl/update-vehicle/$requestId";
+
   static const String deleteVehicle = "$baseUrl/customer/vehicles/";
 
   static const String getMyRequests = "$baseUrl/customer/customer-requests";
-
-  static const String addNewVehicle = "$baseUrl/customer/vehicles";
 
   static const String checkOfferCoupon = "$baseUrl/customer/check-offer";
 

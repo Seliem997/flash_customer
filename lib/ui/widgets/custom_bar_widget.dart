@@ -5,6 +5,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../utils/styles/colors.dart';
@@ -47,7 +48,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: withArrow
           ? IconButton(
               icon: SvgPicture.asset(
-                'assets/svg/arrow-left.svg',
+                Intl.getCurrentLocale() == 'en' ? 'assets/svg/arrow-left.svg' : 'assets/svg/arrow-right.svg',
                 color: MyApp.themeMode(context) ? Colors.white : Colors.black,
                 width: 5.w,
               ),

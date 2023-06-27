@@ -16,30 +16,6 @@ import '../utils/enum/statuses.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationService extends BaseService {
-  // final fb = FacebookLogin(debug: true);
-
-  // Future<ResponseResult> forgotPassword(String email) async {
-  //   Status status = Status.error;
-  //   // late LoginModel loginModel;
-  //   Map<String, dynamic> body = {"nameOrEmail": email};
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.forgotPassword,
-  //         body: body,
-  //         requestType: Request.post,
-  //         onSuccess: (response) {
-  //           if (response["status_code"] == 200) {
-  //             status = Status.success;
-  //           } else if (response["status_code"] == 400) {
-  //             status = Status.emailNotRegistered;
-  //           }
-  //         });
-  //   } catch (e) {
-  //     status = Status.error;
-  //     logger.e("Error in forgot password $e");
-  //   }
-  //   return ResponseResult(status, "");
-  // }
 
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
@@ -129,8 +105,6 @@ class AuthenticationService extends BaseService {
               status = Status.success;
               userData = UpdateProfileModel.fromJson(response).data;
 
-              await CacheHelper.saveData(
-                  key: CacheKey.userId, value: userData!.fwId);
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
               await CacheHelper.saveData(
                   key: CacheKey.userImage, value: userData!.image);
@@ -179,6 +153,10 @@ class AuthenticationService extends BaseService {
               //     key: CacheKey.email, value: userData!.email);
               message = response["message"];
 
+              await CacheHelper.saveData(
+                  key: CacheKey.userImage, value: userData!.image);
+              await CacheHelper.saveData(
+                  key: CacheKey.userId, value: userData.fwId);
               await CacheHelper.saveData(
                   key: CacheKey.phoneNumber, value: phoneNumber);
               await CacheHelper.saveData(

@@ -32,65 +32,29 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-    return addressesProvider.addressesDataList == []
-        ? const TextWidget(text: 'There is No data Yet')
-        : Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 4.0.h),
-                child: ExpandableContainer(
-                  expanded: expandLocationFlag,
-                  expandedHeight: 27.h,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
-                    child: Column(
-                      children: [
-                        /*DefaultButtonWithIcon(
-                    width: 187,
-                    height: 34,
-                    padding: symmetricEdgeInsets(horizontal: 28),
-                    borderRadius: BorderRadius.circular(8),
-                    backgroundButton: AppColor.white,
-                    icon: CustomSizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Image.asset('assets/images/home_light.png')),
-                    onPressed: () {},
-                    labelText: S.of(context).home,
-                    textColor: AppColor.black,
-                  ),
-                  verticalSpace(8),
-                  DefaultButtonWithIcon(
-                    width: 187,
-                    height: 34,
-                    padding: symmetricEdgeInsets(horizontal: 28),
-                    borderRadius: BorderRadius.circular(8),
-                    backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset(
-                      'assets/svg/work.svg',
-                    ),
-                    onPressed: () {},
-                    labelText: S.of(context).work,
-                    textColor: AppColor.black,
-                  ),
-                  verticalSpace(8),
-                  DefaultButtonWithIcon(
-                    width: 187,
-                    height: 34,
-                    padding: symmetricEdgeInsets(horizontal: 28),
-                    borderRadius: BorderRadius.circular(8),
-                    backgroundButton: AppColor.white,
-                    icon: SvgPicture.asset(
-                      'assets/svg/school.svg',
-                    ),
-                    onPressed: () {},
-                    labelText: S.of(context).school,
-                    textColor: AppColor.black,
-                  ),
-                  const Spacer(),*/
-                        Expanded(
-                            child: ListView.separated(
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 4.0.h),
+          child: ExpandableContainer(
+            expanded: expandLocationFlag,
+            expandedHeight: 27.h,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+              child: Column(
+                children: [
+                  addressesProvider.addressesDataList.isEmpty
+                      ? const Expanded(
+                          child: Center(
+                              child: TextWidget(
+                          text: 'There is No Addresses Yet',
+                          color: AppColor.black,
+                          fontWeight: FontWeight.bold,
+                          textSize: 20,
+                                height: 1.4,
+                        )))
+                      : Expanded(
+                          child: ListView.separated(
                           shrinkWrap: true,
                           // physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) =>
@@ -132,85 +96,88 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                       zoom: 13.5,
                                       target: LatLng(
                                           double.parse(addressesProvider
-                                              .addressesDataList[index].latitude),
+                                              .addressesDataList[index]
+                                              .latitude),
                                           double.parse(addressesProvider
-                                              .addressesDataList[index].langitude)))));
+                                              .addressesDataList[index]
+                                              .langitude)))));
                             },
                             labelText: addressesProvider
-                                .addressesDataList[index].type!,
+                                .addressesDataList[index]
+                                .locationName ??
+                                '${addressesProvider.addressesDataList[index].type!}${S.of(context).location}',
                             textColor: AppColor.black,
                           ),
                           separatorBuilder: (context, index) =>
                               verticalSpace(4),
                           itemCount: addressesProvider.addressesDataList.length,
                         )),
-                        GestureDetector(
-                          onTap: () {
-                            navigateTo(
-                                context,
-                                const NewAddress(
-                                  cameFromHomeScreen: true,
-                                ));
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColor.primary),
-                            child: const Icon(
-                              Icons.add,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      navigateTo(
+                          context,
+                          const NewAddress(
+                            cameFromHomeScreen: true,
+                          ));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: AppColor.primary),
+                      child: const Icon(
+                        Icons.add,
+                        size: 25,
+                        color: Colors.white,
+                      ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        CustomContainer(
+          onTap: () {
+            setState(() {
+              expandLocationFlag = !expandLocationFlag;
+            });
+          },
+          width: 219,
+          height: 38,
+          padding: symmetricEdgeInsets(horizontal: 30),
+          backgroundColor: AppColor.primary,
+          backgroundColorDark: AppColor.dark,
+          child: Row(
+            children: <Widget>[
+              TextWidget(
+                text: S.of(context).savedLocation,
+                fontWeight: MyFontWeight.semiBold,
+                textSize: MyFontSize.size15,
+                color: AppColor.white,
+              ),
+              const Spacer(),
+              Container(
+                height: 18.0,
+                width: 18.0,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  border: Border.all(width: 1, color: AppColor.white),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Icon(
+                    expandLocationFlag
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Colors.white,
+                    size: 10.0,
                   ),
                 ),
               ),
-              CustomContainer(
-                onTap: () {
-                  setState(() {
-                    expandLocationFlag = !expandLocationFlag;
-                  });
-                },
-                width: 219,
-                height: 38,
-                padding: symmetricEdgeInsets(horizontal: 30),
-                backgroundColor: AppColor.primary,
-                backgroundColorDark: AppColor.dark,
-                child: Row(
-                  children: <Widget>[
-                    TextWidget(
-                      text: S.of(context).savedLocation,
-                      fontWeight: MyFontWeight.semiBold,
-                      textSize: MyFontSize.size15,
-                      color: AppColor.white,
-                    ),
-                    const Spacer(),
-                    Container(
-                      height: 18.0,
-                      width: 18.0,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(width: 1, color: AppColor.white),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          expandLocationFlag
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: Colors.white,
-                          size: 10.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
-          );
+          ),
+        ),
+      ],
+    );
   }
 }

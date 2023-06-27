@@ -57,6 +57,7 @@ class DetailsRequestData {
         this.payBy,
         this.feedback,
         this.packageId,
+        this.packageDetails,
         this.amount,
         this.lateTime,
         this.actualTime,
@@ -83,6 +84,7 @@ class DetailsRequestData {
     payBy = json['pay_by'];
     feedback = json['feedback'];
     packageId = json['package_id'];
+    packageDetails = json['package_details'];
     amount = json['amount'];
     lateTime = json['late_time'];
     actualTime = json['actual_time'];
