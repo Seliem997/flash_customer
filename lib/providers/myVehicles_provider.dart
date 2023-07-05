@@ -10,7 +10,7 @@ class MyVehiclesProvider with ChangeNotifier {
 
   MyVehiclesService myVehiclesService = MyVehiclesService();
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController? nameController ;
   TextEditingController yearController = TextEditingController();
   TextEditingController numbersController = TextEditingController();
   TextEditingController lettersController = TextEditingController();

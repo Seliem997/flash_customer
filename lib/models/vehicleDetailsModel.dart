@@ -36,9 +36,9 @@ class VehicleDetailsData {
   String? manufacturerLogo;
   int? vehicleModelId;
   String? vehicleModelName;
-  String? vehicleTypeId;
+  int? vehicleTypeId;
   String? vehicleTypeName;
-  dynamic subVehicleTypeId;
+  int? subVehicleTypeId;
   String? subVehicleTypeName;
   Customer? customer;
 

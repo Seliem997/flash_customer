@@ -547,7 +547,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.bold,
                       ),
-                      const Spacer(),
+                      /*const Spacer(),
                       TextButton(
                         onPressed: () {},
                         child: TextWidget(
@@ -556,7 +556,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                           fontWeight: MyFontWeight.medium,
                           color: AppColor.boldBlue,
                         ),
-                      )
+                      )*/
                     ],
                   ),
                   verticalSpace(6),

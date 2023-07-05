@@ -60,6 +60,7 @@ class UserProvider extends ChangeNotifier {
         userImage = (value.data as ProfileData).image;
         userEmail = (value.data as ProfileData).email;
         userId = (value.data as ProfileData).fwId;
+
       }
       notifyListeners();
     });

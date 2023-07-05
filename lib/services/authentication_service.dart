@@ -295,6 +295,8 @@ class AuthenticationService extends BaseService {
       request.headers.addAll(headers);
 
       request.fields['_method'] = "PUT";
+      request.fields['country_code'] = "+966";
+      request.fields['phone'] = CacheHelper.returnData(key: CacheKey.phoneNumber);
 
       request.files.add(await http.MultipartFile.fromPath("image", imagePath));
 

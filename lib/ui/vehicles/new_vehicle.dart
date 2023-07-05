@@ -56,7 +56,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
       myVehiclesProvider.numbersController = vehicleData.numbers == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.numbers);
       myVehiclesProvider.lettersController = vehicleData.letters == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.letters);
       myVehiclesProvider.screenPickerColor = vehicleData.color == null ? Colors.white : Color(int.parse(vehicleData.color!));
-      log(myVehiclesProvider.nameController.text);
     }//
   }
 
@@ -66,7 +65,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
         Provider.of<PackageProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context);
-    var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
+    var vehicleData;
+    if(widget.updateVehicle ) {
+      vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
+    }else;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -417,10 +419,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                       letters:
                       myVehiclesProvider.lettersController.text,
                       color: myVehiclesProvider.vehicleColor,
-                      name: myVehiclesProvider.nameController.text,
+                      name: myVehiclesProvider.nameController?.text,
                       year: myVehiclesProvider.yearController.text,
                   ).then((value) {
-                    log(myVehiclesProvider.nameController.text);
+                    // log(myVehiclesProvider.nameController.text);
                     log(myVehiclesProvider.vehicleColor);
                     log(myVehiclesProvider.screenPickerColor.toString());
                   AppLoader.stopLoader();
@@ -446,7 +448,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 letters:
                                     myVehiclesProvider.lettersController.text,
                                 color: myVehiclesProvider.vehicleColor,
-                                name: myVehiclesProvider.nameController.text,
+                                name: myVehiclesProvider.nameController == null? packageProvider.selectedVehicleModel!.name! :  myVehiclesProvider.nameController!.text,
                                 year: myVehiclesProvider.yearController.text,
                               )
                                   .then((value) {

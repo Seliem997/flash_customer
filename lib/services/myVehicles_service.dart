@@ -27,11 +27,11 @@ class MyVehiclesService extends BaseService {
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "vehicle_type_id": vehicleTypeId,
-      "name_en": name,
-      "year": year,
-      "color": color,
-      "letters": letters,
-      "numbers": numbers,
+      if(name != null)"name_en": name,
+      if(year != null)"year": year,
+      if(color != null)"color": color,
+      if(letters != null)"letters": letters,
+      if(numbers != null)"numbers": numbers,
       "manufacturer_id": manufacture,
       "vehicle_model_id": model
     };

@@ -216,7 +216,6 @@ class EditProfile extends StatelessWidget {
                 DefaultButton(
                   text: S.of(context).save,
                   onPressed: () async {
-                    print('on Tap is ${phoneTextController.text}');
                     FocusScope.of(context).unfocus();
                     AppLoader.showLoader(context);
                     await userProvider

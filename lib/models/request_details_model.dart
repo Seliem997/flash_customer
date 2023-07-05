@@ -8,11 +8,11 @@ class DetailsRequestModel {
   DetailsRequestModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
     message = json['message'];
-    data = json['data'] != null ? new DetailsRequestData.fromJson(json['data']) : null;
+    data = json['data'] != null ? DetailsRequestData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['status_code'] = this.statusCode;
     data['message'] = this.message;
     if (this.data != null) {
@@ -84,7 +84,9 @@ class DetailsRequestData {
     payBy = json['pay_by'];
     feedback = json['feedback'];
     packageId = json['package_id'];
-    packageDetails = json['package_details'];
+    packageDetails =  json['package_details'] != null
+        ? PackageDetails.fromJson(json['package_details'])
+        : null;
     amount = json['amount'];
     lateTime = json['late_time'];
     actualTime = json['actual_time'];
@@ -96,34 +98,34 @@ class DetailsRequestData {
     date = json['date'];
     slotsDate = json['slots_date'];
     customer = json['customer'] != null
-        ? new CustomerDetails.fromJson(json['customer'])
+        ? CustomerDetails.fromJson(json['customer'])
         : null;
-    city = json['city'] != null ? new City.fromJson(json['city']) : null;
+    city = json['city'] != null ? City.fromJson(json['city']) : null;
     requestAddress = json['request_address'] != null
-        ? new Location.fromJson(json['request_address'])
+        ? Location.fromJson(json['request_address'])
         : null;
     employee = json['employee'] != null
-        ? new Employee.fromJson(json['employee'])
+        ? Employee.fromJson(json['employee'])
         : null;
     if (json['services'] != null) {
       services = <Services>[];
       json['services'].forEach((v) {
-        services!.add(new Services.fromJson(v));
+        services!.add(Services.fromJson(v));
       });
     }
     vehicleRequest = json['vehicleRequest'] != null
-        ? new VehicleRequest.fromJson(json['vehicleRequest'])
+        ? VehicleRequest.fromJson(json['vehicleRequest'])
         : null;
     if (json['slots'] != null) {
       slots = <Slots>[];
       json['slots'].forEach((v) {
-        slots!.add(new Slots.fromJson(v));
+        slots!.add(Slots.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['request_id'] = this.requestId;
     data['status'] = this.status;
@@ -219,7 +221,7 @@ class PackageDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
@@ -258,19 +260,19 @@ class CustomerDetails {
     if (json['location'] != null) {
       location = <Location>[];
       json['location'].forEach((v) {
-        location!.add(new Location.fromJson(v));
+        location!.add(Location.fromJson(v));
       });
     }
     if (json['vehicle'] != null) {
       vehicle = <Vehicle>[];
       json['vehicle'].forEach((v) {
-        vehicle!.add(new Vehicle.fromJson(v));
+        vehicle!.add(Vehicle.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['fwid'] = this.fwid;
     data['phone'] = this.phone;
@@ -314,7 +316,7 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['image'] = this.image;
     data['type'] = this.type;
@@ -385,12 +387,12 @@ class Vehicle {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? new CustomerDetails.fromJson(json['customer'])
+        ? CustomerDetails.fromJson(json['customer'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['numbers'] = this.numbers;
@@ -447,7 +449,7 @@ class CustomerDetailsData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['fw_id'] = this.fwId;
     data['name'] = this.name;
@@ -476,7 +478,7 @@ class City {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['min_amount'] = this.minAmount;
@@ -497,7 +499,7 @@ class Employee {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     return data;
@@ -542,7 +544,7 @@ class Services {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
     data['image'] = this.image;
@@ -616,12 +618,12 @@ class VehicleRequest {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? new CustomerDetails.fromJson(json['customer'])
+        ? CustomerDetails.fromJson(json['customer'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['numbers'] = this.numbers;
@@ -678,7 +680,7 @@ class Slots {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['start_at'] = this.startAt;
     data['end_at'] = this.endAt;
