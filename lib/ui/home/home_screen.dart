@@ -25,6 +25,7 @@ import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
+import '../payment/test.dart';
 import '../services/other_services_screen.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
@@ -211,13 +212,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
-              // DefaultButton(
-              //   text: "Test Payment",
-              //   onPressed: () {
-              //     navigateTo(context, TestPayment());
-              //     // paymentProvider.startSDK();
-              //   },
-              // ),
+              /*DefaultButton(
+                text: "Test Payment",
+                onPressed: () {
+                  navigateTo(context, TestPayment());
+                  // paymentProvider.startSDK();
+                },
+              ),*/
               DefaultButton(
                 width: 294,
                 height: 56,

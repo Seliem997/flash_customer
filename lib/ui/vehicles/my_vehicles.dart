@@ -181,12 +181,12 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 6,
-                                  backgroundColor: myVehiclesProvider.myVehiclesData!.collection![index].color == null ? Colors.white : Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)),
+                                  backgroundColor: myVehiclesProvider.myVehiclesData!.collection![index].color == null ? Colors.transparent : Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)),
                                 ),
                                 horizontalSpace(6),
                                 TextWidget(
                                   text:
-                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color == null ? Colors.white : ColorTools.nameThatColor(Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)))} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color == null ? null : ColorTools.nameThatColor(Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)))} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
                                   fontWeight: MyFontWeight.medium,
                                   textSize: MyFontSize.size10,
                                   maxLines: 1,

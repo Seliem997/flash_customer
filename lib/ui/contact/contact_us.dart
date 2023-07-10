@@ -134,7 +134,7 @@ class _ContactUsState extends State<ContactUs> {
                 width: double.infinity,
                 child: DefaultFormField(
                   controller: aboutProvider.phoneController,
-                  hintText: '+966 124 365 1236',
+                  hintText: '+966 543 210 1234',
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,

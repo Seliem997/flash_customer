@@ -69,7 +69,7 @@ dependencies:
   provider: ^6.0.5
 
 #  flutter_tap_payment: ^0.2.0
-  go_sell_sdk_flutter: ^2.2.2
+  go_sell_sdk_flutter: ^2.2.3
   restart_app: ^1.1.0+1
   flutter_statusbarcolor_ns: ^0.5.0
   fast_cached_network_image: ^1.1.1

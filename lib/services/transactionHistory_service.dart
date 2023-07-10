@@ -42,37 +42,4 @@ class TransactionHistoryService extends BaseService {
     return ResponseResult(result, transactionData);
   }
 
-  Future<ResponseResult> chargingWalletUrl ({required int amount, required String payBy,}) async {
-    Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
-    Map<String, dynamic> body = {
-      "amount": amount,
-      "pay_by": payBy,
-    };
-
-    ChargeWalletUrl? chargeWalletUrl;
-    try {
-      await requestFutureData(
-          api: Api.chargingWallet,
-          requestType: Request.post,
-          jsonBody: true,
-          withToken: true,
-          headers: headers,
-          body: body,
-          onSuccess: (response) async {
-            try {
-              result = Status.success;
-              chargeWalletUrl = ChargeWalletModel.fromJson(response).data!;
-
-            } catch (e) {
-              logger.e("Error getting response Charging wallet\n$e");
-            }
-          });
-    } catch (e) {
-      result = Status.error;
-      log("Error in Charging wallet$e");
-    }
-    return ResponseResult(result, chargeWalletUrl);
-  }
-
 }

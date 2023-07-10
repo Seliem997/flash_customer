@@ -14,7 +14,8 @@ class MyVehiclesProvider with ChangeNotifier {
   TextEditingController yearController = TextEditingController();
   TextEditingController numbersController = TextEditingController();
   TextEditingController lettersController = TextEditingController();
-  String vehicleColor= '4294967295';
+  String? vehicleColor;
+  // String vehicleColor= '4294967295';
   Color screenPickerColor= Colors.white;
 
   bool loadingMyVehicles = true;
@@ -135,11 +136,12 @@ class MyVehiclesProvider with ChangeNotifier {
   }
 
   void resetFields(){
-    nameController = TextEditingController();
-    yearController = TextEditingController();
-    numbersController = TextEditingController();
-    lettersController = TextEditingController();
-    vehicleColor= '4294967295';
+    nameController = TextEditingController(text: '');
+    yearController = TextEditingController(text: '');
+    numbersController = TextEditingController(text: '');
+    lettersController = TextEditingController(text: '');
+    vehicleColor= null;
+    // vehicleColor= '4294967295';
     screenPickerColor= Colors.white;
     notifyListeners();
   }

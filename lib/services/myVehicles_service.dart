@@ -99,6 +99,7 @@ class MyVehiclesService extends BaseService {
           withToken: true,
           requestType: Request.put,
           onSuccess: (response) {
+            print('On success service');
             if (response["status_code"] == 200) {
               status = Status.success;
               vehicleDetailsData = VehicleDetailsModel.fromJson(response).data!;

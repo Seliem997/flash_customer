@@ -111,7 +111,7 @@ class _RequestDetailsState extends State<RequestDetails> {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
           transactionCurrency: "SAR",
-          amount: '500',
+          amount: '50',
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
@@ -126,7 +126,7 @@ class _RequestDetailsState extends State<RequestDetails> {
             PaymentItem(
                 name: "service_item1",
                 //TODO : change the price
-                amountPerUnit: 33,
+                amountPerUnit: 50,
                 // amountPerUnit: (updatedRequestDetailsData.id!).toDouble(),
                 quantity: Quantity(value: 1),
                 // quantity: Quantity(value: updatedRequestDetailsData.id!),
@@ -144,7 +144,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                 //       name: "tax1",
                 //       description: "tax describtion")
                 // ],
-                totalAmount: 300),
+                totalAmount: 50),
           ],
           // List of taxes
           taxes: [],
@@ -325,77 +325,6 @@ class _RequestDetailsState extends State<RequestDetails> {
         Provider.of<RequestServicesProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
 
-/*
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Complete Payment'),
-          backgroundColor: Colors.grey,
-        ),
-        body: SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-                top: 300,
-                left: 18,
-                right: 18,
-                child: Text(
-                  "Status: [$sdkStatus $responseID ]",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Roboto",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 15.0,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Positioned(
-                bottom: Platform.isIOS ? 0 : 10,
-                left: 18,
-                right: 18,
-                child: SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    clipBehavior: Clip.hardEdge,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(payButtonColor),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                    onPressed: startSDK,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'PAY',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.lock_outline,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-*/
     return Scaffold(
       appBar: CustomAppBar(
         withArrow: false,
@@ -1072,88 +1001,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                           ),
                         ),
                         verticalSpace(40),
-                        // SizedBox(
-                        //   height: 45,
-                        //   child: ElevatedButton(
-                        //     clipBehavior: Clip.hardEdge,
-                        //     style: ButtonStyle(
-                        //       backgroundColor:
-                        //           MaterialStateProperty.all(Color(0xff2ace00)),
-                        //       shape: MaterialStateProperty.all(
-                        //         RoundedRectangleBorder(
-                        //           borderRadius: BorderRadius.circular(30),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //     onPressed: () {
-                        //       navigateTo(context, GoSellPayment());
-                        //       // paymentProvider.startSDK();
-                        //     },
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         Text(
-                        //           'PAY',
-                        //           style: TextStyle(
-                        //             color: Colors.white,
-                        //             fontSize: 16.0,
-                        //           ),
-                        //         ),
-                        //         Spacer(),
-                        //         Icon(
-                        //           Icons.lock_outline,
-                        //           color: Colors.white,
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        /*SizedBox(
-                          child: Text(
-                            "Status: [$sdkStatus $responseID ]",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto",
-                              fontStyle: FontStyle.normal,
-                              fontSize: 15.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-              SizedBox(
-                height: 45,
-                child: ElevatedButton(
-                  clipBehavior: Clip.hardEdge,
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all(payButtonColor),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
-                  onPressed: startSDK,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'PAY',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.lock_outline,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ),*/
                         DefaultButton(
                           height: 48,
                           width: 345,
@@ -1179,10 +1026,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 AppLoader.stopLoader();
                                 CustomSnackBars.successSnackBar(
                                     context, 'Submit Request Success');
-
-                                // homeProvider.launchExpectedURL(
-                                //     expectedUrl:
-                                //     '${requestServicesProvider.paymentUrlData!.paymentUrl}');
                                 navigateAndFinish(
                                     context,
                                     const HomeScreen(

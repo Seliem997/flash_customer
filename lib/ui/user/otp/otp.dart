@@ -191,8 +191,8 @@ class _OTPScreenState extends State<OTPScreen> {
                     AppLoader.stopLoader();
                     if (value.status == Status.success) {
                       if (value.message != "invalid otp") {
-                        navigateTo(context, const HomeScreen());
                         userDataProvider.timer!.cancel();
+                        navigateTo(context, const HomeScreen());
                       } else {
                         CustomSnackBars.failureSnackBar(context, value.message);
                       }

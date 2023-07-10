@@ -8,7 +8,7 @@ import '../utils/enum/statuses.dart';
 
 class TransactionHistoryProvider with ChangeNotifier{
 
-  TextEditingController? rechargeAmountController= TextEditingController() ;
+  TextEditingController? rechargeAmountController= TextEditingController(text: '0.0') ;
 
 
   TransactionData? transactionData;
@@ -22,15 +22,5 @@ class TransactionHistoryProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  ChargeWalletUrl? chargeWalletUrl;
-  Future chargingWalletUrl({required int amount, required String payBy,}) async {
-    TransactionHistoryService transactionHistoryService = TransactionHistoryService();
-    await transactionHistoryService.chargingWalletUrl(amount: amount, payBy: payBy).then((value) {
-      if (value.status == Status.success) {
-        chargeWalletUrl = value.data;
-      }
-    });
-    notifyListeners();
-  }
 
 }

@@ -481,10 +481,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_sell_sdk_flutter
-      sha256: "5be8c696b257aca541077c2bde3142a2431581ea8c347b70b709d0b52ad098b3"
+      sha256: a907b9640171fedac34fa229b49e1e5cbd6b63334dc3e252f1101413adc805c5
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.2"
+    version: "2.2.3"
   google_api_headers:
     dependency: transitive
     description:

@@ -52,10 +52,10 @@ class _WalletPaymentState extends State<WalletPayment> {
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context, listen: false);
     super.initState();
-    payButtonColor = Color(0xff2ace00);
+    payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     configureSDK(
-        /*amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text)*/);
+        amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text));
   }
 
   void loadData() async {
@@ -65,11 +65,11 @@ class _WalletPaymentState extends State<WalletPayment> {
   }
 
   // configure SDK
-  Future<void> configureSDK(/*{required double amount}*/) async {
+  Future<void> configureSDK({required double amount}) async {
     // configure app
     configureApp();
     // sdk session configurations
-    setupSDKSession(/*amount: amount*/);
+    setupSDKSession(amount: amount);
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -89,12 +89,12 @@ class _WalletPaymentState extends State<WalletPayment> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
-  Future<void> setupSDKSession(/*{required double amount}*/) async {
+  Future<void> setupSDKSession({required double amount}) async {
     try {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
           transactionCurrency: "SAR",
-          amount: '500',
+          amount: '$amount',
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
@@ -105,56 +105,10 @@ class _WalletPaymentState extends State<WalletPayment> {
               middleName: "test",
               lastName: "test",
               metaData: null),
-          paymentItems: <PaymentItem>[
-            PaymentItem(
-                name: "service_item1",
-                //TODO : change the price
-                amountPerUnit: 258,
-                // amountPerUnit: (updatedRequestDetailsData.id!).toDouble(),
-                quantity: Quantity(value: 1),
-                // quantity: Quantity(value: updatedRequestDetailsData.id!),
-                // discount: {
-                //   "type": "F",
-                //   "value": 10,
-                //   "maximum_fee": 10,
-                //   "minimum_fee": 1
-                // },
-                description: "Item 1 Apple",
-                // taxes: [
-                //   Tax(
-                //       amount: Amount(
-                //           type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-                //       name: "tax1",
-                //       description: "tax describtion")
-                // ],
-                totalAmount: 300),
-          ],
+          paymentItems: [],
           // List of taxes
           taxes: [],
-          // taxes: [
-          //   Tax(
-          //       amount:
-          //           Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-          //       name: "tax1",
-          //       description: "tax describtion"),
-          //   Tax(
-          //       amount:
-          //           Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-          //       name: "tax1",
-          //       description: "tax describtion")
-          // ],
-          // List of shippnig
           shippings: [],
-          // shippings: [
-          //   Shipping(
-          //       name: "shipping 1",
-          //       amount: 100,
-          //       description: "shiping description 1"),
-          //   Shipping(
-          //       name: "shipping 2",
-          //       amount: 150,
-          //       description: "shiping description 2")
-          // ],
           postURL: "https://tap.company",
           // Payment description
           paymentDescription: "paymentDescription",
@@ -309,82 +263,10 @@ class _WalletPaymentState extends State<WalletPayment> {
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context);
 
-/*
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Complete Payment'),
-          backgroundColor: Colors.grey,
-        ),
-        body: SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-                top: 300,
-                left: 18,
-                right: 18,
-                child: Text(
-                  "Status: [$sdkStatus $responseID ]",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Roboto",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 15.0,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Positioned(
-                bottom: Platform.isIOS ? 0 : 10,
-                left: 18,
-                right: 18,
-                child: SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    clipBehavior: Clip.hardEdge,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(payButtonColor),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                    onPressed: startSDK,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'PAY',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.lock_outline,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-*/
     return Scaffold(
       backgroundColor: MyApp.themeMode(context) ? AppColor.boldDark : null,
       appBar: CustomAppBar(
         title: S.of(context).myWallet,
-        // backgroundColor: AppColor.lightBabyBlue,
       ),
       body: ListView(
         shrinkWrap: true,
@@ -400,16 +282,6 @@ class _WalletPaymentState extends State<WalletPayment> {
             backgroundColor: AppColor.lightBabyBlue,
             child: Column(
               children: [
-                // const CircleAvatar(
-                //   backgroundColor: Color.fromRGBO(0, 107, 182, 0.53),
-                //   radius: 55,
-                //   child: CircleAvatar(
-                //     radius: 49,
-                //     backgroundImage: AssetImage(
-                //       'assets/images/profile.png',
-                //     ),
-                //   ),
-                // ),
                 const ImageEditable(
                   imageUrl: '',
                 ),
@@ -473,7 +345,6 @@ class _WalletPaymentState extends State<WalletPayment> {
                     ],
                   ),
                   verticalSpace(28),
-/*
                   SizedBox(
                     height: 45,
                     child: ElevatedButton(
@@ -488,9 +359,11 @@ class _WalletPaymentState extends State<WalletPayment> {
                         ),
                       ),
                       onPressed: () async {
-                        startSDK();
+                        // startSDK();
+
+                        setupSDKSession(amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text));
                       },
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -509,34 +382,9 @@ class _WalletPaymentState extends State<WalletPayment> {
                       ),
                     ),
                   ),
-*/
                   DefaultButton(
                       text: S.of(context).pay,
-                      onPressed: () {
-                        /*if(transactionHistoryProvider.rechargeAmountController == null){
-                          CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
-                        }else{
-                          AppLoader.showLoader(context);
-                          transactionHistoryProvider.chargingWalletUrl(
-                            amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
-                            payBy: 'credit_card',
-                          ).then((value) => AppLoader.stopLoader());
-                        }*/
-                        AppLoader.showLoader(context);
-                        transactionHistoryProvider
-                            .chargingWalletUrl(
-                          amount: /*int.parse(transactionHistoryProvider.rechargeAmountController!.text,)*/
-                              30,
-                          payBy: 'credit_card',
-                        )
-                            .then((value) {
-                          AppLoader.stopLoader();
-                          homeProvider.launchExpectedURL(
-                            expectedUrl:
-                                '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
-                          );
-                        });
-                      },
+                      onPressed: () {},
                       width: 217,
                       height: 40),
                   verticalSpace(45),

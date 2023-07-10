@@ -137,33 +137,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 verticalSpace(28),
                 DefaultButton(
                     text: S.of(context).pay,
-                    onPressed: () {
-                      /*if(transactionHistoryProvider.rechargeAmountController == null){
-                        CustomSnackBars.failureSnackBar(context, 'Please, Enter Amount First',);
-                      }else{
-                        AppLoader.showLoader(context);
-                        transactionHistoryProvider.chargingWalletUrl(
-                          amount: int.parse(transactionHistoryProvider.rechargeAmountController!.text,),
-                          payBy: 'credit_card',
-                        ).then((value) => AppLoader.stopLoader());
-                      }*/
-                      AppLoader.showLoader(context);
-                      transactionHistoryProvider
-                          .chargingWalletUrl(
-                        amount: int.parse(
-                          transactionHistoryProvider
-                              .rechargeAmountController!.text,
-                        ),
-                        payBy: 'credit_card',
-                      )
-                          .then((value) {
-                        AppLoader.stopLoader();
-                        homeProvider.launchExpectedURL(
-                          expectedUrl:
-                              '${transactionHistoryProvider.chargeWalletUrl!.chargeUrl}',
-                        );
-                      });
-                    },
+                    onPressed: () {},
                     width: 217,
                     height: 40),
                 verticalSpace(45),

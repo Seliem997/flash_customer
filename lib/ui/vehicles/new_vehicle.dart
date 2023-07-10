@@ -309,7 +309,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           myVehiclesProvider.screenPickerColor = color;
                           myVehiclesProvider.vehicleColor = color.value.toString();
                         });
-                    log(myVehiclesProvider.vehicleColor);
 
                         // ColorTools.nameThatColor(color);
                   },
@@ -423,7 +422,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
                       year: myVehiclesProvider.yearController.text,
                   ).then((value) {
                     // log(myVehiclesProvider.nameController.text);
-                    log(myVehiclesProvider.vehicleColor);
                     log(myVehiclesProvider.screenPickerColor.toString());
                   AppLoader.stopLoader();
                   myVehiclesProvider.resetFields();
@@ -448,7 +446,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 letters:
                                     myVehiclesProvider.lettersController.text,
                                 color: myVehiclesProvider.vehicleColor,
-                                name: myVehiclesProvider.nameController == null? packageProvider.selectedVehicleModel!.name! :  myVehiclesProvider.nameController!.text,
+                                name: myVehiclesProvider.nameController == null? packageProvider.selectedVehicleModel!.name! : myVehiclesProvider.nameController!.text == '' ? packageProvider.selectedVehicleModel!.name! : myVehiclesProvider.nameController!.text,
                                 year: myVehiclesProvider.yearController.text,
                               )
                                   .then((value) {
