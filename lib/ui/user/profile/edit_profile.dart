@@ -39,7 +39,7 @@ class EditProfile extends StatelessWidget {
         child: Column(
           children: [
             ImageEditable(
-              imageUrl: '',
+              imageUrl: CacheHelper.returnData(key: CacheKey.userImage),
               showEditIcon: true,
               onTap: () async {
                 await ImagePicker.platform

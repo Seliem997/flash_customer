@@ -16,7 +16,6 @@ import '../utils/enum/statuses.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationService extends BaseService {
-
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
     Status status = Status.error;
@@ -281,7 +280,7 @@ class AuthenticationService extends BaseService {
 
   Future<ResponseResult> updateProfilePicture(String imagePath) async {
     Status status = Status.error;
-    UpdateProfileModel? userDataResponse;
+    String imageUrl = "";
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -296,7 +295,8 @@ class AuthenticationService extends BaseService {
 
       request.fields['_method'] = "PUT";
       request.fields['country_code'] = "+966";
-      request.fields['phone'] = CacheHelper.returnData(key: CacheKey.phoneNumber);
+      request.fields['phone'] =
+          CacheHelper.returnData(key: CacheKey.phoneNumber);
 
       request.files.add(await http.MultipartFile.fromPath("image", imagePath));
 
@@ -308,13 +308,14 @@ class AuthenticationService extends BaseService {
           final response = jsonDecode(value.body);
           // userDataResponse = UpdateProfileModel.fromJson(response);
           logger.i("Response: $response");
-          // if (userDataResponse!.statusCode == 200) {
-          //   log("Successss");
-          //   status = Status.success;
-          // } else if (userDataResponse!.statusCode == 400) {
-          //   status = Status.codeNotCorrect;
-          //   log("Failureee");
-          // }
+          if (response['status_code'] == 200) {
+            log("Successss");
+            imageUrl = response['data']['image'];
+            status = Status.success;
+          } else if (response['status_code'] == 400) {
+            status = Status.error;
+            log("Failureee");
+          }
         });
       }).timeout(const Duration(seconds: 30));
     } catch (e) {
@@ -322,6 +323,6 @@ class AuthenticationService extends BaseService {
       status = Status.error;
     }
     log("Status ${status.key}");
-    return ResponseResult(status, userDataResponse?.data?.image ?? "");
+    return ResponseResult(status, imageUrl);
   }
 }

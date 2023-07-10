@@ -49,14 +49,16 @@ class ImageEditable extends StatelessWidget {
           //     ),
           //   ),
           // ),
-          const CircleAvatar(
+          CircleAvatar(
             backgroundColor: Color.fromRGBO(0, 107, 182, 0.53),
             radius: 55,
             child: CircleAvatar(
               radius: 49,
-              backgroundImage: AssetImage(
-                'assets/images/profile.png',
-              ),
+              backgroundImage: imageUrl.isNotEmpty
+                  ? CachedNetworkImageProvider(imageUrl) as ImageProvider
+                  : AssetImage(
+                      'assets/images/profile.png',
+                    ),
             ),
           ),
           Visibility(

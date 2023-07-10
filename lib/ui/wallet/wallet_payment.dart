@@ -55,7 +55,8 @@ class _WalletPaymentState extends State<WalletPayment> {
     payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     configureSDK(
-        amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text));
+        amount: double.parse(
+            transactionHistoryProvider.rechargeAmountController!.text));
   }
 
   void loadData() async {
@@ -68,8 +69,9 @@ class _WalletPaymentState extends State<WalletPayment> {
   Future<void> configureSDK({required double amount}) async {
     // configure app
     configureApp();
+    // startSDK();
     // sdk session configurations
-    setupSDKSession(amount: amount);
+    // setupSDKSession(amount: amount);
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -359,9 +361,11 @@ class _WalletPaymentState extends State<WalletPayment> {
                         ),
                       ),
                       onPressed: () async {
-                        // startSDK();
+                        await setupSDKSession(
+                            amount: double.parse(transactionHistoryProvider
+                                .rechargeAmountController!.text));
 
-                        setupSDKSession(amount: double.parse(transactionHistoryProvider.rechargeAmountController!.text));
+                        startSDK();
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,

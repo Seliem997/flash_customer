@@ -27,7 +27,10 @@ class RequestServicesService extends BaseService {
     required int vehicleId,
   }) async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
 
     List<ServiceData> basicServicesDataList = [];
     try {
@@ -55,7 +58,10 @@ class RequestServicesService extends BaseService {
   Future<ResponseResult> getExtraServices(
       {required int cityId, required int vehicleId}) async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
 
     List<ServiceData> extraServicesDataList = [];
     try {
@@ -84,7 +90,10 @@ class RequestServicesService extends BaseService {
     required String discountCode,
   }) async {
     Status status = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {"offer_code": discountCode};
     CouponData? couponData;
     try {
@@ -115,7 +124,10 @@ class RequestServicesService extends BaseService {
     required double lng,
   }) async {
     Status status = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {"lat": lat, "lng": lng};
     CityIdData? cityIdData;
     try {
@@ -150,7 +162,10 @@ class RequestServicesService extends BaseService {
   }) async {
     Status status = Status.error;
     dynamic message;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {
       "city_id": cityId,
       "address_id": addressId,
@@ -192,7 +207,10 @@ class RequestServicesService extends BaseService {
   }) async {
     Status status = Status.error;
     dynamic message;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {
       "slots_ids": slotsIds,
       "slots_date": slotsDate,
@@ -227,7 +245,10 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> getRequestDetails({required int requestId}) async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
 
     DetailsRequestData? detailsRequestData;
     try {
@@ -258,7 +279,10 @@ class RequestServicesService extends BaseService {
   }) async {
     Status result = Status.error;
     dynamic message;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
 
     RequestDetailsData? updatedRequestDetailsData;
@@ -300,7 +324,10 @@ class RequestServicesService extends BaseService {
     required String date,
   }) async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
 
     List<List<SlotData>>? slots = [];
     try {
@@ -336,7 +363,10 @@ class RequestServicesService extends BaseService {
   }) async {
     Status status = Status.error;
     dynamic message;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
     PaymentUrlData? paymentUrlData;
     try {
@@ -350,7 +380,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
-              paymentUrlData =PaymentUrlModel.fromJson(response).data!;
+              paymentUrlData = PaymentUrlModel.fromJson(response).data!;
               message = response["message"];
             } else if (response["status_code"] == 422 ||
                 response["status_code"] == 400) {
@@ -372,7 +402,10 @@ class RequestServicesService extends BaseService {
   }) async {
     Status status = Status.error;
     dynamic message;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     Map<String, dynamic> body = {"rate": rate, "feedback": feedBack};
     RatingData? ratingData;
     try {
@@ -386,7 +419,7 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
-              ratingData =RateDetailsModel.fromJson(response).data!;
+              ratingData = RateDetailsModel.fromJson(response).data!;
               message = response["message"];
             } else if (response["status_code"] == 422 ||
                 response["status_code"] == 400) {
@@ -403,9 +436,12 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> getBankAccounts() async {
     Status result = Status.error;
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
 
-    List<BankAccountsData> bankAccountsList= [];
+    List<BankAccountsData> bankAccountsList = [];
     try {
       await requestFutureData(
           api: Api.bankAccounts,
@@ -428,7 +464,11 @@ class RequestServicesService extends BaseService {
     return ResponseResult(result, bankAccountsList);
   }
 
-  Future<ResponseResult> uploadPaymentFile(String imagePath,{required int bankAccountId, required int requestId,}) async {
+  Future<ResponseResult> uploadPaymentFile(
+    String imagePath, {
+    required int bankAccountId,
+    required int requestId,
+  }) async {
     Status status = Status.error;
 
     Map<String, String> headers = {
@@ -438,7 +478,8 @@ class RequestServicesService extends BaseService {
     };
 
     try {
-      var request = http.MultipartRequest("POST", Uri.parse(Api.submitFinialRequest));
+      var request =
+          http.MultipartRequest("POST", Uri.parse(Api.submitFinialRequest));
 
       request.headers.addAll(headers);
 
@@ -446,7 +487,6 @@ class RequestServicesService extends BaseService {
       request.fields['pay_by'] = 'bank_transfer';
       // request.fields['_method'] = "PUT";
       request.fields['bank_account_id'] = '$bankAccountId';
-
 
       request.files.add(await http.MultipartFile.fromPath("image", imagePath));
 
@@ -456,15 +496,15 @@ class RequestServicesService extends BaseService {
       await request.send().then((stream) async {
         await http.Response.fromStream(stream).then((value) {
           final response = jsonDecode(value.body);
-          // userDataResponse = UpdateProfileModel.fromJson(response);
+          BankTransferModel model = BankTransferModel.fromJson(response);
           logger.i("Response: $response");
-          // if (userDataResponse!.statusCode == 200) {
-          //   log("Successss");
-          //   status = Status.success;
-          // } else if (userDataResponse!.statusCode == 400) {
-          //   status = Status.codeNotCorrect;
-          //   log("Failureee");
-          // }
+          if (model.statusCode == 200) {
+            log("Successss");
+            status = Status.success;
+          } else if (model.statusCode == 400) {
+            status = Status.error;
+            log("Failureee");
+          }
         });
       }).timeout(const Duration(seconds: 30));
     } catch (e) {
@@ -472,8 +512,6 @@ class RequestServicesService extends BaseService {
       status = Status.error;
     }
     log("Status ${status.key}");
-    return ResponseResult(status,/* userDataResponse?.data?.image ??*/ "");
+    return ResponseResult(status, "");
   }
-
-
 }

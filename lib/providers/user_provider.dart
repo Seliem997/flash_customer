@@ -60,7 +60,6 @@ class UserProvider extends ChangeNotifier {
         userImage = (value.data as ProfileData).image;
         userEmail = (value.data as ProfileData).email;
         userId = (value.data as ProfileData).fwId;
-
       }
       notifyListeners();
     });
@@ -96,16 +95,19 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProfilePicture(BuildContext context, String imagePath) async {
+  Future<void> updateProfilePicture(
+      BuildContext context, String imagePath) async {
     final AuthenticationService authenticationService = AuthenticationService();
 
     AppLoader.showLoader(context);
-    await authenticationService.updateProfilePicture(imagePath).then((value) {
+    await authenticationService
+        .updateProfilePicture(imagePath)
+        .then((imageUrl) {
       AppLoader.stopLoader();
-      if (value.status == Status.success) {
+      if (imageUrl.status == Status.success) {
         CustomSnackBars.successSnackBar(context, "Updated Successfully");
-        userImage = value.data;
-        CacheHelper.saveData(key: CacheKey.userImage, value: value.data);
+        userImage = imageUrl.data;
+        CacheHelper.saveData(key: CacheKey.userImage, value: imageUrl.data);
       } else {
         CustomSnackBars.failureSnackBar(context, "Something went wrong");
       }
