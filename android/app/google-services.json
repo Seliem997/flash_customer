@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "623957972857",
+    "project_id": "flash-wash",
+    "storage_bucket": "flash-wash.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623957972857:android:05865da51e35cf685ac1a8",
+        "android_client_info": {
+          "package_name": "com.flash.customerapp.flash_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623957972857-ebjn3e5utqpj9utm409ukbkc9edtduhe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9fQOTSqxNyIBigm3-q0-aHson8k5Ytn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623957972857-ebjn3e5utqpj9utm409ukbkc9edtduhe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "623957972857-napiqs9b233a0kd7u8dmd0g5cvmhb7fc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flash.employeeapp.flashEmployee"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623957972857:android:3931491b3c6f48685ac1a8",
+        "android_client_info": {
+          "package_name": "com.flash.employeeapp.flash_employee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623957972857-ebjn3e5utqpj9utm409ukbkc9edtduhe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9fQOTSqxNyIBigm3-q0-aHson8k5Ytn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623957972857-ebjn3e5utqpj9utm409ukbkc9edtduhe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "623957972857-napiqs9b233a0kd7u8dmd0g5cvmhb7fc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flash.employeeapp.flashEmployee"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,6 +15,8 @@ import '../utils/enum/shared_preference_keys.dart';
 import '../utils/enum/statuses.dart';
 import 'package:http/http.dart' as http;
 
+import 'firebase_service.dart';
+
 class AuthenticationService extends BaseService {
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
@@ -24,10 +26,12 @@ class AuthenticationService extends BaseService {
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     dynamic message;
+    // TODO: add fcm_token field after its done in backend
     Map<String, dynamic> body = {
       "phone": phoneNumber,
       "otp": otp,
-      "country_code": countryCode
+      "country_code": countryCode,
+      // "fcm_token":await FirebaseService.getDeviceToken()
     };
     ProfileData? profileData;
     try {

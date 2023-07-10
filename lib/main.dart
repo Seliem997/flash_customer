@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_customer/providers/about_provider.dart';
 import 'package:flash_customer/providers/addresses_provider.dart';
 import 'package:flash_customer/providers/home_provider.dart';
@@ -12,6 +13,7 @@ import 'package:flash_customer/providers/payment_provider.dart';
 import 'package:flash_customer/providers/requestServices_provider.dart';
 import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
+import 'package:flash_customer/services/firebase_service.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
@@ -23,6 +25,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import 'firebase_options.dart';
 import 'generated/l10n.dart';
 
 void main() async {
@@ -30,6 +33,10 @@ void main() async {
 
   await CacheHelper.init();
   FastCachedImageConfig.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseService.initializeFirebase();
   runApp(const MyApp());
 }
 
