@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
       homeProvider.markers.clear();
       await _handleLocationPermission();
       await _getCurrentLocation();
-      addressesProvider.getAddresses();
+      loggedIn ? addressesProvider.getAddresses() : null;
     }
   }
 

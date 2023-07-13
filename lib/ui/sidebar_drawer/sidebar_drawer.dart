@@ -16,6 +16,7 @@ import '../about/about.dart';
 import '../addresses/addresses.dart';
 import '../contact/contact_us.dart';
 import '../monthly_pkg/monthly_pkg.dart';
+import '../notifications/notifications_screen.dart';
 import '../requests/myRequests.dart';
 import '../user/profile/edit_profile.dart';
 import '../vehicles/my_vehicles.dart';
@@ -361,7 +362,31 @@ class SidebarDrawer extends StatelessWidget {
                 );
               },
             ),
-            verticalSpace(50),
+            ListTile(
+              leading: CustomSizedBox(
+                width: 25,
+                height: 25,
+                child: SvgPicture.asset(
+                  'assets/svg/messages.svg',
+                  color:
+                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
+                ),
+              ),
+              minLeadingWidth: 2.w,
+              title: TextWidget(
+                text: 'Notification',
+                color:
+                    MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
+                textSize: 18,
+                fontWeight: MyFontWeight.medium,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                navigateTo(context, const NotificationsScreen());
+
+              },
+            ),
+            verticalSpace(30),
             ListTile(
               leading: CustomSizedBox(
                 width: 25,

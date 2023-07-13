@@ -1,7 +1,9 @@
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/image_editable.dart';
+import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
@@ -39,15 +41,19 @@ class EditProfile extends StatelessWidget {
         child: Column(
           children: [
             ImageEditable(
-              imageUrl: CacheHelper.returnData(key: CacheKey.userImage),
+              imageUrl: CacheHelper.returnData(key: CacheKey.userImage) ?? '',
               showEditIcon: true,
               onTap: () async {
                 await ImagePicker.platform
                     .getImage(source: ImageSource.gallery, imageQuality: 30)
                     .then((image) async {
                   if (image != null) {
+                    AppLoader.showLoader(context);
                     await userProvider.updateProfilePicture(
-                        context, image.path);
+                        context, image.path).then((value) {
+                          AppLoader.stopLoader();
+                          navigateAndFinish(context, HomeScreen());
+                    });
                   }
                 });
               },
@@ -193,8 +199,9 @@ class EditProfile extends StatelessWidget {
                                     width: 130,
                                     height: 30,
                                     text: S.of(context).delete,
-                                    onPressed: () {
-                                      Navigator.pop(context);
+                                    onPressed: () async{
+                                      await userProvider.deleteAccount();
+                                      navigateAndFinish(context, const HomeScreen());
                                     },
                                     backgroundColor: AppColor.textRed,
                                   ),

@@ -184,9 +184,8 @@ class _OTPScreenState extends State<OTPScreen> {
                 height: 55,
                 onPressed: () async {
                   AppLoader.showLoader(context);
-                  await auth
-                      .checkCode(widget.phoneNumber, widget.countryCode,
-                          userDataProvider.otpToString())
+                  await userDataProvider
+                      .checkCode(phoneNumber: widget.phoneNumber, countryCode: widget.countryCode, otp: userDataProvider.otpToString())
                       .then((value) {
                     AppLoader.stopLoader();
                     if (value.status == Status.success) {

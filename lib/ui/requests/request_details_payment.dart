@@ -62,9 +62,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     super.initState();
     payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
-    configureSDK(
-        updatedRequestDetailsData:
-            requestServicesProvider.updatedRequestDetailsData!);
+    configureSDK();
   }
 
   void loadData() async {
@@ -79,12 +77,12 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   // configure SDK
   Future<void> configureSDK({
-    required RequestDetailsData updatedRequestDetailsData,
+    double? amount,
   }) async {
     // configure app
     configureApp();
     // sdk session configurations
-    setupSDKSession(updatedRequestDetailsData: updatedRequestDetailsData);
+    setupSDKSession(amount: amount);
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -105,13 +103,13 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
   Future<void> setupSDKSession({
-    required RequestDetailsData updatedRequestDetailsData,
+    double? amount,
   }) async {
     try {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
           transactionCurrency: "SAR",
-          amount: '50',
+          amount: '$amount',
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
@@ -122,56 +120,12 @@ class _RequestDetailsState extends State<RequestDetails> {
               middleName: "test",
               lastName: "test",
               metaData: null),
-          paymentItems: <PaymentItem>[
-            PaymentItem(
-                name: "service_item1",
-                //TODO : change the price
-                amountPerUnit: 50,
-                // amountPerUnit: (updatedRequestDetailsData.id!).toDouble(),
-                quantity: Quantity(value: 1),
-                // quantity: Quantity(value: updatedRequestDetailsData.id!),
-                // discount: {
-                //   "type": "F",
-                //   "value": 10,
-                //   "maximum_fee": 10,
-                //   "minimum_fee": 1
-                // },
-                description: "Item 1 Apple",
-                // taxes: [
-                //   Tax(
-                //       amount: Amount(
-                //           type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-                //       name: "tax1",
-                //       description: "tax describtion")
-                // ],
-                totalAmount: 50),
-          ],
+          paymentItems: [],
           // List of taxes
           taxes: [],
-          // taxes: [
-          //   Tax(
-          //       amount:
-          //           Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-          //       name: "tax1",
-          //       description: "tax describtion"),
-          //   Tax(
-          //       amount:
-          //           Amount(type: "F", value: 10, minimumFee: 1, maximumFee: 10),
-          //       name: "tax1",
-          //       description: "tax describtion")
-          // ],
-          // List of shippnig
+
           shippings: [],
-          // shippings: [
-          //   Shipping(
-          //       name: "shipping 1",
-          //       amount: 100,
-          //       description: "shiping description 1"),
-          //   Shipping(
-          //       name: "shipping 2",
-          //       amount: 150,
-          //       description: "shiping description 2")
-          // ],
+
           postURL: "https://tap.company",
           // Payment description
           paymentDescription: "paymentDescription",
@@ -1016,6 +970,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                           .selectedCreditCardPayment*/
                                 ) {
                               AppLoader.showLoader(context);
+
+                              await setupSDKSession(
+                                  amount: requestServicesProvider.totalAmountAfterDiscount!.toDouble());
+
+                              await startSDK();
                               await requestServicesProvider
                                   .submitFinialRequest(
                                 requestId: requestServicesProvider

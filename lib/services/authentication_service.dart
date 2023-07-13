@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cross_file/src/types/interface.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:intl/intl.dart';
 
 import '../base/service/base_service.dart';
@@ -41,22 +42,26 @@ class AuthenticationService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               message = response["message"];
-              profileData = UpdateProfileModel.fromJson(response).data;
+              //---------------------------------------------------------------------- عايز اعرف السبب اللي ميخليش الداتا تدخل البروفايل داتا ------------------------
+              profileData = UpdateProfileModel.fromJson(response).data!;
 
               print("Bearer ${response["data"]["token"]}");
               CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
+              CacheHelper.saveData(key: CacheKey.userId, value: response["data"]["users"]["fw_id"]);
+              CacheHelper.saveData(key: CacheKey.userImage, value: response["data"]["users"]["image"]);
               CacheHelper.saveData(
                   key: CacheKey.userName,
-                  value: profileData?.name == null
-                      ? "New User"
-                      : profileData!.name);
+                  value: response["data"]["users"]["name"] ?? "New User");
 
               CacheHelper.saveData(
                   key: CacheKey.token,
                   value: "Bearer ${response["data"]["token"]}");
+              print("service Profile Data ${profileData!.fwId}");
+              print("cache Profile Data ${response["data"]["users"]["fw_id"]}");
+
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
               message = response["message"];
@@ -126,7 +131,6 @@ class AuthenticationService extends BaseService {
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     dynamic message;
-    UserData? userData;
     Map<String, dynamic> body = {
       "phone": phoneNumber,
       "country_code": countryCode
@@ -140,22 +144,9 @@ class AuthenticationService extends BaseService {
           onSuccess: (response) async {
             if (response["status_code"] == 200) {
               status = Status.success;
-              // loginModel = LoginModel.fromJson(response);
 
-              // CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
-              // userData = LoginModel.fromJson(response).data!.user!;
-              // await CacheHelper.saveData(
-              //     key: CacheKey.userName, value: userData!.name!);
-              // await CacheHelper.saveData(
-              //     key: CacheKey.userImage, value: userData!.image!);
-              // await CacheHelper.saveData(
-              //     key: CacheKey.email, value: userData!.email);
               message = response["message"];
 
-              await CacheHelper.saveData(
-                  key: CacheKey.userImage, value: userData!.image);
-              await CacheHelper.saveData(
-                  key: CacheKey.userId, value: userData.fwId);
               await CacheHelper.saveData(
                   key: CacheKey.phoneNumber, value: phoneNumber);
               await CacheHelper.saveData(
@@ -169,75 +160,9 @@ class AuthenticationService extends BaseService {
       status = Status.error;
       logger.e("Error Signing in $e");
     }
-    return ResponseResult(status, userData, message: message);
+    return ResponseResult(status, '', message: message);
   }
 
-  // Future<ResponseResult> getMyProfile() async {
-  //   Status status = Status.error;
-  //   late UserData userData;
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.getMyProfile,
-  //         withToken: true,
-  //         requestType: Request.get,
-  //         onSuccess: (response) async {
-  //           if (response["status_code"] == 200) {
-  //             status = Status.success;
-  //             userData = ProfileModel.fromJson(response).data!;
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.userName, value: userData.name!);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.userImage, value: userData.image!);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.email, value: userData.email);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.phoneNumber, value: userData.phone);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.countryCode, value: userData.countryCode);
-  //           } else if (response["status_code"] == 400) {
-  //             status = Status.invalidEmailOrPass;
-  //           }
-  //         });
-  //   } catch (e) {
-  //     status = Status.error;
-  //     logger.e("Error Signing in $e");
-  //   }
-  //   return ResponseResult(status, userData);
-  // }
-
-  // Future<ResponseResult> getUserData() async {
-  //   Status result = Status.error;
-  //   InfoData? userData;
-  //   Map<String, String> headers = {
-  //     'locale': 'ar',
-  //     'Accept': 'application/json'
-  //   };
-  //   try {
-  //     await requestFutureData(
-  //         api: Api.getUserData,
-  //         withToken: true,
-  //         requestType: Request.get,
-  //         headers: headers,
-  //         onSuccess: (response) async {
-  //           if (response['status_code'] == 200) {
-  //             result = Status.success;
-  //             userData = InfoModel.fromJson(response).data;
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.userName, value: userData!.name);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.email, value: userData!.email);
-  //             await CacheHelper.saveData(
-  //                 key: CacheKey.phoneNumber, value: userData!.phone ?? "");
-  //           } else {
-  //             result = Status.error;
-  //           }
-  //         });
-  //   } catch (e) {
-  //     result = Status.error;
-  //     logger.e("Error in creating user $e");
-  //   }
-  //   return ResponseResult(result, userData);
-  // }
 
   Future<ResponseResult> getSocialLinks() async {
     Status result = Status.error;
@@ -273,12 +198,14 @@ class AuthenticationService extends BaseService {
       CacheHelper.saveData(key: CacheKey.loggedIn, value: false);
       CacheHelper.saveData(key: CacheKey.userName, value: "");
       CacheHelper.saveData(key: CacheKey.email, value: "");
+      CacheHelper.saveData(key: CacheKey.userImage, value: '');
+
     } catch (e) {
       log("Error Signing out $e");
     }
   }
 
-  Future<ResponseResult> updateProfilePicture(String imagePath) async {
+  Future<ResponseResult> updateProfilePicture(context,String imagePath) async {
     Status status = Status.error;
     String imageUrl = "";
 
@@ -305,6 +232,7 @@ class AuthenticationService extends BaseService {
 
       await request.send().then((stream) async {
         await http.Response.fromStream(stream).then((value) {
+          AppLoader.showLoader(context);
           final response = jsonDecode(value.body);
           // userDataResponse = UpdateProfileModel.fromJson(response);
           logger.i("Response: $response");
@@ -325,4 +253,41 @@ class AuthenticationService extends BaseService {
     log("Status ${status.key}");
     return ResponseResult(status, imageUrl);
   }
+
+  Future<ResponseResult> deleteMyAccount() async {
+    Status result = Status.error;
+    Map<String, String> headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    Map<String, dynamic> body = {
+      "_method": "delete"
+    };
+    dynamic message;
+
+    try {
+      await requestFutureData(
+          api: Api.deleteMyAccount,
+          requestType: Request.post,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          body: body,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              message = response["message"];
+            } catch (e) {
+              logger.e("Error getting response delete Account\n$e");
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in deleting Account $e");
+    }
+    return ResponseResult(result, '', message: message);
+  }
+
 }

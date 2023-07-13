@@ -5,6 +5,7 @@ class Api {
   static const String checkCode = "$baseUrl/customer/verify-otp";
   static const String updateMyProfile = "$baseUrl/customer/update-my-profile";
 
+  static const String notifications = "$baseUrl/customer/my-notification";
   static const String getAbout = "$baseUrl/about";
   static const String getSocialLinks = "$baseUrl/social-links";
   static const String getAboutImages =
@@ -88,6 +89,8 @@ class Api {
       "$baseUrl/update-vehicle/$requestId";
 
   static const String deleteVehicle = "$baseUrl/customer/vehicles/";
+
+  static const String deleteMyAccount = "$baseUrl/customer/delete-my-account";
 
   static const String getMyRequests = "$baseUrl/customer/customer-requests";
 

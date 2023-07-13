@@ -1,4 +1,5 @@
 import 'package:flash_customer/main.dart';
+import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
@@ -17,7 +18,9 @@ import '../../providers/requestServices_provider.dart';
 import '../../providers/transactionHistory_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/app_loader.dart';
+import '../../utils/cache_helper.dart';
 import '../../utils/enum/date_formats.dart';
+import '../../utils/enum/shared_preference_keys.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
 import '../payment/tap_loader/awesome_loader.dart';
@@ -27,6 +30,7 @@ import '../widgets/custom_container.dart';
 import '../widgets/custom_form_field.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/image_editable.dart';
+import '../widgets/no_data_place_holder.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
@@ -62,6 +66,7 @@ class _WalletPaymentState extends State<WalletPayment> {
   void loadData() async {
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context, listen: false);
+    transactionHistoryProvider.isLoading == true;
     await transactionHistoryProvider.getTransactionHistory();
   }
 
@@ -284,8 +289,8 @@ class _WalletPaymentState extends State<WalletPayment> {
             backgroundColor: AppColor.lightBabyBlue,
             child: Column(
               children: [
-                const ImageEditable(
-                  imageUrl: '',
+                ImageEditable(
+                  imageUrl: CacheHelper.returnData(key: CacheKey.userImage) ?? '',
                 ),
                 verticalSpace(14),
                 TextWidget(
@@ -347,48 +352,21 @@ class _WalletPaymentState extends State<WalletPayment> {
                     ],
                   ),
                   verticalSpace(28),
-                  SizedBox(
-                    height: 45,
-                    child: ElevatedButton(
-                      clipBehavior: Clip.hardEdge,
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(payButtonColor),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        await setupSDKSession(
-                            amount: double.parse(transactionHistoryProvider
-                                .rechargeAmountController!.text));
-
-                        startSDK();
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'PAY',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          Spacer(),
-                          Icon(
-                            Icons.lock_outline,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   DefaultButton(
                       text: S.of(context).pay,
-                      onPressed: () {},
+                      onPressed: () async{
+                        if(double.parse(transactionHistoryProvider
+                            .rechargeAmountController!.text) > 1) {
+                          AppLoader.showLoader(context);
+                          await setupSDKSession(
+                            amount: double.parse(transactionHistoryProvider
+                                .rechargeAmountController!.text));
+                          startSDK().then((value) => AppLoader.stopLoader());
+                        }else{
+                          CustomSnackBars.failureSnackBar(context, "Please Enter a valid Amount");
+                        }
+
+                      },
                       width: 217,
                       height: 40),
                   verticalSpace(45),
@@ -412,8 +390,12 @@ class _WalletPaymentState extends State<WalletPayment> {
                     ],
                   ),
                   verticalSpace(6),
-                  transactionHistoryProvider.transactionData == null
+                  transactionHistoryProvider.isLoading == true
                       ? const DataLoader()
+                  : transactionHistoryProvider.transactionData!.collection!.isEmpty
+                      ? const CustomSizedBox(
+                      height: 300,
+                      child: Center(child: NoDataPlaceHolder(useExpand: false,)))
                       : CustomSizedBox(
                           height: 300,
                           child: ListView.separated(

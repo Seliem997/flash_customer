@@ -65,7 +65,7 @@ class MyVehiclesProvider with ChangeNotifier {
   Future<ResponseResult> updateVehicle({
     required int vehicleId,
     required int vehicleTypeId,
-    required int subVehicleTypeId,
+    int? subVehicleTypeId,
     required int manufacture,
     required int model,
     required int customerId,

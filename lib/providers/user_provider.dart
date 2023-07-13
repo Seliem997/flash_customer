@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../main.dart';
 import '../models/profileModel.dart';
+import '../models/requestResult.dart';
 import '../services/authentication_service.dart';
 import '../utils/app_loader.dart';
 import '../utils/enum/shared_preference_keys.dart';
@@ -14,9 +15,11 @@ import '../utils/enum/statuses.dart';
 import '../utils/snack_bars.dart';
 
 class UserProvider extends ChangeNotifier {
+  AuthenticationService authenticationService = AuthenticationService();
+
   String? userName = CacheHelper.returnData(key: CacheKey.userName);
   String? userBalance = CacheHelper.returnData(key: CacheKey.balance);
-  String? userImage;
+  String? userImage = CacheHelper.returnData(key: CacheKey.userImage);
   String? phone = CacheHelper.returnData(key: CacheKey.phoneNumber);
   String? userEmail = CacheHelper.returnData(key: CacheKey.email);
   String? userId = CacheHelper.returnData(key: CacheKey.userId);
@@ -24,7 +27,6 @@ class UserProvider extends ChangeNotifier {
   Timer? _timer;
 
   Timer? get timer => _timer;
-
   set timer(Timer? value) {
     _timer = value;
     notifyListeners();
@@ -45,19 +47,45 @@ class UserProvider extends ChangeNotifier {
     return otpString;
   }
 
+
+
+  ProfileData? profileData;
+  Future<ResponseResult>checkCode(
+      {required String phoneNumber, required String countryCode, required String otp}) async {
+    Status state = Status.error;
+    dynamic message;
+
+    await authenticationService
+        .checkCode(phoneNumber, countryCode, otp)
+        .then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        message = value.message;
+        profileData = value.data;
+        print("object Profile Data ${profileData!.fwId}");
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, profileData, message: message);
+  }
+
+
   Future<Status> updateUserProfile({
     required String name,
     required String email,
   }) async {
     Status status = Status.error;
-    AuthenticationService authenticationService = AuthenticationService();
     await authenticationService
         .updateProfile(name: name, email: email)
         .then((value) {
       if (value.status == Status.success) {
         status = Status.success;
+        profileData = value.data;
         userName = (value.data as ProfileData).name;
         userImage = (value.data as ProfileData).image;
+        CacheHelper.saveData(key: CacheKey.userImage, value: (value.data as ProfileData).image);
         userEmail = (value.data as ProfileData).email;
         userId = (value.data as ProfileData).fwId;
       }
@@ -66,23 +94,21 @@ class UserProvider extends ChangeNotifier {
     return status;
   }
 
-  // Future<Status> deleteAccount() async {
-  //   AuthenticationService authenticationService = AuthenticationService();
-  //   Status status=Status.error;
-  //   await authenticationService
-  //       .deleteAccount()
-  //       .then((value) {
-  //     status = value;
-  //     if(status==Status.success){
-  //       CacheHelper.saveData(key: "loggedIn", value: false);
-  //       CacheHelper.signOut();
-  //     }
-  //   });
-  //
-  //   return status;
-  // }
+  Future<Status> deleteAccount() async {
+    Status status=Status.error;
+    await authenticationService
+        .deleteMyAccount()
+        .then((value) {
+      if(value.status == Status.success){
+        CacheHelper.saveData(key: CacheKey.loggedIn, value: false);
+        notifyListeners();
+        authenticationService.signOut();
+      }
+    });
 
-  //-------------------------------------------- change App Mode -------
+    return status;
+  }
+
 
   //-------------------------------------------- change Language -------
 
@@ -101,7 +127,7 @@ class UserProvider extends ChangeNotifier {
 
     AppLoader.showLoader(context);
     await authenticationService
-        .updateProfilePicture(imagePath)
+        .updateProfilePicture(context,imagePath)
         .then((imageUrl) {
       AppLoader.stopLoader();
       if (imageUrl.status == Status.success) {

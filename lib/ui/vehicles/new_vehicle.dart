@@ -409,7 +409,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                       .updateVehicle(
                     vehicleId: vehicleData.id!,
                       vehicleTypeId: packageProvider.selectedManufacture == null ? vehicleData.vehicleTypeId! : packageProvider.selectedManufacture!.vehicleTypeId!,
-                      subVehicleTypeId: packageProvider.selectedManufacture == null ? vehicleData.subVehicleTypeId! : packageProvider.selectedManufacture!.subVehicleTypeId!,
+                      subVehicleTypeId: packageProvider.selectedManufacture == null ? vehicleData.subVehicleTypeId : packageProvider.selectedManufacture!.subVehicleTypeId,
                       manufacture: packageProvider.selectedManufacture == null ? vehicleData.manufacturerId! : packageProvider.selectedManufacture!.id!,
                       model: packageProvider.selectedVehicleModel == null ? vehicleData.vehicleModelId! : packageProvider.selectedVehicleModel!.id!,
                       customerId: vehicleData.customerId!,
