@@ -62,11 +62,15 @@ dependencies:
   image_picker:
 
 
+
   #  firebase
   firebase_core: ^2.4.1
   firebase_auth:
   http: ^0.13.5
   provider: ^6.0.5
+  firebase_messaging: ^14.6.2
+  flutter_local_notifications: ^8.2.0
+  permission_handler: ^10.2.0
 
 #  flutter_tap_payment: ^0.2.0
   go_sell_sdk_flutter: ^2.2.3
