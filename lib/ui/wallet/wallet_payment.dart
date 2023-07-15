@@ -302,7 +302,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                 ),
                 verticalSpace(10),
                 TextWidget(
-                  text: '${userProvider.userBalance} ${S.of(context).sr}',
+                  text: '${sdkStatus == "SUCCESS" ? (double.parse(userProvider.userBalance!) + double.parse(transactionHistoryProvider.rechargeAmountController!.text)) : userProvider.userBalance} ${S.of(context).sr}',
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
                   color: const Color(0xFF00567B),
@@ -392,7 +392,9 @@ class _WalletPaymentState extends State<WalletPayment> {
                   verticalSpace(6),
                   transactionHistoryProvider.isLoading == true
                       ? const DataLoader()
-                  : transactionHistoryProvider.transactionData!.collection!.isEmpty
+                  : transactionHistoryProvider.transactionData == null
+                      ? const DataLoader()
+                      : transactionHistoryProvider.transactionData!.collection!.isEmpty
                       ? const CustomSizedBox(
                       height: 300,
                       child: Center(child: NoDataPlaceHolder(useExpand: false,)))

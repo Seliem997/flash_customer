@@ -86,11 +86,14 @@ class MyVehiclesService extends BaseService {
       "numbers": numbers,
       "manufacturer_id": manufacture,
       "vehicle_model_id": model,
-      "sub_vehicle_type_id":subVehicleTypeId,
+      // "sub_vehicle_type_id":subVehicleTypeId,
+      if(subVehicleTypeId != null)"sub_vehicle_type_id": subVehicleTypeId,
       "customer_id":customerId
     };
     VehicleDetailsData? vehicleDetailsData;
     try {
+      print('Enter in service');
+
       await requestFutureData(
           api: Api.updateVehicle(requestId: vehicleId),
           body: body,
@@ -107,7 +110,6 @@ class MyVehiclesService extends BaseService {
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
               print("Error in response updated New Vehicle ");
-
             }
           });
     } catch (e) {

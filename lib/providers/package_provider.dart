@@ -214,6 +214,10 @@ class PackageProvider with ChangeNotifier {
   }
 
   bool isLoading = true;
+  void setLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
   List<List<SlotData>> packageSlotsList = [];
   Future getPackageTimeSlots({
     required int cityId,

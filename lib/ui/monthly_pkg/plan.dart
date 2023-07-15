@@ -16,6 +16,7 @@ import '../../utils/font_styles.dart';
 import '../date_time/washes_date.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
+import '../widgets/no_data_place_holder.dart';
 import '../widgets/spaces.dart';
 import '../widgets/text_widget.dart';
 
@@ -44,6 +45,7 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+    packageProvider.setLoading(true);
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context, listen: false);
     final HomeProvider homeProvider =
@@ -54,7 +56,7 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
       long: homeProvider.currentPosition!.longitude,
     );
     await packageProvider.getPackages(
-        cityId: requestServicesProvider.cityIdData!.id!);
+        cityId: requestServicesProvider.cityIdData!.id!).then((value) => packageProvider.setLoading(false));
   }
 
   @override
@@ -68,8 +70,10 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
 
     return Scaffold(
         appBar: CustomAppBar(title: S.of(context).monthlyPkg),
-        body: packageProvider.packagesDataList.isEmpty
+        body: packageProvider.isLoading
             ? const DataLoader()
+        :packageProvider.packagesDataList.isEmpty
+            ? const NoDataPlaceHolder(useExpand: false,)
             : Padding(
                 padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
                 child: Column(

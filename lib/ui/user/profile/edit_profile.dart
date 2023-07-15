@@ -44,18 +44,18 @@ class EditProfile extends StatelessWidget {
               imageUrl: CacheHelper.returnData(key: CacheKey.userImage) ?? '',
               showEditIcon: true,
               onTap: () async {
+                AppLoader.showLoader(context);
                 await ImagePicker.platform
                     .getImage(source: ImageSource.gallery, imageQuality: 30)
                     .then((image) async {
                   if (image != null) {
-                    AppLoader.showLoader(context);
                     await userProvider.updateProfilePicture(
                         context, image.path).then((value) {
                           AppLoader.stopLoader();
-                          navigateAndFinish(context, HomeScreen());
                     });
                   }
                 });
+                AppLoader.stopLoader();
               },
             ),
             verticalSpace(21),

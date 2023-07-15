@@ -70,19 +70,15 @@ class _MyAddressesState extends State<MyAddresses> {
                                   children: [
                                     SlidableAction(
                                       flex: 1,
-                                      onPressed: (BuildContext context) {},
+                                      onPressed: (BuildContext context) {
+
+                                      },
                                       backgroundColor: const Color(0xFFE74A2A),
                                       foregroundColor: Colors.white,
                                       icon: Icons.delete_forever_outlined,
                                       label: S.of(context).delete,
                                     ),
-                                    // SlidableAction(
-                                    //   onPressed: (BuildContext context) {},
-                                    //   backgroundColor: const Color(0xFF28A72D),
-                                    //   foregroundColor: Colors.white,
-                                    //   icon: Icons.mode_edit_outline_outlined,
-                                    //   label: 'Edit',
-                                    // ),
+
                                   ],
                                 ),
                                 child: CustomContainer(

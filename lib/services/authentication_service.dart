@@ -32,7 +32,7 @@ class AuthenticationService extends BaseService {
       "phone": phoneNumber,
       "otp": otp,
       "country_code": countryCode,
-      // "fcm_token":await FirebaseService.getDeviceToken()
+      "fcm_token":await FirebaseService.getDeviceToken()
     };
     ProfileData? profileData;
     try {
@@ -49,7 +49,6 @@ class AuthenticationService extends BaseService {
               //---------------------------------------------------------------------- عايز اعرف السبب اللي ميخليش الداتا تدخل البروفايل داتا ------------------------
               profileData = UpdateProfileModel.fromJson(response).data!;
 
-              print("Bearer ${response["data"]["token"]}");
               CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
@@ -63,8 +62,6 @@ class AuthenticationService extends BaseService {
               CacheHelper.saveData(
                   key: CacheKey.token,
                   value: "Bearer ${response["data"]["token"]}");
-              print("service Profile Data ${profileData!.fwId}");
-              print("cache Profile Data ${response["data"]["users"]["fw_id"]}");
 
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;

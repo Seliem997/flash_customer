@@ -745,8 +745,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ),
                               horizontalSpace(12),
                               TextWidget(
-                                /*${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance}*/
-                                text: '20 SR',
+                                text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance}',
                                 textSize: MyFontSize.size14,
                                 fontWeight: MyFontWeight.semiBold,
                                 color: const Color(0xFF0084DF),

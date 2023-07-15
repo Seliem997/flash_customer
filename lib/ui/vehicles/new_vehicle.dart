@@ -346,7 +346,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(4)
                           ],
+                          onChanged: (v){
+                            setState(() {
+                            });
+                          },
                         ),
                       ),
                     ],
@@ -373,6 +378,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.medium,
                           keyboardType: TextInputType.text,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(3)
+                          ],
+                          onChanged: (v){
+                            setState(() {
+                            });
+                          },
                         ),
                       ),
                     ],
@@ -380,9 +392,61 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 ],
               ),
               verticalSpace(32),
+              // Align(
+              //   alignment: Alignment.center,
+              //   child: Image.asset('assets/images/vehicle_plate.png'),
+              // ),
               Align(
                 alignment: Alignment.center,
-                child: Image.asset('assets/images/vehicle_plate.png'),
+                child: CustomSizedBox(
+                  width: 200,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Table(
+                              // textDirection: TextDirection.rtl,
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              border: TableBorder.all(
+                                  width: 2, color: Colors.black),
+                              children: List.generate(
+                                2,
+                                    (index) => TableRow(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextWidget(
+                                      text: myVehiclesProvider.numbersController.text,
+                                      textScaleFactor: 2.4,
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.bold,
+                                      textSize: 12,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextWidget(
+                                      text: myVehiclesProvider.lettersController.text,
+                                      textScaleFactor: 2.4,
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.bold,
+                                      textSize: 12,
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Image.asset('assets/images/ksa.png'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ),
               verticalSpace(12),
               Align(

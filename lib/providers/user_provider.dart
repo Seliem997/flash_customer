@@ -123,13 +123,11 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> updateProfilePicture(
       BuildContext context, String imagePath) async {
-    final AuthenticationService authenticationService = AuthenticationService();
 
     AppLoader.showLoader(context);
     await authenticationService
         .updateProfilePicture(context,imagePath)
         .then((imageUrl) {
-      AppLoader.stopLoader();
       if (imageUrl.status == Status.success) {
         CustomSnackBars.successSnackBar(context, "Updated Successfully");
         userImage = imageUrl.data;
@@ -138,5 +136,6 @@ class UserProvider extends ChangeNotifier {
         CustomSnackBars.failureSnackBar(context, "Something went wrong");
       }
     });
+    notifyListeners();
   }
 }
