@@ -5,6 +5,7 @@ import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -140,6 +141,13 @@ class _ContactUsState extends State<ContactUs> {
                   textColor: AppColor.textGrey,
                   textSize: MyFontSize.size10,
                   fontWeight: MyFontWeight.regular,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(11),
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+
                 ),
               ),
               verticalSpace(22),
