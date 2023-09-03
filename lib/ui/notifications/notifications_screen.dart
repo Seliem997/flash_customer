@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../providers/notifications_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../widgets/custom_container.dart';
@@ -39,8 +39,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const TextWidget(
-          text: "Notifications",
+        title: TextWidget(
+          text: S.of(context).notifications,
           textSize: 18,
           fontWeight: FontWeight.bold,
         ),

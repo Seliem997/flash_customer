@@ -173,5 +173,6 @@
   "rechargeAmount": "مبلغ الشحن",
   "transactionsHistory": "تاريخ المعاملات",
   "seeAll": "اظهار الكل",
-"somethingwentwrong": "هناك خطأ ما"
+  "somethingwentwrong": "هناك خطأ ما",
+  "notifications": "الاشعارات"
 }

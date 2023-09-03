@@ -173,5 +173,6 @@
   "rechargeAmount": "Recharge Amount",
   "transactionsHistory": "Transactions history",
   "seeAll": "See All",
-  "somethingwentwrong": "somethingWentWrong"
+  "somethingwentwrong": "somethingWentWrong",
+  "notifications": "Notifications"
 }

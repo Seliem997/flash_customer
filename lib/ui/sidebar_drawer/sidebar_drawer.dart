@@ -374,7 +374,7 @@ class SidebarDrawer extends StatelessWidget {
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(
-                text: 'Notification',
+                text: S.of(context).notifications,
                 color:
                     MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
                 textSize: 18,
@@ -383,7 +383,6 @@ class SidebarDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 navigateTo(context, const NotificationsScreen());
-
               },
             ),
             verticalSpace(30),
