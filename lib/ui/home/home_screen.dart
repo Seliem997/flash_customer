@@ -168,6 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
             zoomControlsEnabled: false,
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
             onLongPress: (latlang) {
+              homeProvider.markers.clear();
+              homeProvider.resetMap();
               homeProvider.addMarkerLongPressed(
                   latlang); //we will call this function when pressed on the map
             },
