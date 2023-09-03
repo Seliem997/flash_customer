@@ -7,6 +7,7 @@ enum CacheKey {
   userName('userName'),
   userImage('userImage'),
   userId('userId'),
+  userNumberId('userNumberId'),
   email('email'),
   token('token'),
   phoneNumber('phoneNumber'),

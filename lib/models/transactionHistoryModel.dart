@@ -155,3 +155,48 @@ class ChargeWalletUrl {
   }
 }
 
+class RechargeWalletModel {
+  int? statusCode;
+  String? message;
+  RechargeWalletData? data;
+
+  RechargeWalletModel({this.statusCode, this.message, this.data});
+
+  RechargeWalletModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? new RechargeWalletData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class RechargeWalletData {
+  String? chargeType;
+  String? customerId;
+  int? newBalance;
+
+  RechargeWalletData({this.chargeType, this.customerId, this.newBalance});
+
+  RechargeWalletData.fromJson(Map<String, dynamic> json) {
+    chargeType = json['charge_type'];
+    customerId = json['customer_id'];
+    newBalance = json['new_balance'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['charge_type'] = this.chargeType;
+    data['customer_id'] = this.customerId;
+    data['new_balance'] = this.newBalance;
+    return data;
+  }
+}

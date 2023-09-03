@@ -591,7 +591,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 Row(
                                   children: [
                                     TextWidget(
-                                      text: 'Total Amount :',
+                                      text: S.of(context).totalAmount,
                                       textSize: MyFontSize.size15,
                                       fontWeight: MyFontWeight.semiBold,
                                     ),

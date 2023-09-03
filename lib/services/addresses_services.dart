@@ -50,7 +50,6 @@ class AddressesService extends BaseService {
   }
 
 
-
   Future<ResponseResult> getAddresses() async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
@@ -77,6 +76,38 @@ class AddressesService extends BaseService {
       log("Error in getting Addresses Data$e");
     }
     return ResponseResult(result, addressesDataList);
+  }
+
+  Future<ResponseResult> deleteAddress({required int addressID}) async {
+    Status result = Status.error;
+    Map<String, String> headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    dynamic message;
+
+    try {
+      await requestFutureData(
+          api: '${Api.deleteAddress}$addressID',
+          requestType: Request.delete,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              result = Status.success;
+              message = response["message"];
+            } catch (e) {
+              logger.e("Error getting response delete Address\n$e");
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in deleting Address $e");
+    }
+    return ResponseResult(result, '', message: message);
   }
 
 }

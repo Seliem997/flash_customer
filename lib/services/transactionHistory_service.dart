@@ -42,4 +42,41 @@ class TransactionHistoryService extends BaseService {
     return ResponseResult(result, transactionData);
   }
 
+
+  Future<ResponseResult> rechargeWallet({
+    required String chargeId,
+  }) async {
+    Status status = Status.error;
+    dynamic message;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    Map<String, dynamic> body = {"charge_id": chargeId,};
+    RechargeWalletData? rechargeWalletData;
+    try {
+      await requestFutureData(
+          api: Api.walletCharge,
+          body: body,
+          headers: headers,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.post,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              message = response["message"];
+              rechargeWalletData = RechargeWalletModel.fromJson(response).data;
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
+              status = Status.error;
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in Wallet Charging Request $e");
+    }
+    return ResponseResult(status, rechargeWalletData, message: message);
+  }
 }

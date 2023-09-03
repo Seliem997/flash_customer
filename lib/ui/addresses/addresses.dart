@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
+import '../../utils/enum/statuses.dart';
+import '../../utils/snack_bars.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
 import 'new_address.dart';
@@ -71,14 +73,25 @@ class _MyAddressesState extends State<MyAddresses> {
                                     SlidableAction(
                                       flex: 1,
                                       onPressed: (BuildContext context) {
-
+                                        addressesProvider.deleteAddress(
+                                            addressID: addressesProvider
+                                                .addressesDataList[index].id!).then((value) {
+                                          if (value.status == Status.success) {
+                                            print('object');
+                                            CustomSnackBars.successSnackBar(
+                                                context, '${value.message}');
+                                          } else {
+                                            CustomSnackBars
+                                                .somethingWentWrongSnackBar(
+                                                context);
+                                          }
+                                        });
                                       },
                                       backgroundColor: const Color(0xFFE74A2A),
                                       foregroundColor: Colors.white,
                                       icon: Icons.delete_forever_outlined,
                                       label: S.of(context).delete,
                                     ),
-
                                   ],
                                 ),
                                 child: CustomContainer(
@@ -148,7 +161,6 @@ class _MyAddressesState extends State<MyAddresses> {
                             ),
                           ),
                         ),
-
                   Padding(
                     padding: symmetricEdgeInsets(horizontal: 24),
                     child: DefaultButton(

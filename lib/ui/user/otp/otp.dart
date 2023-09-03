@@ -128,7 +128,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       itemCount: 4,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        return OtpCell(index: index);
+                        return OtpCell(index: index,phoneNumber: widget.phoneNumber, countryCode: widget.countryCode,);
                       }),
                 ),
               ),
@@ -177,6 +177,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 ),
               ),
               verticalSpace(150),
+/*
               DefaultButton(
                 text: S.of(context).continueText,
                 fontSize: MyFontSize.size18,
@@ -201,6 +202,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   });
                 },
               )
+*/
             ],
           ),
         ),

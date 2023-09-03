@@ -67,6 +67,97 @@ class ProfileData {
   }
 }
 
+class LoginProfileModel {
+  int? statusCode;
+  String? message;
+  ProfileLoginData? data;
+
+  LoginProfileModel({this.statusCode, this.message, this.data});
+
+  LoginProfileModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    message = json['message'];
+    data = json['data'] != null ? new ProfileLoginData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class ProfileLoginData {
+  String? token;
+  ProfileData? users;
+
+  ProfileLoginData({this.token, this.users});
+
+  ProfileLoginData.fromJson(Map<String, dynamic> json) {
+    token = json['token'];
+    users = json['users'] != null ? new ProfileData.fromJson(json['users']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['token'] = this.token;
+    if (this.users != null) {
+      data['users'] = this.users!.toJson();
+    }
+    return data;
+  }
+}
+
+// class ProfileData {
+//   int? id;
+//   String? fwId;
+//   String? name;
+//   String? email;
+//   String? phone;
+//   String? countryCode;
+//   String? image;
+//   String? balance;
+//
+//
+//   ProfileData(
+//       {this.id,
+//         this.fwId,
+//         this.name,
+//         this.email,
+//         this.phone,
+//         this.countryCode,
+//         this.image,
+//         this.balance});
+//
+//   ProfileData.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     fwId = json['fw_id'];
+//     name = json['name'];
+//     email = json['email'];
+//     phone = json['phone'];
+//     countryCode = json['country_code'];
+//     image = json['image'];
+//     balance = json['balance'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['fw_id'] = this.fwId;
+//     data['name'] = this.name;
+//     data['email'] = this.email;
+//     data['phone'] = this.phone;
+//     data['country_code'] = this.countryCode;
+//     data['image'] = this.image;
+//     data['balance'] = this.balance;
+//     return data;
+//   }
+// }
+
 
 class SocialLinksModel {
   int? statusCode;

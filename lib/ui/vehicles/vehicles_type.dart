@@ -51,13 +51,11 @@ class _VehicleTypesState extends State<VehicleTypes> {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
 
-    await myVehiclesProvider
-        .getMyVehicles()
-        .then((value) {
-          if(myVehiclesProvider.myVehiclesData!.collection!.isNotEmpty) {
-            packageProvider.selectedMyVehicleLabel();
-          }
-        });
+    await myVehiclesProvider.getMyVehicles().then((value) {
+      if (myVehiclesProvider.myVehiclesData!.collection!.isNotEmpty) {
+        packageProvider.selectedMyVehicleLabel();
+      }
+    });
     packageProvider.getVehiclesTypeActive();
     packageProvider.getManufacturersOfType(
         vehicleTypeId: packageProvider.vehicleTypeId);
@@ -153,7 +151,9 @@ class _VehicleTypesState extends State<VehicleTypes> {
             packageProvider.newVehicleLabel
                 ? (packageProvider.vehiclesTypesDataList.isEmpty ||
                         packageProvider.manufacturerDataList.isEmpty)
-                    ? const DataLoader()
+                    ? const DataLoader(
+                        useExpand: true,
+                      )
                     : Expanded(
                         child: NewVehiclesScreenWidget(
                             packageProvider: packageProvider),
@@ -189,7 +189,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                 AppLoader.showLoader(context),
                                 await myVehiclesProvider
                                     .addNewVehicle(
-                                  vehicleTypeId: packageProvider.selectedManufacture!.vehicleTypeId!,
+                                  vehicleTypeId: packageProvider
+                                      .selectedManufacture!.vehicleTypeId!,
                                   manufacture:
                                       packageProvider.selectedManufacture!.id!,
                                   model:
@@ -202,6 +203,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                   if (value.status == Status.success) {
                                     CustomSnackBars.successSnackBar(
                                         context, 'New Vehicle added');
+                                    requestServicesProvider
+                                        .cityIdData != null ?
                                     navigateTo(
                                       context,
                                       ServicesScreen(
@@ -210,7 +213,8 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                         vehicleId: myVehiclesProvider
                                             .vehicleDetailsData!.id!,
                                       ),
-                                    );
+                                    ) : CustomSnackBars.failureSnackBar(
+                                        context, 'This City not available');
                                   } else {
                                     CustomSnackBars.somethingWentWrongSnackBar(
                                         context);
@@ -220,17 +224,21 @@ class _VehicleTypesState extends State<VehicleTypes> {
                             : packageProvider.chooseRequiredModel(value: true)
                         : packageProvider.chooseRequiredManufacture(value: true)
                     : myVehiclesProvider.selectedMyVehicleIndex != null
-                        ? navigateTo(
-                            context,
-                            ServicesScreen(
-                              cityId: requestServicesProvider.cityIdData!.id!,
-                              vehicleId: myVehiclesProvider
-                                  .myVehiclesData!
-                                  .collection![myVehiclesProvider
-                                      .selectedMyVehicleIndex!]
-                                  .id!,
-                            ),
-                          )
+                        ? requestServicesProvider.cityIdData != null
+                            ? navigateTo(
+                                context,
+                                ServicesScreen(
+                                  cityId:
+                                      requestServicesProvider.cityIdData!.id!,
+                                  vehicleId: myVehiclesProvider
+                                      .myVehiclesData!
+                                      .collection![myVehiclesProvider
+                                          .selectedMyVehicleIndex!]
+                                      .id!,
+                                ),
+                              )
+                            : CustomSnackBars.failureSnackBar(
+                                context, 'Choose available City first')
                         : CustomSnackBars.failureSnackBar(
                             context, S.of(context).chooseVehicleFirst);
               },

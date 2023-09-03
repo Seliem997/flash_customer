@@ -15,6 +15,7 @@ class AboutProvider with ChangeNotifier{
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController phoneController = TextEditingController(text: '');
   TextEditingController messageController = TextEditingController(text: '');
+  GlobalKey<FormState> contactDataKey = GlobalKey<FormState>();
 
   double currentDotsIndex = 0;
 

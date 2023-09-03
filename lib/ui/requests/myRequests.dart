@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../providers/myRequests_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -53,7 +54,7 @@ class _MyRequestsState extends State<MyRequests> {
               padding: onlyEdgeInsets(top: 40, start: 24, ),
               child: Row(
                 children: [
-                  DefaultButtonWithIcon(
+                  /*DefaultButtonWithIcon(
                     padding: symmetricEdgeInsets(horizontal: 10),
                     icon: SvgPicture.asset('assets/svg/filter.svg'),
                     onPressed: () {},
@@ -62,11 +63,11 @@ class _MyRequestsState extends State<MyRequests> {
                     backgroundButton: const Color(0xFFF0F0F0),
                     borderColor: AppColor.boldGrey,
                     border: true,
-                  ),
+                  ),*/
                   horizontalSpace(20),
                   DefaultButtonWithIcon(
                     padding: symmetricEdgeInsets(horizontal: 10),
-                    icon: SvgPicture.asset('assets/svg/filter.svg'),
+                    icon: SvgPicture.asset('assets/svg/filter.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
                     onPressed: () {
                       showDialog(
                         context: context,

@@ -11,11 +11,14 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../models/requestDetailsModel.dart';
 import '../../models/request_details_model.dart';
 import '../../providers/home_provider.dart';
 import '../../providers/requestServices_provider.dart';
+import '../../utils/cache_helper.dart';
+import '../../utils/enum/shared_preference_keys.dart';
 import '../home/home_screen.dart';
 import 'summaryRequestDetails.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -47,7 +50,7 @@ class RequestDetails extends StatefulWidget {
 
 class _RequestDetailsState extends State<RequestDetails> {
   late Map<dynamic, dynamic> tapSDKResult;
-  String responseID = "";
+  String chargeId = "";
   String sdkStatus = "";
   String? sdkErrorCode;
   String? sdkErrorMessage;
@@ -57,8 +60,6 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   @override
   void initState() {
-    final RequestServicesProvider requestServicesProvider =
-        Provider.of<RequestServicesProvider>(context, listen: false);
     super.initState();
     payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -78,11 +79,12 @@ class _RequestDetailsState extends State<RequestDetails> {
   // configure SDK
   Future<void> configureSDK({
     double? amount,
+    int? requestId,
   }) async {
     // configure app
     configureApp();
     // sdk session configurations
-    setupSDKSession(amount: amount);
+    setupSDKSession(amount: amount, requestId: requestId);
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -104,6 +106,7 @@ class _RequestDetailsState extends State<RequestDetails> {
   // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
   Future<void> setupSDKSession({
     double? amount,
+    int? requestId,
   }) async {
     try {
       GoSellSdkFlutter.sessionConfigurations(
@@ -113,12 +116,12 @@ class _RequestDetailsState extends State<RequestDetails> {
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
-              email: "test@test.com",
+              email: "${CacheHelper.returnData(key: CacheKey.email)}",
               isdNumber: "965",
-              number: "00000000",
-              firstName: "test",
-              middleName: "test",
-              lastName: "test",
+              number: "${CacheHelper.returnData(key: CacheKey.phoneNumber)}",
+              firstName: "${CacheHelper.returnData(key: CacheKey.userName)}",
+              middleName: "",
+              lastName: "",
               metaData: null),
           paymentItems: [],
           // List of taxes
@@ -131,8 +134,9 @@ class _RequestDetailsState extends State<RequestDetails> {
           paymentDescription: "paymentDescription",
           // Payment Metadata
           paymentMetaData: {
-            "SeliemCustomer_Id": "21",
-            "SeliemRequest_Id": "22",
+            "customer_id": "${CacheHelper.returnData(key: CacheKey.userNumberId)}",
+            "request_id": "$requestId",
+            "charge_type": "credit",
           },
           // Payment Reference
           paymentReference: Reference(
@@ -185,7 +189,7 @@ class _RequestDetailsState extends State<RequestDetails> {
       loaderController.start();
     });
 
-    var tapSDKResult = await GoSellSdkFlutter.startPaymentSDK;
+    tapSDKResult = await GoSellSdkFlutter.startPaymentSDK;
     loaderController.stopWhenFull();
     print('>>>> ${tapSDKResult['sdk_result']}');
 
@@ -242,7 +246,7 @@ class _RequestDetailsState extends State<RequestDetails> {
         print('TOKENIZE card_exp_month : ${tapSDKResult['card_exp_month']}');
         print('TOKENIZE card_exp_year    : ${tapSDKResult['card_exp_year']}');
 
-        responseID = tapSDKResult['token'];
+        chargeId = tapSDKResult['token'];
         break;
     }
   }
@@ -270,7 +274,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     print(
         '$trx_mode source_payment_type : ${tapSDKResult['source_payment_type']}');
 
-    responseID = tapSDKResult['charge_id'];
+    chargeId = tapSDKResult['charge_id'];
   }
 
   @override
@@ -286,7 +290,7 @@ class _RequestDetailsState extends State<RequestDetails> {
         customizePopButton: IconButton(
           icon: SvgPicture.asset(
             'assets/svg/arrow-left.svg',
-            color: Colors.black,
+            color: MyApp.themeMode(context) ? Colors.white : Colors.black,
             width: 5.w,
           ),
           onPressed: () {
@@ -418,7 +422,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
-                                            'assets/images/cash.png'),
+                                            'assets/images/cash.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
@@ -452,7 +456,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
-                                            'assets/images/card.png'),
+                                            'assets/images/card.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+                                        ),
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
@@ -460,9 +465,25 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         textSize: MyFontSize.size12,
                                         fontWeight: MyFontWeight.semiBold,
                                       ),
+                                      const Spacer(),
+                                      CustomSizedBox(
+                                        width: 20,
+                                          height: 20,
+                                          child: Image.asset('assets/images/Mastercard.png',)),
+                                      horizontalSpace(2),
+                                      CustomSizedBox(
+                                        width: 26,
+                                          height: 26,
+                                          child: Image.asset('assets/images/Visa.png')),
+                                      horizontalSpace(4),
+                                      CustomSizedBox(
+                                        width: 26,
+                                          height: 26,
+                                          child: Image.asset('assets/images/mada.png')),
                                     ],
                                   ),
                                 ),
+/*
                                 Visibility(
                                   visible: requestServicesProvider
                                       .selectedCreditCardPayment,
@@ -651,6 +672,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     ),
                                   ),
                                 ),
+*/
                                 verticalSpace(12),
                                 CustomContainer(
                                   height: 34,
@@ -665,7 +687,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
-                                            'assets/images/apple.png'),
+                                            'assets/images/apple.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
@@ -718,7 +740,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
-                                            'assets/images/bank.png'),
+                                            'assets/images/bank.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
                                       ),
                                       horizontalSpace(10),
                                       TextWidget(
@@ -745,7 +767,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ),
                               horizontalSpace(12),
                               TextWidget(
-                                text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance}',
+                                text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails?.balance} ${S.of(context).sr}',
                                 textSize: MyFontSize.size14,
                                 fontWeight: MyFontWeight.semiBold,
                                 color: const Color(0xFF0084DF),
@@ -795,6 +817,28 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   },
                                   child: Image.asset(
                                       'assets/images/info-circle.png')),
+                              const Spacer(),
+                              CustomContainer(
+                                height: 20,
+                                onTap: (){
+                                  requestServicesProvider
+                                      .selectWalletPayment(
+                                      !requestServicesProvider
+                                          .selectedWalletPayment);
+                                },
+                                child: CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: const Color(0xFF007FD8),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 8,
+                                    child: CircleAvatar(
+                                      backgroundColor: requestServicesProvider.selectedWalletPayment ? const Color(0xFF007FD8) : AppColor.white,
+                                      radius: 6,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -819,7 +863,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.updatedRequestDetailsData!.amount!} SR',
+                                          '${requestServicesProvider.updatedRequestDetailsData!.amount!} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -837,7 +881,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!} " "SR",
+                                          "${requestServicesProvider.updatedRequestDetailsData!.tax!} ${S.of(context).sr}",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -918,7 +962,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     TextWidget(
                                       text:
                                           "${requestServicesProvider.couponData?.discountAmount ?? 0}",
-                                      // "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} SR",
+                                      // "${requestServicesProvider.updatedRequestDetailsData!.discountAmount} ${S.of(context).sr}",
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -942,7 +986,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.totalAmountAfterDiscount} SR',
+                                          '${requestServicesProvider.totalAmountAfterDiscount} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -959,26 +1003,64 @@ class _RequestDetailsState extends State<RequestDetails> {
                           width: 345,
                           fontWeight: MyFontWeight.bold,
                           fontSize: MyFontSize.size20,
-                          backgroundColor: requestServicesProvider
-                              .selectedCashPayment ? AppColor.primary : const Color(0xFFB6B6B6),
+                          backgroundColor: (requestServicesProvider.selectedCashPayment || requestServicesProvider.selectedCreditCardPayment || requestServicesProvider.selectedWalletPayment) ? AppColor.primary : const Color(0xFFB6B6B6),
                           text: S.of(context).confirmAndPay,
                           onPressed: () async {
                             if (requestServicesProvider
-                                    .selectedCashPayment /*||
-                      requestServicesProvider
-                          .selectedCreditCardPayment*/
-                                ) {
+                                    .selectedCashPayment) {
                               AppLoader.showLoader(context);
-
-                              await setupSDKSession(
-                                  amount: requestServicesProvider.totalAmountAfterDiscount!.toDouble());
-
-                              await startSDK();
                               await requestServicesProvider
                                   .submitFinialRequest(
                                 requestId: requestServicesProvider
                                     .updatedRequestDetailsData!.id!,
                                 payBy: 'cash',
+                              )
+                                  .then((value) async {
+                                AppLoader.stopLoader();
+                                CustomSnackBars.successSnackBar(
+                                    context, 'Submit Request Success');
+                                navigateAndFinish(
+                                    context,
+                                    const HomeScreen(
+                                      cameFromNewRequest: true,
+                                    ));
+                              });
+                            }else if(requestServicesProvider.selectedCreditCardPayment){
+                              AppLoader.showLoader(context);
+                              await setupSDKSession(
+                                  amount: requestServicesProvider.totalAmountAfterDiscount!.toDouble(),
+                                requestId: requestServicesProvider
+                                    .updatedRequestDetailsData!.id!,
+                              );
+                              await startSDK();
+                              if(sdkStatus == "SUCCESS"){
+                                await requestServicesProvider.creditRequestPayment(chargeId: chargeId,
+                                ).then((value) async {
+                                  AppLoader.stopLoader();
+                                  CustomSnackBars.successSnackBar(
+                                      context, 'Submit Request Success');
+                                  navigateAndFinish(
+                                      context,
+                                      const HomeScreen(
+                                        cameFromNewRequest: true,
+                                      ));
+                                });
+                              }else{
+                                AppLoader.stopLoader();
+                                CustomSnackBars.failureSnackBar(
+                                    context, 'Payment Method Rejected');
+                              }
+                            } else if (requestServicesProvider
+                                .selectedWalletPayment) {
+                              AppLoader.showLoader(context);
+                              await requestServicesProvider
+                                  .submitFinialRequest(
+                                requestId: requestServicesProvider
+                                    .updatedRequestDetailsData!.id!,
+                                payBy: 'wallet',
+                                walletAmount: int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!) >= requestServicesProvider.totalAmountAfterDiscount!
+                                    ? requestServicesProvider.totalAmountAfterDiscount!
+                                    : int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!),
                               )
                                   .then((value) async {
                                 AppLoader.stopLoader();

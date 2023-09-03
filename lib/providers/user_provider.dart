@@ -18,11 +18,12 @@ class UserProvider extends ChangeNotifier {
   AuthenticationService authenticationService = AuthenticationService();
 
   String? userName = CacheHelper.returnData(key: CacheKey.userName);
-  String? userBalance = CacheHelper.returnData(key: CacheKey.balance);
+  var userBalance = CacheHelper.returnData(key: CacheKey.balance);
   String? userImage = CacheHelper.returnData(key: CacheKey.userImage);
   String? phone = CacheHelper.returnData(key: CacheKey.phoneNumber);
   String? userEmail = CacheHelper.returnData(key: CacheKey.email);
   String? userId = CacheHelper.returnData(key: CacheKey.userId);
+  int? userNumberId = CacheHelper.returnData(key: CacheKey.userNumberId);
 
   Timer? _timer;
 
@@ -62,6 +63,17 @@ class UserProvider extends ChangeNotifier {
         state = Status.success;
         message = value.message;
         profileData = value.data;
+        CacheHelper.saveData(
+            key: CacheKey.balance,
+            value: profileData!.balance);
+        CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
+        CacheHelper.saveData(key: CacheKey.userId, value: profileData!.fwId);
+        CacheHelper.saveData(key: CacheKey.userNumberId, value: profileData?.id);
+        CacheHelper.saveData(key: CacheKey.phoneNumber, value: profileData!.phone);
+        CacheHelper.saveData(key: CacheKey.userImage, value: profileData!.image);
+        CacheHelper.saveData(
+            key: CacheKey.userName,
+            value: profileData!.name ?? "New User");
         print("object Profile Data ${profileData!.fwId}");
       } else {
         message = value.message;
@@ -83,11 +95,9 @@ class UserProvider extends ChangeNotifier {
       if (value.status == Status.success) {
         status = Status.success;
         profileData = value.data;
-        userName = (value.data as ProfileData).name;
-        userImage = (value.data as ProfileData).image;
-        CacheHelper.saveData(key: CacheKey.userImage, value: (value.data as ProfileData).image);
-        userEmail = (value.data as ProfileData).email;
-        userId = (value.data as ProfileData).fwId;
+        userName = profileData?.name;
+        userEmail = profileData?.email;
+
       }
       notifyListeners();
     });
@@ -138,4 +148,5 @@ class UserProvider extends ChangeNotifier {
     });
     notifyListeners();
   }
+
 }

@@ -1,5 +1,6 @@
 
 
+import 'package:flash_customer/models/requestResult.dart';
 import 'package:flutter/material.dart';
 
 import '../models/transactionHistoryModel.dart';
@@ -23,6 +24,28 @@ bool isLoading = false;
       }
     });
     notifyListeners();
+  }
+
+  RechargeWalletData? rechargeWalletData;
+
+  Future<ResponseResult> rechargeWallet({
+    required String chargeId,
+  }) async {
+    Status state = Status.error;
+    dynamic message;
+    TransactionHistoryService transactionHistoryService = TransactionHistoryService();
+    await transactionHistoryService.rechargeWallet(chargeId: chargeId).then((value) {
+      isLoading = true;
+      notifyListeners();
+      if (value.status == Status.success) {
+        state = Status.success;
+        rechargeWalletData = value.data;
+        getTransactionHistory();
+      }
+      isLoading = false;
+    });
+    notifyListeners();
+    return ResponseResult(state, rechargeWalletData, message: message);
   }
 
 

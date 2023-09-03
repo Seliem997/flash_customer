@@ -21,6 +21,7 @@ import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/enum/date_formats.dart';
 import '../../utils/enum/shared_preference_keys.dart';
+import '../../utils/enum/statuses.dart';
 import '../../utils/font_styles.dart';
 import '../../utils/styles/colors.dart';
 import '../payment/tap_loader/awesome_loader.dart';
@@ -43,7 +44,7 @@ class WalletPayment extends StatefulWidget {
 
 class _WalletPaymentState extends State<WalletPayment> {
   late Map<dynamic, dynamic> tapSDKResult;
-  String responseID = "";
+  String chargeID = "";
   String sdkStatus = "";
   String? sdkErrorCode;
   String? sdkErrorMessage;
@@ -59,8 +60,8 @@ class _WalletPaymentState extends State<WalletPayment> {
     payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
     configureSDK(
-        amount: double.parse(
-            transactionHistoryProvider.rechargeAmountController!.text));
+        /*amount: double.parse(
+            transactionHistoryProvider.rechargeAmountController!.text)*/);
   }
 
   void loadData() async {
@@ -71,7 +72,7 @@ class _WalletPaymentState extends State<WalletPayment> {
   }
 
   // configure SDK
-  Future<void> configureSDK({required double amount}) async {
+  Future<void> configureSDK() async {
     // configure app
     configureApp();
     // startSDK();
@@ -105,12 +106,12 @@ class _WalletPaymentState extends State<WalletPayment> {
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
-              email: "test@test.com",
+              email: "${CacheHelper.returnData(key: CacheKey.email)}",
               isdNumber: "965",
-              number: "00000000",
-              firstName: "test",
-              middleName: "test",
-              lastName: "test",
+              number: "${CacheHelper.returnData(key: CacheKey.phoneNumber)}",
+              firstName: "${CacheHelper.returnData(key: CacheKey.userName)}",
+              middleName: "",
+              lastName: "",
               metaData: null),
           paymentItems: [],
           // List of taxes
@@ -121,8 +122,8 @@ class _WalletPaymentState extends State<WalletPayment> {
           paymentDescription: "paymentDescription",
           // Payment Metadata
           paymentMetaData: {
-            "SeliemCustomer_Id": "21",
-            "SeliemRequest_Id": "22",
+            "customer_id": "${CacheHelper.returnData(key: CacheKey.userNumberId)}",
+            "charge_type": "wallet",
           },
           // Payment Reference
           paymentReference: Reference(
@@ -175,7 +176,7 @@ class _WalletPaymentState extends State<WalletPayment> {
       loaderController.start();
     });
 
-    var tapSDKResult = await GoSellSdkFlutter.startPaymentSDK;
+    tapSDKResult = await GoSellSdkFlutter.startPaymentSDK;
     loaderController.stopWhenFull();
     print('>>>> ${tapSDKResult['sdk_result']}');
 
@@ -232,7 +233,7 @@ class _WalletPaymentState extends State<WalletPayment> {
         print('TOKENIZE card_exp_month : ${tapSDKResult['card_exp_month']}');
         print('TOKENIZE card_exp_year    : ${tapSDKResult['card_exp_year']}');
 
-        responseID = tapSDKResult['token'];
+        chargeID = tapSDKResult['token'];
         break;
     }
   }
@@ -240,6 +241,7 @@ class _WalletPaymentState extends State<WalletPayment> {
   void printSDKResult(String trx_mode) {
     print('$trx_mode status                : ${tapSDKResult['status']}');
     print('$trx_mode Aliiiicode                : ${tapSDKResult['code']}');
+    print('$trx_mode chargeID                : ${tapSDKResult['charge_id']}');
     print('$trx_mode id               : ${tapSDKResult['charge_id']}');
     print('$trx_mode  description        : ${tapSDKResult['description']}');
     print('$trx_mode  message           : ${tapSDKResult['message']}');
@@ -260,13 +262,12 @@ class _WalletPaymentState extends State<WalletPayment> {
     print(
         '$trx_mode source_payment_type : ${tapSDKResult['source_payment_type']}');
 
-    responseID = tapSDKResult['charge_id'];
+    chargeID = tapSDKResult['charge_id'];
   }
 
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context);
 
@@ -302,7 +303,8 @@ class _WalletPaymentState extends State<WalletPayment> {
                 ),
                 verticalSpace(10),
                 TextWidget(
-                  text: '${sdkStatus == "SUCCESS" ? (double.parse(userProvider.userBalance!) + double.parse(transactionHistoryProvider.rechargeAmountController!.text)) : userProvider.userBalance} ${S.of(context).sr}',
+                  text: '${userProvider.userBalance}',
+                  // text: '${sdkStatus == "SUCCESS" ? (double.parse(userProvider.userBalance!) + double.parse(transactionHistoryProvider.rechargeAmountController!.text)) : userProvider.userBalance} ${S.of(context).sr}',
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
                   color: const Color(0xFF00567B),
@@ -361,7 +363,18 @@ class _WalletPaymentState extends State<WalletPayment> {
                           await setupSDKSession(
                             amount: double.parse(transactionHistoryProvider
                                 .rechargeAmountController!.text));
-                          startSDK().then((value) => AppLoader.stopLoader());
+                          startSDK().then((value) async{
+                            if(sdkStatus == "SUCCESS"){
+                              await transactionHistoryProvider.rechargeWallet(chargeId: chargeID).then((value) {
+                                if (value.status == Status.success) {
+                                  userProvider.userBalance = transactionHistoryProvider.rechargeWalletData?.newBalance.toString();
+                                  CacheHelper.saveData(key: CacheKey.balance, value: transactionHistoryProvider.rechargeWalletData?.newBalance);
+                                  print("user balance == ${userProvider.userBalance}");
+                                }
+                              });
+                            }
+                            AppLoader.stopLoader();
+                          });
                         }else{
                           CustomSnackBars.failureSnackBar(context, "Please Enter a valid Amount");
                         }

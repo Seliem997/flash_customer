@@ -322,6 +322,7 @@ class RequestServicesService extends BaseService {
     required double duration,
     String? service,
     required String date,
+    required int addressId,
   }) async {
     Status result = Status.error;
     Map<String, String> headers = {
@@ -337,7 +338,9 @@ class RequestServicesService extends BaseService {
               basicId: basicId,
               date: date,
               duration: duration,
-              service: service ?? ''),
+              service: service ?? '',
+            addressId: addressId,
+          ),
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
@@ -360,6 +363,7 @@ class RequestServicesService extends BaseService {
   Future<ResponseResult> submitFinialRequest({
     required int requestId,
     required String payBy,
+    num? walletAmount,
   }) async {
     Status status = Status.error;
     dynamic message;
@@ -367,7 +371,7 @@ class RequestServicesService extends BaseService {
       'Content-Type': 'application/json',
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
-    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
+    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy, "wallet_amount": walletAmount};
     PaymentUrlData? paymentUrlData;
     try {
       await requestFutureData(
@@ -393,6 +397,42 @@ class RequestServicesService extends BaseService {
       logger.e("Error in submit Finial Request $e");
     }
     return ResponseResult(status, paymentUrlData, message: message);
+  }
+
+
+  Future<ResponseResult> creditRequestPayment({
+    required String chargeId,
+  }) async {
+    Status status = Status.error;
+    dynamic message;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    Map<String, dynamic> body = {"charge_id": chargeId,};
+    try {
+      await requestFutureData(
+          api: Api.walletCharge,
+          body: body,
+          headers: headers,
+          jsonBody: true,
+          withToken: true,
+          requestType: Request.post,
+          onSuccess: (response) {
+            if (response["status_code"] == 200) {
+              status = Status.success;
+              message = response["message"];
+            } else if (response["status_code"] == 422 ||
+                response["status_code"] == 400) {
+              status = Status.error;
+              message = response["message"];
+            }
+          });
+    } catch (e) {
+      status = Status.error;
+      logger.e("Error in credit Request Payment  $e");
+    }
+    return ResponseResult(status, '', message: message);
   }
 
   Future<ResponseResult> rateRequest({
@@ -514,4 +554,5 @@ class RequestServicesService extends BaseService {
     log("Status ${status.key}");
     return ResponseResult(status, "");
   }
+
 }

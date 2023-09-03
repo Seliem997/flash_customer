@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       homeProvider.mapController.animateCamera(
                           CameraUpdate.newCameraPosition(CameraPosition(
-                              zoom: 11.5,
+                              zoom: 18.5,
                               target: LatLng(
                                   homeProvider.currentPosition!.latitude,
                                   homeProvider.currentPosition!.longitude))));

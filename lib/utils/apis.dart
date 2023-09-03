@@ -18,6 +18,8 @@ class Api {
 
   static const String storeAddress = "$baseUrl/customer/addresses";
 
+  static const String deleteAddress = "$baseUrl/customer/addresses/";
+
   static const String getBasicServices =
       "$baseUrl/customer/services?type=basic";
 
@@ -33,8 +35,10 @@ class Api {
           int basicId = 27,
           double duration = 50,
           String? service,
-          String date = "06/5/2023"}) =>
-      "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration";
+          String date = "06/5/2023",
+            required int addressId
+          }) =>
+      "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration&address_id=$addressId";
 
   static String rateRequest({required int requestId}) =>
       "$baseUrl/customer/set-request-rate/$requestId";
@@ -75,6 +79,8 @@ class Api {
       "$baseUrl/customer/vehicle_models/get/by/manufacturers/id/";
 
   static const String getPackages = "$baseUrl/customer/all-packages?";
+
+  static const String walletCharge = "$baseUrl/request-payment/done";
 
   static const String getTransactionHistory =
       "$baseUrl/customer/history-transactions";

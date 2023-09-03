@@ -102,6 +102,7 @@ class OtherServicesProvider with ChangeNotifier{
     required int serviceId,
     required double duration,
     required String date,
+    required int addressId,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -112,6 +113,7 @@ class OtherServicesProvider with ChangeNotifier{
       basicId: serviceId,
       duration: duration,
       date: date,
+      addressId: addressId,
     )
         .then((value) {
       isLoading = false;

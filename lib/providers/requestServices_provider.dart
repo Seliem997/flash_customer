@@ -37,8 +37,9 @@ class RequestServicesProvider with ChangeNotifier {
   int? selectedSlotIndex;
   bool isLoading = true;
   List<ExtraServicesItem> selectedExtraServices = [];
-  bool selectedCreditCardPayment = false;
   bool selectedCashPayment = false;
+  bool selectedCreditCardPayment = false;
+  bool selectedWalletPayment = false;
   String? selectedDate;
   List slotsIds = [];
 
@@ -85,15 +86,25 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void selectCashPayment(bool value) {
+    selectedCreditCardPayment = false;
+    selectedCashPayment = value;
+    notifyListeners();
+  }
+
   void selectCreditCardPayment(bool value) {
+    selectedCashPayment= false;
     selectedCreditCardPayment = value;
     notifyListeners();
   }
 
-  void selectCashPayment(bool value) {
-    selectedCashPayment = value;
+  void selectWalletPayment(bool value) {
+    selectedCashPayment= false;
+    selectedCreditCardPayment = false;
+    selectedWalletPayment = value;
     notifyListeners();
   }
+
 
   void selectedBasicService({required int index}) {
     selectedBasicIndex = index;
@@ -239,6 +250,7 @@ class RequestServicesProvider with ChangeNotifier {
     required int basicId,
     required double duration,
     required String date,
+    required int addressId,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -254,6 +266,7 @@ class RequestServicesProvider with ChangeNotifier {
       duration: duration,
       date: date,
       service: services,
+      addressId: addressId,
     )
         .then((value) {
       isLoading = false;
@@ -295,11 +308,12 @@ class RequestServicesProvider with ChangeNotifier {
   Future<ResponseResult> submitFinialRequest({
     required int requestId,
     required String payBy,
+    num? walletAmount,
   }) async {
     Status state = Status.error;
     dynamic message;
     await servicesService
-        .submitFinialRequest(requestId: requestId, payBy: payBy)
+        .submitFinialRequest(requestId: requestId, payBy: payBy, walletAmount: walletAmount)
         .then((value) {
       if (value.status == Status.success) {
         state = Status.success;
@@ -312,6 +326,25 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
     return ResponseResult(state, paymentUrlData, message: message);
   }
+
+
+  Future<ResponseResult> creditRequestPayment({
+    required String chargeId,
+  }) async {
+    Status state = Status.error;
+    dynamic message;
+    await servicesService.creditRequestPayment(chargeId: chargeId,).then((value) {
+      isLoading = true;
+      notifyListeners();
+      if (value.status == Status.success) {
+        state = Status.success;
+      }
+      isLoading = false;
+    });
+    notifyListeners();
+    return ResponseResult(state, '', message: message);
+  }
+
 
   RatingData? ratingData;
   Future<ResponseResult> rateRequest({
@@ -407,8 +440,9 @@ class RequestServicesProvider with ChangeNotifier {
     resetCoupon();
     selectedBasicIndex = null;
     selectedSlotIndex = null;
-    selectedCreditCardPayment = false;
     selectedCashPayment = false;
+    selectedCreditCardPayment = false;
+    selectedWalletPayment = false;
     notifyListeners();
   }
 }

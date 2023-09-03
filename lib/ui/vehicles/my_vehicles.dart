@@ -171,7 +171,7 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                           children: [
                             TextWidget(
                               text:
-                                  '${myVehiclesProvider.myVehiclesData!.collection![index].manufacturerName}, ${myVehiclesProvider.myVehiclesData!.collection![index].vehicleModelName} /${myVehiclesProvider.myVehiclesData!.collection![index].name} ${myVehiclesProvider.myVehiclesData!.collection![index].year} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                                  '${myVehiclesProvider.myVehiclesData!.collection![index].manufacturerName}, ${myVehiclesProvider.myVehiclesData!.collection![index].vehicleModelName} /${(myVehiclesProvider.myVehiclesData!.collection![index].name) ?? ''} ${(myVehiclesProvider.myVehiclesData!.collection![index].year) ?? ''} (${(myVehiclesProvider.myVehiclesData!.collection![index].numbers) ?? ''} ${(myVehiclesProvider.myVehiclesData!.collection![index].letters) ?? ''})',
                               maxLines: 2,
                               fontWeight: MyFontWeight.semiBold,
                               textSize: MyFontSize.size10,
@@ -186,7 +186,7 @@ class MyVehiclesScreenWidget extends StatelessWidget {
                                 horizontalSpace(6),
                                 TextWidget(
                                   text:
-                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color == null ? null : ColorTools.nameThatColor(Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)))} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${myVehiclesProvider.myVehiclesData!.collection![index].numbers} ${myVehiclesProvider.myVehiclesData!.collection![index].letters})',
+                                      '${myVehiclesProvider.myVehiclesData!.collection![index].color == null ? '' : ColorTools.nameThatColor(Color(int.parse(myVehiclesProvider.myVehiclesData!.collection![index].color!)))} ,${myVehiclesProvider.myVehiclesData!.collection![index].vehicleTypeName} (${(myVehiclesProvider.myVehiclesData!.collection![index].numbers) ?? ''} ${(myVehiclesProvider.myVehiclesData!.collection![index].letters) ?? ''})',
                                   fontWeight: MyFontWeight.medium,
                                   textSize: MyFontSize.size10,
                                   maxLines: 1,

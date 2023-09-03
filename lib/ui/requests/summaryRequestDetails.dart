@@ -58,9 +58,7 @@ class SummaryRequestDetails extends StatelessWidget {
                   verticalSpace(10),
                   TextWidget(
                     text:
-                        '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
-                    // text: '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!} - ${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].vehicleModelName!}',
-                    // text: 'Small Car - Blue Yaris ACWS 2190',
+                        '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
                     textSize: MyFontSize.size12,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.subTextGrey,

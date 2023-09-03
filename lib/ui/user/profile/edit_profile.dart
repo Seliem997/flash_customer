@@ -33,6 +33,8 @@ class EditProfile extends StatelessWidget {
         TextEditingController(text: userProvider.userEmail);
     TextEditingController phoneTextController = TextEditingController(
         text: CacheHelper.returnData(key: CacheKey.phoneNumber));
+    TextEditingController fwIdTextController = TextEditingController(
+        text: CacheHelper.returnData(key: CacheKey.userId));
     return Scaffold(
       appBar: CustomAppBar(
         title: S.of(context).myProfile,
@@ -77,8 +79,7 @@ class EditProfile extends StatelessWidget {
                         fillColor: AppColor.borderGreyLight,
                         filled: true,
                         enabled: false,
-                        controller:
-                            TextEditingController(text: userProvider.userId),
+                        controller: fwIdTextController,
                       )),
                   verticalSpace(27),
                   Row(

@@ -46,19 +46,20 @@ class AuthenticationService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               message = response["message"];
-              //---------------------------------------------------------------------- عايز اعرف السبب اللي ميخليش الداتا تدخل البروفايل داتا ------------------------
-              profileData = UpdateProfileModel.fromJson(response).data!;
+
+              profileData = LoginProfileModel.fromJson(response).data!.users;
 
               CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
               CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
               CacheHelper.saveData(key: CacheKey.userId, value: response["data"]["users"]["fw_id"]);
+              CacheHelper.saveData(key: CacheKey.userNumberId, value: profileData?.id);
+              CacheHelper.saveData(key: CacheKey.phoneNumber, value: response["data"]["users"]["phone"]);
               CacheHelper.saveData(key: CacheKey.userImage, value: response["data"]["users"]["image"]);
               CacheHelper.saveData(
                   key: CacheKey.userName,
                   value: response["data"]["users"]["name"] ?? "New User");
-
               CacheHelper.saveData(
                   key: CacheKey.token,
                   value: "Bearer ${response["data"]["token"]}");
@@ -109,10 +110,12 @@ class AuthenticationService extends BaseService {
               print('service updated done');
               status = Status.success;
               userData = UpdateProfileModel.fromJson(response).data;
+              print('object from model ${userData?.name}');
 
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
-              await CacheHelper.saveData(
-                  key: CacheKey.userImage, value: userData!.image);
+              print('object from Cach ${CacheHelper.returnData(key: CacheKey.userName)}');
+              // await CacheHelper.saveData(
+              //     key: CacheKey.userImage, value: userData!.image);
               await CacheHelper.saveData(key: CacheKey.email, value: email);
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
@@ -197,9 +200,13 @@ class AuthenticationService extends BaseService {
   void signOut() async {
     try {
       CacheHelper.saveData(key: CacheKey.loggedIn, value: false);
-      CacheHelper.saveData(key: CacheKey.userName, value: "");
+      CacheHelper.removeData(key: CacheKey.userName);
+      CacheHelper.removeData(key: CacheKey.email);
+      CacheHelper.removeData(key: CacheKey.userImage);
+      CacheHelper.removeData(key: CacheKey.phoneNumber);
+      /*CacheHelper.saveData(key: CacheKey.userName, value: "");
       CacheHelper.saveData(key: CacheKey.email, value: "");
-      CacheHelper.saveData(key: CacheKey.userImage, value: '');
+      CacheHelper.saveData(key: CacheKey.userImage, value: '');*/
 
     } catch (e) {
       log("Error Signing out $e");

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../main.dart';
 import '../../../providers/addresses_provider.dart';
 import '../../../utils/styles/colors.dart';
 import '../../addresses/new_address.dart';
@@ -75,14 +76,14 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                               .addressesDataList[index].type! ==
                                           "work"
                                       ? SvgPicture.asset(
-                                          'assets/svg/work.svg',
+                                          'assets/svg/work.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,
                                         )
                                       : addressesProvider
                                                   .addressesDataList[index]
                                                   .type! ==
                                               "work"
                                           ? SvgPicture.asset(
-                                              'assets/svg/school.svg',
+                                              'assets/svg/school.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,
                                             )
                                           : Image.network(addressesProvider
                                               .addressesDataList[index].image!),

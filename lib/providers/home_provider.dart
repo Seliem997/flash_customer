@@ -46,10 +46,10 @@ class HomeProvider with ChangeNotifier {
       Marker startMarker = Marker(
           markerId: MarkerId(startCoordinatesString),
           position: LatLng(startLatitude, startLongitude),
-          infoWindow: const InfoWindow(
+          /*infoWindow: const InfoWindow(
             title: 'That\'s your Location',
             // snippet: _startAddress,
-          ),
+          ),*/
           icon: await BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue));
 
@@ -72,11 +72,11 @@ class HomeProvider with ChangeNotifier {
       markerId: markerId,
       draggable: true,
       position: latlang,
-      //With this parameter you automatically obtain latitude and longitude
+      /*//With this parameter you automatically obtain latitude and longitude
       infoWindow: const InfoWindow(
         title: "New Location",
         snippet: 'Marker here',
-      ),
+      ),*/
       icon: BitmapDescriptor.defaultMarker,
     );
 
@@ -96,6 +96,7 @@ class HomeProvider with ChangeNotifier {
     print('Lat Lang $latlang');
     notifyListeners();
   }
+
   void resetMap() {
     // markers.clear();
     polylineCoordinates = [];

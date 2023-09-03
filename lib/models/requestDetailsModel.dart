@@ -259,8 +259,8 @@ class Vehicle {
     vehicleTypeName = json['vehicle_type_name'];
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
-    customerDetails = json['customer_details'] != null
-        ? CustomerDetails.fromJson(json['customer_details'])
+    customerDetails = json['customer'] != null
+        ? CustomerDetails.fromJson(json['customer'])
         : null;
   }
 

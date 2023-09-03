@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../main.dart';
 import '../../../models/myRequestsModel.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/styles/colors.dart';
@@ -62,7 +63,7 @@ class RequestItem extends StatelessWidget {
               CustomSizedBox(
                   height: 12,
                   width: 12,
-                  child: SvgPicture.asset('assets/svg/alarm.svg')),
+                  child: SvgPicture.asset('assets/svg/alarm.svg', color: MyApp.themeMode(context) ? Colors.black : Colors.white,)),
               horizontalSpace(8),
               TextWidget(
                 text: '${myRequestData.time}',

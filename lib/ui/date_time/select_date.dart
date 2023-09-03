@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../../../utils/font_styles.dart';
+import '../../main.dart';
+import '../../providers/addresses_provider.dart';
 import '../../providers/requestServices_provider.dart';
 import '../../utils/enum/date_formats.dart';
 import '../../utils/enum/statuses.dart';
@@ -58,6 +60,9 @@ class _SelectDateState extends State<SelectDate> {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
 
+    final AddressesProvider addressesProvider =
+    Provider.of<AddressesProvider>(context, listen: false);
+
     requestServicesProvider.selectedSlotIndex = null;
     otherServicesProvider.selectedTimeSlot();
     packageProvider.selectedSlotIndex = null;
@@ -94,6 +99,7 @@ class _SelectDateState extends State<SelectDate> {
                       .toDouble(),
                   date: DateFormat(DFormat.mdy.key)
                       .format(requestServicesProvider.date),
+      addressId: addressesProvider.addressDetailsData!.id!,
                 )
                 .then((value) => requestServicesProvider.setLoading(false))
             : await requestServicesProvider
@@ -103,7 +109,9 @@ class _SelectDateState extends State<SelectDate> {
                   duration: requestServicesProvider.totalDuration,
                   date: DateFormat(DFormat.mdy.key)
                       .format(requestServicesProvider.date),
-                )
+      addressId: addressesProvider.addressDetailsData!.id!,
+
+    )
                 .then((value) => requestServicesProvider.setLoading(false));
   }
 
@@ -115,6 +123,9 @@ class _SelectDateState extends State<SelectDate> {
         Provider.of<OtherServicesProvider>(context, listen: false);
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+
+    final AddressesProvider addressesProvider =
+    Provider.of<AddressesProvider>(context, listen: false);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -189,7 +200,7 @@ class _SelectDateState extends State<SelectDate> {
                                       .selectedServiceIndex!]
                                   .duration!
                                   .toDouble(),
-                              date: DateFormat(DFormat.mdy.key).format(date),
+                              date: DateFormat(DFormat.mdy.key).format(date), addressId: addressesProvider.addressDetailsData!.id!,
                             )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false))
@@ -200,15 +211,16 @@ class _SelectDateState extends State<SelectDate> {
                                   .selectedBasicServiceId,
                               duration: requestServicesProvider.totalDuration,
                               date: DateFormat(DFormat.mdy.key).format(date),
-                            )
+                  addressId: addressesProvider.addressDetailsData!.id!,
+                )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false));
-              },
+              }, //,color: MyApp.themeMode(context) ? Colors.white : Colors.black,
               leftMargin: 20,
               showYears: true,
-              monthColor: const Color(0xFF565656),
-              dayColor: AppColor.boldGrey,
-              activeDayColor: Colors.black,
+              monthColor: MyApp.themeMode(context) ? Colors.white : const Color(0xFF565656),
+              dayColor: MyApp.themeMode(context) ? Colors.white : AppColor.boldGrey,
+              activeDayColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
               activeBackgroundDayColor: const Color(0xFFBADEF6),
               dotsColor: const Color(0xFF333A47),
               // selectableDayPredicate: (date) => date.day != 23,
@@ -295,7 +307,7 @@ class _SelectDateState extends State<SelectDate> {
                                             children: [
                                               TextWidget(
                                                 text:
-                                                    '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt} - ${value.packageSlotsList[employeeIndex].lastOrNull?.endAt}',
+                                                    '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}',/* - ${value.packageSlotsList[employeeIndex].lastOrNull?.endAt}*/
                                                 fontWeight: MyFontWeight.medium,
                                                 textSize: MyFontSize.size10,
                                                 color: const Color(0xFF565656),
@@ -393,7 +405,7 @@ class _SelectDateState extends State<SelectDate> {
                                                 children: [
                                                   TextWidget(
                                                     text:
-                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} ',/*- ${value.slotsList[employeeIndex].lastOrNull?.endAt}*/
                                                     fontWeight:
                                                         MyFontWeight.medium,
                                                     textSize: MyFontSize.size10,
@@ -492,7 +504,7 @@ class _SelectDateState extends State<SelectDate> {
                                                 children: [
                                                   TextWidget(
                                                     text:
-                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} - ${value.slotsList[employeeIndex].lastOrNull?.endAt}',
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} ',/*- ${value.slotsList[employeeIndex].lastOrNull?.endAt}*/
                                                     fontWeight:
                                                         MyFontWeight.medium,
                                                     textSize: MyFontSize.size10,

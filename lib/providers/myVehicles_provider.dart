@@ -60,8 +60,6 @@ class MyVehiclesProvider with ChangeNotifier {
     return ResponseResult(state, vehicleDetailsData);
   }
 
-
-
   Future<ResponseResult> updateVehicle({
     required int vehicleId,
     required int vehicleTypeId,
