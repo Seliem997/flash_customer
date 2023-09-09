@@ -1,5 +1,4 @@
 import 'package:flash_customer/ui/requests/requestDetails_screen.dart';
-import 'package:flash_customer/ui/requests/request_details.dart';
 import 'package:flash_customer/ui/requests/widgets/request_item.dart';
 import 'package:flash_customer/ui/requests/widgets/status_dialog.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -54,20 +53,33 @@ class _MyRequestsState extends State<MyRequests> {
               padding: onlyEdgeInsets(top: 40, start: 24, ),
               child: Row(
                 children: [
-                  /*DefaultButtonWithIcon(
+                  DefaultButtonWithIcon(
                     padding: symmetricEdgeInsets(horizontal: 10),
-                    icon: SvgPicture.asset('assets/svg/filter.svg'),
-                    onPressed: () {},
+                    icon: SvgPicture.asset('assets/svg/filter.svg',color: MyApp.themeMode(context) ? Colors.white : null),
+                    onPressed: () {
+                      showDatePicker(
+                          context: context,
+                          initialDate: myRequestsProvider.selectedDate ??
+                              DateTime.now(),
+                          firstDate: DateTime.utc(DateTime.now().year),
+                          lastDate:
+                          DateTime.now().add(Duration(days: 180)))
+                          .then((value) {
+                        if (value != null) {
+                          myRequestsProvider.selectedDate = value;
+                        }
+                      });
+                    },
                     labelText: S.of(context).dateFilter,
                     textColor: AppColor.boldGrey,
                     backgroundButton: const Color(0xFFF0F0F0),
                     borderColor: AppColor.boldGrey,
                     border: true,
-                  ),*/
+                  ),
                   horizontalSpace(20),
                   DefaultButtonWithIcon(
                     padding: symmetricEdgeInsets(horizontal: 10),
-                    icon: SvgPicture.asset('assets/svg/filter.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
+                    icon: SvgPicture.asset('assets/svg/filter.svg',color: MyApp.themeMode(context) ? Colors.white : null,),
                     onPressed: () {
                       showDialog(
                         context: context,

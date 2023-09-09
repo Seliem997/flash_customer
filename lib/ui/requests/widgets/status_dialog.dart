@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../providers/myRequests_provider.dart';
+import '../../../utils/enum/status_types.dart';
 import '../../../utils/font_styles.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/spaces.dart';
@@ -55,7 +56,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
-                  myRequestsProvider.changeStatusFilter(myRequestsProvider.pendingRequestsDataList);
+                  myRequestsProvider.getMyRequests(status: StatusType.pending2.key);
                   Navigator.pop(context);
                 });
               },
@@ -72,7 +73,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
-                  myRequestsProvider.changeStatusFilter(myRequestsProvider.onTheWayRequestsDataList);
+                  myRequestsProvider.getMyRequests(status: StatusType.onTheWay2.key);
                   Navigator.pop(context);
                 });
               },
@@ -89,7 +90,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
-                  myRequestsProvider.changeStatusFilter(myRequestsProvider.arrivedRequestsDataList);
+                  myRequestsProvider.getMyRequests(status: StatusType.arrived2.key);
                   Navigator.pop(context);
                 });
               },
@@ -106,7 +107,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
-                  myRequestsProvider.changeStatusFilter(myRequestsProvider.completedRequestsDataList);
+                  myRequestsProvider.getMyRequests(status: StatusType.completed2.key);
                   Navigator.pop(context);
                 });
               },
@@ -123,7 +124,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
-                  myRequestsProvider.changeStatusFilter(myRequestsProvider.canceledRequestsDataList);
+                  myRequestsProvider.getMyRequests(status: StatusType.canceled2.key);
                   Navigator.pop(context);
                 });
               },

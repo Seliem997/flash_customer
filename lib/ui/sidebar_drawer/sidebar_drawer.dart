@@ -15,6 +15,7 @@ import '../../utils/font_styles.dart';
 import '../about/about.dart';
 import '../addresses/addresses.dart';
 import '../contact/contact_us.dart';
+import '../home/home_screen.dart';
 import '../monthly_pkg/monthly_pkg.dart';
 import '../notifications/notifications_screen.dart';
 import '../requests/myRequests.dart';
@@ -127,8 +128,9 @@ class SidebarDrawer extends StatelessWidget {
                                     text: S.of(context).switchh ,
                                     onPressed: () {
                                       MyApp.changeThemeMode(context);
-                                      Navigator.pop(context);
-                                      Restart.restartApp();
+                                      // Restart.restartApp();
+                                      navigateAndFinish(context, const HomeScreen());
+
                                     },
                                     backgroundColor: AppColor.textRed,
                                   ),

@@ -35,6 +35,9 @@ class BasicServicesWidget extends StatelessWidget {
       backgroundColor: servicesProvider.selectedBasicIndex == index
           ? const Color(0xFFE1ECFF)
           : const Color(0xFFD1D1D1),
+      backgroundColorDark: servicesProvider.selectedBasicIndex == index
+          ? const Color(0xFFE1ECFF)
+          : Colors.transparent,
       radiusCircular: 4,
       child: Row(
         children: [
@@ -55,6 +58,7 @@ class BasicServicesWidget extends StatelessWidget {
             text: title,
             textSize: MyFontSize.size12,
             fontWeight: MyFontWeight.semiBold,
+            colorDark: servicesProvider.selectedBasicIndex == index ? Colors.black : null,
           ),
           const Spacer(),
           Padding(
@@ -187,7 +191,8 @@ class ExtraServicesWidget extends StatelessWidget {
                         ? AppColor.primary
                         : AppColor.subTextGrey,
                     child: extraService.isSelected
-                        ? const Icon(Icons.check, color: Colors.white, size: 13)
+                        // ? const Icon(Icons.check, color: Colors.white, size: 13)
+                ? Image.asset('assets/images/checkIcon.png')
                         : Container(),
                   ),
           )

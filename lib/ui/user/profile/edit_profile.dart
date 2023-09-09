@@ -79,6 +79,7 @@ class EditProfile extends StatelessWidget {
                         fillColor: AppColor.borderGreyLight,
                         filled: true,
                         enabled: false,
+                        textColor: AppColor.grey,
                         controller: fwIdTextController,
                       )),
                   verticalSpace(27),

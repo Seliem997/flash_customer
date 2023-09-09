@@ -98,7 +98,8 @@ class Api {
 
   static const String deleteMyAccount = "$baseUrl/customer/delete-my-account";
 
-  static const String getMyRequests = "$baseUrl/customer/customer-requests";
+  static String getMyRequests ({String? status, String? date}) =>
+      "$baseUrl/customer/customer-requests?${status == null ? '': "status=$status"}&${date == null ? '' : "date=$date"}";
 
   static const String checkOfferCoupon = "$baseUrl/customer/check-offer";
 

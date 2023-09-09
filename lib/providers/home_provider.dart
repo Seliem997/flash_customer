@@ -65,18 +65,14 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return false;
   }
-
+  LatLng? usedLatLang;
   Future addMarkerLongPressed(LatLng latlang) async {
     const MarkerId markerId = MarkerId("RANDOM_ID");
     Marker marker = Marker(
       markerId: markerId,
       draggable: true,
       position: latlang,
-      /*//With this parameter you automatically obtain latitude and longitude
-      infoWindow: const InfoWindow(
-        title: "New Location",
-        snippet: 'Marker here',
-      ),*/
+
       icon: BitmapDescriptor.defaultMarker,
     );
 

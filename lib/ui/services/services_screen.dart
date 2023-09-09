@@ -50,7 +50,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
       cityId: widget.cityId,
       vehicleId: widget.vehicleId,
     );
-    // await servicesProvider.getTax();
     servicesProvider.setLoading(false);
   }
 

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/home_provider.dart';
+import '../../utils/enum/statuses.dart';
 import '../../utils/font_styles.dart';
 import '../home/home_screen.dart';
 import '../widgets/custom_button.dart';
@@ -196,7 +197,11 @@ class _LocationDialogState extends State<LocationDialog> {
                     long: homeProvider.currentPosition!.longitude,
                   )
                       .then((value) {
-                    navigateAndFinish(context, const HomeScreen());
+                    if (value.status == Status.success) {
+                      navigateAndFinish(context, const HomeScreen());
+                    } else {
+                      CustomSnackBars.failureSnackBar(context, '${value.message}');
+                    }
                   });
                 } else {
                   CustomSnackBars.failureSnackBar(

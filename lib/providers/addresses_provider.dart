@@ -25,14 +25,17 @@ class AddressesProvider with ChangeNotifier{
     required double long,
   }) async {
     Status state = Status.error;
+    dynamic message;
     await addressesService.storeAddress(type: type, locationName: locationName, lat: lat, long: long).then((value) {
       if (value.status == Status.success) {
         state = Status.success;
+        message = value.message;
         addressDetailsData = value.data;
-       print('Added New address In Provider Successfully');
+      }else{
+        message = value.message;
       }
     });
-    return ResponseResult(state, addressDetailsData);
+    return ResponseResult(state, addressDetailsData, message: message);
   }
 
   List<AddressesData> addressesDataList = [];

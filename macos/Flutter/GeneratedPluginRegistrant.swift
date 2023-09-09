@@ -11,7 +11,7 @@ import firebase_core
 import firebase_messaging
 import flutter_local_notifications
 import geolocator_apple
-import package_info_plus_macos
+import package_info_plus
 import path_provider_foundation
 import shared_preferences_foundation
 import sqflite

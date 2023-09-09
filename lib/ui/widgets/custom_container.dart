@@ -65,17 +65,6 @@ class CustomContainer extends StatelessWidget {
                       : borderColor!)
               : null,
           shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-          /*boxShadow: const [
-            BoxShadow(
-              color: AppColor.tertiary,
-              offset: Offset(
-                1.0,
-                1.0,
-              ),
-              blurRadius: 8.0,
-              spreadRadius: 0.4,
-            ),
-          ],*/
         ),
         child: child,
       ),

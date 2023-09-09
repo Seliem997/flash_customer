@@ -1,4 +1,3 @@
-
 import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flutter/material.dart';
 
@@ -59,10 +58,7 @@ class RequestServicesProvider with ChangeNotifier {
       totalAmount +=
           (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!));
       totalDuration += basicServicesList[selectedBasicIndex!].duration!;
-      totalTaxes = (((basicServicesList[selectedBasicIndex!].tax!) *
-              (double.parse(
-                  basicServicesList[selectedBasicIndex!].selectedPrice!))) /
-          100);
+      totalTaxes = (basicServicesList[selectedBasicIndex!].tax!);
     }
 
     for (int i = 0; i < extraServicesList.length; i++) {
@@ -93,18 +89,17 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   void selectCreditCardPayment(bool value) {
-    selectedCashPayment= false;
+    selectedCashPayment = false;
     selectedCreditCardPayment = value;
     notifyListeners();
   }
 
   void selectWalletPayment(bool value) {
-    selectedCashPayment= false;
+    selectedCashPayment = false;
     selectedCreditCardPayment = false;
     selectedWalletPayment = value;
     notifyListeners();
   }
-
 
   void selectedBasicService({required int index}) {
     selectedBasicIndex = index;
@@ -146,16 +141,6 @@ class RequestServicesProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-
-  /*TaxData? taxData;
-  Future getTax() async {
-      await servicesService.getTax().then((value) {
-      if (value.status == Status.success) {
-        taxData = value.data;
-      }
-    });
-    notifyListeners();
-  }*/
 
   CouponData? couponData;
   Future checkOfferCoupon(BuildContext context) async {
@@ -313,7 +298,8 @@ class RequestServicesProvider with ChangeNotifier {
     Status state = Status.error;
     dynamic message;
     await servicesService
-        .submitFinialRequest(requestId: requestId, payBy: payBy, walletAmount: walletAmount)
+        .submitFinialRequest(
+            requestId: requestId, payBy: payBy, walletAmount: walletAmount)
         .then((value) {
       if (value.status == Status.success) {
         state = Status.success;
@@ -327,13 +313,16 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, paymentUrlData, message: message);
   }
 
-
   Future<ResponseResult> creditRequestPayment({
     required String chargeId,
   }) async {
     Status state = Status.error;
     dynamic message;
-    await servicesService.creditRequestPayment(chargeId: chargeId,).then((value) {
+    await servicesService
+        .creditRequestPayment(
+      chargeId: chargeId,
+    )
+        .then((value) {
       isLoading = true;
       notifyListeners();
       if (value.status == Status.success) {
@@ -344,7 +333,6 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
     return ResponseResult(state, '', message: message);
   }
-
 
   RatingData? ratingData;
   Future<ResponseResult> rateRequest({
@@ -404,20 +392,17 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> uploadPaymentFile(BuildContext context, String imagePath, {required int bankAccountId, required int requestId}) async {
-
+  Future<void> uploadPaymentFile(BuildContext context, String imagePath,
+      {required int bankAccountId, required int requestId}) async {
     AppLoader.showLoader(context);
-    await servicesService.uploadPaymentFile(imagePath, bankAccountId: bankAccountId, requestId: requestId).then((value) {
+    await servicesService
+        .uploadPaymentFile(imagePath,
+            bankAccountId: bankAccountId, requestId: requestId)
+        .then((value) {
       AppLoader.stopLoader();
       CustomSnackBars.successSnackBar(context, "Requested Successfully");
-      /*if (value.status == Status.success) {
-        CustomSnackBars.successSnackBar(context, "Uploaded Successfully");
-      } else {
-        CustomSnackBars.failureSnackBar(context, "Something went wrong");
-      }*/
     });
   }
-
 
   void resetCoupon() {
     couponData = null;

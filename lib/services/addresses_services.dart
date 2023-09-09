@@ -18,6 +18,7 @@ class AddressesService extends BaseService {
     required double long,
   }) async {
     Status status = Status.error;
+    dynamic message;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     Map<String, dynamic> body = {
       "type": type ?? "Home",
@@ -37,16 +38,18 @@ class AddressesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              message = response["message"];
               addressesData = AddressDetailsModel.fromJson(response).data!;
             } else if (response["status_code"] == 422) {
               status = Status.codeNotCorrect;
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error in store address $e");
     }
-    return ResponseResult(status, addressesData);
+    return ResponseResult(status, addressesData, message: message);
   }
 
 

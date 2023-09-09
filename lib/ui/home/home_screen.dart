@@ -74,14 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void loadData() async {
-    if(widget.cameFromNewRequest){
+    if (widget.cameFromNewRequest) {
       navigateTo(context, const MyRequests());
-    }else{
+    } else {
       final AddressesProvider addressesProvider =
-      Provider.of<AddressesProvider>(context, listen: false);
+          Provider.of<AddressesProvider>(context, listen: false);
       _loadMapStyles();
       final HomeProvider homeProvider =
-      Provider.of<HomeProvider>(context, listen: false);
+          Provider.of<HomeProvider>(context, listen: false);
       homeProvider.markers.clear();
       await _handleLocationPermission();
       await _getCurrentLocation();
@@ -214,16 +214,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
               verticalSpace(32),
-              /*DefaultButton(
-                text: "Test Payment",
-                onPressed: () {
-                  navigateTo(context, TestPayment());
-                  // paymentProvider.startSDK();
-                },
-              ),*/
               DefaultButton(
                 width: 294,
                 height: 56,
+                backgroundColor:
+                    MyApp.themeMode(context) ? AppColor.dark : AppColor.primary,
                 text: S.of(context).wash,
                 fontSize: 28,
                 fontWeight: MyFontWeight.bold,
@@ -240,7 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             AppLoader.stopLoader();
                             navigateTo(context, const VehicleTypes());
                           } else {
-                            CustomSnackBars.somethingWentWrongSnackBar(context);
+                            CustomSnackBars.failureSnackBar(
+                                context, '${value.message}');
                             AppLoader.stopLoader();
                           }
                         });
@@ -261,9 +257,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         : AppColor.buttonGrey,
                     text: S.of(context).products,
                     textColor: AppColor.black,
-                    onPressed:() {
+                    onPressed: () {
                       homeProvider.launchExpectedURL(
-                                expectedUrl: 'https://flashwashstore.com/');},
+                          expectedUrl: 'https://flashwashstore.com/');
+                    },
                     fontWeight: MyFontWeight.medium,
                     fontSize: MyFontSize.size14,
                   ),
@@ -291,10 +288,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   const OtherServices(),
                                 );
-
                               } else {
-                                CustomSnackBars.somethingWentWrongSnackBar(
-                                    context);
+                                CustomSnackBars.failureSnackBar(
+                                    context, '${value.message}');
                                 AppLoader.stopLoader();
                               }
                             });
@@ -394,13 +390,3 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 }
-/*
-
-final Uri _url = Uri.parse('https://flashwashstore.com/');
-
-Future<void> _launchUrl() async {
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
-  }
-}
-*/

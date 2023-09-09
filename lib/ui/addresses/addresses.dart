@@ -77,13 +77,10 @@ class _MyAddressesState extends State<MyAddresses> {
                                             addressID: addressesProvider
                                                 .addressesDataList[index].id!).then((value) {
                                           if (value.status == Status.success) {
-                                            print('object');
                                             CustomSnackBars.successSnackBar(
                                                 context, '${value.message}');
                                           } else {
-                                            CustomSnackBars
-                                                .somethingWentWrongSnackBar(
-                                                context);
+                                            CustomSnackBars.failureSnackBar(context, '${value.message}');
                                           }
                                         });
                                       },

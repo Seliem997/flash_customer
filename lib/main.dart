@@ -15,6 +15,7 @@ import 'package:flash_customer/providers/requestServices_provider.dart';
 import 'package:flash_customer/providers/transactionHistory_provider.dart';
 import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/services/firebase_service.dart';
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/splash/app_splash.dart';
 import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flash_customer/utils/enum/shared_preference_keys.dart';
@@ -182,7 +183,7 @@ class _MyAppState extends State<MyApp> {
 
           supportedLocales: S.delegate.supportedLocales,
           locale: _locale,
-          // home: const ContactUs(),
+          // home: const HomeScreen(),
           home: const AppSplash(),
         );
       }),

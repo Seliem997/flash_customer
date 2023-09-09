@@ -4,6 +4,7 @@ import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -102,6 +103,29 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                           double.parse(addressesProvider
                                               .addressesDataList[index]
                                               .langitude)))));
+
+                               homeProvider.currentPosition = Position(
+                                 latitude: double.parse(addressesProvider.addressesDataList[index].latitude),
+                                 longitude: double.parse(addressesProvider.addressesDataList[index].langitude),
+                                 timestamp: homeProvider.currentPosition!.timestamp,
+                                 accuracy: homeProvider.currentPosition!.accuracy,
+                                 altitude: homeProvider.currentPosition!.altitude,
+                                 heading: homeProvider.currentPosition!.heading,
+                                 speed: homeProvider.currentPosition!.speed,
+                                 speedAccuracy: homeProvider.currentPosition!.speedAccuracy,
+                               );
+
+                              homeProvider.markers.clear();
+                              homeProvider.resetMap();
+                              Marker marker = Marker(
+                                markerId: const MarkerId("Saved_Location"),
+                                draggable: true,
+                                position: LatLng(double.parse(addressesProvider.addressesDataList[index].latitude),
+                                    double.parse(addressesProvider.addressesDataList[index].langitude)),
+                                icon: BitmapDescriptor.defaultMarker,
+                              );
+                              homeProvider.markers.add(marker);
+
                             },
                             labelText: addressesProvider
                                 .addressesDataList[index]

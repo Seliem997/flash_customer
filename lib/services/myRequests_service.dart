@@ -15,7 +15,7 @@ import '../utils/enum/statuses.dart';
 class MyRequestsService extends BaseService {
 
 
-  Future<ResponseResult> getMyRequests() async {
+  Future<ResponseResult> getMyRequests({String? status, String? date}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Accept': 'application/json',
@@ -26,7 +26,7 @@ class MyRequestsService extends BaseService {
     List<MyRequestsData>? myRequestsDataList;
     try {
       await requestFutureData(
-          api: Api.getMyRequests,
+          api: Api.getMyRequests(status: status, date: date),
           requestType: Request.get,
           jsonBody: true,
           withToken: true,

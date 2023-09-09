@@ -673,27 +673,34 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   ),
                                 ),
 */
-                                verticalSpace(12),
-                                CustomContainer(
-                                  height: 34,
-                                  backgroundColor: AppColor.white,
-                                  borderColor: AppColor.borderGreyBold,
-                                  radiusCircular: 4,
-                                  padding: symmetricEdgeInsets(
-                                      vertical: 5, horizontal: 12),
-                                  child: Row(
+                                Visibility(
+                                  visible: Platform.isIOS,
+                                  child: Column(
                                     children: [
-                                      CustomSizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: Image.asset(
-                                            'assets/images/apple.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
-                                      ),
-                                      horizontalSpace(10),
-                                      TextWidget(
-                                        text: S.of(context).applePay,
-                                        textSize: MyFontSize.size12,
-                                        fontWeight: MyFontWeight.semiBold,
+                                      verticalSpace(12),
+                                      CustomContainer(
+                                        height: 34,
+                                        backgroundColor: AppColor.white,
+                                        borderColor: AppColor.borderGreyBold,
+                                        radiusCircular: 4,
+                                        padding: symmetricEdgeInsets(
+                                            vertical: 5, horizontal: 12),
+                                        child: Row(
+                                          children: [
+                                            CustomSizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: Image.asset(
+                                                  'assets/images/apple.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
+                                            ),
+                                            horizontalSpace(10),
+                                            TextWidget(
+                                              text: S.of(context).applePay,
+                                              textSize: MyFontSize.size12,
+                                              fontWeight: MyFontWeight.semiBold,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -821,6 +828,44 @@ class _RequestDetailsState extends State<RequestDetails> {
                               CustomContainer(
                                 height: 20,
                                 onTap: (){
+                                  int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!) <= requestServicesProvider.totalAmountAfterDiscount!
+                                      ? showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Padding(
+                                          padding: onlyEdgeInsets(
+                                              top: 40,
+                                              bottom: 32,
+                                              end: 38,
+                                              start: 38),
+                                          child: TextWidget(
+                                            textAlign: TextAlign.center,
+                                            text: 'You need to pay ${requestServicesProvider.totalAmountAfterDiscount! - int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!)} Cash or choose another payment',
+                                            textSize: MyFontSize.size15,
+                                            fontWeight: MyFontWeight.semiBold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Padding(
+                                            padding: onlyEdgeInsets(
+                                                top: 0,
+                                                bottom: 40,
+                                                end: 48,
+                                                start: 48),
+                                            child: DefaultButton(
+                                              width: 225,
+                                              height: 32,
+                                              text: S.of(context).ok,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ) :
                                   requestServicesProvider
                                       .selectWalletPayment(
                                       !requestServicesProvider
