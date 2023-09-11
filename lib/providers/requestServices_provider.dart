@@ -175,12 +175,19 @@ class RequestServicesProvider with ChangeNotifier {
 
   CityIdData? cityIdData;
   Future getCityId({required double lat, required double long}) async {
+    Status state = Status.error;
+    dynamic message;
+
     await servicesService.getCityId(lat: lat, lng: long).then((value) {
       if (value.status == Status.success) {
+        state = Status.success;
         cityIdData = value.data;
+      }else {
+        message = value.message;
       }
     });
     notifyListeners();
+    return ResponseResult(state, bookServicesData, message: message);
   }
 
   BookServicesData? bookServicesData;

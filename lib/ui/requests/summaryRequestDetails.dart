@@ -75,7 +75,7 @@ class SummaryRequestDetails extends StatelessWidget {
             verticalSpace(10),
             TextWidget(
               text:
-                  "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time!}",
+                  "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
               textSize: MyFontSize.size12,
               fontWeight: MyFontWeight.regular,
               color: AppColor.subTextGrey,

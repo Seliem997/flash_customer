@@ -129,14 +129,14 @@ class PackageService extends BaseService {
     return ResponseResult(result, vehiclesModelsDataList);
   }
 
-  Future<ResponseResult> getPackages({required int cityId}) async {
+  Future<ResponseResult> getPackages({required int vehicleTypeId, required int vehicleSubTypeId, required int cityId, }) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<PackagesData> packagesDataList = [];
     try {
       await requestFutureData(
-          api: '${Api.getPackages}city_id=$cityId',
+          api: '${Api.getPackages}vehicle_type_id=$vehicleTypeId&vehicle_sub_type_id=$vehicleSubTypeId&city_id=$cityId',
           requestType: Request.get,
           jsonBody: true,
           withToken: true,

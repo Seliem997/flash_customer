@@ -25,6 +25,8 @@ class UserProvider extends ChangeNotifier {
   String? userId = CacheHelper.returnData(key: CacheKey.userId);
   int? userNumberId = CacheHelper.returnData(key: CacheKey.userNumberId);
 
+  String? statusType;
+
   Timer? _timer;
 
   Timer? get timer => _timer;

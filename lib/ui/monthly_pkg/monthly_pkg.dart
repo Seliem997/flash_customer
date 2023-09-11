@@ -64,6 +64,8 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
         Provider.of<PackageProvider>(context);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context);
+    final RequestServicesProvider requestServicesProvider =
+    Provider.of<RequestServicesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).monthlyPkg),
       body: packageProvider.manufacturerDataList.isEmpty
@@ -199,13 +201,20 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                         if (value.status == Status.success) {
                                           CustomSnackBars.successSnackBar(
                                               context, 'New Vehicle added');
-                                          navigateTo(
+                                          requestServicesProvider.cityIdData != null
+                                              ? navigateTo(
                                               context,
                                               MonthlyPlans(
                                                 comeFromNewCar: true,
                                                 vehicleId: myVehiclesProvider
                                                     .vehicleDetailsData!.id,
-                                              ));
+                                                vehicleTypeId: myVehiclesProvider
+                                                    .vehicleDetailsData!.vehicleTypeId!,
+                                                vehicleSubTypeId: myVehiclesProvider
+                                                    .vehicleDetailsData!.subVehicleTypeId!,
+                                              ))
+                                              : CustomSnackBars.failureSnackBar(
+                                              context, 'Choose available City first');
                                         } else {
                                           CustomSnackBars
                                               .somethingWentWrongSnackBar(
@@ -218,12 +227,25 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                               : packageProvider.chooseRequiredManufacture(
                                   value: true)
                           : myVehiclesProvider.selectedMyVehicleIndex != null
-                              ? navigateTo(
-                                  context,
-                                  MonthlyPlans(
-                                    myVehicleIndex: myVehiclesProvider
-                                        .selectedMyVehicleIndex,
-                                  ))
+                              ? requestServicesProvider.cityIdData != null
+                          ?  navigateTo(
+                          context,
+                          MonthlyPlans(
+                            myVehicleIndex: myVehiclesProvider
+                                .selectedMyVehicleIndex,
+                            vehicleTypeId: myVehiclesProvider
+                                .myVehiclesData!
+                                .collection![myVehiclesProvider
+                                .selectedMyVehicleIndex!]
+                                .vehicleTypeId!,
+                            vehicleSubTypeId:  myVehiclesProvider
+                                .myVehiclesData!
+                                .collection![myVehiclesProvider
+                                .selectedMyVehicleIndex!]
+                                .subVehicleTypeId!,
+                          ))
+                          : CustomSnackBars.failureSnackBar(
+                          context, 'Choose available City first')
                               : CustomSnackBars.failureSnackBar(
                                   context, S.of(context).chooseVehicleFirst);
                     },

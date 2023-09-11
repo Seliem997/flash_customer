@@ -46,6 +46,7 @@ class RequestItem extends StatelessWidget {
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.semiBold,
               ),
+              horizontalSpace(10),
               Expanded(
                 child: TextWidget(
                   text: services,
@@ -63,7 +64,7 @@ class RequestItem extends StatelessWidget {
               CustomSizedBox(
                   height: 12,
                   width: 12,
-                  child: SvgPicture.asset('assets/svg/alarm.svg', color: MyApp.themeMode(context) ? Colors.black : Colors.white,)),
+                  child: SvgPicture.asset('assets/svg/alarm.svg', color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),)),
               horizontalSpace(8),
               TextWidget(
                 text: '${myRequestData.time}',
@@ -76,13 +77,13 @@ class RequestItem extends StatelessWidget {
           verticalSpace(10),
           Row(
             children: [
-              const CustomSizedBox(
+              CustomSizedBox(
                 height: 12,
                 width: 12,
                 child: Icon(
                   Icons.calendar_today_outlined,
                   size: 12,
-                  color: Color(0xff616161),
+                  color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),
                 ),
               ),
               horizontalSpace(8),
@@ -101,7 +102,7 @@ class RequestItem extends StatelessWidget {
                 height: 12,
                 width: 12,
                 child: SvgPicture.asset('assets/svg/profile.svg',
-                    color: AppColor.grey),
+                  color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),),
               ),
               horizontalSpace(8),
               TextWidget(

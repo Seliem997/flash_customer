@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../providers/about_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
@@ -54,21 +55,7 @@ class _ContactUsState extends State<ContactUs> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextWidget(
-                  text:
-                      'Lorem ipsum dolor sit amet',
-                  fontWeight: MyFontWeight.semiBold,
-                  textSize: MyFontSize.size16,
-                ),
-                verticalSpace(10),
-                TextWidget(
-                  text:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnd.',
-                  fontWeight: MyFontWeight.regular,
-                  textSize: MyFontSize.size12,
-                  color: AppColor.grey,
-                ),
-                verticalSpace(32),
+                verticalSpace(42),
                 Row(
                   children: [
                     TextWidget(
@@ -120,7 +107,7 @@ class _ContactUsState extends State<ContactUs> {
                   width: double.infinity,
                   child: DefaultFormField(
                     controller: aboutProvider.emailController,
-                    hintText: 'mariam.nasser87@yahoo.com',
+                    hintText: 'example@gmail.com',
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
@@ -301,7 +288,7 @@ class _ContactUsState extends State<ContactUs> {
                         horizontalSpace(14),
                         CustomContainer(
                           width: 30,
-                          child: Image.asset('assets/images/tiktok.png'),
+                          child: Image.asset('assets/images/tiktok.png', color: MyApp.themeMode(context) ? Colors.white : Colors.black,),
                             onTap: () async{
                               try {
                                 await launchUrlString('${aboutProvider.socialLinksData!.data!.tiktok}', mode: LaunchMode.externalApplication);

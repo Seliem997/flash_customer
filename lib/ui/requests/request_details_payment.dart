@@ -407,6 +407,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                                           .selectedCashPayment
                                       ? const Color(0xFFD2FFEA)
                                       : AppColor.white,
+                                  backgroundColorDark: requestServicesProvider
+                                      .selectedCashPayment
+                                      ? AppColor.lightGrey
+                                      : Colors.transparent,
                                   borderColor: AppColor.borderGreyBold,
                                   radiusCircular: 4,
                                   padding: symmetricEdgeInsets(
@@ -440,6 +444,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                                           .selectedCreditCardPayment
                                       ? const Color(0xFFD2FFEA)
                                       : AppColor.white,
+                                  backgroundColorDark:  requestServicesProvider
+                                      .selectedCreditCardPayment
+                                      ? AppColor.lightGrey
+                                      : Colors.transparent,
                                   borderColor: AppColor.borderGreyBold,
                                   radiusCircular: 4,
                                   padding: symmetricEdgeInsets(
@@ -479,7 +487,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       CustomSizedBox(
                                         width: 26,
                                           height: 26,
-                                          child: Image.asset('assets/images/mada.png')),
+                                          child: Image.asset('assets/images/mada.png',color: MyApp.themeMode(context) ? Colors.white : null,)),
                                     ],
                                   ),
                                 ),
@@ -857,6 +865,26 @@ class _RequestDetailsState extends State<RequestDetails> {
                                               width: 225,
                                               height: 32,
                                               text: S.of(context).ok,
+                                              onPressed: () {
+                                                requestServicesProvider
+                                                    .selectWalletPayment(
+                                                    !requestServicesProvider
+                                                        .selectedWalletPayment);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                          horizontalSpace(10),
+                                          Padding(
+                                            padding: onlyEdgeInsets(
+                                                top: 0,
+                                                bottom: 40,
+                                                end: 48,
+                                                start: 48),
+                                            child: DefaultButton(
+                                              width: 225,
+                                              height: 32,
+                                              text: S.of(context).cancel,
                                               onPressed: () {
                                                 Navigator.pop(context);
                                               },

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flash_customer/main.dart';
 import 'package:flash_customer/providers/home_provider.dart';
+import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/home/widgets/widgets.dart';
 import 'package:flash_customer/ui/requests/myRequests.dart';
 import 'package:flash_customer/ui/user/register/register.dart';
@@ -151,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context);
 
@@ -231,18 +233,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           long: homeProvider.currentPosition!.longitude,
                         )
                             .then((value) {
+                          AppLoader.stopLoader();
                           if (value.status == Status.success) {
-                            AppLoader.stopLoader();
                             navigateTo(context, const VehicleTypes());
                           } else {
                             CustomSnackBars.failureSnackBar(
                                 context, '${value.message}');
-                            AppLoader.stopLoader();
                           }
                         });
                       }
                     : () {
-                        navigateTo(context, const RegisterPhoneNumber());
+                  userProvider.statusType = 'wash service';
+                  navigateTo(context, const RegisterPhoneNumber());
                       },
               ),
               verticalSpace(14),
@@ -296,7 +298,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           }
                         : () {
-                            navigateTo(context, const RegisterPhoneNumber());
+                      userProvider.statusType = 'other service';
+                      navigateTo(context, const RegisterPhoneNumber());
                           },
                     fontWeight: MyFontWeight.medium,
                     fontSize: MyFontSize.size14,

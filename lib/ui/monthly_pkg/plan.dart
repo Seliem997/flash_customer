@@ -1,3 +1,4 @@
+import 'package:flash_customer/main.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/utils/app_loader.dart';
@@ -25,12 +26,15 @@ class MonthlyPlans extends StatefulWidget {
       {Key? key,
       this.myVehicleIndex,
       this.comeFromNewCar = false,
-      this.vehicleId})
+      this.vehicleId,
+        this.vehicleSubTypeId, this.vehicleTypeId})
       : super(key: key);
 
   final int? myVehicleIndex;
   final bool comeFromNewCar;
   final int? vehicleId;
+  final int? vehicleTypeId;
+  final int? vehicleSubTypeId;
   @override
   State<MonthlyPlans> createState() => _MonthlyPlansState();
 }
@@ -56,7 +60,10 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
       long: homeProvider.currentPosition!.longitude,
     );
     await packageProvider.getPackages(
-        cityId: requestServicesProvider.cityIdData!.id!).then((value) => packageProvider.setLoading(false));
+        cityId: requestServicesProvider.cityIdData!.id!,
+      vehicleTypeId: widget.vehicleTypeId!,
+      vehicleSubTypeId: widget.vehicleSubTypeId!
+    ).then((value) => packageProvider.setLoading(false));
   }
 
   @override
@@ -322,9 +329,9 @@ class PackageCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                                'per ${packageProvider.packagesDataList[index].per}',
+                                ' per ${packageProvider.packagesDataList[index].per}',
                             style: TextStyle(
-                              color: const Color(0xFF636363),
+                              color: MyApp.themeMode(context) ? AppColor.white : const Color(0xFF636363),
                               fontSize: MyFontSize.size10,
                               fontWeight: MyFontWeight.medium,
                             ),

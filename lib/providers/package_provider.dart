@@ -199,8 +199,8 @@ class PackageProvider with ChangeNotifier {
   }
 
   List<PackagesData> packagesDataList = [];
-  Future getPackages({required int cityId}) async {
-    await packageService.getPackages(cityId: cityId).then((value) {
+  Future getPackages({required int vehicleTypeId, required int vehicleSubTypeId, required int cityId, }) async {
+    await packageService.getPackages(vehicleTypeId: vehicleTypeId, vehicleSubTypeId: vehicleSubTypeId, cityId: cityId).then((value) {
       if (value.status == Status.success) {
         packagesDataList = value.data;
       }

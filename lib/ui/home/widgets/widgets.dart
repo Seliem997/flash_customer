@@ -1,4 +1,5 @@
 import 'package:flash_customer/providers/home_provider.dart';
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/utils/font_styles.dart';
@@ -12,6 +13,9 @@ import 'package:sizer/sizer.dart';
 import '../../../generated/l10n.dart';
 import '../../../main.dart';
 import '../../../providers/addresses_provider.dart';
+import '../../../utils/app_loader.dart';
+import '../../../utils/enum/statuses.dart';
+import '../../../utils/snack_bars.dart';
 import '../../../utils/styles/colors.dart';
 import '../../addresses/new_address.dart';
 import '../../widgets/custom_button.dart';
@@ -72,7 +76,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                               child: addressesProvider
                                           .addressesDataList[index].type! ==
                                       "home"
-                                  ? Image.asset('assets/images/home_light.png')
+                                  ? Image.asset('assets/images/home_light.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,)
                                   : addressesProvider
                                               .addressesDataList[index].type! ==
                                           "work"
@@ -138,12 +142,23 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                           itemCount: addressesProvider.addressesDataList.length,
                         )),
                   GestureDetector(
-                    onTap: () {
-                      navigateTo(
-                          context,
-                          const NewAddress(
-                            cameFromHomeScreen: true,
-                          ));
+                    onTap: () async {
+                      AppLoader.showLoader(context);
+                      await addressesProvider
+                          .storeAddress(
+                        lat: homeProvider.currentPosition!.latitude,
+                        long: homeProvider.currentPosition!.longitude,
+                      )
+                          .then((value) {
+                        if (value.status == Status.success) {
+                          AppLoader.stopLoader();
+                          navigateAndFinish(context, const HomeScreen());
+                        } else {
+                          CustomSnackBars.failureSnackBar(
+                              context, '${value.message}');
+                          AppLoader.stopLoader();
+                        }
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5),
