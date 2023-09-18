@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../main.dart';
 import '../../../providers/user_provider.dart';
 import '../../../services/authentication_service.dart';
 import '../../../utils/snack_bars.dart';
@@ -99,12 +100,12 @@ class _OTPScreenState extends State<OTPScreen> {
                 text: TextSpan(
                   text: S.of(context).codeIsSendTo,
                   style: TextStyle(
-                      color: AppColor.black,
+                      color: MyApp.themeMode(context) ? AppColor.white : AppColor.black,
                       fontSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.medium),
                   children: [
                     TextSpan(
-                      text: '${widget.countryCode} ${widget.phoneNumber}',
+                      text: ' ${widget.countryCode} ${widget.phoneNumber}',
                       style: TextStyle(
                         color: const Color(0xFF29A7FF),
                         fontSize: MyFontSize.size14,
@@ -137,7 +138,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 text: TextSpan(
                   text: S.of(context).didNotReceiveCode,
                   style: TextStyle(
-                      color: AppColor.black,
+                      color: MyApp.themeMode(context) ? AppColor.white : AppColor.black,
                       fontSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.medium),
                   children: [

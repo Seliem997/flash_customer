@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/font_styles.dart';
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../models/packagesModel.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/requestServices_provider.dart';
@@ -131,7 +132,7 @@ class WashesDate extends StatelessWidget {
                                             Row(
                                               children: [
                                                 SvgPicture.asset(
-                                                    'assets/svg/calendar.svg'),
+                                                    'assets/svg/calendar.svg', color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),),
                                                 horizontalSpace(10),
                                                 TextWidget(
                                                   text:
@@ -148,7 +149,7 @@ class WashesDate extends StatelessWidget {
                                             Row(
                                               children: [
                                                 SvgPicture.asset(
-                                                    'assets/svg/clock (1).svg'),
+                                                    'assets/svg/clock (1).svg', color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),),
                                                 horizontalSpace(10),
                                                 TextWidget(
                                                   text: packageProvider

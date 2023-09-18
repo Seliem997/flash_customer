@@ -981,8 +981,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                                           controller: requestServicesProvider
                                               .discountCodeController,
                                           withBorder: false,
-                                          // padding: 10,
-                                          // contentPadding: onlyEdgeInsets(start: 10),
                                           textInputAction: TextInputAction.done,
                                           hintText: '',
                                           enabled: requestServicesProvider
@@ -1131,9 +1129,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 requestId: requestServicesProvider
                                     .updatedRequestDetailsData!.id!,
                                 payBy: 'wallet',
-                                walletAmount: int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!) >= requestServicesProvider.totalAmountAfterDiscount!
+                                /*walletAmount: int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!) >= requestServicesProvider.totalAmountAfterDiscount!
                                     ? requestServicesProvider.totalAmountAfterDiscount!
-                                    : int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!),
+                                    : int.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!),*/
                               )
                                   .then((value) async {
                                 AppLoader.stopLoader();

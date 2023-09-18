@@ -52,8 +52,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 child: SummaryRequestDetails(
                     requestServicesProvider: requestServicesProvider,
                     cameFromOtherServices: requestServicesProvider
+                        .detailsRequestData!.services == null ? false :  requestServicesProvider
+                        .detailsRequestData!.services!.isEmpty ? false : requestServicesProvider
                             .detailsRequestData!.services![0].type ==
-                        "other"),
+                        "other",
+                  cameFromMonthlyPackage: requestServicesProvider
+                      .detailsRequestData!.packageId != null ? true : false,
+                ),
               ),
       ),
     );

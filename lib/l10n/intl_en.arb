@@ -20,7 +20,7 @@
   "dateTime": "Date & Time",
   "otp": "OTP",
   "codeIsSendTo": "Code is send to",
-  "didNotReceiveCode": "Did not receive code?",
+  "didNotReceiveCode": "Did not receive code? ",
   "requestAgain": "Request Again",
   "codeSentSuccessfully": "Code Sent Successfully",
   "aboutUs": "About us",

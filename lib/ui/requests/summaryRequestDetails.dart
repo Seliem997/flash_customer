@@ -67,19 +67,24 @@ class SummaryRequestDetails extends StatelessWidget {
                 ],
               ),
             ),
-            TextWidget(
-              text: S.of(context).dateTime,
-              textSize: MyFontSize.size15,
-              fontWeight: MyFontWeight.semiBold,
-            ),
-            verticalSpace(10),
-            TextWidget(
-              text:
-                  "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
-              textSize: MyFontSize.size12,
-              fontWeight: MyFontWeight.regular,
-              color: AppColor.subTextGrey,
-            ),
+            !cameFromMonthlyPackage ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextWidget(
+                  text: S.of(context).dateTime,
+                  textSize: MyFontSize.size15,
+                  fontWeight: MyFontWeight.semiBold,
+                ),
+                verticalSpace(10),
+                TextWidget(
+                  text:
+                      "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
+                  textSize: MyFontSize.size12,
+                  fontWeight: MyFontWeight.regular,
+                  color: AppColor.subTextGrey,
+                ),
+              ],
+            ) : Container(),
             Visibility(
               visible: !cameFromMonthlyPackage,
               child: Column(

@@ -49,7 +49,7 @@ class RequestItem extends StatelessWidget {
               horizontalSpace(10),
               Expanded(
                 child: TextWidget(
-                  text: services,
+                  text: services == '' ? 'Monthly Package' : services,
                   textSize: MyFontSize.size10,
                   fontWeight: MyFontWeight.medium,
                   color: AppColor.grey,
@@ -174,7 +174,7 @@ class RequestItem extends StatelessWidget {
                 fontWeight: MyFontWeight.semiBold,
               ),
               TextWidget(
-                text: '${myRequestData.totalAmount}',
+                text: '${myRequestData.totalAmount} ${S.of(context).sr}',
                 textSize: MyFontSize.size10,
                 fontWeight: MyFontWeight.bold,
                 color: AppColor.borderBlue,

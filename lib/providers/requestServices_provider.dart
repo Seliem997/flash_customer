@@ -158,6 +158,9 @@ class RequestServicesProvider with ChangeNotifier {
             discountAmount = couponData!.discountAmount!;
             totalAmountAfterDiscount =
                 updatedRequestDetailsData!.totalAmount! - discountAmount;
+            if(totalAmountAfterDiscount! <= 0){
+              totalAmountAfterDiscount =0;
+            }
           } else {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).codeNotAccepted);
@@ -413,7 +416,7 @@ class RequestServicesProvider with ChangeNotifier {
 
   void resetCoupon() {
     couponData = null;
-    discountCodeController = TextEditingController();
+    discountCodeController = TextEditingController(text: '');
     totalAmountAfterDiscount = updatedRequestDetailsData?.totalAmount;
     notifyListeners();
   }

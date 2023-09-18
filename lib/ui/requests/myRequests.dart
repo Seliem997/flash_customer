@@ -35,6 +35,7 @@ class _MyRequestsState extends State<MyRequests> {
     final MyRequestsProvider myRequestsProvider =
         Provider.of<MyRequestsProvider>(context, listen: false);
     myRequestsProvider.setLoading(true);
+    myRequestsProvider.selectedDate = null;
     await myRequestsProvider.getMyRequests();
   }
 

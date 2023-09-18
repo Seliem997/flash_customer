@@ -26,7 +26,6 @@ import '../../utils/enum/statuses.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/enum/shared_preference_keys.dart';
-import '../payment/test.dart';
 import '../services/other_services_screen.dart';
 import '../sidebar_drawer/sidebar_drawer.dart';
 import '../vehicles/vehicles_type.dart';
@@ -53,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
     _lightMapStyle =
         await rootBundle.loadString('assets/map_styles/light.json');
+    if(MyApp.themeMode(context)){
+      AppLoader.showLoader(context);
+      await Future.delayed(const Duration(seconds: 1));
+      AppLoader.stopLoader();
+    }
     _setMapStyle();
   }
 
@@ -80,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       final AddressesProvider addressesProvider =
           Provider.of<AddressesProvider>(context, listen: false);
-      _loadMapStyles();
+      await _loadMapStyles();
       final HomeProvider homeProvider =
           Provider.of<HomeProvider>(context, listen: false);
       homeProvider.markers.clear();

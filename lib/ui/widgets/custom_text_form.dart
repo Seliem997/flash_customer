@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../main.dart';
 import '../../utils/styles/colors.dart';
 
 class CustomTextForm extends StatelessWidget {
@@ -46,14 +47,14 @@ class CustomTextForm extends StatelessWidget {
       validator: validator,
       onEditingComplete: onEditingComplete,
       textInputAction: textInputAction,
-      style: const TextStyle(color: AppColor.secondary),
+      style: TextStyle(color: MyApp.themeMode(context) ? AppColor.white : AppColor.secondary),
       keyboardType: keyboardType,
       decoration: InputDecoration(
         filled: !enabled,
         fillColor: AppColor.borderGreyLight,
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColor.grey,
+          color: MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
           fontSize: 12.sp,
         ),
         contentPadding: contentPadding ?? onlyEdgeInsets(start: 10),
