@@ -40,22 +40,44 @@ class _StatusDialogState extends State<StatusDialog> {
                   text: S.of(context).listOfStatus,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size18,
+                  colorDark: Colors.black,
                 ),
               ),
             ),
             verticalSpace(24),
             RadioListTile(
               title: TextWidget(
+                text: S.of(context).allStatus,
+                textSize: MyFontSize.size14,
+                fontWeight: MyFontWeight.medium,
+                color: const Color(0xFF282828),
+                colorDark: Colors.black,
+              ),
+              value: "All",
+              groupValue: statusType,
+              onChanged: (value) {
+                setState(() {
+                  statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).allStatus;
+                  myRequestsProvider.getMyRequests();
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            RadioListTile(
+              title: TextWidget(
                 text: S.of(context).pending,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
                 color: const Color(0xFF282828),
+                colorDark: Colors.black,
               ),
               value: "Pending",
               groupValue: statusType,
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).pending;
                   myRequestsProvider.getMyRequests(status: StatusType.pending2.key);
                   Navigator.pop(context);
                 });
@@ -66,6 +88,7 @@ class _StatusDialogState extends State<StatusDialog> {
                 text: S.of(context).onTheWay,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
+                colorDark: Colors.black,
                 color: const Color(0xFF282828),
               ),
               value: "On the way",
@@ -73,6 +96,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).onTheWay;
                   myRequestsProvider.getMyRequests(status: StatusType.onTheWay2.key);
                   Navigator.pop(context);
                 });
@@ -83,6 +107,7 @@ class _StatusDialogState extends State<StatusDialog> {
                 text: S.of(context).arrived,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
+                colorDark: Colors.black,
                 color: const Color(0xFF282828),
               ),
               value: "Arrived",
@@ -90,6 +115,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).arrived;
                   myRequestsProvider.getMyRequests(status: StatusType.arrived2.key);
                   Navigator.pop(context);
                 });
@@ -100,6 +126,7 @@ class _StatusDialogState extends State<StatusDialog> {
                 text: S.of(context).completed,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
+                colorDark: Colors.black,
                 color: const Color(0xFF282828),
               ),
               value: "Completed",
@@ -107,6 +134,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).completed;
                   myRequestsProvider.getMyRequests(status: StatusType.completed2.key);
                   Navigator.pop(context);
                 });
@@ -117,6 +145,7 @@ class _StatusDialogState extends State<StatusDialog> {
                 text: S.of(context).canceled,
                 textSize: MyFontSize.size14,
                 fontWeight: MyFontWeight.medium,
+                colorDark: Colors.black,
                 color: const Color(0xFF282828),
               ),
               value: "Canceled",
@@ -124,6 +153,7 @@ class _StatusDialogState extends State<StatusDialog> {
               onChanged: (value) {
                 setState(() {
                   statusType = value.toString();
+                  myRequestsProvider.filterDateStatus= S.of(context).canceled;
                   myRequestsProvider.getMyRequests(status: StatusType.canceled2.key);
                   Navigator.pop(context);
                 });

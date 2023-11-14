@@ -17,7 +17,7 @@ class RatingData {
   int? id;
   String? requestId;
   String? status;
-  String? rate;
+  dynamic rate;
   String? payBy;
   String? feedback;
   dynamic packageId;
@@ -319,13 +319,6 @@ class Employee {
     image = json['image'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['image'] = this.image;
-    return data;
-  }
 }
 
 class Services {
@@ -386,9 +379,11 @@ class Slots {
   String? startAt;
   String? endAt;
   int? employeeId;
+  String? employeeName;
   int? shiftId;
   String? status;
   int? gapTime;
+  String? date;
   String? createdAt;
 
   Slots(
@@ -396,9 +391,11 @@ class Slots {
         this.startAt,
         this.endAt,
         this.employeeId,
+        this.employeeName,
         this.shiftId,
         this.status,
         this.gapTime,
+        this.date,
         this.createdAt});
 
   Slots.fromJson(Map<String, dynamic> json) {
@@ -406,22 +403,12 @@ class Slots {
     startAt = json['start_at'];
     endAt = json['end_at'];
     employeeId = json['employee_id'];
+    employeeName = json['employee_name'];
     shiftId = json['shift_id'];
     status = json['status'];
     gapTime = json['gap_time'];
+    date = json['date'];
     createdAt = json['created_at'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['start_at'] = this.startAt;
-    data['end_at'] = this.endAt;
-    data['employee_id'] = this.employeeId;
-    data['shift_id'] = this.shiftId;
-    data['status'] = this.status;
-    data['gap_time'] = this.gapTime;
-    data['created_at'] = this.createdAt;
-    return data;
-  }
 }

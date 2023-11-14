@@ -31,6 +31,7 @@ class OtherServices extends StatefulWidget {
 }
 
 class _OtherServicesState extends State<OtherServices> {
+  dynamic errorMessage;
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -51,8 +52,17 @@ class _OtherServicesState extends State<OtherServices> {
           lat: homeProvider.currentPosition!.latitude,
           long: homeProvider.currentPosition!.longitude,
         )
-        .then((value) => otherServicesProvider.getOtherServices(
-            cityId: requestServicesProvider.cityIdData!.id!));
+        .then((value) {
+          if(value.status == Status.success){
+            return otherServicesProvider.getOtherServices(
+                cityId: requestServicesProvider.cityIdData!.id!);
+          }else{
+            requestServicesProvider.cityIdData = null;
+            errorMessage= value.message;
+            otherServicesProvider.setLoading(false);
+          }
+
+        });
   }
 
   @override
@@ -73,6 +83,9 @@ class _OtherServicesState extends State<OtherServices> {
       ),
       body: otherServicesProvider.isLoading
           ? const DataLoader()
+          : requestServicesProvider.cityIdData == null ? Center(
+              child:
+              TextWidget(text: '$errorMessage'))
           : otherServicesProvider.otherServicesList.isEmpty
               ? Expanded(
                   child: Center(
@@ -106,45 +119,8 @@ class _OtherServicesState extends State<OtherServices> {
                                         "pricable"
                                     ? true
                                     : false,
-                                infoOnPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: TextWidget(
-                                            text:
-                                                '${otherServicesProvider.otherServicesList[index].info}',
-                                          ),
-                                        ),
-                                        actions: [
-                                          Padding(
-                                            padding: symmetricEdgeInsets(
-                                                vertical: 5),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                DefaultButton(
-                                                  width: 130,
-                                                  height: 30,
-                                                  text: S.of(context).cancel,
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  backgroundColor:
-                                                      AppColor.boldGreen,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
                                 onTap: () {
+                                  print('object index $index');
                                   otherServicesProvider.selectedOtherServiceId =
                                       otherServicesProvider
                                           .otherServicesList[index].id!;

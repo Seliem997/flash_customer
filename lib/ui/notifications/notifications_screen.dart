@@ -55,64 +55,67 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ? const DataLoader()
             : notificationsProvider.notifications!.isEmpty
                 ? const NoDataPlaceHolder(useExpand: false)
-                : ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: notificationsProvider.notifications!.length,
-                    itemBuilder: (context, index) {
-                      return CustomContainer(
-                        padding:
-                            symmetricEdgeInsets(horizontal: 15, vertical: 10),
-                        radiusCircular: 5,
-                        height: 105,
-                        backgroundColor: AppColor.borderGrey,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CustomContainer(
-                                  width: 220,
-                                  borderColorDark: Colors.transparent,
-                                  child: TextWidget(
-                                    text:
-                                        "${notificationsProvider.notifications![index].content}",
-                                    textSize: 13,
-                                    height: 1.2,
-                                    maxLines: 3,
+                : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: notificationsProvider.notifications!.length,
+                      itemBuilder: (context, index) {
+                        return CustomContainer(
+                          padding:
+                              symmetricEdgeInsets(horizontal: 15, vertical: 10),
+                          radiusCircular: 5,
+                          height: 120,
+                          backgroundColor: AppColor.borderGrey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextWidget(
+                                text:
+                                "${notificationsProvider.notifications![index].title}",
+                                textSize: 14,
+                                height: 1,
+                                maxLines: 1,
+                              ),
+                              verticalSpace(10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CustomContainer(
+                                    width: 220,
+                                    borderColorDark: Colors.transparent,
+                                    child: TextWidget(
+                                      text:
+                                          "${notificationsProvider.notifications![index].content}",
+                                      textSize: 13,
+                                      height: 1.2,
+                                      maxLines: 3,
+                                    ),
                                   ),
-                                ),
-                                // CustomContainer(
-                                //   width: 78,
-                                //   height: 65,
-                                //   radiusCircular: 5,
-                                //   borderColorDark: Colors.transparent,
-                                //   image: DecorationImage(
-                                //       image: AssetImage("assets/images/Nature.png"),
-                                //       fit: BoxFit.cover),
-                                // )
-                              ],
-                            ),
-                            const Spacer(),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.calendar_today_outlined,
-                                  size: 12,
-                                  color: Color(0xff616161),
-                                ),
-                                horizontalSpace(15),
-                                TextWidget(
-                                  text:
-                                      "${notificationsProvider.notifications![index].time} - ${notificationsProvider.notifications![index].date}",
-                                  textSize: 10,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) => verticalSpace(20)),
+                                ],
+                              ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 12,
+                                    color: Color(0xff616161),
+                                  ),
+                                  horizontalSpace(15),
+                                  TextWidget(
+                                    text:
+                                        "${notificationsProvider.notifications![index].time} - ${notificationsProvider.notifications![index].date}",
+                                    textSize: 10,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => verticalSpace(20)),
+                ),
       ),
     );
   }

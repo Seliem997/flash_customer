@@ -5,6 +5,7 @@ import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
@@ -31,6 +32,7 @@ class MonthlyPkg extends StatefulWidget {
 }
 
 class _MonthlyPkgState extends State<MonthlyPkg> {
+  final GlobalKey listVehiclesKey= GlobalKey();
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -77,8 +79,44 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                   Row(
                     children: [
                       CustomContainer(
+                        backgroundColor: packageProvider.myVehicleLabel
+                            ? AppColor.borderGrey
+                            : AppColor.borderGreyLight,
+                        borderColor: packageProvider.myVehicleLabel
+                            ? AppColor.babyBlue
+                            : Colors.transparent,
+                        borderColorDark:
+                        packageProvider.myVehicleLabel
+                            ? AppColor.borderBlue
+                            : null,
+                        width: 162,
                         padding:
-                            symmetricEdgeInsets(horizontal: 18, vertical: 15),
+                        symmetricEdgeInsets(horizontal: 18, vertical: 10),
+                        onTap: () {
+                          packageProvider.selectedMyVehicleLabel();
+                        },
+                        radiusCircular: 6,
+                        child: Column(
+                          children: [
+                            CustomSizedBox(
+                              width: 50,
+                              height: 50,
+                              child:
+                              Image.asset('assets/images/my_vehicles.png'),
+                            ),
+                            verticalSpace(8),
+                            TextWidget(
+                              text: S.of(context).myVehicles,
+                              fontWeight: MyFontWeight.semiBold,
+                              textSize: MyFontSize.size16,
+                            ),
+                          ],
+                        ),
+                      ),
+                      horizontalSpace(21),
+                      CustomContainer(
+                        padding:
+                        symmetricEdgeInsets(horizontal: 18, vertical: 10),
                         backgroundColor: packageProvider.newVehicleLabel
                             ? AppColor.borderGrey
                             : AppColor.borderGreyLight,
@@ -90,7 +128,6 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                             ? AppColor.borderBlue
                             : null,
                         width: 162,
-                        height: 112,
                         radiusCircular: 6,
                         onTap: () {
                           packageProvider.selectedNewVehicleLabel();
@@ -106,45 +143,8 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                             TextWidget(
                               text: S.of(context).newCar,
                               fontWeight: MyFontWeight.semiBold,
-                              textSize: MyFontSize.size18,
+                              textSize: Intl.getCurrentLocale() == 'ar' ? MyFontSize.size16 : MyFontSize.size18,
                             )
-                          ],
-                        ),
-                      ),
-                      horizontalSpace(21),
-                      CustomContainer(
-                        backgroundColor: packageProvider.myVehicleLabel
-                            ? AppColor.borderGrey
-                            : AppColor.borderGreyLight,
-                        borderColor: packageProvider.myVehicleLabel
-                            ? AppColor.babyBlue
-                            : Colors.transparent,
-                        borderColorDark:
-                        packageProvider.myVehicleLabel
-                            ? AppColor.borderBlue
-                            : null,
-                        width: 162,
-                        height: 112,
-                        padding:
-                            symmetricEdgeInsets(horizontal: 18, vertical: 15),
-                        onTap: () {
-                          packageProvider.selectedMyVehicleLabel();
-                        },
-                        radiusCircular: 6,
-                        child: Column(
-                          children: [
-                            CustomSizedBox(
-                              width: 50,
-                              height: 50,
-                              child:
-                                  Image.asset('assets/images/my_vehicles.png'),
-                            ),
-                            verticalSpace(8),
-                            TextWidget(
-                              text: S.of(context).myVehicles,
-                              fontWeight: MyFontWeight.semiBold,
-                              textSize: MyFontSize.size18,
-                            ),
                           ],
                         ),
                       ),
@@ -163,7 +163,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                           : myVehiclesProvider.myVehiclesData == null
                               ? const NoDataPlaceHolder()
                               : MyVehiclesScreenWidget(
-                                  myVehiclesProvider: myVehiclesProvider),
+                                  myVehiclesProvider: myVehiclesProvider,),
                   packageProvider.newVehicleLabel
                       ? Visibility(
                           visible: packageProvider.manufacturerDataList.isEmpty,
@@ -214,7 +214,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                                     .vehicleDetailsData!.subVehicleTypeId!,
                                               ))
                                               : CustomSnackBars.failureSnackBar(
-                                              context, 'Choose available City first');
+                                              context, S.of(context).chooseAvailableCityFirst);
                                         } else {
                                           CustomSnackBars
                                               .somethingWentWrongSnackBar(
@@ -245,7 +245,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                 .subVehicleTypeId!,
                           ))
                           : CustomSnackBars.failureSnackBar(
-                          context, 'Choose available City first')
+                          context, S.of(context).chooseAvailableCityFirst)
                               : CustomSnackBars.failureSnackBar(
                                   context, S.of(context).chooseVehicleFirst);
                     },

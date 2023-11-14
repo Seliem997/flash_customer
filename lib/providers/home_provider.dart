@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
-import 'package:go_sell_sdk_flutter/model/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../main.dart';
 
 class HomeProvider with ChangeNotifier {
-  String? _placeDistance;
-  String? get placeDistance => _placeDistance;
-
-  set placeDistance(String? value) {
-    _placeDistance = value;
-    notifyListeners();
-  }
 
   Position? get currentPosition => _currentPosition;
 
@@ -31,9 +18,7 @@ class HomeProvider with ChangeNotifier {
 
   Set<Marker> markers = {};
 
-  PolylinePoints? polylinePoints;
   Map<PolylineId, Polyline> polylines = {};
-  List<LatLng> polylineCoordinates = [];
 
   Future<bool> startMarker() async {
     try {
@@ -46,18 +31,12 @@ class HomeProvider with ChangeNotifier {
       Marker startMarker = Marker(
           markerId: MarkerId(startCoordinatesString),
           position: LatLng(startLatitude, startLongitude),
-          /*infoWindow: const InfoWindow(
-            title: 'That\'s your Location',
-            // snippet: _startAddress,
-          ),*/
           icon: await BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue));
 
       markers.clear();
-      polylineCoordinates = [];
       polylines = {};
       markers.add(startMarker);
-
       return true;
     } catch (e) {
       print(e);
@@ -65,7 +44,7 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return false;
   }
-  LatLng? usedLatLang;
+
   Future addMarkerLongPressed(LatLng latlang) async {
     const MarkerId markerId = MarkerId("RANDOM_ID");
     Marker marker = Marker(
@@ -77,6 +56,7 @@ class HomeProvider with ChangeNotifier {
     );
 
     currentPosition = Position(
+
       longitude: latlang.longitude,
       latitude: latlang.latitude,
       timestamp: currentPosition!.timestamp,
@@ -94,11 +74,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   void resetMap() {
-    // markers.clear();
-    polylineCoordinates = [];
     polylines = {};
-    polylinePoints = null;
-    _placeDistance = null;
     notifyListeners();
   }
 

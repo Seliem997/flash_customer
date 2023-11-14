@@ -25,7 +25,7 @@ class ExpandableContainer extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
-      width: (219 / screenWidth * 100).w,
+      width: (225 / screenWidth * 100).w,
       height: expanded ? expandedHeight : collapsedHeight,
       child: Container(
         padding: EdgeInsets.only(top:0.8.h ),

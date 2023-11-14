@@ -54,7 +54,6 @@ class MyVehiclesProvider with ChangeNotifier {
       if (value.status == Status.success) {
         state = Status.success;
         vehicleDetailsData = value.data;
-        print('Added New Vehicle In Provider Successfully');
       }
     });
     return ResponseResult(state, vehicleDetailsData);
@@ -73,7 +72,6 @@ class MyVehiclesProvider with ChangeNotifier {
     String? name,
     String? year,
   }) async {
-    print('Enter in Provider');
 
     Status state = Status.error;
     await myVehiclesService
@@ -94,7 +92,6 @@ class MyVehiclesProvider with ChangeNotifier {
       if (value.status == Status.success) {
         state = Status.success;
         vehicleDetailsData = value.data;
-        print('Update Vehicle In Provider Successfully');
       }
     });
     return ResponseResult(state, vehicleDetailsData);
@@ -115,7 +112,7 @@ class MyVehiclesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future deleteVehicle({required int vehicleID}) async {
+  Future<ResponseResult> deleteVehicle({required int vehicleID}) async {
     loadingMyVehicles = true;
     notifyListeners();
     Status state = Status.error;

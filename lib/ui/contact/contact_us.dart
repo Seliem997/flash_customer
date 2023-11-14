@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../providers/about_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
 import '../widgets/custom_bar_widget.dart';
@@ -38,13 +39,21 @@ class _ContactUsState extends State<ContactUs> {
   void loadData() async {
     final AboutProvider aboutProvider =
         Provider.of<AboutProvider>(context, listen: false);
+    final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+
     aboutProvider.contactDataKey = GlobalKey<FormState>();
+    if(userProvider.profileData != null){
+      aboutProvider.emailController.text= userProvider.profileData!.email!;
+      aboutProvider.nameController.text= userProvider.profileData!.name!;
+      aboutProvider.phoneController.text= userProvider.profileData!.phone!;
+    }
     await aboutProvider.getSocialLinks();
   }
 
   @override
   Widget build(BuildContext context) {
     final AboutProvider aboutProvider = Provider.of<AboutProvider>(context);
+
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).contactUs),
       body: SingleChildScrollView(
@@ -59,12 +68,12 @@ class _ContactUsState extends State<ContactUs> {
                 Row(
                   children: [
                     TextWidget(
-                        text: 'Name',
+                        text: S.of(context).name,
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.medium),
                     horizontalSpace(3),
                     TextWidget(
-                      text: '(Optional)',
+                      text: S.of(context).optional,
                       textSize: MyFontSize.size8,
                       fontWeight: MyFontWeight.regular,
                       color: AppColor.lightGrey,
@@ -77,7 +86,7 @@ class _ContactUsState extends State<ContactUs> {
                   width: double.infinity,
                   child: DefaultFormField(
                     controller: aboutProvider.nameController,
-                    hintText: 'Enter Name',
+                    hintText: S.of(context).enterName,
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
@@ -89,12 +98,12 @@ class _ContactUsState extends State<ContactUs> {
                 Row(
                   children: [
                     TextWidget(
-                        text: 'Email',
+                        text: S.of(context).email,
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.medium),
                     horizontalSpace(3),
                     TextWidget(
-                      text: '(Optional)',
+                      text: S.of(context).optional,
                       textSize: MyFontSize.size8,
                       fontWeight: MyFontWeight.regular,
                       color: AppColor.lightGrey,
@@ -117,9 +126,9 @@ class _ContactUsState extends State<ContactUs> {
                       if (!RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value!)) {
-                        return "Please Enter Valid Email Address";
+                        return S.of(context).pleaseEnterValidEmailAddress;
                       } else if (value.isEmpty) {
-                        return "Please Enter Your Email Address";
+                        return S.of(context).pleaseEnterYourEmailAddress;
                       }
                       return null;
                     },
@@ -127,7 +136,7 @@ class _ContactUsState extends State<ContactUs> {
                 ),
                 verticalSpace(22),
                 TextWidget(
-                    text: 'Phone number',
+                    text: S.of(context).phoneNumber,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium),
                 verticalSpace(10),
@@ -137,6 +146,7 @@ class _ContactUsState extends State<ContactUs> {
                   child: DefaultFormField(
                     controller: aboutProvider.phoneController,
                     hintText: '+966 543 210 1234',
+                    maxLines: 1,
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
@@ -144,6 +154,7 @@ class _ContactUsState extends State<ContactUs> {
                     fontWeight: MyFontWeight.regular,
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
+
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
                       FilteringTextInputFormatter.digitsOnly,
@@ -164,7 +175,7 @@ class _ContactUsState extends State<ContactUs> {
                 ),
                 verticalSpace(22),
                 TextWidget(
-                    text: 'Message',
+                    text: S.of(context).message,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium),
                 verticalSpace(10),
@@ -173,19 +184,23 @@ class _ContactUsState extends State<ContactUs> {
                   width: double.infinity,
                   child: DefaultFormField(
                     controller: aboutProvider.messageController,
-                    hintText: 'Type your message........',
+                    hintText: S.of(context).typeYourMessage,
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
                     textSize: MyFontSize.size10,
                     fontWeight: MyFontWeight.regular,
+                    maxLines: 5,
+                    textHeight: 1.5,
+                    letterSpacing: 1,
+                    wordSpacing: 1.5,
                   ),
                 ),
                 verticalSpace(15),
                 DefaultButton(
                   height: 37,
                   width: 345,
-                  text: 'Send',
+                  text: S.of(context).send,
                   onPressed: () {
                     if(aboutProvider.emailController.text != ''){
                       if (aboutProvider.contactDataKey.currentState!.validate()) {
@@ -197,7 +212,7 @@ class _ContactUsState extends State<ContactUs> {
                             navigateAndFinish(context, const HomeScreen());
                           });
                         }else {
-                          CustomSnackBars.failureSnackBar(context, 'Please Fill Required Fields',);
+                          CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
                         }
                       }
 
@@ -210,7 +225,7 @@ class _ContactUsState extends State<ContactUs> {
                           navigateAndFinish(context, const HomeScreen());
                         });
                       }else {
-                        CustomSnackBars.failureSnackBar(context, 'Please Fill Required Fields',);
+                        CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
                       }
                     }
 
@@ -334,7 +349,7 @@ class _ContactUsState extends State<ContactUs> {
                       }
                     },
                     child: Text(
-                      'Our website',
+                      S.of(context).ourWebsite,
                       style: TextStyle(
                         fontSize: MyFontSize.size16,
                         fontWeight: MyFontWeight.semiBold,

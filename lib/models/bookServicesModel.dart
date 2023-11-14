@@ -15,9 +15,7 @@ class BookServicesModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status_code'] = this.statusCode;
     data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
+
     return data;
   }
 }
@@ -76,26 +74,6 @@ class BookServicesData {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['request_id'] = this.requestId;
-    data['status'] = this.status;
-    data['rate'] = this.rate;
-    data['pay_by'] = this.payBy;
-    data['feedback'] = this.feedback;
-    data['amount'] = this.amount;
-    data['tax'] = this.tax;
-    data['discount_amount'] = this.discountAmount;
-    data['total_amount'] = this.totalAmount;
-    data['time'] = this.time;
-    data['date'] = this.date;
-    data['employee'] = this.employee;
-    if (this.services != null) {
-      data['services'] = this.services!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
 class Services {
@@ -126,15 +104,4 @@ class Services {
     countable = json['countable'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['image'] = this.image;
-    data['info'] = this.info;
-    data['type'] = this.type;
-    data['duration'] = this.duration;
-    data['countable'] = this.countable;
-    return data;
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
+import 'package:flash_customer/main.dart';
 import 'package:flash_customer/services/authentication_service.dart';
 import 'package:flash_customer/ui/widgets/custom_bar_widget.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
@@ -14,7 +15,7 @@ import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intlar;
 
 import '../../../generated/l10n.dart';
 import '../../widgets/navigate.dart';
@@ -76,12 +77,13 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                           alignment: AlignmentDirectional.centerStart,
                           child: TextWidget(
                             text: S.of(context).enterYourPhoneNumber,
-                            textSize: 13,
+                            textSize: MyFontSize.size12,
                             fontWeight: MyFontWeight.regular,
                           )),
                       verticalSpace(16),
                       Row(
-                        children: [
+                        textDirection: TextDirection.ltr,
+                      children: [
                           CustomContainer(
                             padding: symmetricEdgeInsets(horizontal: 4),
                             width: 72,
@@ -90,14 +92,12 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                             alignment: Alignment.center,
                             borderColor: AppColor.borderBlue,
                             onTap: () async {
-                              /*final code = await countryPicker.showPicker(
-                                  context: context);*/
                               setState(() {
                                 countryCode = const CountryCode(name: "Saudi Arabia", code: "SA", dialCode: "+966");
-                                // countryCode = code;
                               });
                             },
                             child: Row(
+                              textDirection: TextDirection.ltr,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomSizedBox(
@@ -128,6 +128,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                             textInputAction: TextInputAction.done,
                             letterSpacing: 3,
                             textHeight: 0.8,
+                            textColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(11),
                               FilteringTextInputFormatter.digitsOnly,

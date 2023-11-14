@@ -28,13 +28,13 @@ class EditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     TextEditingController nameTextController =
-        TextEditingController(text: userProvider.userName);
+        TextEditingController(text: userProvider.profileData?.name);
     TextEditingController emailTextController =
-        TextEditingController(text: userProvider.userEmail);
+        TextEditingController(text: userProvider.profileData?.email);
     TextEditingController phoneTextController = TextEditingController(
-        text: CacheHelper.returnData(key: CacheKey.phoneNumber));
+        text: userProvider.profileData?.phone);
     TextEditingController fwIdTextController = TextEditingController(
-        text: CacheHelper.returnData(key: CacheKey.userId));
+        text: userProvider.profileData?.fwId);
     return Scaffold(
       appBar: CustomAppBar(
         title: S.of(context).myProfile,
@@ -43,7 +43,7 @@ class EditProfile extends StatelessWidget {
         child: Column(
           children: [
             ImageEditable(
-              imageUrl: CacheHelper.returnData(key: CacheKey.userImage) ?? '',
+              imageUrl: userProvider.profileData?.image ?? '',
               showEditIcon: true,
               onTap: () async {
                 AppLoader.showLoader(context);
@@ -69,12 +69,14 @@ class EditProfile extends StatelessWidget {
                   TextWidget(
                       text: S.of(context).id,
                       textSize: MyFontSize.size18,
-                      fontWeight: MyFontWeight.medium),
+                      fontWeight: MyFontWeight.medium,
+                  ),
                   verticalSpace(10),
                   CustomSizedBox(
                       height: 40,
                       width: double.infinity,
                       child: DefaultFormField(
+                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         hintText: S.of(context).enterId,
                         fillColor: AppColor.borderGreyLight,
                         filled: true,
@@ -110,6 +112,8 @@ class EditProfile extends StatelessWidget {
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium,
+                      maxLines: 1,
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     ),
                   ),
                   verticalSpace(27),
@@ -140,6 +144,8 @@ class EditProfile extends StatelessWidget {
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium,
+                      maxLines: 1,
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     ),
                   ),
                   verticalSpace(27),
@@ -160,6 +166,7 @@ class EditProfile extends StatelessWidget {
                       textColor: AppColor.grey,
                       textSize: MyFontSize.size15,
                       fontWeight: MyFontWeight.medium,
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     ),
                   ),
                 ],

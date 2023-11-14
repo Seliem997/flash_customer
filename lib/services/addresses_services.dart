@@ -99,8 +99,13 @@ class AddressesService extends BaseService {
           headers: headers,
           onSuccess: (response) async {
             try {
-              result = Status.success;
-              message = response["message"];
+              if (response["code"] == 200) {
+                result = Status.success;
+                message = response["message"];
+              } else if (response["code"] == 400 || response["code"] == 401) {
+                result = Status.codeNotCorrect;
+                message = response["message"];
+              }
             } catch (e) {
               logger.e("Error getting response delete Address\n$e");
               message = response["message"];

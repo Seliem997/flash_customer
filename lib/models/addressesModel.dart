@@ -7,17 +7,15 @@ class AddressDetailsModel {
 
   AddressDetailsModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
-    data = json['data'] != null ? new AddressesData.fromJson(json['data']) : null;
+    data = json['data'] != null ? AddressesData.fromJson(json['data']) : null;
     message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status_code'] = this.statusCode;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+
+    data['message'] = message;
     return data;
   }
 }
@@ -42,11 +40,9 @@ class AddressesModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status_code'] = statusCode;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
+
     data['message'] = message;
     return data;
   }
@@ -80,15 +76,4 @@ class AddressesData {
     customerId = json['customer_id'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['image'] = image;
-    data['type'] = type;
-    data['latitude'] = latitude;
-    data['langitude'] = langitude;
-    data['location_name'] = locationName;
-    data['customer_id'] = customerId;
-    return data;
-  }
 }

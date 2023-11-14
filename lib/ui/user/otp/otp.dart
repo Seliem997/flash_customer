@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/custom_bar_widget.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
@@ -11,17 +10,21 @@ import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../main.dart';
+import '../../../providers/addresses_provider.dart';
+import '../../../providers/home_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../services/authentication_service.dart';
 import '../../../utils/snack_bars.dart';
-import '../../widgets/custom_button.dart';
+import '../../home/home_screen.dart';
+import '../../services/other_services_screen.dart';
+import '../../vehicles/vehicles_type.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/navigate.dart';
-import '../register/register.dart';
 import 'otp_cell.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -62,7 +65,6 @@ class _OTPScreenState extends State<OTPScreen> {
     userDataProvider.timer = Timer.periodic(duration, (timer) {
       if (is_screen_on && userDataProvider.timer != null) {
         setState(() {
-          print(timer.tick);
           currentSeconds = timer.tick;
           if (currentSeconds == timerMaxSeconds) {
             isShow = true;
@@ -84,7 +86,8 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userDataProvider = Provider.of<UserProvider>(context);
-
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+    final AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(
         title: S.of(context).otp,
@@ -100,7 +103,9 @@ class _OTPScreenState extends State<OTPScreen> {
                 text: TextSpan(
                   text: S.of(context).codeIsSendTo,
                   style: TextStyle(
-                      color: MyApp.themeMode(context) ? AppColor.white : AppColor.black,
+                      color: MyApp.themeMode(context)
+                          ? AppColor.white
+                          : AppColor.black,
                       fontSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.medium),
                   children: [
@@ -124,6 +129,72 @@ class _OTPScreenState extends State<OTPScreen> {
                 width: double.infinity,
                 child: Align(
                   alignment: Alignment.center,
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Pinput(
+                      onCompleted: (pin) async{
+                          AppLoader.showLoader(context);
+                          await userDataProvider
+                              .checkCode(
+                              phoneNumber: widget.phoneNumber,
+                              countryCode: widget.countryCode,
+                              otp: pin.toString())
+                              .then((value) async{
+                            AppLoader.stopLoader();
+                            if (value.status == Status.success) {
+                              if (value.message != "invalid otp") {
+                                userDataProvider.timer!.cancel();
+                                if(userDataProvider.statusType != null) {
+                                  if(userDataProvider.statusType == 'wash service') {
+                                    AppLoader.showLoader(context);
+                                    await addressesProvider
+                                        .storeAddress(
+                                      lat: homeProvider.currentPosition!.latitude,
+                                      long: homeProvider.currentPosition!.longitude,
+                                    )
+                                        .then((value) {
+                                      AppLoader.stopLoader();
+                                      if (value.status == Status.success) {
+                                        navigateAndFinish(context, const HomeScreen(cameFromOTPToVehicles: true,));
+                                      } else {
+                                        CustomSnackBars.failureSnackBar(
+                                            context, '${value.message}');
+                                      }
+                                    });
+                                  }else if(userDataProvider.statusType == 'other service'){
+                                    AppLoader.showLoader(context);
+                                    await addressesProvider
+                                        .storeAddress(
+                                      lat: homeProvider.currentPosition!.latitude,
+                                      long: homeProvider.currentPosition!.longitude,
+                                    )
+                                        .then((value) {
+                                      if (value.status == Status.success) {
+                                        AppLoader.stopLoader();
+                                        navigateAndFinish(context, const HomeScreen(cameFromOTPToOther: true,));
+                                      } else {
+                                        CustomSnackBars.failureSnackBar(
+                                            context, '${value.message}');
+                                        AppLoader.stopLoader();
+                                      }
+                                    });
+                                  }
+                                }else{
+                                  navigateTo(context, const HomeScreen());
+                                }
+                              } else {
+                                CustomSnackBars.failureSnackBar(context, value.message);
+                              }
+                            } else {
+                              CustomSnackBars.failureSnackBar(context, value.message);
+                            }
+                          });
+
+
+                      },
+                    ),
+                  ),
+/*
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: 4,
@@ -131,6 +202,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         return OtpCell(index: index,phoneNumber: widget.phoneNumber, countryCode: widget.countryCode,);
                       }),
+*/
                 ),
               ),
               verticalSpace(30),
@@ -138,7 +210,9 @@ class _OTPScreenState extends State<OTPScreen> {
                 text: TextSpan(
                   text: S.of(context).didNotReceiveCode,
                   style: TextStyle(
-                      color: MyApp.themeMode(context) ? AppColor.white : AppColor.black,
+                      color: MyApp.themeMode(context)
+                          ? AppColor.white
+                          : AppColor.black,
                       fontSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.medium),
                   children: [

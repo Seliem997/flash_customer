@@ -36,17 +36,23 @@ class OtherServicesProvider with ChangeNotifier{
   int selectedServiceQuantity = 0;
 
   void decreaseQuantityService(){
+    selectedOtherServiceId = otherServicesList[selectedServiceIndex!].id!;
     if (otherServicesList[selectedServiceIndex!].quantity > 0) {
       otherServicesList[selectedServiceIndex!].quantity = otherServicesList[selectedServiceIndex!].quantity -1;
-      notifyListeners();
     }else{
       selectedServiceIndex = null;
-      notifyListeners();
     }
+    notifyListeners();
+
   }
 
-  void increaseQuantityService(){
-    otherServicesList[selectedServiceIndex!].quantity++;
+  void increaseQuantityService({required int selectedServiceIndex}){
+    selectedOtherServiceId = otherServicesList[selectedServiceIndex].id!;
+    if(otherServicesList[selectedServiceIndex].quantity ==0){
+      otherServicesList[selectedServiceIndex].quantity =1;
+    }else {
+      otherServicesList[selectedServiceIndex].quantity++;
+    }
     notifyListeners();
   }
 
@@ -119,8 +125,6 @@ class OtherServicesProvider with ChangeNotifier{
       isLoading = false;
       if (value.status == Status.success) {
         slotsList = value.data;
-        print('Other Services Slots in provider Success');
-        print(slotsList);
       }
     });
     notifyListeners();

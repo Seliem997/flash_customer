@@ -54,30 +54,25 @@ class _WalletPaymentState extends State<WalletPayment> {
 
   @override
   void initState() {
-    final TransactionHistoryProvider transactionHistoryProvider =
-        Provider.of<TransactionHistoryProvider>(context, listen: false);
     super.initState();
     payButtonColor = const Color(0xff2ace00);
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
-    configureSDK(
-        /*amount: double.parse(
-            transactionHistoryProvider.rechargeAmountController!.text)*/);
+    configureSDK();
   }
 
   void loadData() async {
     final TransactionHistoryProvider transactionHistoryProvider =
         Provider.of<TransactionHistoryProvider>(context, listen: false);
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     transactionHistoryProvider.isLoading == true;
+    await userProvider.getUserData();
     await transactionHistoryProvider.getTransactionHistory();
   }
 
-  // configure SDK
   Future<void> configureSDK() async {
-    // configure app
     configureApp();
-    // startSDK();
-    // sdk session configurations
-    // setupSDKSession(amount: amount);
+
   }
 
   // configure app key and bundle-id (You must get those keys from tap)
@@ -98,6 +93,8 @@ class _WalletPaymentState extends State<WalletPayment> {
 
   // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
   Future<void> setupSDKSession({required double amount}) async {
+    final UserProvider userProvider =
+    Provider.of<UserProvider>(context, listen: false);
     try {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
@@ -106,10 +103,10 @@ class _WalletPaymentState extends State<WalletPayment> {
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
-              email: "${CacheHelper.returnData(key: CacheKey.email)}",
+              email: "${userProvider.profileData?.email}",
               isdNumber: "965",
-              number: "${CacheHelper.returnData(key: CacheKey.phoneNumber)}",
-              firstName: "${CacheHelper.returnData(key: CacheKey.userName)}",
+              number: "${userProvider.profileData?.phone}",
+              firstName: "${userProvider.profileData?.name}",
               middleName: "",
               lastName: "",
               metaData: null),
@@ -122,7 +119,7 @@ class _WalletPaymentState extends State<WalletPayment> {
           paymentDescription: "paymentDescription",
           // Payment Metadata
           paymentMetaData: {
-            "customer_id": "${CacheHelper.returnData(key: CacheKey.userNumberId)}",
+            "customer_id": "${userProvider.profileData?.id}",
             "charge_type": "wallet",
           },
           // Payment Reference
@@ -291,19 +288,19 @@ class _WalletPaymentState extends State<WalletPayment> {
             child: Column(
               children: [
                 ImageEditable(
-                  imageUrl: CacheHelper.returnData(key: CacheKey.userImage) ?? '',
+                  imageUrl: userProvider.profileData?.image ?? '',
                 ),
                 verticalSpace(14),
                 TextWidget(
-                  text: userProvider.userName == ""
+                  text: userProvider.profileData?.name == ""
                       ? S.of(context).userName
-                      : userProvider.userName ?? S.of(context).userName,
+                      : userProvider.profileData?.name ?? S.of(context).userName,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size16,
                 ),
                 verticalSpace(10),
                 TextWidget(
-                  text: '${userProvider.userBalance}',
+                  text: '${S.of(context).balance} ${userProvider.profileData?.balance}',
                   // text: '${sdkStatus == "SUCCESS" ? (double.parse(userProvider.userBalance!) + double.parse(transactionHistoryProvider.rechargeAmountController!.text)) : userProvider.userBalance} ${S.of(context).sr}',
                   fontWeight: MyFontWeight.semiBold,
                   textSize: MyFontSize.size14,
@@ -329,7 +326,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                       horizontalSpace(18),
                       Expanded(
                         child: CustomContainer(
-                          height: 30,
+                          height: 35,
                           radiusCircular: 3,
                           backgroundColor: AppColor.buttonGrey,
                           borderColor: AppColor.boldGrey,
@@ -344,7 +341,8 @@ class _WalletPaymentState extends State<WalletPayment> {
                                 FilteringTextInputFormatter.digitsOnly,
                               ],
                               textInputAction: TextInputAction.done,
-                              hintText: '',
+                              hintText: '0',
+                              textColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
                               padding: symmetricEdgeInsets(
                                   vertical: 8, horizontal: 5),
                             ),
@@ -355,30 +353,31 @@ class _WalletPaymentState extends State<WalletPayment> {
                   ),
                   verticalSpace(28),
                   DefaultButton(
-                      text: S.of(context).pay,
+                      text: S.of(context).submit,
                       onPressed: () async{
-                        if(double.parse(transactionHistoryProvider
-                            .rechargeAmountController!.text) > 1) {
-                          AppLoader.showLoader(context);
-                          await setupSDKSession(
-                            amount: double.parse(transactionHistoryProvider
-                                .rechargeAmountController!.text));
-                          startSDK().then((value) async{
-                            if(sdkStatus == "SUCCESS"){
-                              await transactionHistoryProvider.rechargeWallet(chargeId: chargeID).then((value) {
-                                if (value.status == Status.success) {
-                                  userProvider.userBalance = transactionHistoryProvider.rechargeWalletData?.newBalance.toString();
-                                  CacheHelper.saveData(key: CacheKey.balance, value: transactionHistoryProvider.rechargeWalletData?.newBalance);
-                                  print("user balance == ${userProvider.userBalance}");
-                                }
-                              });
-                            }
-                            AppLoader.stopLoader();
-                          });
+                        if(transactionHistoryProvider.rechargeAmountController!.text != ''){
+                          if(double.parse(transactionHistoryProvider
+                              .rechargeAmountController!.text) > 1) {
+                            AppLoader.showLoader(context);
+                            await setupSDKSession(
+                                amount: double.parse(transactionHistoryProvider
+                                    .rechargeAmountController!.text));
+                            startSDK().then((value) async{
+                              if(sdkStatus == "SUCCESS"){
+                                await transactionHistoryProvider.rechargeWallet(chargeId: chargeID).then((value) {
+                                  if (value.status == Status.success) {
+                                    userProvider.getUserData();
+                                  }
+                                });
+                              }
+                              AppLoader.stopLoader();
+                            });
+                          }else{
+                            CustomSnackBars.failureSnackBar(context, S.of(context).pleaseEnterAValidAmount);
+                          }
                         }else{
-                          CustomSnackBars.failureSnackBar(context, "Please Enter a valid Amount");
+                          CustomSnackBars.failureSnackBar(context, S.of(context).pleaseInsertAnAmount);
                         }
-
                       },
                       width: 217,
                       height: 40),
@@ -390,16 +389,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                         textSize: MyFontSize.size14,
                         fontWeight: MyFontWeight.bold,
                       ),
-                      /*const Spacer(),
-                      TextButton(
-                        onPressed: () {},
-                        child: TextWidget(
-                          text: S.of(context).seeAll,
-                          textSize: MyFontSize.size10,
-                          fontWeight: MyFontWeight.medium,
-                          color: AppColor.boldBlue,
-                        ),
-                      )*/
+
                     ],
                   ),
                   verticalSpace(6),
@@ -417,7 +407,6 @@ class _WalletPaymentState extends State<WalletPayment> {
                             itemCount: transactionHistoryProvider
                                 .transactionData!.collection!.length,
                             itemBuilder: (context, index) => CustomContainer(
-                              height: 60,
                               width: 345,
                               radiusCircular: 4,
                               padding: symmetricEdgeInsets(
@@ -449,10 +438,10 @@ class _WalletPaymentState extends State<WalletPayment> {
                                         Row(
                                           children: [
                                             CustomSizedBox(
-                                              width: 8,
-                                              height: 8,
+                                              width: 12,
+                                              height: 12,
                                               child: SvgPicture.asset(
-                                                  'assets/svg/clock.svg'),
+                                                  'assets/svg/clock.svg', color: MyApp.themeMode(context) ? Colors.white : null),
                                             ),
                                             horizontalSpace(4),
                                             TextWidget(
@@ -462,7 +451,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                                                           .transactionData!
                                                           .collection![index]
                                                           .createdAt!)),
-                                              textSize: MyFontSize.size8,
+                                              textSize: MyFontSize.size10,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),
@@ -474,7 +463,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                                                           .transactionData!
                                                           .collection![index]
                                                           .createdAt!)),
-                                              textSize: MyFontSize.size8,
+                                              textSize: MyFontSize.size10,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),

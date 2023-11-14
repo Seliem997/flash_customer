@@ -2,8 +2,11 @@ import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../providers/requestServices_provider.dart';
@@ -24,14 +27,14 @@ class SubmitBankTransferMethod extends StatelessWidget {
     final RequestServicesProvider requestServicesProvider =
     Provider.of<RequestServicesProvider>(context);
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Bank Transfer Method'),
+      appBar: CustomAppBar(title: S.of(context).bankTransferMethod),
       body: Padding(
           padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextWidget(
-                text: 'Bank name',
+                text: S.of(context).bankName,
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size15,
               ),
@@ -44,9 +47,11 @@ class SubmitBankTransferMethod extends StatelessWidget {
                   padding: symmetricEdgeInsets(horizontal: 11, vertical: 11),
                   child: Row(
                     children: [
-                      CustomSizedBox(
-                        width: 85,
-                        height: 23,
+                      CustomContainer(
+                        backgroundColorDark: Colors.white,
+                        width: 90,
+                        height: 25,
+                        padding: EdgeInsets.symmetric(horizontal: 2.w),
                         child: Image.network(requestServicesProvider.bankAccountsList[index].image!),
                       ),
                       horizontalSpace(34),
@@ -57,7 +62,7 @@ class SubmitBankTransferMethod extends StatelessWidget {
               ),
               verticalSpace(35),
               TextWidget(
-                text: 'Bank account number',
+                text: S.of(context).bankAccountNumber,
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size15,
               ),
@@ -71,14 +76,23 @@ class SubmitBankTransferMethod extends StatelessWidget {
                   padding: symmetricEdgeInsets(horizontal: 11, vertical: 11),
                   child: Row(
                     children: [
-                      TextWidget(text: requestServicesProvider.bankAccountsList[index].accountNumber!,textSize: 14,fontWeight: MyFontWeight.semiBold,),
+                      Expanded(child: TextWidget(text: requestServicesProvider.bankAccountsList[index].accountNumber!,textSize: 14,fontWeight: MyFontWeight.semiBold,)),
+                      InkWell(
+                        onTap: (){
+                          Clipboard.setData(ClipboardData(text: requestServicesProvider.bankAccountsList[index].accountNumber!));
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svg/copy.svg',
+                          color: AppColor.primary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               verticalSpace(35),
               TextWidget(
-                text: 'Name',
+                text: S.of(context).name,
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size15,
               ),
@@ -92,7 +106,16 @@ class SubmitBankTransferMethod extends StatelessWidget {
                   padding: symmetricEdgeInsets(horizontal: 11, vertical: 11),
                   child: Row(
                     children: [
-                      TextWidget(text: requestServicesProvider.bankAccountsList[index].accountHolder!,textSize: 14,fontWeight: MyFontWeight.semiBold,),
+                      Expanded(child: TextWidget(text: requestServicesProvider.bankAccountsList[index].accountHolder!,textSize: 14,fontWeight: MyFontWeight.semiBold,)),
+                      InkWell(
+                        onTap: (){
+                          Clipboard.setData(ClipboardData(text: requestServicesProvider.bankAccountsList[index].accountHolder!));
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svg/copy.svg',
+                          color: AppColor.primary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -113,7 +136,22 @@ class SubmitBankTransferMethod extends StatelessWidget {
                   padding: symmetricEdgeInsets(horizontal: 11, vertical: 11),
                   child: Row(
                     children: [
-                      TextWidget(text: requestServicesProvider.bankAccountsList[index].ibanNumber!,textSize: 14,fontWeight: MyFontWeight.semiBold,),
+                      Expanded(
+                        child: TextWidget(
+                          text: requestServicesProvider.bankAccountsList[index].ibanNumber!,
+                          textSize: 14,
+                          fontWeight: MyFontWeight.semiBold,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          Clipboard.setData(ClipboardData(text: requestServicesProvider.bankAccountsList[index].ibanNumber!));
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svg/copy.svg',
+                          color: AppColor.primary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -121,8 +159,8 @@ class SubmitBankTransferMethod extends StatelessWidget {
               verticalSpace(50),
               Center(
                 child: CustomSizedBox(
-                  height: 100,
-                    width: 140,
+                  height: 140,
+                    width: 180,
                     onTap: () async{
                       await ImagePicker.platform
                           .getImage(source: ImageSource.gallery, imageQuality: 30)
@@ -139,7 +177,9 @@ class SubmitBankTransferMethod extends StatelessWidget {
                       });
 
                     },
-                    child: Image.asset('assets/images/uploadFiles.png')),
+                    child: Image.asset('assets/images/uploadFiles.png',height: 140,
+                      width: 180,
+                    fit: BoxFit.cover,)),
               ),
               verticalSpace(50),
 /*              DefaultButton(

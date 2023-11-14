@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,20 +47,26 @@ class _NewAddressState extends State<NewAddress> {
 
   Future _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
-    _lightMapStyle =
-        await rootBundle.loadString('assets/map_styles/light.json');
+    _lightMapStyle = MyApp.themeMode(context) ? await rootBundle.loadString('assets/map_styles/dark.json') :
+    await rootBundle.loadString('assets/map_styles/light.json');
+    if(MyApp.themeMode(context)){
+      AppLoader.showLoader(context);
+      await Future.delayed(const Duration(seconds: 1));
+      AppLoader.stopLoader();
+    }
     _setMapStyle();
   }
 
   Future _setMapStyle() async {
     final HomeProvider homeProvider =
-        Provider.of<HomeProvider>(context, listen: false);
+    Provider.of<HomeProvider>(context, listen: false);
 
     if (MyApp.themeMode(context)) {
       homeProvider.mapController.setMapStyle(_darkMapStyle);
       setState(() {});
     } else {
-      // homeProvider.mapController.setMapStyle(_lightMapStyle);
+      homeProvider.mapController.setMapStyle(_lightMapStyle);
+      setState(() {});
     }
   }
 
@@ -101,9 +108,7 @@ class _NewAddressState extends State<NewAddress> {
       AppLoader.showLoader(context);
       await Geolocator.getCurrentPosition().then((Position position) async {
         AppLoader.stopLoader();
-        // print("Cur Position1: ${position.longitude} ${position.latitude}");
         homeProvider.currentPosition = position;
-        // homeProvider.startMarker();
         homeProvider.mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -171,6 +176,7 @@ class _NewAddressState extends State<NewAddress> {
                   zoomGesturesEnabled: true,
                   zoomControlsEnabled: false,
                   polylines: Set<Polyline>.of(homeProvider.polylines.values),
+
                   onLongPress: (latlang) {
                     homeProvider.addMarkerLongPressed(latlang);
                   },
@@ -182,9 +188,44 @@ class _NewAddressState extends State<NewAddress> {
                   children: [
                     CustomAppBar(
                       title: S.of(context).myAddresses,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: MyApp.themeMode(context) ? AppColor.secondaryDarkColor.withOpacity(0.5) : Colors.transparent,
                     ),
                     const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () async{
+                              try {
+                                AppLoader.showLoader(context);
+                                await Geolocator.getCurrentPosition().then((Position position) async {
+                                  AppLoader.stopLoader();
+                                  homeProvider.mapController.animateCamera(
+                                    CameraUpdate.newCameraPosition(
+                                      CameraPosition(
+                                        target: LatLng(position.latitude, position.longitude),
+                                        zoom: 15.5,
+                                      ),
+                                    ),
+                                  );
+                                }).catchError((e) {
+                                  log("Error in accessing current location $e");
+                                });
+                              } catch (e) {
+                                log("Error in catch accessing current location $e");
+                              }
+                            },
+                            child: Padding(
+                              padding: onlyEdgeInsets(end: 24),
+                              child: CustomSizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Image.asset(MyApp.themeMode(context) ? 'assets/images/locationSpotDark.png' : 'assets/images/locationSpot.png',),
+                              ),
+                            ),
+                          )),
+                    ),
                     Padding(
                       padding: symmetricEdgeInsets(horizontal: 24),
                       child: DefaultButton(

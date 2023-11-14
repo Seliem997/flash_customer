@@ -90,6 +90,7 @@ class RequestServicesService extends BaseService {
     required String discountCode,
   }) async {
     Status status = Status.error;
+    dynamic message;
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
@@ -107,16 +108,21 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              message = response["message"];
+
               couponData = OfferCouponModel.fromJson(response).data!;
             } else if (response["status_code"] == 422) {
               status = Status.codeNotCorrect;
+              message = response["message"];
+            }else{
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error in Check Coupon $e");
     }
-    return ResponseResult(status, couponData);
+    return ResponseResult(status, couponData, message: message);
   }
 
   Future<ResponseResult> getCityId({
@@ -124,6 +130,7 @@ class RequestServicesService extends BaseService {
     required double lng,
   }) async {
     Status status = Status.error;
+    dynamic message;
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
@@ -141,16 +148,18 @@ class RequestServicesService extends BaseService {
           onSuccess: (response) {
             if (response["status_code"] == 200) {
               status = Status.success;
+              message = response["message"];
               cityIdData = CityIdModel.fromJson(response).data!;
-            } else if (response["status_code"] == 422) {
+            } else if (response["status_code"] == 422|| response["status_code"] == 401) {
               status = Status.codeNotCorrect;
+              message = response["message"];
             }
           });
     } catch (e) {
       status = Status.error;
       logger.e("Error in get city Id $e");
     }
-    return ResponseResult(status, cityIdData);
+    return ResponseResult(status, cityIdData, message: message);
   }
 
   Future<ResponseResult> bookServices({
@@ -276,6 +285,8 @@ class RequestServicesService extends BaseService {
   Future<ResponseResult> updateRequestSlots({
     required int requestId,
     required String payBy,
+    String? offerCode,
+    dynamic employeeId,
   }) async {
     Status result = Status.error;
     dynamic message;
@@ -283,7 +294,8 @@ class RequestServicesService extends BaseService {
       'Content-Type': 'application/json',
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
-    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy};
+    Map<String, dynamic> body = {"id": requestId, "pay_by": payBy,
+      offerCode != null ? "offer_code" : '' : offerCode ?? '', "employee_id": employeeId};
 
     RequestDetailsData? updatedRequestDetailsData;
     try {

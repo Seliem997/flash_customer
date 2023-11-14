@@ -157,11 +157,30 @@ class PackageProvider with ChangeNotifier {
     await packageService
         .saveSlotsPackageRequest(mapBody: mapBody)
         .then((value) {
-          print('object in provider');
-      if (value.status == Status.success) {
+        if (value.status == Status.success) {
         state = Status.success;
         washesTime = {};
         washesDate = {};
+      } else {
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, '', message: message);
+  }
+
+
+  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required int reqId}) async {
+    Status state = Status.error;
+
+    dynamic message;
+
+    await packageService
+        .reserveRequestPackageSlots(slotsId: slotsId, slotsDate: slotsDate, reqId: reqId)
+        .then((value) {
+        if (value.status == Status.success) {
+        state = Status.success;
+
       } else {
         message = value.message;
       }

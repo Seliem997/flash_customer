@@ -1,5 +1,6 @@
 import 'package:flash_customer/models/manufacturersModel.dart';
 import 'package:flash_customer/models/vehiclesModelsModel.dart';
+import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/custom_button.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -28,13 +29,14 @@ import '../widgets/spaces.dart';
 import 'my_vehicles.dart';
 
 class VehicleTypes extends StatefulWidget {
-  const VehicleTypes({Key? key}) : super(key: key);
+  const VehicleTypes({Key? key,}) : super(key: key);
 
   @override
   State<VehicleTypes> createState() => _VehicleTypesState();
 }
 
 class _VehicleTypesState extends State<VehicleTypes> {
+  final GlobalKey listVehiclesKey= GlobalKey();
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
@@ -75,7 +77,10 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<RequestServicesProvider>(context);
 
     return Scaffold(
-      appBar: CustomAppBar(title: S.of(context).vehicleType),
+      appBar: CustomAppBar(
+          title: S.of(context).vehicleType,
+
+      ),
       body: Padding(
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 49),
         child: Column(
@@ -92,26 +97,45 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColorDark: packageProvider.myVehicleLabel
                       ? AppColor.borderBlue
                       : null,
+                  backgroundColorDark: packageProvider.myVehicleLabel
+                      ? AppColor.grey
+                      : null,
                   width: 162,
-                  height: 50,
-                  radiusCircular: 4,
+                  padding: symmetricEdgeInsets(vertical: 10),
+                  radiusCircular: 6,
                   onTap: () {
                     packageProvider.selectedMyVehicleLabel();
                   },
-                  child: Center(
-                    child: TextWidget(
-                      text: S.of(context).myVehicles,
-                      fontWeight: packageProvider.myVehicleLabel
-                          ? MyFontWeight.semiBold
-                          : MyFontWeight.medium,
-                      textSize: packageProvider.myVehicleLabel
-                          ? MyFontSize.size16
-                          : MyFontSize.size14,
-                      color: packageProvider.myVehicleLabel
-                          ? AppColor.black
-                          : const Color(0xFF878787),
-                    ),
+                  child: Column(
+                    children: [
+                      CustomSizedBox(
+                        width: 50,
+                        height: 50,
+                        child:
+                        Image.asset('assets/images/my_vehicles.png'),
+                      ),
+                      verticalSpace(8),
+                      TextWidget(
+                        text: S.of(context).myVehicles,
+                        fontWeight: MyFontWeight.semiBold,
+                        textSize: MyFontSize.size18,
+                      ),
+                    ],
                   ),
+                  // child: Center(
+                  //   child: TextWidget(
+                  //     text: S.of(context).myVehicles,
+                  //     fontWeight: packageProvider.myVehicleLabel
+                  //         ? MyFontWeight.semiBold
+                  //         : MyFontWeight.medium,
+                  //     textSize: packageProvider.myVehicleLabel
+                  //         ? MyFontSize.size16
+                  //         : MyFontSize.size14,
+                  //     color: packageProvider.myVehicleLabel
+                  //         ? AppColor.black
+                  //         : const Color(0xFF878787),
+                  //   ),
+                  // ),
                 ),
                 horizontalSpace(21),
                 CustomContainer(
@@ -124,26 +148,43 @@ class _VehicleTypesState extends State<VehicleTypes> {
                   borderColorDark: packageProvider.newVehicleLabel
                       ? AppColor.borderBlue
                       : null,
+                  backgroundColorDark: packageProvider.newVehicleLabel
+                      ? AppColor.grey : null,
                   width: 162,
-                  height: 50,
-                  radiusCircular: 4,
+                  padding: symmetricEdgeInsets(vertical: 10),
+                  radiusCircular: 6,
                   onTap: () {
                     packageProvider.selectedNewVehicleLabel();
                   },
-                  child: Center(
-                    child: TextWidget(
-                      text: S.of(context).newVehicles,
-                      fontWeight: packageProvider.newVehicleLabel
-                          ? MyFontWeight.semiBold
-                          : MyFontWeight.medium,
-                      textSize: packageProvider.newVehicleLabel
-                          ? MyFontSize.size16
-                          : MyFontSize.size14,
-                      color: packageProvider.newVehicleLabel
-                          ? AppColor.black
-                          : const Color(0xFF878787),
-                    ),
+                  child: Column(
+                    children: [
+                      CustomSizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/images/new_car.png'),
+                      ),
+                      verticalSpace(8),
+                      TextWidget(
+                        text: S.of(context).newCar,
+                        fontWeight: MyFontWeight.semiBold,
+                        textSize: MyFontSize.size18,
+                      )
+                    ],
                   ),
+                  // child: Center(
+                  //   child: TextWidget(
+                  //     text: S.of(context).newVehicles,
+                  //     fontWeight: packageProvider.newVehicleLabel
+                  //         ? MyFontWeight.semiBold
+                  //         : MyFontWeight.medium,
+                  //     textSize: packageProvider.newVehicleLabel
+                  //         ? MyFontSize.size16
+                  //         : MyFontSize.size14,
+                  //     color: packageProvider.newVehicleLabel
+                  //         ? AppColor.black
+                  //         : const Color(0xFF878787),
+                  //   ),
+                  // ),
                 ),
               ],
             ),
@@ -238,7 +279,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                 ),
                               )
                             : CustomSnackBars.failureSnackBar(
-                                context, 'Choose available City first')
+                                context, S.of(context).chooseAvailableCityFirst)
                         : CustomSnackBars.failureSnackBar(
                             context, S.of(context).chooseVehicleFirst);
               },
@@ -272,6 +313,9 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               backgroundColor: packageProvider.selectedVehicleTypeIndex == index
                   ? const Color(0xFFE6EEFB)
                   : AppColor.borderGreyLight,
+              backgroundColorDark: packageProvider.selectedVehicleTypeIndex == index
+                  ? AppColor.grey
+                  : AppColor.primaryDark,
               borderColorDark: packageProvider.selectedVehicleTypeIndex == index
                   ? AppColor.borderBlue
                   : null,
@@ -292,11 +336,13 @@ class NewVehiclesScreenWidget extends StatelessWidget {
               radiusCircular: 5,
               child: Column(
                 children: [
-                  CustomSizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.network(
-                        packageProvider.vehiclesTypesDataList[index].image!),
+                  Expanded(
+                    child: CustomSizedBox(
+                      // width: 50,
+                      // height: 50,
+                      child: Image.network(
+                          packageProvider.vehiclesTypesDataList[index].image!,fit: BoxFit.cover,),
+                    ),
                   ),
                   verticalSpace(8),
                   TextWidget(
@@ -359,11 +405,11 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                           packageProvider.manufacturerDataList[index].name!,
                           style: TextStyle(
                               color: MyApp.themeMode(context)
-                                  ? const Color(0xFF909090)
+                                  ? Colors.white
                                   : Colors.black,
                               fontSize: 16)))),
               dropdownColor:
-                  MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+                  MyApp.themeMode(context) ? AppColor.grey : null,
               onChanged: (value) async {
                 packageProvider.setSelectedManufacture(value!);
                 packageProvider.chooseManufacture = true;
@@ -430,12 +476,12 @@ class NewVehiclesScreenWidget extends StatelessWidget {
                         packageProvider.vehiclesModelsDataList[index].name!,
                         style: TextStyle(
                             color: MyApp.themeMode(context)
-                                ? const Color(0xFF909090)
+                                ? Colors.white
                                 : Colors.black,
                             fontSize: 16))),
               ),
               dropdownColor:
-                  MyApp.themeMode(context) ? AppColor.borderGreyLight : null,
+                  MyApp.themeMode(context) ? AppColor.grey : null,
               onChanged: (value) async {
                 packageProvider.setSelectedVehicle(value!);
                 packageProvider.chooseModel = true;

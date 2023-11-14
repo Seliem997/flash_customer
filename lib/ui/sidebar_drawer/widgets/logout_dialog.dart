@@ -20,7 +20,7 @@ class LogOutDialog extends StatelessWidget {
     return Dialog(
       child: CustomContainer(
         width: 321,
-        height: 233,
+        height: 245,
         radiusCircular: 12,
         padding: symmetricEdgeInsets(horizontal: 24, vertical: 38),
         child: Column(
@@ -30,6 +30,7 @@ class LogOutDialog extends StatelessWidget {
               fontWeight: MyFontWeight.bold,
               textSize: MyFontSize.size18,
               color: const Color(0xFFF24955),
+              colorDark: Colors.black,
             ),
             verticalSpace(24),
             TextWidget(
@@ -37,33 +38,34 @@ class LogOutDialog extends StatelessWidget {
               fontWeight: MyFontWeight.semiBold,
               textSize: MyFontSize.size20,
               color: const Color(0xFF2D2D2D),
+              colorDark: Colors.black,
             ),
             verticalSpace(32),
             Row(
               children: [
                 DefaultButton(
-                  text: S.of(context).cancel,
+                  text: S.of(context).logout,
                   fontWeight: MyFontWeight.bold,
                   fontSize: MyFontSize.size14,
                   height: 33,
                   width: 155,
                   backgroundColor: const Color(0xFF616161),
                   onPressed: () {
-                    Navigator.pop(context);
+                    AuthenticationService auth = AuthenticationService();
+                    auth.signOut();
+                    navigateAndFinish(context, const HomeScreen());
                   },
                 ),
                 horizontalSpace(16),
                 DefaultButton(
-                  text: S.of(context).logout,
+                  text: S.of(context).cancel,
                   fontWeight: MyFontWeight.bold,
                   fontSize: MyFontSize.size14,
                   height: 33,
                   width: 96,
                   backgroundColor: AppColor.textRed,
                   onPressed: () {
-                    AuthenticationService auth = AuthenticationService();
-                    auth.signOut();
-                    navigateAndFinish(context, const HomeScreen());
+                    Navigator.pop(context);
                   },
                 ),
               ],

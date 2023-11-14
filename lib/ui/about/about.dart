@@ -38,10 +38,7 @@ class _AboutUsState extends State<AboutUs> {
 
   @override
   Widget build(BuildContext context) {
-    double currentIndex = 0;
-    final AboutProvider aboutProvider = Provider.of<AboutProvider>(
-      context,
-    );
+    final AboutProvider aboutProvider = Provider.of<AboutProvider>(context,);
     return Scaffold(
       appBar: CustomAppBar(
         title: S.of(context).aboutUs,
@@ -57,9 +54,9 @@ class _AboutUsState extends State<AboutUs> {
                     (index) {
                       return CustomContainer(
                         width: 325,
-                        height: 144,
+                        height: 188,
                         margin: symmetricEdgeInsets(horizontal: 4),
-                        padding: symmetricEdgeInsets(horizontal: 4),
+                        padding: symmetricEdgeInsets(horizontal: 0,vertical: 0),
                         clipBehavior: Clip.hardEdge,
                         backgroundColor: Colors.transparent,
                         child: Stack(
@@ -67,12 +64,12 @@ class _AboutUsState extends State<AboutUs> {
                             Image.network(
                               aboutProvider.aboutImagesDataList[index].image!,
                               fit: BoxFit.fill,
-                              height: 170,
-                              width: 315,
+                              // height: 188,
+                              width: 335,
                             ),
                             const CustomContainer(
                               width: 305,
-                              height: 144,
+                              height: 188,
                               clipBehavior: Clip.hardEdge,
                               backgroundColor: Color.fromRGBO(22, 22, 22, 0.41),
                             ),
@@ -97,7 +94,7 @@ class _AboutUsState extends State<AboutUs> {
                                         .aboutImagesDataList[index]
                                         .description!,
                                     fontWeight: MyFontWeight.regular,
-                                    textSize: MyFontSize.size8,
+                                    textSize: MyFontSize.size12,
                                     color: AppColor.white,
                                     maxLines: 4,
                                   ),
@@ -110,9 +107,9 @@ class _AboutUsState extends State<AboutUs> {
                     },
                   ),
                   options: CarouselOptions(
-                    height: (144 / screenHeight) * 100.h,
+                    height: (188 / screenHeight) * 100.h,
                     initialPage: 0,
-                    viewportFraction: 0.70,
+                    viewportFraction: 0.80,
                     enableInfiniteScroll: false,
                     reverse: false,
                     autoPlay: true,
@@ -142,7 +139,7 @@ class _AboutUsState extends State<AboutUs> {
                   child: Padding(
                     padding: symmetricEdgeInsets(horizontal: 24),
                     child: ListView.separated(
-                      itemCount: aboutProvider.aboutDataList.length - 1,
+                      itemCount: aboutProvider.aboutDataList.length,
                       itemBuilder: (context, index) => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -150,13 +147,13 @@ class _AboutUsState extends State<AboutUs> {
                             text: aboutProvider.aboutDataList[0].title!
                                 .toCapitalCase(),
                             fontWeight: MyFontWeight.semiBold,
-                            textSize: MyFontSize.size16,
+                            textSize: MyFontSize.size19,
                           ),
                           verticalSpace(8),
                           TextWidget(
                             text: aboutProvider.aboutDataList[0].description!,
                             fontWeight: MyFontWeight.regular,
-                            textSize: MyFontSize.size12,
+                            textSize: MyFontSize.size16,
                             color: AppColor.grey,
                             height: 1.5,
                           )

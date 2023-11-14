@@ -9,7 +9,7 @@ import '../utils/enum/statuses.dart';
 
 class TransactionHistoryProvider with ChangeNotifier{
 
-  TextEditingController? rechargeAmountController= TextEditingController(text: '0.0') ;
+  TextEditingController? rechargeAmountController= TextEditingController() ;
 
 bool isLoading = false;
   TransactionData? transactionData;

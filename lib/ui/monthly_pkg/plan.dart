@@ -14,7 +14,7 @@ import '../../providers/requestServices_provider.dart';
 import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../../utils/font_styles.dart';
-import '../date_time/washes_date.dart';
+import 'washes_date.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/data_loader.dart';
 import '../widgets/no_data_place_holder.dart';
@@ -122,6 +122,8 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
                                     .then((value) {
                                   if (value.status == Status.success) {
                                     AppLoader.stopLoader();
+                                    packageProvider.washesTime = {};
+                                    packageProvider.washesDate = {};
                                     return navigateTo(
                                       context,
                                       WashesDate(
@@ -166,7 +168,7 @@ class PackageCard extends StatelessWidget {
       onTap: onTap,
       radiusCircular: 6,
       width: 345,
-      height: 173,
+      // height: 173,
       backgroundColor:
           isSelected ? AppColor.selectedColor : AppColor.borderGreyLight,
       padding: EdgeInsets.zero,
@@ -184,7 +186,7 @@ class PackageCard extends StatelessWidget {
                     : const Color(0xFFB8B8B8),
                 child: Center(
                   child: TextWidget(
-                    text: '${packageProvider.packagesDataList[index].name} ${S.of(context).pkg}',
+                    text: '${packageProvider.packagesDataList[index].name}',
                     fontWeight: MyFontWeight.semiBold,
                     textSize: MyFontSize.size10,
                     color: isSelected
@@ -231,7 +233,7 @@ class PackageCard extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                         text:
-                            '${packageProvider.packagesDataList[index].washingQuantity} times ',
+                            '${packageProvider.packagesDataList[index].washingQuantity} ${S.of(context).times} ',
                         style: TextStyle(
                             color: const Color(0xFF0096FF),
                             fontSize: MyFontSize.size10,
@@ -239,7 +241,7 @@ class PackageCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                                ' per ${packageProvider.packagesDataList[index].per}',
+                                ' ${S.of(context).per} ${packageProvider.packagesDataList[index].per}',
                             style: TextStyle(
                               color: MyApp.themeMode(context) ? AppColor.white : const Color(0xFF636363),
                               fontSize: MyFontSize.size10,
@@ -259,8 +261,9 @@ class PackageCard extends StatelessWidget {
                 ),
                 verticalSpace(7),
                 TextWidget(
-                  text:
-                      '${packageProvider.packagesDataList[index].description}',
+                  text: packageProvider.packagesDataList[index].description != null
+                      ? packageProvider.packagesDataList[index].description!
+                      : '',
                   fontWeight: MyFontWeight.medium,
                   textSize: MyFontSize.size10,
                   color: const Color(0xFF636363),

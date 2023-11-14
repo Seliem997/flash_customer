@@ -46,7 +46,7 @@ dependencies:
   dots_indicator: ^2.1.0
   fl_country_code_picker: ^0.0.4
   carousel_slider: ^4.1.1
-  intl: 0.18.0
+  intl: 0.18.1
   google_maps_flutter: ^2.2.5
   flutter_polyline_points:
   google_map_polyline_new:
@@ -55,6 +55,8 @@ dependencies:
   geocoding:
   url_launcher: ^6.1.10
   flutter_slidable: ^2.0.0
+  showcaseview: ^2.0.3
+  gif: ^2.2.0
 
   calendar_timeline: ^1.1.2
   flutter_rating_bar: ^4.0.1
@@ -72,14 +74,13 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   permission_handler: ^10.2.0
 
-#  flutter_tap_payment: ^0.2.0
   go_sell_sdk_flutter: ^2.2.3
-  restart_app: ^1.1.0+1
   flutter_statusbarcolor_ns: ^0.5.0
   fast_cached_network_image: ^1.1.1
   change_case: ^1.1.0
   flex_color_picker: ^3.2.2
   package_info_plus: any
+  pinput: ^3.0.1
 
 
 

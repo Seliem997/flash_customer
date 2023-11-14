@@ -17,6 +17,9 @@ import '../utils/snack_bars.dart';
 class UserProvider extends ChangeNotifier {
   AuthenticationService authenticationService = AuthenticationService();
 
+  ProfileData? profileData;
+
+  /*
   String? userName = CacheHelper.returnData(key: CacheKey.userName);
   var userBalance = CacheHelper.returnData(key: CacheKey.balance);
   String? userImage = CacheHelper.returnData(key: CacheKey.userImage);
@@ -24,6 +27,14 @@ class UserProvider extends ChangeNotifier {
   String? userEmail = CacheHelper.returnData(key: CacheKey.email);
   String? userId = CacheHelper.returnData(key: CacheKey.userId);
   int? userNumberId = CacheHelper.returnData(key: CacheKey.userNumberId);
+*/
+ /* String? userName ;
+  String? userImage ;
+  String? phone ;
+  String? userEmail ;
+  String? userId ;
+  var userBalance;
+  int? userNumberId;*/
 
   String? statusType;
 
@@ -52,7 +63,6 @@ class UserProvider extends ChangeNotifier {
 
 
 
-  ProfileData? profileData;
   Future<ResponseResult>checkCode(
       {required String phoneNumber, required String countryCode, required String otp}) async {
     Status state = Status.error;
@@ -65,18 +75,18 @@ class UserProvider extends ChangeNotifier {
         state = Status.success;
         message = value.message;
         profileData = value.data;
-        CacheHelper.saveData(
+        CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
+
+       /* CacheHelper.saveData(
             key: CacheKey.balance,
             value: profileData!.balance);
-        CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
         CacheHelper.saveData(key: CacheKey.userId, value: profileData!.fwId);
         CacheHelper.saveData(key: CacheKey.userNumberId, value: profileData?.id);
         CacheHelper.saveData(key: CacheKey.phoneNumber, value: profileData!.phone);
         CacheHelper.saveData(key: CacheKey.userImage, value: profileData!.image);
         CacheHelper.saveData(
             key: CacheKey.userName,
-            value: profileData!.name ?? "New User");
-        print("object Profile Data ${profileData!.fwId}");
+            value: profileData!.name ?? "New User");*/
       } else {
         message = value.message;
       }
@@ -86,19 +96,36 @@ class UserProvider extends ChangeNotifier {
   }
 
 
+  Future getUserData() async {
+    await authenticationService.getUserProfile().then((value) {
+      if (value.status == Status.success) {
+        profileData = value.data;
+        /*CacheHelper.saveData(
+            key: CacheKey.balance,
+            value: profileData!.balance);
+        CacheHelper.saveData(key: CacheKey.userId, value: profileData!.fwId);
+        CacheHelper.saveData(key: CacheKey.userNumberId, value: profileData?.id);
+        CacheHelper.saveData(key: CacheKey.phoneNumber, value: profileData!.phone);
+        CacheHelper.saveData(key: CacheKey.userImage, value: profileData!.image);
+        CacheHelper.saveData(
+            key: CacheKey.userName,
+            value: profileData!.name ?? "New User");*/
+      }
+    });
+    notifyListeners();
+  }
+
   Future<Status> updateUserProfile({
     required String name,
     required String email,
   }) async {
     Status status = Status.error;
     await authenticationService
-        .updateProfile(name: name, email: email)
+        .updateProfile(name: name, email: email, phone: profileData!.phone!)
         .then((value) {
       if (value.status == Status.success) {
         status = Status.success;
         profileData = value.data;
-        userName = profileData?.name;
-        userEmail = profileData?.email;
 
       }
       notifyListeners();
@@ -138,12 +165,10 @@ class UserProvider extends ChangeNotifier {
 
     AppLoader.showLoader(context);
     await authenticationService
-        .updateProfilePicture(context,imagePath)
+        .updateProfilePicture(context,imagePath, phoneNumber: profileData!.phone)
         .then((imageUrl) {
       if (imageUrl.status == Status.success) {
         CustomSnackBars.successSnackBar(context, "Updated Successfully");
-        userImage = imageUrl.data;
-        CacheHelper.saveData(key: CacheKey.userImage, value: imageUrl.data);
       } else {
         CustomSnackBars.failureSnackBar(context, "Something went wrong");
       }

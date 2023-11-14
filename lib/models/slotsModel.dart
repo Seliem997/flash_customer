@@ -9,7 +9,7 @@ class SlotsModel {
     statusCode = json['status_code'];
     message = json['message'];
     if (json['data'] != null) {
-      data = [/*<SlotData>[]*/];
+      data = [];
       json['data'].forEach((v) {
         final List<SlotData> innerList = [];
         v.forEach((b) {

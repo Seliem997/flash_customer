@@ -222,7 +222,6 @@ class PackageService extends BaseService {
                 detailsRequestData = DetailsRequestModel.fromJson(response).data!;
               } else if (response["status_code"] == 422 ||
                   response["status_code"] == 400) {
-                // result = Status.success;
                 result = Status.error;
                 message = response["message"];
               }
@@ -239,15 +238,56 @@ class PackageService extends BaseService {
     return ResponseResult(result, detailsRequestData, message: message);
   }
 
+  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required int reqId}) async {
+    Status result = Status.error;
+
+    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    dynamic message;
+    Map<String, dynamic> body = {
+      "slots_ids": slotsId,
+      "slots_date": slotsDate,
+      "id": reqId
+    };
+    try {
+      await requestFutureData(
+          api: Api.reserveRequestPackageSlots,
+          requestType: Request.post,
+          body: body,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          onSuccess: (response) async {
+
+            try {
+              if (response["status_code"] == 200) {
+                result = Status.success;
+                message = response["message"];
+
+              } else if (response["status_code"] == 422 ||
+                  response["status_code"] == 400) {
+                result = Status.error;
+                message = response["message"];
+              }
+            } catch (e) {
+              message = response["message"];
+              logger.e(
+                  "Error getting response reserve Slots Package Request Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting reserve Slots Package Request Data$e");
+    }
+    return ResponseResult(result, '', message: message);
+  }
+
   Future<ResponseResult> saveSlotsPackageRequest({required Map<String, dynamic> mapBody}) async {
     Status result = Status.error;
 
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     dynamic message;
     Map<String, dynamic> body = mapBody;
-    // DetailsRequestData? detailsRequestData;
     try {
-      print('object in out of service');
       await requestFutureData(
           api: Api.saveSlotsPackageRequest,
           requestType: Request.post,
@@ -256,15 +296,12 @@ class PackageService extends BaseService {
           withToken: true,
           headers: headers,
           onSuccess: (response) async {
-            print('object in service');
 
             try {
               if (response["status_code"] == 200) {
                 result = Status.success;
-                // detailsRequestData = DetailsRequestModel.fromJson(response).data!;
               } else if (response["status_code"] == 422 ||
                   response["status_code"] == 400) {
-                // result = Status.success;
                 result = Status.error;
                 message = response["message"];
               }
@@ -278,7 +315,7 @@ class PackageService extends BaseService {
       result = Status.error;
       log("Error in getting save Slots Package Request Data$e");
     }
-    return ResponseResult(result, ''/*detailsRequestData*/, message: message);
+    return ResponseResult(result, '', message: message);
   }
 
 

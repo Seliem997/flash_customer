@@ -15,7 +15,7 @@ import '../utils/enum/statuses.dart';
 class MyRequestsService extends BaseService {
 
 
-  Future<ResponseResult> getMyRequests({String? status, String? date}) async {
+  Future<ResponseResult> getMyRequests({String? status, String? dateFrom, String? dateTo}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Accept': 'application/json',
@@ -26,7 +26,7 @@ class MyRequestsService extends BaseService {
     List<MyRequestsData>? myRequestsDataList;
     try {
       await requestFutureData(
-          api: Api.getMyRequests(status: status, date: date),
+          api: Api.getMyRequests(status: status, dateFrom: dateFrom, dateTo: dateTo),
           requestType: Request.get,
           jsonBody: true,
           withToken: true,
@@ -45,4 +45,45 @@ class MyRequestsService extends BaseService {
     }
     return ResponseResult(result, myRequestsDataList);
   }
+
+
+  Future<ResponseResult> updateRequestStatus({
+    required int requestId,
+    required String status,
+  }) async {
+    Status result = Status.error;
+    dynamic message;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    Map<String, dynamic> body = {"status": status};
+    try {
+      await requestFutureData(
+          api: Api.updateRequestStatus(requestId: requestId),
+          requestType: Request.patch,
+          jsonBody: true,
+          withToken: true,
+          body: body,
+          headers: headers,
+          onSuccess: (response) async {
+            try {
+              if (response["status_code"] == 200) {
+                result = Status.success;
+
+              } else if (response["status_code"] == 422 || response["status_code"] == 400) {
+                result = Status.codeNotCorrect;
+                message = response["message"];
+              }
+            } catch (e) {
+              logger.e("Error getting response update Request status Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting update Request status Data$e");
+    }
+    return ResponseResult(result, '', message: message);
+  }
+
 }

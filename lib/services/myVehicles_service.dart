@@ -48,11 +48,8 @@ class MyVehiclesService extends BaseService {
             if (response["status_code"] == 200) {
               status = Status.success;
               vehicleDetailsData = VehicleDetailsModel.fromJson(response).data!;
-              print('Added New Vehicle Service Successfully');
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
-              print("Error in response Added New Vehicle ");
-
             }
           });
     } catch (e) {
@@ -92,7 +89,6 @@ class MyVehiclesService extends BaseService {
     };
     VehicleDetailsData? vehicleDetailsData;
     try {
-      print('Enter in service');
 
       await requestFutureData(
           api: Api.updateVehicle(requestId: vehicleId),
@@ -102,14 +98,11 @@ class MyVehiclesService extends BaseService {
           withToken: true,
           requestType: Request.put,
           onSuccess: (response) {
-            print('On success service');
             if (response["status_code"] == 200) {
               status = Status.success;
               vehicleDetailsData = VehicleDetailsModel.fromJson(response).data!;
-              print('Added Update Vehicle Service Successfully');
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
-              print("Error in response updated New Vehicle ");
             }
           });
     } catch (e) {
@@ -168,8 +161,13 @@ class MyVehiclesService extends BaseService {
           headers: headers,
           onSuccess: (response) async {
             try {
-              result = Status.success;
-              message = response["message"];
+              if (response["status_code"] == 200) {
+                result = Status.success;
+                message = response["message"];
+              } else if (response["status_code"] == 400 || response["status_code"] == 401) {
+                result = Status.codeNotCorrect;
+                message = response["message"];
+              }
             } catch (e) {
               logger.e("Error getting response delete Vehicle\n$e");
               message = response["message"];

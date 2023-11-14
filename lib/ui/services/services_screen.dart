@@ -65,7 +65,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       body: (requestServicesProvider.isLoading )
           ? const DataLoader()
           : SingleChildScrollView(
-            child: (requestServicesProvider.basicServicesList.isEmpty ||
+            child: (requestServicesProvider.basicServicesList.isEmpty &&
                     requestServicesProvider.extraServicesList.isEmpty)
                 ? CustomSizedBox(
                     height: 500,
@@ -124,6 +124,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           child: TextWidget(
                                             text:
                                                 '${requestServicesProvider.basicServicesList[index].info}',
+                                            colorDark: Colors.black,
                                           ),
                                         ),
                                         actions: [
@@ -174,7 +175,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           backgroundColor: const Color(0xFFF9F9F9),
                           child: requestServicesProvider
                                   .extraServicesList.isEmpty
-                              ? const DataLoader()
+                              ? CustomSizedBox(
+                              height: 70,
+                              child: Center(
+                                  child: TextWidget(
+                                      text: S.of(context).noServicesAvailable)))
                               : Padding(
                                   padding: onlyEdgeInsets(
                                     start: 11,
@@ -201,6 +206,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                                 child: TextWidget(
                                                   text:
                                                       '${requestServicesProvider.extraServicesList[index].info}',
+                                                  colorDark: Colors.black,
                                                 ),
                                               ),
                                               actions: [

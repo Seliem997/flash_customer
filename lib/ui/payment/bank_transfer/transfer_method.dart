@@ -2,6 +2,7 @@ import 'package:flash_customer/ui/payment/bank_transfer/submit_bank_transfer.dar
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../providers/requestServices_provider.dart';
@@ -43,7 +44,7 @@ class _BankTransferMethodState extends State<BankTransferMethod> {
     final RequestServicesProvider requestServicesProvider =
     Provider.of<RequestServicesProvider>(context);
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Bank Transfer Method'),
+      appBar: CustomAppBar(title: S.of(context).bankTransferMethod),
       body: (requestServicesProvider.isLoading)
           ? const DataLoader()
           : requestServicesProvider.bankAccountsList == []
@@ -57,7 +58,7 @@ class _BankTransferMethodState extends State<BankTransferMethod> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextWidget(
-                text: 'Chose one of our banks',
+                text: S.of(context).choseOneOfOurBanks,
                 fontWeight: MyFontWeight.semiBold,
                 textSize: MyFontSize.size15,
               ),
@@ -74,13 +75,19 @@ class _BankTransferMethodState extends State<BankTransferMethod> {
                     padding: symmetricEdgeInsets(horizontal: 11, vertical: 11),
                     child: Row(
                       children: [
-                        CustomSizedBox(
-                          width: 85,
-                          height: 23,
+                        CustomContainer(
+                          backgroundColorDark: Colors.white,
+                          width: 90,
+                          height: 25,
+                          padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: Image.network(requestServicesProvider.bankAccountsList[index].image!),
                         ),
                         horizontalSpace(34),
-                        TextWidget(text: requestServicesProvider.bankAccountsList[index].bankName!,textSize: 14,fontWeight: MyFontWeight.semiBold,)
+                        TextWidget(
+                          text: requestServicesProvider.bankAccountsList[index].bankName!,
+                          textSize: 14,
+                          fontWeight: MyFontWeight.semiBold,
+                        )
                       ],
                     ),
                   ),

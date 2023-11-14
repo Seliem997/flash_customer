@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -50,14 +51,14 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
               child: Column(
                 children: [
                   addressesProvider.addressesDataList.isEmpty
-                      ? const Expanded(
+                      ?  Expanded(
                           child: Center(
                               child: TextWidget(
-                          text: 'There is No Addresses Yet',
+                          text: S.of(context).thereIsNoAddressYet,
                           color: AppColor.black,
                           fontWeight: FontWeight.bold,
                           textSize: 20,
-                                height: 1.4,
+                          height: 1.4,
                         )))
                       : Expanded(
                           child: ListView.separated(
@@ -76,19 +77,30 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                               child: addressesProvider
                                           .addressesDataList[index].type! ==
                                       "home"
-                                  ? Image.asset('assets/images/home_light.png',color: MyApp.themeMode(context) ? Colors.white : Colors.black,)
+                                  ? Image.asset(
+                                      'assets/images/home_light.png',
+                                      color: MyApp.themeMode(context)
+                                          ? Colors.white
+                                          : Colors.black,
+                                    )
                                   : addressesProvider
                                               .addressesDataList[index].type! ==
                                           "work"
                                       ? SvgPicture.asset(
-                                          'assets/svg/work.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+                                          'assets/svg/work.svg',
+                                          color: MyApp.themeMode(context)
+                                              ? Colors.white
+                                              : Colors.black,
                                         )
                                       : addressesProvider
                                                   .addressesDataList[index]
                                                   .type! ==
                                               "work"
                                           ? SvgPicture.asset(
-                                              'assets/svg/school.svg',color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+                                              'assets/svg/school.svg',
+                                              color: MyApp.themeMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             )
                                           : Image.network(addressesProvider
                                               .addressesDataList[index].image!),
@@ -108,32 +120,48 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                               .addressesDataList[index]
                                               .langitude)))));
 
-                               homeProvider.currentPosition = Position(
-                                 latitude: double.parse(addressesProvider.addressesDataList[index].latitude),
-                                 longitude: double.parse(addressesProvider.addressesDataList[index].langitude),
-                                 timestamp: homeProvider.currentPosition!.timestamp,
-                                 accuracy: homeProvider.currentPosition!.accuracy,
-                                 altitude: homeProvider.currentPosition!.altitude,
-                                 heading: homeProvider.currentPosition!.heading,
-                                 speed: homeProvider.currentPosition!.speed,
-                                 speedAccuracy: homeProvider.currentPosition!.speedAccuracy,
-                               );
+                              homeProvider.currentPosition = Position(
+                                latitude: double.parse(addressesProvider
+                                    .addressesDataList[index].latitude),
+                                longitude: double.parse(addressesProvider
+                                    .addressesDataList[index].langitude),
+                                timestamp:
+                                    homeProvider.currentPosition!.timestamp,
+                                accuracy:
+                                    homeProvider.currentPosition!.accuracy,
+                                altitude:
+                                    homeProvider.currentPosition!.altitude,
+                                heading: homeProvider.currentPosition!.heading,
+                                speed: homeProvider.currentPosition!.speed,
+                                speedAccuracy:
+                                    homeProvider.currentPosition!.speedAccuracy,
+                              );
 
                               homeProvider.markers.clear();
                               homeProvider.resetMap();
                               Marker marker = Marker(
                                 markerId: const MarkerId("Saved_Location"),
                                 draggable: true,
-                                position: LatLng(double.parse(addressesProvider.addressesDataList[index].latitude),
-                                    double.parse(addressesProvider.addressesDataList[index].langitude)),
+                                position: LatLng(
+                                    double.parse(addressesProvider
+                                        .addressesDataList[index].latitude),
+                                    double.parse(addressesProvider
+                                        .addressesDataList[index].langitude)),
                                 icon: BitmapDescriptor.defaultMarker,
                               );
                               homeProvider.markers.add(marker);
-
                             },
-                            labelText: addressesProvider
-                                .addressesDataList[index]
-                                .locationName ??
+                            labelText: (Intl.getCurrentLocale() == 'ar'
+                                    ? (addressesProvider
+                                                .addressesDataList[index]
+                                                .locationName ==
+                                            'Location Name'
+                                        ? 'بدون اسم'
+                                        : addressesProvider
+                                            .addressesDataList[index]
+                                            .locationName)
+                                    : addressesProvider.addressesDataList[index]
+                                        .locationName) ??
                                 '${addressesProvider.addressesDataList[index].type!}${S.of(context).location}',
                             textColor: AppColor.black,
                           ),
@@ -182,8 +210,8 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
               expandLocationFlag = !expandLocationFlag;
             });
           },
-          width: 219,
-          height: 38,
+          width: 225,
+          height: 40,
           padding: symmetricEdgeInsets(horizontal: 30),
           backgroundColor: AppColor.primary,
           backgroundColorDark: AppColor.dark,

@@ -11,15 +11,6 @@ class MyVehiclesModel {
     message = json['message'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status_code'] = statusCode;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['message'] = message;
-    return data;
-  }
 }
 
 class MyVehiclesData {
@@ -70,24 +61,6 @@ class MyVehiclesData {
     total = json['total'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (collection != null) {
-      data['collection'] = collection!.map((v) => v.toJson()).toList();
-    }
-    data['current_page'] = currentPage;
-    data['first_page_url'] = firstPageUrl;
-    data['from'] = from;
-    data['last_page'] = lastPage;
-    data['last_page_url'] = lastPageUrl;
-    data['next_page_url'] = nextPageUrl;
-    data['path'] = path;
-    data['per_page'] = perPage;
-    data['prev_page_url'] = prevPageUrl;
-    data['to'] = to;
-    data['total'] = total;
-    return data;
-  }
 }
 
 class MyVehiclesCollection {
@@ -109,7 +82,7 @@ class MyVehiclesCollection {
   String? vehicleTypeName;
   int? subVehicleTypeId;
   String? subVehicleTypeName;
-  Customer? customer;
+  CustomerDetailsData? customer;
 
   MyVehiclesCollection(
       {this.id,
@@ -152,38 +125,13 @@ class MyVehiclesCollection {
     subVehicleTypeId = json['sub_vehicle_type_id'];
     subVehicleTypeName = json['sub_vehicle_type_name'];
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ? CustomerDetailsData.fromJson(json['customer'])
         : null;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['numbers'] = this.numbers;
-    data['letters'] = this.letters;
-    data['letters_others'] = this.lettersOthers;
-    data['color'] = this.color;
-    data['year'] = this.year;
-    data['main_image'] = this.mainImage;
-    data['customer_id'] = this.customerId;
-    data['manufacturer_id'] = this.manufacturerId;
-    data['manufacturer_name'] = this.manufacturerName;
-    data['manufacturer_logo'] = this.manufacturerLogo;
-    data['vehicle_model_id'] = this.vehicleModelId;
-    data['vehicle_model_name'] = this.vehicleModelName;
-    data['vehicle_type_id'] = this.vehicleTypeId;
-    data['vehicle_type_name'] = this.vehicleTypeName;
-    data['sub_vehicle_type_id'] = this.subVehicleTypeId;
-    data['sub_vehicle_type_name'] = this.subVehicleTypeName;
-    if (this.customer != null) {
-      data['customer'] = this.customer!.toJson();
-    }
-    return data;
-  }
 }
 
-class Customer {
+class CustomerDetailsData {
   int? id;
   String? fwId;
   String? name;
@@ -193,7 +141,7 @@ class Customer {
   String? image;
   String? balance;
 
-  Customer(
+  CustomerDetailsData(
       {this.id,
         this.fwId,
         this.name,
@@ -203,7 +151,7 @@ class Customer {
         this.image,
         this.balance});
 
-  Customer.fromJson(Map<String, dynamic> json) {
+  CustomerDetailsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fwId = json['fw_id'];
     name = json['name'];
@@ -214,16 +162,4 @@ class Customer {
     balance = json['balance'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['fw_id'] = fwId;
-    data['name'] = name;
-    data['email'] = email;
-    data['phone'] = phone;
-    data['country_code'] = countryCode;
-    data['image'] = image;
-    data['balance'] = balance;
-    return data;
-  }
 }

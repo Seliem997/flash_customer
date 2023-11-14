@@ -163,10 +163,8 @@ class _MyAppState extends State<MyApp> {
           title: 'Flash Customer',
           theme: isDarkMode
               ? ThemeData.dark().copyWith(
-                  appBarTheme: const AppBarTheme(
-                      color: AppColor.darkScaffoldColor,
-                      iconTheme: IconThemeData(color: Colors.white)),
-                  scaffoldBackgroundColor: AppColor.darkScaffoldColor)
+
+          )
               : ThemeData(
                   primarySwatch: Colors.blue,
                   appBarTheme: const AppBarTheme(
@@ -174,6 +172,7 @@ class _MyAppState extends State<MyApp> {
                       iconTheme: IconThemeData(color: Colors.black)),
                   scaffoldBackgroundColor: AppColor.lightScaffoldColor),
           darkTheme: darkTheme,
+          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           localizationsDelegates: const [
             S.delegate,
             GlobalMaterialLocalizations.delegate,

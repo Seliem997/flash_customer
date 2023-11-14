@@ -1,3 +1,5 @@
+import 'package:flash_customer/models/rateDetailsModel.dart';
+
 class DetailsRequestModel {
   int? statusCode;
   dynamic message;
@@ -35,7 +37,7 @@ class DetailsRequestData {
   dynamic lateTime;
   dynamic actualTime;
   dynamic tax;
-  String? discountAmount;
+  dynamic discountAmount;
   dynamic totalAmount;
   String? totalDuration;
   String? time;
@@ -161,9 +163,7 @@ class DetailsRequestData {
     if (this.vehicleRequest != null) {
       data['vehicleRequest'] = this.vehicleRequest!.toJson();
     }
-    if (this.slots != null) {
-      data['slots'] = this.slots!.map((v) => v.toJson()).toList();
-    }
+
     return data;
   }
 }
@@ -648,47 +648,47 @@ class VehicleRequest {
   }
 }
 
-class Slots {
-  int? id;
-  String? startAt;
-  String? endAt;
-  int? employeeId;
-  int? shiftId;
-  String? status;
-  int? gapTime;
-  String? createdAt;
-
-  Slots(
-      {this.id,
-        this.startAt,
-        this.endAt,
-        this.employeeId,
-        this.shiftId,
-        this.status,
-        this.gapTime,
-        this.createdAt});
-
-  Slots.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    startAt = json['start_at'];
-    endAt = json['end_at'];
-    employeeId = json['employee_id'];
-    shiftId = json['shift_id'];
-    status = json['status'];
-    gapTime = json['gap_time'];
-    createdAt = json['created_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['start_at'] = this.startAt;
-    data['end_at'] = this.endAt;
-    data['employee_id'] = this.employeeId;
-    data['shift_id'] = this.shiftId;
-    data['status'] = this.status;
-    data['gap_time'] = this.gapTime;
-    data['created_at'] = this.createdAt;
-    return data;
-  }
-}
+// class Slots {
+//   int? id;
+//   String? startAt;
+//   String? endAt;
+//   int? employeeId;
+//   int? shiftId;
+//   String? status;
+//   int? gapTime;
+//   String? createdAt;
+//
+//   Slots(
+//       {this.id,
+//         this.startAt,
+//         this.endAt,
+//         this.employeeId,
+//         this.shiftId,
+//         this.status,
+//         this.gapTime,
+//         this.createdAt});
+//
+//   Slots.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     startAt = json['start_at'];
+//     endAt = json['end_at'];
+//     employeeId = json['employee_id'];
+//     shiftId = json['shift_id'];
+//     status = json['status'];
+//     gapTime = json['gap_time'];
+//     createdAt = json['created_at'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['start_at'] = this.startAt;
+//     data['end_at'] = this.endAt;
+//     data['employee_id'] = this.employeeId;
+//     data['shift_id'] = this.shiftId;
+//     data['status'] = this.status;
+//     data['gap_time'] = this.gapTime;
+//     data['created_at'] = this.createdAt;
+//     return data;
+//   }
+// }

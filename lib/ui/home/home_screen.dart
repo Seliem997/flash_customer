@@ -17,6 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/addresses_provider.dart';
@@ -32,10 +33,12 @@ import '../vehicles/vehicles_type.dart';
 import '../widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.cameFromNewRequest = false})
+  const HomeScreen({Key? key, this.cameFromNewRequest = false, this.cameFromOTPToVehicles = false, this.cameFromOTPToOther = false})
       : super(key: key);
 
   final bool cameFromNewRequest;
+  final bool cameFromOTPToVehicles;
+  final bool cameFromOTPToOther;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -50,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
-    _lightMapStyle =
+    _lightMapStyle = MyApp.themeMode(context) ? await rootBundle.loadString('assets/map_styles/dark.json') :
         await rootBundle.loadString('assets/map_styles/light.json');
     if(MyApp.themeMode(context)){
       AppLoader.showLoader(context);
@@ -68,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
       homeProvider.mapController.setMapStyle(_darkMapStyle);
       setState(() {});
     } else {
-      // homeProvider.mapController.setMapStyle(_lightMapStyle);
+      homeProvider.mapController.setMapStyle(_lightMapStyle);
+      setState(() {});
     }
   }
 
@@ -80,13 +84,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void loadData() async {
     if (widget.cameFromNewRequest) {
-      navigateTo(context, const MyRequests());
+      navigateTo(context, ShowCaseWidget(
+          autoPlay: true,
+          autoPlayDelay: const Duration(seconds: 2),
+          builder: Builder(builder: (context){return const MyRequests();})) );
+    }else if(widget.cameFromOTPToOther){
+      navigateTo(context, const OtherServices());
+    } else if(widget.cameFromOTPToVehicles){
+      navigateTo(context, const VehicleTypes());
     } else {
       final AddressesProvider addressesProvider =
           Provider.of<AddressesProvider>(context, listen: false);
+      final HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
       await _loadMapStyles();
-      final HomeProvider homeProvider =
-          Provider.of<HomeProvider>(context, listen: false);
       homeProvider.markers.clear();
       await _handleLocationPermission();
       await _getCurrentLocation();
@@ -103,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
       AppLoader.showLoader(context);
       await Geolocator.getCurrentPosition().then((Position position) async {
         AppLoader.stopLoader();
-        // print("Cur Position1: ${position.longitude} ${position.latitude}");
         homeProvider.currentPosition = position;
         homeProvider.startMarker();
         homeProvider.mapController.animateCamera(
@@ -199,27 +209,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: const SavedLocationExpanded(),
               ),
               const Spacer(),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      homeProvider.mapController.animateCamera(
-                          CameraUpdate.newCameraPosition(CameraPosition(
-                              zoom: 18.5,
-                              target: LatLng(
-                                  homeProvider.currentPosition!.latitude,
-                                  homeProvider.currentPosition!.longitude))));
-                    },
-                    child: Padding(
-                      padding: onlyEdgeInsets(end: 24),
-                      child: CustomSizedBox(
-                        height: 40,
-                        width: 40,
-                        child: Image.asset('assets/images/locationSpot.png'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () async{
+                        try {
+                          AppLoader.showLoader(context);
+                          await Geolocator.getCurrentPosition().then((Position position) async {
+                            AppLoader.stopLoader();
+                            homeProvider.mapController.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                  target: LatLng(position.latitude, position.longitude),
+                                  zoom: 15.5,
+                                ),
+                              ),
+                            );
+                          }).catchError((e) {
+                            log("Error in accessing current location $e");
+                          });
+                        } catch (e) {
+                          log("Error in catch accessing current location $e");
+                        }
+                      },
+                      child: Padding(
+                        padding: onlyEdgeInsets(end: 24),
+                        child: CustomSizedBox(
+                          height: 40,
+                          width: 40,
+                          child: Image.asset(MyApp.themeMode(context) ? 'assets/images/locationSpotDark.png' : 'assets/images/locationSpot.png',),
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
+              ),
               verticalSpace(32),
+              CustomContainer(
+                borderColor: Colors.red,
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
+                child: TextWidget(
+                  text: S.of(context).holdPressToChangeYourLocation,
+                  color: Colors.red,
+                  colorDark: Colors.red,
+                  textSize: MyFontSize.size12,
+                ),
+              ),
               DefaultButton(
                 width: 294,
                 height: 56,

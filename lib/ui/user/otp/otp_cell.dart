@@ -31,8 +31,7 @@ class OtpCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProvider userDataProvider = Provider.of<UserProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-    final AddressesProvider addressesProvider =
-    Provider.of<AddressesProvider>(context);
+    final AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context);
 
     return CustomContainer(
       width: 48,

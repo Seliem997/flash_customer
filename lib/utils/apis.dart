@@ -3,7 +3,6 @@ class Api {
 
   static const String registerOrLogin = "$baseUrl/customer/register";
   static const String checkCode = "$baseUrl/customer/verify-otp";
-  static const String updateMyProfile = "$baseUrl/customer/update-my-profile";
 
   static const String notifications = "$baseUrl/customer/my-notification";
   static const String getAbout = "$baseUrl/about";
@@ -30,6 +29,8 @@ class Api {
 
   static const String updateProfile = "$baseUrl/customer/update-my-profile";
 
+  static const String getUserProfile = "$baseUrl/customer/my-profile";
+
   static String getTimeSlots(
           {int cityId = 1,
           int basicId = 27,
@@ -47,13 +48,16 @@ class Api {
     int cityId = 2,
     int packageId = 1,
     int packageDuration = 10,
-    String date = "5/15/2022",
+    String date = "2/22/2222",
   }) =>
       "$baseUrl/customer/slots-package?city_id=$cityId&package_id=$packageId&date=$date&package_duration=$packageDuration";
 
   static const String updateInitialRequest =
       "$baseUrl/customer/update-initial-request?pay_by";
+
   static const String submitFinialRequest = "$baseUrl/customer/request";
+
+  static String updateRequestStatus({required int requestId}) => "$baseUrl/customer/update-request-status/$requestId";
 
   static const String bookServices = "$baseUrl/customer/initial-request";
 
@@ -62,6 +66,8 @@ class Api {
 
   static const String saveSlotsPackageRequest =
       "$baseUrl/customer/request-package-employee-id";
+
+  static const String reserveRequestPackageSlots = "$baseUrl/customer/reserve-request-slot";
 
   static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
@@ -98,8 +104,8 @@ class Api {
 
   static const String deleteMyAccount = "$baseUrl/customer/delete-my-account";
 
-  static String getMyRequests ({String? status, String? date}) =>
-      "$baseUrl/customer/customer-requests?${status == null ? '': "status=$status"}&${date == null ? '' : "date=$date"}";
+  static String getMyRequests ({String? status, String? dateFrom, String? dateTo}) =>
+      "$baseUrl/customer/customer-requests?${status == null ? '': "status=$status"}&${dateFrom == null ? '' : "date=$dateFrom"}&${dateTo == null ? '' : "date2=$dateTo"}";
 
   static const String checkOfferCoupon = "$baseUrl/customer/check-offer";
 

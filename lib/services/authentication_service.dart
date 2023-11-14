@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'firebase_service.dart';
 
 class AuthenticationService extends BaseService {
+
   Future<ResponseResult> checkCode(
       String phoneNumber, String countryCode, String otp) async {
     Status status = Status.error;
@@ -48,18 +49,18 @@ class AuthenticationService extends BaseService {
               message = response["message"];
 
               profileData = LoginProfileModel.fromJson(response).data!.users;
+              CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
 
-              CacheHelper.saveData(
+              /*CacheHelper.saveData(
                   key: CacheKey.balance,
                   value: response["data"]["users"]["balance"]);
-              CacheHelper.saveData(key: CacheKey.loggedIn, value: true);
               CacheHelper.saveData(key: CacheKey.userId, value: response["data"]["users"]["fw_id"]);
               CacheHelper.saveData(key: CacheKey.userNumberId, value: profileData?.id);
               CacheHelper.saveData(key: CacheKey.phoneNumber, value: response["data"]["users"]["phone"]);
               CacheHelper.saveData(key: CacheKey.userImage, value: response["data"]["users"]["image"]);
               CacheHelper.saveData(
                   key: CacheKey.userName,
-                  value: response["data"]["users"]["name"] ?? "New User");
+                  value: response["data"]["users"]["name"] ?? "New User");*/
               CacheHelper.saveData(
                   key: CacheKey.token,
                   value: "Bearer ${response["data"]["token"]}");
@@ -79,6 +80,7 @@ class AuthenticationService extends BaseService {
   Future<ResponseResult> updateProfile({
     required String name,
     required String email,
+    required String phone,
   }) async {
     Status status = Status.error;
     Map<String, String> header = {
@@ -86,7 +88,7 @@ class AuthenticationService extends BaseService {
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     Map<String, dynamic> body = {
-      "phone": CacheHelper.returnData(key: CacheKey.phoneNumber),
+      "phone": phone,
       "country_code": '+966',
       "name": name,
       "email": email,
@@ -94,12 +96,9 @@ class AuthenticationService extends BaseService {
     };
     ProfileData? userData;
     try {
-      print(name);
-      print(email);
-      print(CacheHelper.returnData(key: CacheKey.phoneNumber));
 
       await requestFutureData(
-          api: Api.updateMyProfile,
+          api: Api.updateProfile,
           body: body,
           jsonBody: true,
           withToken: true,
@@ -107,16 +106,12 @@ class AuthenticationService extends BaseService {
           requestType: Request.post,
           onSuccess: (response) async {
             if (response["status_code"] == 200) {
-              print('service updated done');
               status = Status.success;
               userData = UpdateProfileModel.fromJson(response).data;
-              print('object from model ${userData?.name}');
-
+/*
               await CacheHelper.saveData(key: CacheKey.userName, value: name);
-              print('object from Cach ${CacheHelper.returnData(key: CacheKey.userName)}');
-              // await CacheHelper.saveData(
-              //     key: CacheKey.userImage, value: userData!.image);
-              await CacheHelper.saveData(key: CacheKey.email, value: email);
+
+              await CacheHelper.saveData(key: CacheKey.email, value: email);*/
             } else if (response["status_code"] == 400) {
               status = Status.codeNotCorrect;
             }
@@ -150,11 +145,11 @@ class AuthenticationService extends BaseService {
               status = Status.success;
 
               message = response["message"];
-
+/*
               await CacheHelper.saveData(
                   key: CacheKey.phoneNumber, value: phoneNumber);
               await CacheHelper.saveData(
-                  key: CacheKey.countryCode, value: countryCode);
+                  key: CacheKey.countryCode, value: countryCode);*/
             } else if (response["status_code"] == 400) {
               status = Status.invalidEmailOrPass;
               message = response["message"];
@@ -167,6 +162,34 @@ class AuthenticationService extends BaseService {
     return ResponseResult(status, '', message: message);
   }
 
+
+  Future<ResponseResult> getUserProfile() async {
+    Status result = Status.error;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    ProfileData? userData;
+    try {
+      await requestFutureData(
+          api: Api.getUserProfile,
+          withToken: true,
+          requestType: Request.get,
+          headers: headers,
+          onSuccess: (response) async {
+            if (response['status_code'] == 200) {
+              result = Status.success;
+              userData = UpdateProfileModel.fromJson(response).data;
+            } else {
+              result = Status.error;
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      logger.e("Error in getting user Data $e");
+    }
+    return ResponseResult(result, userData);
+  }
 
   Future<ResponseResult> getSocialLinks() async {
     Status result = Status.error;
@@ -200,20 +223,14 @@ class AuthenticationService extends BaseService {
   void signOut() async {
     try {
       CacheHelper.saveData(key: CacheKey.loggedIn, value: false);
-      CacheHelper.removeData(key: CacheKey.userName);
-      CacheHelper.removeData(key: CacheKey.email);
-      CacheHelper.removeData(key: CacheKey.userImage);
-      CacheHelper.removeData(key: CacheKey.phoneNumber);
-      /*CacheHelper.saveData(key: CacheKey.userName, value: "");
-      CacheHelper.saveData(key: CacheKey.email, value: "");
-      CacheHelper.saveData(key: CacheKey.userImage, value: '');*/
+
 
     } catch (e) {
       log("Error Signing out $e");
     }
   }
 
-  Future<ResponseResult> updateProfilePicture(context,String imagePath) async {
+  Future<ResponseResult> updateProfilePicture(context, String imagePath, {required phoneNumber}) async {
     Status status = Status.error;
     String imageUrl = "";
 
@@ -230,8 +247,7 @@ class AuthenticationService extends BaseService {
 
       request.fields['_method'] = "PUT";
       request.fields['country_code'] = "+966";
-      request.fields['phone'] =
-          CacheHelper.returnData(key: CacheKey.phoneNumber);
+      request.fields['phone'] = phoneNumber;
 
       request.files.add(await http.MultipartFile.fromPath("image", imagePath));
 

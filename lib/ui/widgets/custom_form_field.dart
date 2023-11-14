@@ -9,7 +9,7 @@ class DefaultFormField extends StatelessWidget {
   const DefaultFormField({
     Key? key,
     this.controller,
-    this.height = 48,
+    this.height = 40,
     this.keyboardType,
     this.onChanged,
     required this.hintText,
@@ -30,15 +30,16 @@ class DefaultFormField extends StatelessWidget {
     this.inputFormatters = const [],
     this.radiusCircular = 5,
     this.textSize,
-    this.fontWeight,
+    this.fontWeight, this.maxLines, this.wordSpacing,
   }) : super(key: key);
 
   final TextEditingController? controller;
   final double? textSize;
   final double height;
   final double radiusCircular;
-  final double? letterSpacing;
+  final double? letterSpacing, wordSpacing;
   final double? textHeight;
+  final int? maxLines;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
@@ -78,11 +79,13 @@ class DefaultFormField extends StatelessWidget {
         validator: validator,
         obscureText: isPassword,
         keyboardType: keyboardType,
+        maxLines: maxLines,
         style: TextStyle(
             color: textColor,
             fontSize: textSize,
             fontWeight: fontWeight,
             letterSpacing: letterSpacing,
+            wordSpacing: wordSpacing,
             height: textHeight),
         textInputAction: textInputAction,
         textAlign: textAlign,

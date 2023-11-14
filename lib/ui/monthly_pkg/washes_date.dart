@@ -46,7 +46,7 @@ class WashesDate extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextWidget(
-                        text: '${index + 1}${ordinal(index + 1)} wash',
+                        text: '${index + 1}${ordinal(index + 1)} ${S.of(context).washh}',
                         fontWeight: MyFontWeight.semiBold,
                         textSize: MyFontSize.size15,
                       ),
@@ -215,8 +215,6 @@ class WashesDate extends StatelessWidget {
                               CustomSnackBars.failureSnackBar(
                                   context, '${value.message}');
                             }
-
-
                           });
                     }
                   : () {
@@ -235,33 +233,3 @@ class WashesDate extends StatelessWidget {
   }
 }
 
-/*
-               CustomContainer(
-                clipBehavior: Clip.hardEdge,
-                width: double.infinity,
-                height: 75,
-                onTap: (){
-                  navigateTo(context, const SelectDate());
-                },
-                backgroundColor: AppColor.borderGreyLight,
-                child: Row(
-                  children: [
-                    const CustomContainer(
-                      width: 8,
-                      height: double.infinity,
-                      radiusCircular: 0,
-                      backgroundColor: Color(0xFF898A8D),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: TextWidget(
-                          text: 'No date & time',
-                          fontWeight: MyFontWeight.medium,
-                          textSize: MyFontSize.size12,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-* */

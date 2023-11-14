@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/image_editable.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../models/myRequestsModel.dart';
 import '../../../providers/requestServices_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../../utils/enum/statuses.dart';
 import '../../../utils/font_styles.dart';
 import '../../../utils/snack_bars.dart';
@@ -20,10 +23,10 @@ import '../../widgets/spaces.dart';
 import '../../widgets/text_widget.dart';
 
 class RatingDialog extends StatefulWidget {
-  RatingDialog({Key? key, this.isRated = false, required this.requestId}) : super(key: key);
+  RatingDialog({Key? key, this.isRated = false, required this.myRequestData}) : super(key: key);
 
   bool isRated;
-  int requestId;
+  final MyRequestsData myRequestData;
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
@@ -35,6 +38,7 @@ class _RatingDialogState extends State<RatingDialog> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
     Provider.of<RequestServicesProvider>(context);
+    final UserProvider userDataProvider = Provider.of<UserProvider>(context);
     return Dialog(
       child: SingleChildScrollView(
         child: CustomContainer(
@@ -50,68 +54,33 @@ class _RatingDialogState extends State<RatingDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const CustomSizedBox(
-                      height: 55,
-                      width: 55,
-                      child: ImageEditable(
-                        imageUrl: '',
-                      ),
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundImage: CachedNetworkImageProvider(widget.myRequestData.employee?.image ??
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0F6JSOHkKNsDAnJo3mBl98s0JXJ4dheYY-0jWCUjFJ0tiW6VyPfLJ_wQP&s=10"),
                     ),
                     verticalSpace(10),
                     TextWidget(
-                      text: 'Mariam Nasser',
+                      text: widget.myRequestData.employee?.name == ""
+                          ? S.of(context).userName
+                          : widget.myRequestData.employee?.name ?? S.of(context).userName,
                       textSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.semiBold,
-                    ),
-                    verticalSpace(10),
-                    Row(
-                      children: [
-                        CustomSizedBox(
-                            height: 12,
-                            width: 12,
-                            child: SvgPicture.asset('assets/svg/alarm.svg')),
-                        horizontalSpace(8),
-                        TextWidget(
-                          text: '03:15 PM',
-                          textSize: MyFontSize.size10,
-                          fontWeight: MyFontWeight.medium,
-                          color: AppColor.grey,
-                        ),
-                      ],
-                    ),
-                    verticalSpace(10),
-                    Row(
-                      children: [
-                        const CustomSizedBox(
-                          height: 12,
-                          width: 12,
-                          child: Icon(
-                            Icons.calendar_today_outlined,
-                            size: 12,
-                            color: Color(0xff616161),
-                          ),
-                        ),
-                        horizontalSpace(8),
-                        TextWidget(
-                          text: 'Monday , 23 January 2023',
-                          textSize: MyFontSize.size12,
-                          fontWeight: MyFontWeight.medium,
-                          color: AppColor.grey,
-                        ),
-                      ],
+                      colorDark: Colors.black,
                     ),
                     verticalSpace(20),
                     TextWidget(
                       text: S.of(context).howDoYouRateTheService,
                       textSize: MyFontSize.size14,
                       fontWeight: MyFontWeight.semiBold,
+                      colorDark: Colors.black,
                     ),
                     verticalSpace(10),
                     RatingBar.builder(
                       initialRating: 0,
                       minRating: 0,
                       direction: Axis.horizontal,
-                      allowHalfRating: true,
+                      allowHalfRating: false,
                       itemCount: 5,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                       itemBuilder: (context, _) => const Icon(
@@ -140,33 +109,42 @@ class _RatingDialogState extends State<RatingDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextWidget(
-                        text: S.of(context).feedback,
-                        textSize: MyFontSize.size17,
-                        fontWeight: MyFontWeight.bold,
+                      Visibility(
+                        visible: requestServicesProvider.ratingValue < 4,
+                        child: Column(
+                          children: [
+                            TextWidget(
+                              text: S.of(context).feedback,
+                              textSize: MyFontSize.size17,
+                              fontWeight: MyFontWeight.bold,
+                              colorDark: Colors.black,
+                            ),
+                            verticalSpace(10),
+                            TextWidget(
+                              text: S
+                                  .of(context)
+                                  .pleaseGiveUsFeedbackAboutWhyYouRatedItSo,
+                              textSize: MyFontSize.size12,
+                              fontWeight: MyFontWeight.medium,
+                              color: const Color(0xFF8A8A8A),
+                              colorDark: Colors.black,
+                            ),
+                            verticalSpace(10),
+                            CustomSizedBox(
+                                width: 284,
+                                height: 62,
+                                child: DefaultFormField(
+                                  controller: requestServicesProvider.ratingFeedbackController,
+                                  height: 62,
+                                  hintText: S.of(context).type,
+                                  textSize: MyFontSize.size8,
+                                  fillColor: const Color(0xFFE0E0E0),
+                                  filled: true,
+                                  withBorder: true,
+                                )),
+                          ],
+                        ),
                       ),
-                      verticalSpace(10),
-                      TextWidget(
-                        text: S
-                            .of(context)
-                            .pleaseGiveUsFeedbackAboutWhyYouRatedItSo,
-                        textSize: MyFontSize.size12,
-                        fontWeight: MyFontWeight.medium,
-                        color: const Color(0xFF8A8A8A),
-                      ),
-                      verticalSpace(10),
-                      CustomSizedBox(
-                          width: 284,
-                          height: 62,
-                          child: DefaultFormField(
-                            controller: requestServicesProvider.ratingFeedbackController,
-                            height: 62,
-                            hintText: S.of(context).type,
-                            textSize: MyFontSize.size8,
-                            fillColor: const Color(0xFFE0E0E0),
-                            filled: true,
-                            withBorder: true,
-                          )),
                       verticalSpace(10),
                       DefaultButton(
                         height: 39,
@@ -181,7 +159,7 @@ class _RatingDialogState extends State<RatingDialog> {
                         onPressed: () {
                           AppLoader.showLoader(context);
                           requestServicesProvider.rateRequest(
-                            requestId: widget.requestId, rate: requestServicesProvider.ratingValue, feedBack: requestServicesProvider.ratingFeedbackController.text,
+                            requestId: widget.myRequestData.id!, rate: requestServicesProvider.ratingValue, feedBack: requestServicesProvider.ratingFeedbackController.text,
                           ).then((value) {
                             AppLoader.stopLoader();
                             if(value.status == Status.success){

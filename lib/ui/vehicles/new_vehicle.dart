@@ -49,7 +49,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
     Provider.of<MyVehiclesProvider>(context, listen: false);
     await packageProvider.getManufacturers();
     if(widget.updateVehicle){
-      log('In Widget Update');
       var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
       myVehiclesProvider.nameController = vehicleData.name == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.name);
       myVehiclesProvider.yearController = vehicleData.year == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.year);

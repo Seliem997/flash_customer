@@ -1,7 +1,9 @@
 import 'package:flash_customer/ui/requests/widgets/rating_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../main.dart';
@@ -49,7 +51,8 @@ class RequestItem extends StatelessWidget {
               horizontalSpace(10),
               Expanded(
                 child: TextWidget(
-                  text: services == '' ? 'Monthly Package' : services,
+                  text:
+                      services == '' ? S.of(context).monthlyPackage : services,
                   textSize: MyFontSize.size10,
                   fontWeight: MyFontWeight.medium,
                   color: AppColor.grey,
@@ -59,21 +62,65 @@ class RequestItem extends StatelessWidget {
             ],
           ),
           verticalSpace(12),
-          Row(
-            children: [
-              CustomSizedBox(
-                  height: 12,
-                  width: 12,
-                  child: SvgPicture.asset('assets/svg/alarm.svg', color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),)),
-              horizontalSpace(8),
-              TextWidget(
-                text: '${myRequestData.time}',
-                textSize: MyFontSize.size10,
-                fontWeight: MyFontWeight.medium,
-                color: AppColor.grey,
-              ),
-            ],
-          ),
+          myRequestData.status != 'Canceled'
+              ? services != ''
+                  ? Row(
+                      children: [
+                        CustomSizedBox(
+                            height: 12,
+                            width: 12,
+                            child: SvgPicture.asset(
+                              'assets/svg/alarm.svg',
+                              color: MyApp.themeMode(context)
+                                  ? Colors.white
+                                  : const Color(0xff616161),
+                            )),
+                        horizontalSpace(8),
+                        myRequestData.slots != null
+                            ? myRequestData.slots!.isNotEmpty
+                                ? TextWidget(
+                                    text: '${myRequestData.slots![0].startAt}',
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: AppColor.grey,
+                                  )
+                                : TextWidget(
+                                    text: Intl.getCurrentLocale() == 'ar'
+                                        ? myRequestData.packageDetails!.nameAr!
+                                        : myRequestData.packageDetails!.nameEn!,
+                                    textSize: MyFontSize.size10,
+                                    fontWeight: MyFontWeight.medium,
+                                    color: AppColor.grey,
+                                  )
+                            : TextWidget(
+                                text: Intl.getCurrentLocale() == 'ar'
+                                    ? myRequestData.packageDetails!.nameAr!
+                                    : myRequestData.packageDetails!.nameEn!,
+                                textSize: MyFontSize.size10,
+                                fontWeight: MyFontWeight.medium,
+                                color: AppColor.grey,
+                              ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        TextWidget(
+                          text: S.of(context).packageName,
+                          textSize: MyFontSize.size12,
+                          fontWeight: MyFontWeight.semiBold,
+                        ),
+                        horizontalSpace(8),
+                        TextWidget(
+                          text: Intl.getCurrentLocale() == 'ar'
+                              ? myRequestData.packageDetails!.nameAr!
+                              : myRequestData.packageDetails!.nameEn!,
+                          textSize: MyFontSize.size10,
+                          fontWeight: MyFontWeight.medium,
+                          color: AppColor.grey,
+                        ),
+                      ],
+                    )
+              : const SizedBox(),
           verticalSpace(10),
           Row(
             children: [
@@ -83,12 +130,14 @@ class RequestItem extends StatelessWidget {
                 child: Icon(
                   Icons.calendar_today_outlined,
                   size: 12,
-                  color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),
+                  color: MyApp.themeMode(context)
+                      ? Colors.white
+                      : const Color(0xff616161),
                 ),
               ),
               horizontalSpace(8),
               TextWidget(
-                text: '${myRequestData.date}',
+                text: '${myRequestData.slotsDate}',
                 textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.medium,
                 color: AppColor.grey,
@@ -101,8 +150,12 @@ class RequestItem extends StatelessWidget {
               CustomSizedBox(
                 height: 12,
                 width: 12,
-                child: SvgPicture.asset('assets/svg/profile.svg',
-                  color: MyApp.themeMode(context) ? Colors.white : const Color(0xff616161),),
+                child: SvgPicture.asset(
+                  'assets/svg/profile.svg',
+                  color: MyApp.themeMode(context)
+                      ? Colors.white
+                      : const Color(0xff616161),
+                ),
               ),
               horizontalSpace(8),
               TextWidget(
@@ -113,7 +166,9 @@ class RequestItem extends StatelessWidget {
               ),
             ],
           ),
-          Visibility(visible: myRequestData.status == 'Complete', child: verticalSpace(10)),
+          Visibility(
+              visible: myRequestData.status == 'Complete',
+              child: verticalSpace(10)),
           Visibility(
             visible: myRequestData.status == 'Complete',
             child: Row(
@@ -129,39 +184,52 @@ class RequestItem extends StatelessWidget {
                   width: 100,
                   child: myRequestData.rate == null
                       ? ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>CustomSizedBox(
-                      height: 12,
-                      width: 12,
-                      child: Image.asset('assets/images/star.png')),
-                      separatorBuilder: (context, index) => horizontalSpace(4), itemCount: 5,)
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => CustomSizedBox(
+                              height: 12,
+                              width: 12,
+                              child: Image.asset('assets/images/star.png')),
+                          separatorBuilder: (context, index) =>
+                              horizontalSpace(4),
+                          itemCount: 5,
+                        )
                       : ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>CustomSizedBox(
-                      height: 12,
-                      width: 12,
-                      child: Image.asset('assets/images/star.png',color: Colors.amber),),
-                      separatorBuilder: (context, index) => horizontalSpace(4), itemCount: myRequestData.rate,),
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => CustomSizedBox(
+                            height: 12,
+                            width: 12,
+                            child: Image.asset('assets/images/star.png',
+                                color: Colors.amber),
+                          ),
+                          separatorBuilder: (context, index) =>
+                              horizontalSpace(4),
+                          itemCount: myRequestData.rate,
+                        ),
                 ),
                 horizontalSpace(6),
-                myRequestData.rate == null ? DefaultButton(
-                  height: 20,
-                  width: 50,
-                  radiusCircular: 3,
-                  padding: symmetricEdgeInsets(vertical: 2, horizontal: 4),
-                  text: 'Rate',
-                  fontSize: MyFontSize.size9,
-                  fontWeight: MyFontWeight.semiBold,
-                  backgroundColor: const Color(0xFF03B7FD),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RatingDialog(requestId: myRequestData.id!,);
-                      },
-                    );
-                  },
-                ) : const SizedBox(),
+                myRequestData.rate == null
+                    ? DefaultButton(
+                        height: 20,
+                        width: 50,
+                        radiusCircular: 3,
+                        padding:
+                            symmetricEdgeInsets(vertical: 2, horizontal: 4),
+                        text: S.of(context).rate,
+                        fontSize: MyFontSize.size9,
+                        fontWeight: MyFontWeight.semiBold,
+                        backgroundColor: const Color(0xFF03B7FD),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return RatingDialog(
+                                myRequestData: myRequestData,
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),
@@ -181,15 +249,28 @@ class RequestItem extends StatelessWidget {
               ),
               const Spacer(),
               DefaultButton(
-                height: 21,
-                width: 64,
-                padding: EdgeInsets.zero,
-                text: "${myRequestData.status}",
+                // height: 21,
+                // width: 64,
+                padding: EdgeInsets.symmetric(horizontal: 2.w),
+                text:
+                    "${Intl.getCurrentLocale() == 'ar' ? myRequestData.statusArabic : myRequestData.status}",
                 fontSize: MyFontSize.size9,
                 fontWeight: MyFontWeight.semiBold,
                 backgroundColor: myRequestData.status == 'Complete'
                     ? Colors.green
-                    : AppColor.textRed,
+                    : myRequestData.status == 'Pending'
+                        ? Colors.orange
+                        : myRequestData.status == 'Waiting Approval'
+                            ? Colors.black
+                            : myRequestData.status == 'Arrived' ||
+                                    myRequestData.status == 'On the way'
+                                ? Colors.yellow
+                                : myRequestData.status == 'Canceled'
+                                    ? Colors.red
+                                    : AppColor.textRed,
+                textColor: myRequestData.status == 'Waiting Approval'
+                    ? Colors.white
+                    : Colors.black,
                 onPressed: () {},
               ),
             ],

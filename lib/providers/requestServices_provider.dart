@@ -27,7 +27,6 @@ class RequestServicesProvider with ChangeNotifier {
   double totalAmount = 0;
   double totalDuration = 0;
   num? totalAmountAfterDiscount = 0;
-  num discountAmount = 0;
   dynamic totalTaxes = 0;
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
@@ -143,30 +142,38 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   CouponData? couponData;
-  Future checkOfferCoupon(BuildContext context) async {
+  Future checkOfferCoupon(BuildContext context, {required int requestId,
+    String? offerCode,
+    dynamic employeeId,}) async {
     if (discountCodeController.text.isNotEmpty) {
       AppLoader.showLoader(context);
       await servicesService
           .checkCoupon(discountCode: discountCodeController.text)
-          .then((value) {
-        AppLoader.stopLoader();
+          .then((value) async{
         if (value.status == Status.success) {
           couponData = value.data;
           if (couponData!.isActive == 1) {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).offerAppliedSuccessfully);
-            discountAmount = couponData!.discountAmount!;
+            await updateRequestSlots(requestId: requestId, payBy: 'cash', employeeId: employeeId, offerCode: offerCode);
+            AppLoader.stopLoader();
+            totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount;
+            /*discountAmount = couponData!.discountAmount!;
             totalAmountAfterDiscount =
-                updatedRequestDetailsData!.totalAmount! - discountAmount;
+                updatedRequestDetailsData!.totalAmount! - discountAmount;*/
             if(totalAmountAfterDiscount! <= 0){
               totalAmountAfterDiscount =0;
             }
+
           } else {
+            AppLoader.stopLoader();
             CustomSnackBars.successSnackBar(
                 context, S.of(context).codeNotAccepted);
           }
         } else {
-          CustomSnackBars.failureSnackBar(context, S.of(context).codeIsInvalid);
+          AppLoader.stopLoader();
+          // CustomSnackBars.failureSnackBar(context, S.of(context).codeIsInvalid);
+          CustomSnackBars.failureSnackBar(context, value.message);
         }
       });
     } else {
@@ -177,7 +184,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   CityIdData? cityIdData;
-  Future getCityId({required double lat, required double long}) async {
+  Future<ResponseResult> getCityId({required double lat, required double long}) async {
     Status state = Status.error;
     dynamic message;
 
@@ -267,6 +274,7 @@ class RequestServicesProvider with ChangeNotifier {
       isLoading = false;
       if (value.status == Status.success) {
         slotsList = value.data;
+        print('Success ${value.data}');
         print('Time Slot in provider Success');
         print(slotsList);
       }
@@ -278,6 +286,8 @@ class RequestServicesProvider with ChangeNotifier {
   Future updateRequestSlots({
     required int requestId,
     required String payBy,
+    String? offerCode,
+    dynamic employeeId,
   }) async {
     Status state = Status.error;
     dynamic message;
@@ -285,6 +295,8 @@ class RequestServicesProvider with ChangeNotifier {
         .updateRequestSlots(
       requestId: requestId,
       payBy: payBy,
+      offerCode: offerCode,
+      employeeId: employeeId
     )
         .then((value) {
       if (value.status == Status.success) {
@@ -298,6 +310,7 @@ class RequestServicesProvider with ChangeNotifier {
     notifyListeners();
     return ResponseResult(state, updatedRequestDetailsData, message: message);
   }
+
 
   PaymentUrlData? paymentUrlData;
   Future<ResponseResult> submitFinialRequest({
@@ -417,7 +430,7 @@ class RequestServicesProvider with ChangeNotifier {
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController(text: '');
-    totalAmountAfterDiscount = updatedRequestDetailsData?.totalAmount;
+    updatedRequestDetailsData != null ? totalAmountAfterDiscount = double.parse(updatedRequestDetailsData!.amount!) + double.parse(updatedRequestDetailsData!.tax!.toString()) : null;
     notifyListeners();
   }
 
@@ -430,7 +443,6 @@ class RequestServicesProvider with ChangeNotifier {
     totalAmount = 0;
     totalDuration = 0;
     totalAmountAfterDiscount = 0;
-    discountAmount = 0;
     totalTaxes = 0;
     resetCoupon();
     selectedBasicIndex = null;

@@ -67,12 +67,12 @@ class _SelectDateState extends State<SelectDate> {
 
     widget.cameFromPackage
         ? packageProvider.washesDate[widget.index] =
-        DateFormat(DFormat.ymd.key).format(DateTime.now())
+        DateFormat(DFormat.ymd.key,('en-IN')).format(DateTime.now())
         : widget.cameFromOtherServices
         ? otherServicesProvider.selectedDate =
-        DateFormat(DFormat.ymd.key).format(DateTime.now())
+        DateFormat(DFormat.ymd.key,('en-IN')).format(DateTime.now())
         : requestServicesProvider.selectedDate =
-        DateFormat(DFormat.ymd.key).format(DateTime.now());
+        DateFormat(DFormat.ymd.key,('en-IN')).format(DateTime.now());
 
     widget.cameFromPackage
         ? await packageProvider.getPackageTimeSlots(
@@ -82,7 +82,7 @@ class _SelectDateState extends State<SelectDate> {
             packageDuration: packageProvider
                 .packagesDataList[packageProvider.selectedPackageIndex!]
                 .duration!,
-            date: DateFormat(DFormat.mdy.key)
+            date: DateFormat(DFormat.mdy.key,('en-IN'))
                 .format(requestServicesProvider.date),
           )
         : widget.cameFromOtherServices
@@ -95,17 +95,16 @@ class _SelectDateState extends State<SelectDate> {
                           otherServicesProvider.selectedServiceIndex!]
                       .duration!
                       .toDouble(),
-                  date: DateFormat(DFormat.mdy.key)
+                  date: DateFormat(DFormat.mdy.key,('en-IN'))
                       .format(requestServicesProvider.date),
-      addressId: addressesProvider.addressDetailsData!.id!,
-                )
+      addressId: addressesProvider.addressDetailsData!.id!,)
                 .then((value) => requestServicesProvider.setLoading(false))
             : await requestServicesProvider
                 .getTimeSlots(
                   cityId: requestServicesProvider.cityIdData!.id!,
                   basicId: requestServicesProvider.selectedBasicServiceId,
                   duration: requestServicesProvider.totalDuration,
-                  date: DateFormat(DFormat.mdy.key)
+                  date: DateFormat(DFormat.mdy.key,('en-IN'))
                       .format(requestServicesProvider.date),
       addressId: addressesProvider.addressDetailsData!.id!,
 
@@ -132,6 +131,10 @@ class _SelectDateState extends State<SelectDate> {
           navigateAndFinish(context, const HomeScreen());
           requestServicesProvider.clearServices();
           otherServicesProvider.clearServices();
+        },
+        onArrowPressed: (){
+          packageProvider.reserveRequestPackageSlots(slotsId: packageProvider.slotsIds, slotsDate: packageProvider.washesDate[widget.index] , reqId: packageProvider.detailsRequestData!.id!);
+          Navigator.pop(context);
         },
       ),
       body: Padding(
@@ -163,12 +166,12 @@ class _SelectDateState extends State<SelectDate> {
 
                 widget.cameFromPackage
                     ? packageProvider.washesDate[widget.index] =
-                        DateFormat(DFormat.ymd.key).format(date)
+                        DateFormat(DFormat.ymd.key,('en-IN')).format(date)
                     : widget.cameFromOtherServices
                         ? otherServicesProvider.selectedDate =
-                            DateFormat(DFormat.ymd.key).format(date)
+                            DateFormat(DFormat.ymd.key,('en-IN')).format(date)
                         : requestServicesProvider.selectedDate =
-                            DateFormat(DFormat.ymd.key).format(date);
+                            DateFormat(DFormat.ymd.key,('en-IN')).format(date);
 
                 widget.cameFromPackage
                     ? await packageProvider.getPackageTimeSlots(
@@ -181,11 +184,7 @@ class _SelectDateState extends State<SelectDate> {
                             .packagesDataList[
                                 packageProvider.selectedPackageIndex!]
                             .duration!,
-                        date: DateFormat(DFormat.mdy.key).format(date),
-                        /*cityId: 2,
-                  packageId: 1,
-                  packageDuration: 10,
-                  date: "5/15/2022",*/
+                        date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
                       )
                     : widget.cameFromOtherServices
                         ? await otherServicesProvider
@@ -198,7 +197,7 @@ class _SelectDateState extends State<SelectDate> {
                                       .selectedServiceIndex!]
                                   .duration!
                                   .toDouble(),
-                              date: DateFormat(DFormat.mdy.key).format(date), addressId: addressesProvider.addressDetailsData!.id!,
+                              date: DateFormat(DFormat.mdy.key,('en-IN')).format(date), addressId: addressesProvider.addressDetailsData!.id!,
                             )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false))
@@ -208,18 +207,18 @@ class _SelectDateState extends State<SelectDate> {
                               basicId: requestServicesProvider
                                   .selectedBasicServiceId,
                               duration: requestServicesProvider.totalDuration,
-                              date: DateFormat(DFormat.mdy.key).format(date),
+                              date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
                   addressId: addressesProvider.addressDetailsData!.id!,
                 )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false));
               }, //,color: MyApp.themeMode(context) ? Colors.white : Colors.black,
-              leftMargin: 20,
+              leftMargin: Intl.getCurrentLocale() == 'ar' ? 0 : 20,
               showYears: true,
               monthColor: MyApp.themeMode(context) ? Colors.white : const Color(0xFF565656),
               dayColor: MyApp.themeMode(context) ? Colors.white : AppColor.boldGrey,
               activeDayColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
-              activeBackgroundDayColor: const Color(0xFFBADEF6),
+              activeBackgroundDayColor: AppColor.borderBlue,
               dotsColor: const Color(0xFF333A47),
               // selectableDayPredicate: (date) => date.day != 23,
               locale: 'en_ISO',
@@ -257,10 +256,12 @@ class _SelectDateState extends State<SelectDate> {
                                                   ? const Color(0xFFBADEF6)
                                                   : AppColor.borderGreyLight,
                                           borderColor:
-                                              value.selectedSlotIndex ==
-                                                      employeeIndex
+                                              value.selectedSlotIndex == employeeIndex
                                                   ? AppColor.borderBlue
                                                   : Colors.transparent,
+                                          backgroundColorDark: value.selectedSlotIndex == employeeIndex
+                                            ? AppColor.borderBlue : Colors.transparent,
+
                                           radiusCircular: 3,
                                           padding: symmetricEdgeInsets(
                                               vertical: 10, horizontal: 12),
@@ -269,15 +270,10 @@ class _SelectDateState extends State<SelectDate> {
                                             value.selectedTimeSlot(
                                                 index: employeeIndex);
                                             otherServicesProvider.selectedDate =
-                                                DateFormat(DFormat.ymd.key)
+                                                DateFormat(DFormat.ymd.key,('en-IN'))
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
-                                            /* value
-                                                .packageSlotsList[employeeIndex]
-                                                .forEach((v) {
-                                              value.slotsIds.add(v.id);
-                                            });*/
                                             value.slotsIds = value
                                                 .packageSlotsList[employeeIndex]
                                                 .map((e) => e.id)
@@ -305,18 +301,18 @@ class _SelectDateState extends State<SelectDate> {
                                             children: [
                                               TextWidget(
                                                 text:
-                                                    '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}',/* - ${value.packageSlotsList[employeeIndex].lastOrNull?.endAt}*/
+                                                    '${value.packageSlotsList[employeeIndex].firstOrNull?.startAt}',
                                                 fontWeight: MyFontWeight.medium,
-                                                textSize: MyFontSize.size10,
+                                                textSize: MyFontSize.size12,
                                                 color: const Color(0xFF565656),
+                                                colorDark: value.selectedSlotIndex == employeeIndex ? Colors.black : Colors.white,
                                               ),
                                               const Spacer(),
                                               CustomSizedBox(
                                                 height: 14,
                                                 width: 14,
                                                 child:
-                                                    value.selectedSlotIndex ==
-                                                            employeeIndex
+                                                    value.selectedSlotIndex == employeeIndex
                                                         ? const CircleAvatar(
                                                             radius: 30,
                                                             backgroundColor:
@@ -381,6 +377,11 @@ class _SelectDateState extends State<SelectDate> {
                                                           employeeIndex
                                                       ? AppColor.borderBlue
                                                       : Colors.transparent,
+                                              borderColorDark: value.selectedSlotIndex == employeeIndex
+                                                  ? AppColor.borderBlue
+                                                  : AppColor.borderGreyLight,
+                                              backgroundColorDark: value.selectedSlotIndex == employeeIndex
+                                              ? AppColor.borderBlue : Colors.transparent,
                                               radiusCircular: 3,
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
@@ -389,8 +390,9 @@ class _SelectDateState extends State<SelectDate> {
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
                                                 otherServicesProvider
-                                                    .selectedDate = DateFormat(
-                                                        DFormat.ymd.key)
+                                                    .selectedDate =
+                                                    DateFormat(
+                                                        DFormat.ymd.key,('en-IN'))
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
@@ -403,10 +405,10 @@ class _SelectDateState extends State<SelectDate> {
                                                 children: [
                                                   TextWidget(
                                                     text:
-                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} ',/*- ${value.slotsList[employeeIndex].lastOrNull?.endAt}*/
+                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} ',
                                                     fontWeight:
                                                         MyFontWeight.medium,
-                                                    textSize: MyFontSize.size10,
+                                                    textSize: MyFontSize.size14,
                                                     color:
                                                         const Color(0xFF565656),
                                                   ),
@@ -476,10 +478,14 @@ class _SelectDateState extends State<SelectDate> {
                                                   ? const Color(0xFFBADEF6)
                                                   : AppColor.borderGreyLight,
                                               borderColor:
-                                                  value.selectedSlotIndex ==
-                                                          employeeIndex
+                                                  value.selectedSlotIndex == employeeIndex
                                                       ? AppColor.borderBlue
                                                       : Colors.transparent,
+                                              borderColorDark: value.selectedSlotIndex == employeeIndex
+                                                  ? AppColor.borderBlue
+                                                  : AppColor.borderGreyLight,
+                                              backgroundColorDark: value.selectedSlotIndex == employeeIndex
+                                                  ? AppColor.borderBlue : Colors.transparent,
                                               radiusCircular: 3,
                                               padding: symmetricEdgeInsets(
                                                   vertical: 10, horizontal: 12),
@@ -489,7 +495,7 @@ class _SelectDateState extends State<SelectDate> {
                                                     index: employeeIndex);
                                                 otherServicesProvider
                                                     .selectedDate = DateFormat(
-                                                        DFormat.ymd.key)
+                                                        DFormat.ymd.key,('en-IN'))
                                                     .format(
                                                         requestServicesProvider
                                                             .date);
@@ -501,13 +507,10 @@ class _SelectDateState extends State<SelectDate> {
                                               child: Row(
                                                 children: [
                                                   TextWidget(
-                                                    text:
-                                                        '${value.slotsList[employeeIndex].firstOrNull?.startAt} ',/*- ${value.slotsList[employeeIndex].lastOrNull?.endAt}*/
-                                                    fontWeight:
-                                                        MyFontWeight.medium,
-                                                    textSize: MyFontSize.size10,
-                                                    color:
-                                                        const Color(0xFF565656),
+                                                    text: '${value.slotsList[employeeIndex].firstOrNull?.startAt}',
+                                                    fontWeight: MyFontWeight.medium,
+                                                    textSize: MyFontSize.size14,
+                                                    color: const Color(0xFF565656),
                                                   ),
                                                   const Spacer(),
                                                   CustomSizedBox(
@@ -556,7 +559,8 @@ class _SelectDateState extends State<SelectDate> {
                   : S.of(context).pay,
               onPressed: widget.cameFromPackage
                   ? () {
-                      Navigator.pop(context);
+                packageProvider.reserveRequestPackageSlots(slotsId: packageProvider.slotsIds, slotsDate: packageProvider.washesDate[widget.index] , reqId: packageProvider.detailsRequestData!.id!);
+                Navigator.pop(context);
                     }
                   : widget.cameFromOtherServices
                       ? () {
@@ -603,7 +607,7 @@ class _SelectDateState extends State<SelectDate> {
                             });
                           } else {
                             CustomSnackBars.failureSnackBar(
-                                context, 'Choose time First!');
+                                context, S.of(context).chooseTimeFirst);
                           }
                         }
                       : () {

@@ -21,7 +21,6 @@ class OtherServicesItem extends StatelessWidget {
     this.seeMore = false,
     this.onlyValue = false,
     this.onTap,
-    this.infoOnPressed,
     required this.index,
     required this.service,
   });
@@ -30,7 +29,6 @@ class OtherServicesItem extends StatelessWidget {
   final String? serviceValue, serviceUnit;
   final bool seeMore, onlyValue;
   final GestureTapCallback? onTap;
-  final VoidCallback? infoOnPressed;
   final int index;
   final OtherServicesData service;
 
@@ -41,7 +39,6 @@ class OtherServicesItem extends StatelessWidget {
 
     return CustomContainer(
       width: 108,
-      // height: 130,
       margin: onlyEdgeInsets(end: 11),
       radiusCircular: 5,
       backgroundColor: otherServicesProvider.selectedServiceIndex == index
@@ -50,18 +47,17 @@ class OtherServicesItem extends StatelessWidget {
       borderColor: otherServicesProvider.selectedServiceIndex == index
           ? const Color(0xFF0285E0)
           : Colors.transparent,
-      padding: symmetricEdgeInsets(horizontal: 2, vertical: 2),
+      borderColorDark: otherServicesProvider.selectedServiceIndex == index
+          ? const Color(0xFF0285E0)
+          : const Color(0xFFE1ECFF),
+      backgroundColorDark: otherServicesProvider.selectedServiceIndex == index
+          ? AppColor.grey
+          :Colors.transparent,
+      padding: symmetricEdgeInsets(horizontal: 2, vertical: 10),
       onTap: onTap,
       child: Column(
         children: [
-          Align(
-            alignment: AlignmentDirectional.topEnd,
-            child: IconButton(
-              icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
-              onPressed: infoOnPressed,
-            ),
-            // child: Icon(Icons.info, size: 20, color: AppColor.primary),
-          ),
+          verticalSpace(5),
           CustomSizedBox(
             width: 60,
             height: 56,
@@ -143,7 +139,7 @@ class OtherServicesItem extends StatelessWidget {
               horizontalSpace(15),
               CustomContainer(
                 onTap: () {
-                  otherServicesProvider.increaseQuantityService();
+                  otherServicesProvider.increaseQuantityService(selectedServiceIndex: index);
                   otherServicesProvider.selectedService(index: index);
                 },
                 width: 20,
@@ -153,7 +149,8 @@ class OtherServicesItem extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 image: const DecorationImage(
                     image: AssetImage('assets/images/plus.png'),
-                    fit: BoxFit.fitHeight),
+                    fit: BoxFit.fitHeight,
+                ),
               ),
             ],
           )

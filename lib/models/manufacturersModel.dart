@@ -16,15 +16,6 @@ class ManufacturersModel {
     message = json['message'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status_code'] = statusCode;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    data['message'] = message;
-    return data;
-  }
 }
 
 class ManufacturerData {
@@ -52,14 +43,4 @@ class ManufacturerData {
     isActive = json['is_active'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['image'] = image;
-    data['vehicle_type_id'] = vehicleTypeId;
-    data['sub_vehicle_type_id'] = subVehicleTypeId;
-    data['is_active'] = isActive;
-    return data;
-  }
 }
