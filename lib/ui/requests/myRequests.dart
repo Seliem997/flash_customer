@@ -157,7 +157,22 @@ class _MyRequestsState extends State<MyRequests> {
                                       if (myRequestsProvider
                                               .myRequestsDataList[index]
                                               .status ==
-                                          "Canceled") {
+                                          "Canceled"
+                                          || myRequestsProvider.myRequestsDataList[index].status == "Complete") {
+                                        return RequestItem(
+                                          myRequestData: myRequestsProvider
+                                              .myRequestsDataList[index],
+                                          onTap: () {
+                                            navigateTo(
+                                                context,
+                                                RequestDetailsScreen(
+                                                  requestId: myRequestsProvider
+                                                      .myRequestsDataList[index]
+                                                      .id!,
+                                                ));
+                                          },
+                                        );
+                                      } else if ( myRequestsProvider.myRequestsDataList[index].washNumber != null &&  myRequestsProvider.myRequestsDataList[index].washNumber != 1) {
                                         return RequestItem(
                                           myRequestData: myRequestsProvider
                                               .myRequestsDataList[index],

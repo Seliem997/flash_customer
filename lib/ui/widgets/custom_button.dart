@@ -1,6 +1,7 @@
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../main.dart';
@@ -89,7 +90,7 @@ class DefaultButtonWithIcon extends StatelessWidget {
         ),
         icon: icon,
         style: ElevatedButton.styleFrom(
-            alignment: Alignment.centerLeft,
+            alignment: Intl.getCurrentLocale() == 'en' ? Alignment.centerLeft : Alignment.centerRight,
             foregroundColor: textColor ?? AppColor.white,
             backgroundColor: MyApp.themeMode(context)
                 ? AppColor.dark

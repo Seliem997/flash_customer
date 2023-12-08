@@ -344,7 +344,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                               hintText: '0',
                               textColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
                               padding: symmetricEdgeInsets(
-                                  vertical: 8, horizontal: 5),
+                                  vertical: 2, horizontal: 5),
                             ),
                           ),
                         ),
@@ -354,6 +354,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                   verticalSpace(28),
                   DefaultButton(
                       text: S.of(context).submit,
+                      fontSize: MyFontSize.size15,
                       onPressed: () async{
                         if(transactionHistoryProvider.rechargeAmountController!.text != ''){
                           if(double.parse(transactionHistoryProvider
@@ -380,7 +381,8 @@ class _WalletPaymentState extends State<WalletPayment> {
                         }
                       },
                       width: 217,
-                      height: 40),
+                      height: 40,
+                  ),
                   verticalSpace(45),
                   Row(
                     children: [
@@ -411,13 +413,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                               radiusCircular: 4,
                               padding: symmetricEdgeInsets(
                                   horizontal: 16, vertical: 12),
-                              /*backgroundColor: int.parse(transactionHistoryProvider
-                                          .transactionData!
-                                          .collection![index]
-                                          .amount!) >=
-                                      0
-                                  ? AppColor.acceptGreen
-                                  : AppColor.canceledRed,*/
+                              backgroundColorDark: AppColor.acceptGreen.withOpacity(0.3),
                               backgroundColor: AppColor.acceptGreen,
                               child: Center(
                                 child: Row(
@@ -431,7 +427,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                                               .transactionData!
                                               .collection![index]
                                               .type!,
-                                          textSize: MyFontSize.size14,
+                                          textSize: MyFontSize.size16,
                                           fontWeight: MyFontWeight.medium,
                                         ),
                                         verticalSpace(9),
@@ -451,7 +447,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                                                           .transactionData!
                                                           .collection![index]
                                                           .createdAt!)),
-                                              textSize: MyFontSize.size10,
+                                              textSize: MyFontSize.size14,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),

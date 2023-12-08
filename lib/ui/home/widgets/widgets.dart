@@ -42,10 +42,10 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
     return Stack(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 4.0.h),
+          padding: const EdgeInsets.only(top: 0),
           child: ExpandableContainer(
             expanded: expandLocationFlag,
-            expandedHeight: 27.h,
+            expandedHeight: 30.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
               child: Column(
@@ -76,7 +76,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                               width: 20,
                               child: addressesProvider
                                           .addressesDataList[index].type! ==
-                                      "home"
+                                      S.of(context).home
                                   ? Image.asset(
                                       'assets/images/home_light.png',
                                       color: MyApp.themeMode(context)
@@ -85,7 +85,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                     )
                                   : addressesProvider
                                               .addressesDataList[index].type! ==
-                                          "work"
+                                          S.of(context).work
                                       ? SvgPicture.asset(
                                           'assets/svg/work.svg',
                                           color: MyApp.themeMode(context)
@@ -95,9 +95,19 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                       : addressesProvider
                                                   .addressesDataList[index]
                                                   .type! ==
-                                              "work"
+                                              S.of(context).school
                                           ? SvgPicture.asset(
                                               'assets/svg/school.svg',
+                                              color: MyApp.themeMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            )
+                                          : addressesProvider
+                                                  .addressesDataList[index]
+                                                  .type! ==
+                                              S.of(context).shop
+                                          ? SvgPicture.asset(
+                                'assets/svg/shopping_light.svg',
                                               color: MyApp.themeMode(context)
                                                   ? Colors.white
                                                   : Colors.black,
@@ -155,14 +165,14 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                     ? (addressesProvider
                                                 .addressesDataList[index]
                                                 .locationName ==
-                                            'Location Name'
-                                        ? 'بدون اسم'
+                                            'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
+                                        ? '${addressesProvider.addressesDataList[index].type}'
                                         : addressesProvider
                                             .addressesDataList[index]
                                             .locationName)
                                     : addressesProvider.addressesDataList[index]
                                         .locationName) ??
-                                '${addressesProvider.addressesDataList[index].type!}${S.of(context).location}',
+                                '${addressesProvider.addressesDataList[index].type} ${S.of(context).location}',
                             textColor: AppColor.black,
                           ),
                           separatorBuilder: (context, index) =>
@@ -171,7 +181,9 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                         )),
                   GestureDetector(
                     onTap: () async {
-                      AppLoader.showLoader(context);
+                      navigateTo(context, const NewAddress());
+
+                      /*AppLoader.showLoader(context);
                       await addressesProvider
                           .storeAddress(
                         lat: homeProvider.currentPosition!.latitude,
@@ -186,7 +198,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                               context, '${value.message}');
                           AppLoader.stopLoader();
                         }
-                      });
+                      });*/
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5),
@@ -212,7 +224,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
           },
           width: 225,
           height: 40,
-          padding: symmetricEdgeInsets(horizontal: 30),
+          padding: symmetricEdgeInsets(horizontal: 22),
           backgroundColor: AppColor.primary,
           backgroundColorDark: AppColor.dark,
           child: Row(
@@ -220,7 +232,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
               TextWidget(
                 text: S.of(context).savedLocation,
                 fontWeight: MyFontWeight.semiBold,
-                textSize: MyFontSize.size15,
+                textSize: MyFontSize.size14,
                 color: AppColor.white,
               ),
               const Spacer(),

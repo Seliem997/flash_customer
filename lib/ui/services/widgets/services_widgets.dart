@@ -43,10 +43,10 @@ class BasicServicesWidget extends StatelessWidget {
         children: [
           Align(
             alignment: AlignmentDirectional.topStart,
-            child: IconButton(
+            child: infoOnPressed != null ? IconButton(
               icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
               onPressed: infoOnPressed,
-            ),
+            ) : const SizedBox(width: 45),
           ),
           CustomSizedBox(
             height: 35,
@@ -112,10 +112,10 @@ class ExtraServicesWidget extends StatelessWidget {
             children: [
               Align(
                 alignment: AlignmentDirectional.topStart,
-                child: IconButton(
+                child: infoOnPressed != null ? IconButton(
                   icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
                   onPressed: infoOnPressed,
-                ),
+                ) : SizedBox(width: 45,),
               ),
               CustomSizedBox(
                 height: 30,
@@ -151,8 +151,8 @@ class ExtraServicesWidget extends StatelessWidget {
                               requestServicesProvider.calculateTotal();
                             }
                           },
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                           clipBehavior: Clip.hardEdge,
                           borderRadius: BorderRadius.zero,
                           backgroundColor: Colors.transparent,
@@ -174,8 +174,8 @@ class ExtraServicesWidget extends StatelessWidget {
                             requestServicesProvider.notifyListeners();
                             requestServicesProvider.calculateTotal();
                           },
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                           clipBehavior: Clip.hardEdge,
                           borderRadius: BorderRadius.zero,
                           backgroundColor: Colors.transparent,

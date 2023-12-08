@@ -1,3 +1,4 @@
+import 'package:flash_customer/main.dart';
 import 'package:flash_customer/ui/services/widgets/services_widgets.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/custom_form_field.dart';
@@ -114,7 +115,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                           .basicServicesList[index].id!;
                                 },
                                 index: index,
-                                infoOnPressed: () {
+                                infoOnPressed: requestServicesProvider.basicServicesList[index].info != null ? () {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -152,7 +153,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                       );
                                     },
                                   );
-                                },
+                                } : null,
                               ),
                               separatorBuilder: (context, index) =>
                                   verticalSpace(14),
@@ -195,7 +196,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                         ExtraServicesWidget(
                                       extraService: requestServicesProvider
                                           .extraServicesList[index],
-                                      infoOnPressed: () {
+                                      infoOnPressed: requestServicesProvider.extraServicesList[index].info != null ? () {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -238,7 +239,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                             );
                                           },
                                         );
-                                      },
+                                      } : null,
                                     ),
                                     separatorBuilder: (context, index) =>
                                         verticalSpace(14),
@@ -463,7 +464,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                             CustomSizedBox(
                                 height: 18,
                                 width: 18,
-                                child: Image.asset('assets/images/clock.png')),
+                                child: Image.asset('assets/images/clock.png', color: MyApp.themeMode(context) ? Colors.white : null,)),
                             horizontalSpace(4),
                             TextWidget(
                               text: S.of(context).serviceDuration,
@@ -526,68 +527,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   ],
                                 ),
                                 verticalSpace(20),
-                                /*Row(
-                                  children: [
-                                    TextWidget(
-                                      text: 'Discount code : ',
-                                      textSize: MyFontSize.size14,
-                                      fontWeight: MyFontWeight.semiBold,
-                                    ),
-                                    CustomContainer(
-                                      width: 112,
-                                      height: 30,
-                                      radiusCircular: 3,
-                                      backgroundColor: AppColor.buttonGrey,
-                                      borderColor: AppColor.boldGrey,
-                                      alignment: Alignment.center,
-                                      child: Center(
-                                        child: DefaultFormField(
-                                          controller: requestServicesProvider
-                                              .discountCodeController,
-                                          withBorder: false,
-                                          // padding: 10,
-                                          // contentPadding: onlyEdgeInsets(start: 10),
-                                          textInputAction: TextInputAction.done,
-                                          hintText: '',
-                                          enabled: requestServicesProvider
-                                                  .couponData ==
-                                              null,
-                                          padding: symmetricEdgeInsets(
-                                              vertical: 9, horizontal: 5),
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    TextButton(
-                                      onPressed: requestServicesProvider
-                                                  .couponData !=
-                                              null
-                                          ? () {
-                                              requestServicesProvider
-                                                  .resetCoupon();
-                                            }
-                                          : () {
-                                              requestServicesProvider
-                                                  .checkOfferCoupon(context);
-                                            },
-                                      child: TextWidget(
-                                        text: requestServicesProvider
-                                                    .couponData !=
-                                                null
-                                            ? S.of(context).remove
-                                            : S.of(context).apply,
-                                        textSize: MyFontSize.size12,
-                                        fontWeight: MyFontWeight.medium,
-                                        color: requestServicesProvider
-                                                    .couponData !=
-                                                null
-                                            ? AppColor.textRed
-                                            : AppColor.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                verticalSpace(15),*/
                                 const Divider(
                                   color: AppColor.borderGrey,
                                   thickness: 1.5,

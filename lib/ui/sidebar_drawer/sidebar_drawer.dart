@@ -374,11 +374,9 @@ class SidebarDrawer extends StatelessWidget {
               leading: CustomSizedBox(
                 width: 25,
                 height: 25,
-                child: SvgPicture.asset(
-                  'assets/svg/messages.svg',
-                  color:
-                      MyApp.themeMode(context) ? AppColor.white : AppColor.grey,
-                ),
+                child: Icon(Icons.notifications_none_outlined,
+                  color: MyApp.themeMode(context) ? AppColor.white : AppColor.grey,),
+
               ),
               minLeadingWidth: 2.w,
               title: TextWidget(

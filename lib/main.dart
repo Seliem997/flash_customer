@@ -24,6 +24,7 @@ import 'package:flash_customer/utils/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -162,15 +163,15 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Flash Customer',
           theme: isDarkMode
-              ? ThemeData.dark().copyWith(
-
-          )
+              ? ThemeData.dark().copyWith()
               : ThemeData(
+            fontFamily: Intl.getCurrentLocale() == 'en' ? null : 'BahijArabic',
                   primarySwatch: Colors.blue,
                   appBarTheme: const AppBarTheme(
                       color: AppColor.white,
                       iconTheme: IconThemeData(color: Colors.black)),
-                  scaffoldBackgroundColor: AppColor.lightScaffoldColor),
+                  scaffoldBackgroundColor: AppColor.lightScaffoldColor,
+          ),
           darkTheme: darkTheme,
           themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           localizationsDelegates: const [

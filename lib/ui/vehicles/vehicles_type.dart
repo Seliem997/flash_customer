@@ -52,15 +52,14 @@ class _VehicleTypesState extends State<VehicleTypes> {
         Provider.of<RequestServicesProvider>(context, listen: false);
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
-
     await myVehiclesProvider.getMyVehicles().then((value) {
       if (myVehiclesProvider.myVehiclesData!.collection!.isNotEmpty) {
         packageProvider.selectedMyVehicleLabel();
       }
     });
+    requestServicesProvider.cityIdData = null;
     packageProvider.getVehiclesTypeActive();
-    packageProvider.getManufacturersOfType(
-        vehicleTypeId: packageProvider.vehicleTypeId);
+    packageProvider.getManufacturersOfType(vehicleTypeId: packageProvider.vehicleTypeId);
     requestServicesProvider.getCityId(
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
@@ -243,7 +242,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                   AppLoader.stopLoader();
                                   if (value.status == Status.success) {
                                     CustomSnackBars.successSnackBar(
-                                        context, 'New Vehicle added');
+                                        context, S.of(context).newVehicleAdded);
                                     requestServicesProvider
                                         .cityIdData != null ?
                                     navigateTo(
@@ -255,7 +254,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
                                             .vehicleDetailsData!.id!,
                                       ),
                                     ) : CustomSnackBars.failureSnackBar(
-                                        context, 'This City not available');
+                                        context, S.of(context).thisCityNotAvailable);
                                   } else {
                                     CustomSnackBars.somethingWentWrongSnackBar(
                                         context);

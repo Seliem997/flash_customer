@@ -47,6 +47,7 @@ class _LocationDialogState extends State<LocationDialog> {
                   text: S.of(context).types,
                   fontWeight: MyFontWeight.bold,
                   textSize: MyFontSize.size18,
+                  colorDark: Colors.black,
                 ),
               ),
             ),
@@ -63,6 +64,7 @@ class _LocationDialogState extends State<LocationDialog> {
                     text: S.of(context).home,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
+                    colorDark: Colors.black,
                     color: const Color(0xFF3F3F46),
                   ),
                 ],
@@ -79,8 +81,8 @@ class _LocationDialogState extends State<LocationDialog> {
               title: Row(
                 children: [
                   CustomSizedBox(
-                    height: 14,
-                    width: 14,
+                    height: 20,
+                    width: 20,
                     child: SvgPicture.asset(
                       'assets/svg/work_light.svg',
                     ),
@@ -90,6 +92,7 @@ class _LocationDialogState extends State<LocationDialog> {
                     text: S.of(context).work,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
+                    colorDark: Colors.black,
                     color: const Color(0xFF3F3F46),
                   )
                 ],
@@ -106,8 +109,8 @@ class _LocationDialogState extends State<LocationDialog> {
               title: Row(
                 children: [
                   CustomSizedBox(
-                    height: 14,
-                    width: 14,
+                    height: 20,
+                    width: 20,
                     child: SvgPicture.asset(
                       'assets/svg/school_light.svg',
                     ),
@@ -117,6 +120,7 @@ class _LocationDialogState extends State<LocationDialog> {
                     text: S.of(context).school,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
+                    colorDark: Colors.black,
                     color: const Color(0xFF3F3F46),
                   )
                 ],
@@ -133,8 +137,8 @@ class _LocationDialogState extends State<LocationDialog> {
               title: Row(
                 children: [
                   CustomSizedBox(
-                    height: 14,
-                    width: 14,
+                    height: 20,
+                    width: 20,
                     child: SvgPicture.asset(
                       'assets/svg/shopping_light.svg',
                     ),
@@ -144,6 +148,7 @@ class _LocationDialogState extends State<LocationDialog> {
                     text: S.of(context).shop,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
+                    colorDark: Colors.black,
                     color: const Color(0xFF3F3F46),
                   )
                 ],
@@ -163,17 +168,20 @@ class _LocationDialogState extends State<LocationDialog> {
                     text: S.of(context).other,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.medium,
+                    colorDark: Colors.black,
                     color: const Color(0xFF3F3F46),
                   ),
                   horizontalSpace(11),
                   CustomSizedBox(
                       width: 140,
-                      height: 24,
+                      // height: 24,
                       child: DefaultFormField(
                         hintText: S.of(context).type,
-                        textSize: MyFontSize.size8,
+                        textSize: MyFontSize.size12,
                         fillColor: AppColor.lightBabyBlue,
                         filled: true,
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        textInputAction: TextInputAction.done,
                       )),
                 ],
               ),
@@ -188,6 +196,8 @@ class _LocationDialogState extends State<LocationDialog> {
             verticalSpace(6),
             DefaultButton(
               text: S.of(context).save,
+              fontSize: MyFontSize.size14,
+              fontWeight: MyFontWeight.bold,
               onPressed: () async {
                 if (addressType != null) {
                   await addressesProvider
@@ -210,8 +220,8 @@ class _LocationDialogState extends State<LocationDialog> {
                   );
                 }
               },
-              height: 32,
-              width: 225,
+              height: 40,
+              width: 210,
             ),
           ],
         ),

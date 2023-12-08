@@ -212,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () async{
                         try {
@@ -227,6 +227,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
+                            homeProvider.markers.clear();
+                            homeProvider.resetMap();
+                            homeProvider.addMarkerLongPressed(
+                                LatLng(position.latitude, position.longitude));
                           }).catchError((e) {
                             log("Error in accessing current location $e");
                           });
@@ -235,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       },
                       child: Padding(
-                        padding: onlyEdgeInsets(end: 24),
+                        padding: onlyEdgeInsets(end: 2,),
                         child: CustomSizedBox(
                           height: 40,
                           width: 40,

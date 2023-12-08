@@ -19,3 +19,5 @@ class GlobalEventBus {
     return _instance ?? GlobalEventBus._internal();
   }
 }
+
+final EventBus mainEventBus = GlobalEventBus().eventBus!;

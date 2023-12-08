@@ -423,7 +423,7 @@ class RequestServicesProvider with ChangeNotifier {
             bankAccountId: bankAccountId, requestId: requestId)
         .then((value) {
       AppLoader.stopLoader();
-      CustomSnackBars.successSnackBar(context, "Requested Successfully");
+      CustomSnackBars.successSnackBar(context, S.of(context).submitRequestSuccess);
     });
   }
 

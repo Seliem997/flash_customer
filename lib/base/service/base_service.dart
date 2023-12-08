@@ -6,6 +6,8 @@ import '../../utils/app_loader.dart';
 import '../../utils/cache_helper.dart';
 import '../../utils/enum/request_types.dart';
 import '../../utils/enum/shared_preference_keys.dart';
+import '../../utils/global_event_bus.dart';
+import '../network_fail_event.dart';
 
 class BaseService {
   // final _instance = FirebaseAuth.instance;
@@ -38,9 +40,10 @@ class BaseService {
               .post(Uri.parse(api),
                   body: jsonBody ? jsonEncode(body) : body,
                   headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 15), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
+            mainEventBus.fire(NetworkFailEvent());
             return http.Response('Request Timeout', 408);
           }).then((value) async {
             if (jsonDecode(value.body)['status_code'] == 200 ||

@@ -34,6 +34,7 @@ class MyRequestsData {
   String? requestId;
   String? status;
   String? statusArabic;
+  int? washNumber;
   dynamic rate;
   String? payBy;
   dynamic feedback;
@@ -62,6 +63,7 @@ class MyRequestsData {
         this.status,
         this.statusArabic,
         this.rate,
+        this.washNumber,
         this.payBy,
         this.feedback,
         this.packageId,
@@ -90,6 +92,7 @@ class MyRequestsData {
     requestId = json['request_id'];
     status = json['status'];
     statusArabic = json['status_lang'];
+    washNumber = json['wash_number'];
     rate = json['rate'];
     payBy = json['pay_by'];
     feedback = json['feedback'];

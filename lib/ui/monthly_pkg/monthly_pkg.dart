@@ -200,7 +200,7 @@ class _MonthlyPkgState extends State<MonthlyPkg> {
                                         AppLoader.stopLoader();
                                         if (value.status == Status.success) {
                                           CustomSnackBars.successSnackBar(
-                                              context, 'New Vehicle added');
+                                              context, S.of(context).newVehicleAdded);
                                           requestServicesProvider.cityIdData != null
                                               ? navigateTo(
                                               context,

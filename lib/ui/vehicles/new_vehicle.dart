@@ -83,12 +83,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 children: [
                   TextWidget(
                       text: S.of(context).manufacturer,
-                      textSize: MyFontSize.size15,
+                      textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
                     text: S.of(context).required,
-                    textSize: MyFontSize.size8,
+                    textSize: MyFontSize.size12,
                     fontWeight: MyFontWeight.regular,
                     color: packageProvider.requiredManufacture
                         ? Colors.red
@@ -116,7 +116,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     hint: TextWidget(
                       text: widget.updateVehicle ? vehicleData.manufacturerName! : S.of(context).chooseManufacturer,
                       fontWeight: MyFontWeight.medium,
-                      textSize: MyFontSize.size10,
+                      textSize: MyFontSize.size12,
                       color: const Color(0xFF909090),
                     ),
                     icon: SvgPicture.asset(
@@ -136,7 +136,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     color: MyApp.themeMode(context)
                                         ? const Color(0xFF909090)
                                         : Colors.black,
-                                    fontSize: 16)))),
+                                    fontSize: 18)))),
                     onChanged: (value) async {
                       packageProvider.setSelectedManufacture(value!);
                       packageProvider.chooseManufacture = true;
@@ -160,12 +160,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 children: [
                   TextWidget(
                       text: S.of(context).model,
-                      textSize: MyFontSize.size15,
+                      textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
                     text: S.of(context).required,
-                    textSize: MyFontSize.size8,
+                    textSize: MyFontSize.size12,
                     fontWeight: MyFontWeight.regular,
                     color: packageProvider.requiredModel
                         ? Colors.red
@@ -193,7 +193,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     hint: TextWidget(
                       text: widget.updateVehicle ? vehicleData.vehicleModelName! : S.of(context).chooseModel,
                       fontWeight: MyFontWeight.medium,
-                      textSize: MyFontSize.size10,
+                      textSize: MyFontSize.size12,
                       color: const Color(0xFF909090),
                     ),
                     icon: SvgPicture.asset(
@@ -211,7 +211,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     color: MyApp.themeMode(context)
                                         ? const Color(0xFF909090)
                                         : Colors.black,
-                                    fontSize: 16)))),
+                                    fontSize: 18)))),
                     dropdownColor: MyApp.themeMode(context)
                         ? AppColor.borderGreyLight
                         : null,
@@ -229,12 +229,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 children: [
                   TextWidget(
                       text: S.of(context).nickname,
-                      textSize: MyFontSize.size15,
+                      textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
                     text: S.of(context).optional,
-                    textSize: MyFontSize.size8,
+                    textSize: MyFontSize.size12,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.lightGrey,
                   ),
@@ -250,7 +250,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
-                  textSize: MyFontSize.size12,
+                  textSize: MyFontSize.size14,
                   fontWeight: MyFontWeight.medium,
                 ),
               ),
@@ -259,12 +259,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 children: [
                   TextWidget(
                       text: S.of(context).year,
-                      textSize: MyFontSize.size15,
+                      textSize: MyFontSize.size18,
                       fontWeight: MyFontWeight.medium),
                   horizontalSpace(6),
                   TextWidget(
                     text: S.of(context).optional,
-                    textSize: MyFontSize.size8,
+                    textSize: MyFontSize.size12,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.lightGrey,
                   ),
@@ -280,7 +280,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
-                  textSize: MyFontSize.size12,
+                  textSize: MyFontSize.size14,
                   fontWeight: MyFontWeight.medium,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -298,7 +298,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   hasBorder: true,
                   title: TextWidget(
                     text: S.of(context).color,
-                    textSize: MyFontSize.size15,
+                    textSize: MyFontSize.size18,
                     fontWeight: MyFontWeight.medium,
                   ),
                   // Update the screenPickerColor using the callback.
@@ -311,12 +311,25 @@ class _VehicleInfoState extends State<VehicleInfo> {
 
                         // ColorTools.nameThatColor(color);
                   },
-                  borderColor: Colors.black,
+                  borderColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
                   width: 40,
                   height: 40,
                   borderRadius: 22,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   showColorName: true,
+                  colorNameTextStyle: TextStyle(color: MyApp.themeMode(context) ? Colors.white : Colors.black),
+                  pickersEnabled: const <ColorPickerType, bool>{
+                    ColorPickerType.primary : false,
+                    ColorPickerType.custom : true,
+                    ColorPickerType.accent : true,
+
+                  },
+                  pickerTypeLabels: <ColorPickerType, String>{
+                    ColorPickerType.accent : S.of(context).accent,
+                    ColorPickerType.custom : S.of(context).custom,
+                  },
+                  pickerTypeTextStyle: const TextStyle(color: AppColor.primary),
+                  customColorSwatchesAndNames: myVehiclesProvider.customSwatches,
                 ),
               ),
               verticalSpace(24),
@@ -327,7 +340,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     children: [
                       TextWidget(
                         text: S.of(context).numbers,
-                        textSize: MyFontSize.size15,
+                        textSize: MyFontSize.size18,
                         fontWeight: MyFontWeight.medium,
                       ),
                       verticalSpace(12),
@@ -361,7 +374,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     children: [
                       TextWidget(
                         text: S.of(context).letters,
-                        textSize: MyFontSize.size15,
+                        textSize: MyFontSize.size18,
                         fontWeight: MyFontWeight.medium,
                       ),
                       verticalSpace(12),
@@ -378,7 +391,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           fontWeight: MyFontWeight.medium,
                           keyboardType: TextInputType.text,
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(3)
+                            LengthLimitingTextInputFormatter(4)
                           ],
                           onChanged: (v){
                             setState(() {
@@ -391,10 +404,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
                 ],
               ),
               verticalSpace(32),
-              // Align(
-              //   alignment: Alignment.center,
-              //   child: Image.asset('assets/images/vehicle_plate.png'),
-              // ),
               Align(
                 alignment: Alignment.center,
                 child: CustomSizedBox(

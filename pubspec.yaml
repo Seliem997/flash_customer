@@ -78,7 +78,7 @@ dependencies:
   flutter_statusbarcolor_ns: ^0.5.0
   fast_cached_network_image: ^1.1.1
   change_case: ^1.1.0
-  flex_color_picker: ^3.2.2
+  flex_color_picker: ^3.3.0
   package_info_plus: any
   pinput: ^3.0.1
 
@@ -130,6 +130,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: BahijArabic
+      fonts:
+        - asset: assets/fonts/BahijArabic.ttf
+
   # fonts:
   #   - family: Schyler
   #     fonts:

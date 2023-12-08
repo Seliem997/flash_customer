@@ -1,5 +1,6 @@
 import 'package:flash_customer/main.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TextWidget extends StatelessWidget {
   const TextWidget({
@@ -45,9 +46,10 @@ class TextWidget extends StatelessWidget {
           color: MyApp.themeMode(context) ? colorDark : color,
           height: height,
           overflow: TextOverflow.ellipsis,
-          fontFamily: "Montserrat",
+          fontFamily:  Intl.getCurrentLocale() == 'en' ? null : 'BahijArabic',
           fontWeight: isTitle ? FontWeight.w500 : fontWeight,
-          letterSpacing: 1,
+          letterSpacing: Intl.getCurrentLocale() == 'en'
+              ?  0.8 : 0,
         ),
       ),
     );

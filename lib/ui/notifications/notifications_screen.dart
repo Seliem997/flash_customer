@@ -65,7 +65,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           padding:
                               symmetricEdgeInsets(horizontal: 15, vertical: 10),
                           radiusCircular: 5,
-                          height: 120,
+                          height: 125,
                           backgroundColor: AppColor.borderGrey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               TextWidget(
                                 text:
                                 "${notificationsProvider.notifications![index].title}",
-                                textSize: 14,
+                                textSize: 16,
                                 height: 1,
                                 maxLines: 1,
                               ),
@@ -87,7 +87,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     child: TextWidget(
                                       text:
                                           "${notificationsProvider.notifications![index].content}",
-                                      textSize: 13,
+                                      textSize: 14,
                                       height: 1.2,
                                       maxLines: 3,
                                     ),
@@ -99,14 +99,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 children: [
                                   const Icon(
                                     Icons.calendar_today_outlined,
-                                    size: 12,
+                                    size: 14,
                                     color: Color(0xff616161),
                                   ),
                                   horizontalSpace(15),
                                   TextWidget(
                                     text:
                                         "${notificationsProvider.notifications![index].time} - ${notificationsProvider.notifications![index].date}",
-                                    textSize: 10,
+                                    textSize: 13,
                                   ),
                                 ],
                               )

@@ -137,9 +137,14 @@ class _MyAddressesState extends State<MyAddresses> {
                                                       MainAxisAlignment.spaceAround,
                                                       children: [
                                                         TextWidget(
-                                                          text: (Intl.getCurrentLocale() == 'ar' ?( addressesProvider
+                                                          text: (Intl.getCurrentLocale() == 'ar' ?(addressesProvider
                                                               .addressesDataList[index]
-                                                              .locationName== 'Location Name'? 'بدون اسم' : 'Location Name') : addressesProvider
+                                                              .locationName ==
+                                                              'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
+                                                              ? '${addressesProvider.addressesDataList[index].type}'
+                                                              : addressesProvider
+                                                              .addressesDataList[index]
+                                                              .locationName) : addressesProvider
                                                               .addressesDataList[index]
                                                               .locationName ) ??
                                                               '${addressesProvider.addressesDataList[index].type!}${S.of(context).location}',

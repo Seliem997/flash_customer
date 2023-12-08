@@ -1,3 +1,4 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../models/myVehiclesModel.dart';
@@ -15,8 +16,18 @@ class MyVehiclesProvider with ChangeNotifier {
   TextEditingController numbersController = TextEditingController();
   TextEditingController lettersController = TextEditingController();
   String? vehicleColor;
-  // String vehicleColor= '4294967295';
   Color screenPickerColor= Colors.white;
+  final Map<ColorSwatch<Object>, String> customSwatches =
+  <ColorSwatch<Object>, String>{
+
+    ColorTools.createPrimarySwatch(const Color(0xFFBC350F)): 'Rust',
+    ColorTools.createPrimarySwatch(const Color(0xFFFFFFFF)): 'White',
+    ColorTools.createPrimarySwatch(const Color(0xFF000000)): 'Black',
+    ColorTools.createAccentSwatch(const Color(0xFF412D2E)): 'brown',
+    ColorTools.createAccentSwatch(const Color(0xFF014D33)): 'dark green',
+    ColorTools.createAccentSwatch(Colors.grey): 'Grey',
+    ColorTools.createAccentSwatch(Colors.blue): 'Blue',
+  };
 
   bool loadingMyVehicles = true;
   MyVehiclesData? myVehiclesData;

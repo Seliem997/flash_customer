@@ -80,7 +80,8 @@ class SummaryRequestDetails extends StatelessWidget {
                       verticalSpace(10),
                       TextWidget(
                         text:
-                            "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
+                            "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time}",
+                            // "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
                         textSize: MyFontSize.size15,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -95,7 +96,7 @@ class SummaryRequestDetails extends StatelessWidget {
                 children: [
                   verticalSpace(20),
                   TextWidget(
-                    text: S.of(context).services,
+                    text: S.of(context).basicServices,
                     textSize: MyFontSize.size18,
                     fontWeight: MyFontWeight.semiBold,
                   ),
@@ -113,7 +114,16 @@ class SummaryRequestDetails extends StatelessWidget {
                             requestServicesProvider.detailsRequestData!
                                     .services![index].type ==
                                 "other") {
-                          return TextWidget(
+                          return requestServicesProvider.detailsRequestData!
+                              .services![index].type ==
+                              'basic' ? TextWidget(
+                            text: requestServicesProvider
+                                .detailsRequestData!.services![index].title!,
+                            textSize: MyFontSize.size15,
+                            fontWeight: MyFontWeight.regular,
+                            color: AppColor.subTextGrey,
+
+                          ) : TextWidget(
                             text: '${requestServicesProvider
                                 .detailsRequestData!.services![index].requestServiceCount} ${S.of(context).from} ${requestServicesProvider
                                 .detailsRequestData!.services![index].title!}',

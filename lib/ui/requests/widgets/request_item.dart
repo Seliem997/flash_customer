@@ -51,9 +51,10 @@ class RequestItem extends StatelessWidget {
               horizontalSpace(10),
               Expanded(
                 child: TextWidget(
-                  text:
-                      services == '' ? S.of(context).monthlyPackage : services,
-                  textSize: MyFontSize.size10,
+                  text: services == ''
+                      ? '${Intl.getCurrentLocale() == 'ar' ? myRequestData.packageDetails!.nameAr! : myRequestData.packageDetails!.nameEn!}   (${S.of(context).monthlyPackage})'
+                      : services,
+                  textSize: MyFontSize.size12,
                   fontWeight: MyFontWeight.medium,
                   color: AppColor.grey,
                   maxLines: 2,
@@ -76,45 +77,49 @@ class RequestItem extends StatelessWidget {
                                   : const Color(0xff616161),
                             )),
                         horizontalSpace(8),
-                        myRequestData.slots != null
+                        TextWidget(
+                          text: '${myRequestData.time}',
+                          textSize: MyFontSize.size12,
+                          fontWeight: MyFontWeight.medium,
+                          color: AppColor.grey,
+                        )
+                        /*myRequestData.slots != null
                             ? myRequestData.slots!.isNotEmpty
                                 ? TextWidget(
                                     text: '${myRequestData.slots![0].startAt}',
-                                    textSize: MyFontSize.size10,
+                                    textSize: MyFontSize.size12,
                                     fontWeight: MyFontWeight.medium,
                                     color: AppColor.grey,
                                   )
                                 : TextWidget(
                                     text: Intl.getCurrentLocale() == 'ar'
-                                        ? myRequestData.packageDetails!.nameAr!
-                                        : myRequestData.packageDetails!.nameEn!,
-                                    textSize: MyFontSize.size10,
+                                        ? '${myRequestData.packageDetails?.nameAr}'
+                                        : '${myRequestData.packageDetails?.nameEn}',
+                                    textSize: MyFontSize.size12,
                                     fontWeight: MyFontWeight.medium,
                                     color: AppColor.grey,
                                   )
                             : TextWidget(
                                 text: Intl.getCurrentLocale() == 'ar'
-                                    ? myRequestData.packageDetails!.nameAr!
-                                    : myRequestData.packageDetails!.nameEn!,
-                                textSize: MyFontSize.size10,
+                                    ? '${myRequestData.packageDetails?.nameAr}'
+                                    : '${myRequestData.packageDetails?.nameEn}',
+                                textSize: MyFontSize.size12,
                                 fontWeight: MyFontWeight.medium,
                                 color: AppColor.grey,
-                              ),
+                              ),*/
                       ],
                     )
                   : Row(
                       children: [
                         TextWidget(
-                          text: S.of(context).packageName,
+                          text: S.of(context).washNumber,
                           textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.semiBold,
                         ),
                         horizontalSpace(8),
                         TextWidget(
-                          text: Intl.getCurrentLocale() == 'ar'
-                              ? myRequestData.packageDetails!.nameAr!
-                              : myRequestData.packageDetails!.nameEn!,
-                          textSize: MyFontSize.size10,
+                          text: '${myRequestData.washNumber}',
+                          textSize: MyFontSize.size12,
                           fontWeight: MyFontWeight.medium,
                           color: AppColor.grey,
                         ),
@@ -243,7 +248,7 @@ class RequestItem extends StatelessWidget {
               ),
               TextWidget(
                 text: '${myRequestData.totalAmount} ${S.of(context).sr}',
-                textSize: MyFontSize.size10,
+                textSize: MyFontSize.size12,
                 fontWeight: MyFontWeight.bold,
                 color: AppColor.borderBlue,
               ),

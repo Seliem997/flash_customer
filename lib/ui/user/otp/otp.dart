@@ -10,6 +10,7 @@ import 'package:flash_customer/utils/font_styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart' as intlAr;
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -21,11 +22,8 @@ import '../../../providers/user_provider.dart';
 import '../../../services/authentication_service.dart';
 import '../../../utils/snack_bars.dart';
 import '../../home/home_screen.dart';
-import '../../services/other_services_screen.dart';
-import '../../vehicles/vehicles_type.dart';
 import '../../widgets/custom_container.dart';
 import '../../widgets/navigate.dart';
-import 'otp_cell.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen(
@@ -110,7 +108,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       fontWeight: MyFontWeight.medium),
                   children: [
                     TextSpan(
-                      text: ' ${widget.countryCode} ${widget.phoneNumber}',
+                      text: intlAr.Intl.getCurrentLocale() == 'ar' ? ' ${widget.phoneNumber} 966+' : ' ${widget.countryCode} ${widget.phoneNumber}',
                       style: TextStyle(
                         color: const Color(0xFF29A7FF),
                         fontSize: MyFontSize.size14,
@@ -194,15 +192,6 @@ class _OTPScreenState extends State<OTPScreen> {
                       },
                     ),
                   ),
-/*
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return OtpCell(index: index,phoneNumber: widget.phoneNumber, countryCode: widget.countryCode,);
-                      }),
-*/
                 ),
               ),
               verticalSpace(30),

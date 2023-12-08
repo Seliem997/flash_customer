@@ -354,6 +354,7 @@ class _ContactUsState extends State<ContactUs> {
                         fontSize: MyFontSize.size16,
                         fontWeight: MyFontWeight.semiBold,
                         decoration: TextDecoration.underline,
+                        color: MyApp.themeMode(context) ? Colors.white : Colors.black
                       ),
                     ),
                   ),

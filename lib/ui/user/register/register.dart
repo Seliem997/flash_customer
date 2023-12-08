@@ -70,9 +70,10 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                           textSize: MyFontSize.size15,
                           fontWeight: MyFontWeight.medium,
                           textAlign: TextAlign.center,
+                          height: 1.3,
                         ),
                       ),
-                      verticalSpace(60),
+                      verticalSpace(45),
                       Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: TextWidget(
@@ -124,7 +125,7 @@ class _RegisterPhoneNumberState extends State<RegisterPhoneNumber> {
                             hintText: '545548879',
                             controller: phoneController,
                             keyboardType: TextInputType.phone,
-                            padding: symmetricEdgeInsets(horizontal: 15),
+                            padding: onlyEdgeInsets(start: 15, top: 0, bottom: 8),
                             textInputAction: TextInputAction.done,
                             letterSpacing: 3,
                             textHeight: 0.8,

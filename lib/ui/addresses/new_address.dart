@@ -1,12 +1,9 @@
 import 'dart:developer';
 
 import 'package:flash_customer/ui/widgets/custom_container.dart';
-import 'package:flash_customer/ui/widgets/custom_form_field.dart';
-import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +14,11 @@ import '../../providers/addresses_provider.dart';
 import '../../providers/home_provider.dart';
 import '../../utils/app_loader.dart';
 import '../../utils/font_styles.dart';
+import '../home/home_screen.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/data_loader.dart';
+import '../widgets/navigate.dart';
 import '../widgets/spaces.dart';
 import 'location_dialog.dart';
 
@@ -94,7 +93,7 @@ class _NewAddressState extends State<NewAddress> {
           icon: await BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue)));
     });
-    // addressesProvider.setLoading(false);
+    addressesProvider.setLoading(false);
 
     await _handleLocationPermission();
     await _getCurrentLocation();
@@ -188,6 +187,12 @@ class _NewAddressState extends State<NewAddress> {
                   children: [
                     CustomAppBar(
                       title: S.of(context).myAddresses,
+                      onTap: (){
+                        setState(() {
+                          homeProvider.markers.clear();
+                        });
+                        navigateAndFinish(context, const HomeScreen());
+                      },
                       backgroundColor: MyApp.themeMode(context) ? AppColor.secondaryDarkColor.withOpacity(0.5) : Colors.transparent,
                     ),
                     const Spacer(),

@@ -177,17 +177,10 @@ class SubmitBankTransferMethod extends StatelessWidget {
                       });
 
                     },
-                    child: Image.asset('assets/images/uploadFiles.png',height: 140,
-                      width: 180,
-                    fit: BoxFit.cover,)),
+                    child: Image.asset(
+                      'assets/images/uploadFile.png',
+                    fit: BoxFit.contain,)),
               ),
-              verticalSpace(50),
-/*              DefaultButton(
-                height: 37,
-                width: 345,
-                text: 'Submit',
-                onPressed: () {},
-              )*/
             ],
           )),
     );
