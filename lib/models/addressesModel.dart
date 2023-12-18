@@ -20,7 +20,6 @@ class AddressDetailsModel {
   }
 }
 
-
 class AddressesModel {
   int? statusCode;
   List<AddressesData>? data;
@@ -30,9 +29,9 @@ class AddressesModel {
 
   AddressesModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
-    if (json['data'] != null) {
+    if (json['data']['data'] != null) {
       data = <AddressesData>[];
-      json['data'].forEach((v) {
+      json['data']['data'].forEach((v) {
         data!.add(AddressesData.fromJson(v));
       });
     }
@@ -59,12 +58,12 @@ class AddressesData {
 
   AddressesData(
       {this.id,
-        this.image,
-        this.type,
-        this.latitude,
-        this.langitude,
-        this.locationName,
-        this.customerId});
+      this.image,
+      this.type,
+      this.latitude,
+      this.langitude,
+      this.locationName,
+      this.customerId});
 
   AddressesData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -75,5 +74,4 @@ class AddressesData {
     locationName = json['location_name'];
     customerId = json['customer_id'];
   }
-
 }

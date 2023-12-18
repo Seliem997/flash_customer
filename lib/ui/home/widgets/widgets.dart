@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flash_customer/providers/home_provider.dart';
 import 'package:flash_customer/ui/home/home_screen.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
@@ -47,22 +48,27 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
             expanded: expandLocationFlag,
             expandedHeight: 30.h,
             child: Padding(
-              padding: onlyEdgeInsets(start: 10, end: 10, bottom: 3,),
+              padding: onlyEdgeInsets(
+                start: 10,
+                end: 10,
+                bottom: 3,
+              ),
               child: Column(
                 children: [
                   addressesProvider.addressesDataList.isEmpty
-                      ?  Expanded(
+                      ? Expanded(
                           child: Center(
                               child: Padding(
-                                padding: symmetricEdgeInsets(vertical: 20,horizontal: 10),
-                                child: TextWidget(
-                          text: S.of(context).thereIsNoAddressYet,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.bold,
-                          textSize: 20,
-                          height: 1.4,
-                        ),
-                              )))
+                          padding:
+                              symmetricEdgeInsets(vertical: 20, horizontal: 10),
+                          child: TextWidget(
+                            text: S.of(context).thereIsNoAddressYet,
+                            color: AppColor.black,
+                            fontWeight: FontWeight.bold,
+                            textSize: 20,
+                            height: 1.4,
+                          ),
+                        )))
                       : Expanded(
                           child: ListView.separated(
                           shrinkWrap: true,
@@ -106,17 +112,28 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                                   : Colors.black,
                                             )
                                           : addressesProvider
-                                                  .addressesDataList[index]
-                                                  .type! ==
-                                              S.of(context).shop
-                                          ? SvgPicture.asset(
-                                'assets/svg/shopping_light.svg',
-                                              color: MyApp.themeMode(context)
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            )
-                                          : Image.network(addressesProvider
-                                              .addressesDataList[index].image!),
+                                                          .addressesDataList[
+                                                              index]
+                                                          .type! ==
+                                                      S.of(context).shop ||
+                                                  addressesProvider
+                                                          .addressesDataList[
+                                                              index]
+                                                          .image ==
+                                                      null
+                                              ? SvgPicture.asset(
+                                                  'assets/svg/shopping_light.svg',
+                                                  color:
+                                                      MyApp.themeMode(context)
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                )
+                                              : CachedNetworkImage(
+                                                  imageUrl: addressesProvider
+                                                          .addressesDataList[
+                                                              index]
+                                                          .image ??
+                                                      ""),
                             ),
                             onPressed: () {
                               setState(() {
@@ -166,9 +183,13 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                             },
                             labelText: (Intl.getCurrentLocale() == 'ar'
                                     ? (addressesProvider
-                                                .addressesDataList[index]
-                                                .locationName ==
-                                            'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
+                                                    .addressesDataList[index]
+                                                    .locationName ==
+                                                'Location Name' ||
+                                            addressesProvider
+                                                    .addressesDataList[index]
+                                                    .locationName ==
+                                                'Not Selected'
                                         ? '${addressesProvider.addressesDataList[index].type}'
                                         : addressesProvider
                                             .addressesDataList[index]
