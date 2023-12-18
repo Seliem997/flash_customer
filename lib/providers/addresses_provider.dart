@@ -9,6 +9,8 @@ import '../utils/enum/statuses.dart';
 
 class AddressesProvider with ChangeNotifier{
 
+  TextEditingController otherTextController = TextEditingController();
+
   bool isLoading = true;
   AddressesService addressesService = AddressesService();
 

@@ -124,7 +124,7 @@ class ExtraServicesWidget extends StatelessWidget {
               ),
               horizontalSpace(10),
               CustomContainer(
-                width: 140,
+                width: 125,
                 borderColorDark: Colors.transparent,
                 child: TextWidget(
                   text: extraService.title!,
@@ -151,8 +151,8 @@ class ExtraServicesWidget extends StatelessWidget {
                               requestServicesProvider.calculateTotal();
                             }
                           },
-                          width: 25,
-                          height: 25,
+                          width: 28,
+                          height: 28,
                           clipBehavior: Clip.hardEdge,
                           borderRadius: BorderRadius.zero,
                           backgroundColor: Colors.transparent,
@@ -164,7 +164,7 @@ class ExtraServicesWidget extends StatelessWidget {
                         TextWidget(
                           text: extraService.quantity.toString(),
                           fontWeight: MyFontWeight.bold,
-                          textSize: MyFontSize.size12,
+                          textSize: MyFontSize.size14,
                           colorDark: extraService.quantity > 0 ? Colors.black : Colors.white,
                         ),
                         horizontalSpace(9),
@@ -174,8 +174,8 @@ class ExtraServicesWidget extends StatelessWidget {
                             requestServicesProvider.notifyListeners();
                             requestServicesProvider.calculateTotal();
                           },
-                          width: 25,
-                          height: 25,
+                          width: 28,
+                          height: 28,
                           clipBehavior: Clip.hardEdge,
                           borderRadius: BorderRadius.zero,
                           backgroundColor: Colors.transparent,

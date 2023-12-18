@@ -48,13 +48,17 @@ class _VehicleInfoState extends State<VehicleInfo> {
     final MyVehiclesProvider myVehiclesProvider =
     Provider.of<MyVehiclesProvider>(context, listen: false);
     await packageProvider.getManufacturers();
+    myVehiclesProvider.plateCharacters = '';
     if(widget.updateVehicle){
       var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];
       myVehiclesProvider.nameController = vehicleData.name == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.name);
       myVehiclesProvider.yearController = vehicleData.year == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.year);
       myVehiclesProvider.numbersController = vehicleData.numbers == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.numbers);
       myVehiclesProvider.lettersController = vehicleData.letters == null? TextEditingController(text: '') : TextEditingController(text: vehicleData.letters);
-      myVehiclesProvider.screenPickerColor = vehicleData.color == null ? Colors.white : Color(int.parse(vehicleData.color!));
+      vehicleData.letters != null ? myVehiclesProvider.plateTranslate(myVehiclesProvider.lettersController.text) : null ;
+      myVehiclesProvider.screenPickerColor = vehicleData.color == null
+          ? Colors.white
+          : vehicleData.color!.startsWith('#') ? vehicleData.color!.toColor : Color(int.parse(vehicleData.color!));
     }//
   }
 
@@ -242,7 +246,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
               ),
               verticalSpace(12),
               CustomSizedBox(
-                height: 44,
+                // height: 44,
                 width: double.infinity,
                 child: DefaultFormField(
                   controller: myVehiclesProvider.nameController,
@@ -250,8 +254,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
-                  textSize: MyFontSize.size14,
-                  fontWeight: MyFontWeight.medium,
+                  textSize: MyFontSize.size15,
+                  fontWeight: MyFontWeight.bold,
+                  textInputAction: TextInputAction.next,
+                  padding: onlyEdgeInsets(bottom: 10, start: 15),
                 ),
               ),
               verticalSpace(24),
@@ -280,12 +286,14 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   fillColor: AppColor.borderGreyLight,
                   filled: true,
                   textColor: AppColor.textGrey,
-                  textSize: MyFontSize.size14,
-                  fontWeight: MyFontWeight.medium,
+                  textSize: MyFontSize.size15,
+                  fontWeight: MyFontWeight.bold,
                   keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  padding: onlyEdgeInsets(bottom: 10, start: 15),
                 ),
               ),
               verticalSpace(24),
@@ -306,7 +314,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     setState(
                         () {
                           myVehiclesProvider.screenPickerColor = color;
-                          myVehiclesProvider.vehicleColor = color.value.toString();
+                          print('object color screen picker ${myVehiclesProvider.screenPickerColor}');
+                          myVehiclesProvider.vehicleColor = '#${color.value.toRadixString(16)}';
+                          // myVehiclesProvider.vehicleColor = color.value.toString();
+                          print('object myVehiclesProvider.vehicleColor ${myVehiclesProvider.vehicleColor}');
                         });
 
                         // ColorTools.nameThatColor(color);
@@ -353,9 +364,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
                           textColor: AppColor.textGrey,
-                          textSize: MyFontSize.size12,
-                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size15,
+                          fontWeight: MyFontWeight.semiBold,
                           keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          padding: onlyEdgeInsets(bottom: 10, start: 15),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                             LengthLimitingTextInputFormatter(4)
@@ -387,14 +400,17 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           fillColor: AppColor.borderGreyLight,
                           filled: true,
                           textColor: AppColor.textGrey,
-                          textSize: MyFontSize.size12,
-                          fontWeight: MyFontWeight.medium,
+                          textSize: MyFontSize.size15,
+                          fontWeight: MyFontWeight.semiBold,
+                          padding: onlyEdgeInsets(bottom: 10, start: 15),
                           keyboardType: TextInputType.text,
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(4)
+                            LengthLimitingTextInputFormatter(4),
+                            FilteringTextInputFormatter.allow(RegExp("[JjxXeEDdRrkKLlUuGgHhAaVvSsBbTtzZ]"))
                           ],
                           onChanged: (v){
                             setState(() {
+                              myVehiclesProvider.plateTranslate(myVehiclesProvider.lettersController.text);
                             });
                           },
                         ),
@@ -407,7 +423,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Align(
                 alignment: Alignment.center,
                 child: CustomSizedBox(
-                  width: 200,
+
+                  width: 250,
                   child: Row(
                     children: [
                       Expanded(
@@ -419,7 +436,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                               border: TableBorder.all(
                                   width: 2, color: Colors.black),
                               children: List.generate(
-                                2,
+                                1,
                                     (index) => TableRow(children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -428,7 +445,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       textScaleFactor: 2.4,
                                       color: AppColor.black,
                                       fontWeight: FontWeight.bold,
-                                      textSize: 12,
+                                      textSize: 9,
                                     ),
                                   ),
                                   Padding(
@@ -438,7 +455,38 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       textScaleFactor: 2.4,
                                       color: AppColor.black,
                                       fontWeight: FontWeight.bold,
-                                      textSize: 12,
+                                      textSize: 9,
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                            ),
+                            Table(
+                              // textDirection: TextDirection.rtl,
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              border: TableBorder.all(
+                                  width: 2, color: Colors.black),
+                              children: List.generate(
+                                1,
+                                    (index) => TableRow(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextWidget(
+                                      text: myVehiclesProvider.numbersController.text,
+                                      textScaleFactor: 2.4,
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.bold,
+                                      textSize: 9,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextWidget(
+                                      text: myVehiclesProvider.plateCharacters,
+                                      textScaleFactor: 2.4,
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.bold,
+                                      textSize: 9,
                                     ),
                                   ),
                                 ]),
@@ -447,11 +495,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          Image.asset('assets/images/ksa.png'),
-                        ],
-                      )
+                      Image.asset('assets/images/ksa.png',fit: BoxFit.contain,height: 76),
+
+                      // Column(
+                      //   children: [
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

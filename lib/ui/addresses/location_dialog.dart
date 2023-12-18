@@ -1,5 +1,6 @@
 import 'package:flash_customer/providers/addresses_provider.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/snack_bars.dart';
 import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -176,11 +177,12 @@ class _LocationDialogState extends State<LocationDialog> {
                       width: 140,
                       // height: 24,
                       child: DefaultFormField(
+                        controller: addressesProvider.otherTextController,
                         hintText: S.of(context).type,
                         textSize: MyFontSize.size12,
                         fillColor: AppColor.lightBabyBlue,
                         filled: true,
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        padding: onlyEdgeInsets(bottom: 10, start: 10),
                         textInputAction: TextInputAction.done,
                       )),
                 ],
@@ -199,15 +201,19 @@ class _LocationDialogState extends State<LocationDialog> {
               fontSize: MyFontSize.size14,
               fontWeight: MyFontWeight.bold,
               onPressed: () async {
+                AppLoader.showLoader(context);
                 if (addressType != null) {
                   await addressesProvider
                       .storeAddress(
                     type: addressType!,
                     lat: homeProvider.currentPosition!.latitude,
                     long: homeProvider.currentPosition!.longitude,
+                    locationName: addressType == 'other' ? addressesProvider.otherTextController.text : null
                   )
                       .then((value) {
+                        AppLoader.stopLoader();
                     if (value.status == Status.success) {
+                      addressesProvider.otherTextController = TextEditingController();
                       navigateAndFinish(context, const HomeScreen());
                     } else {
                       CustomSnackBars.failureSnackBar(context, '${value.message}');

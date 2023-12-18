@@ -47,19 +47,22 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
             expanded: expandLocationFlag,
             expandedHeight: 30.h,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+              padding: onlyEdgeInsets(start: 10, end: 10, bottom: 3,),
               child: Column(
                 children: [
                   addressesProvider.addressesDataList.isEmpty
                       ?  Expanded(
                           child: Center(
-                              child: TextWidget(
+                              child: Padding(
+                                padding: symmetricEdgeInsets(vertical: 20,horizontal: 10),
+                                child: TextWidget(
                           text: S.of(context).thereIsNoAddressYet,
                           color: AppColor.black,
                           fontWeight: FontWeight.bold,
                           textSize: 20,
                           height: 1.4,
-                        )))
+                        ),
+                              )))
                       : Expanded(
                           child: ListView.separated(
                           shrinkWrap: true,

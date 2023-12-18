@@ -322,14 +322,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                     style: TextStyle(
                         color: const Color(0xFF0F0F0F),
                         fontSize: MyFontSize.size20,
-                        fontWeight: MyFontWeight.medium),
+                        fontWeight: MyFontWeight.semiBold),
                     children: [
                       TextSpan(
                         text: S.of(context).canceled,
                         style: TextStyle(
                           color: const Color(0xFFFF3F48),
                           fontSize: MyFontSize.size20,
-                          fontWeight: MyFontWeight.medium,
+                          fontWeight: MyFontWeight.semiBold,
                         ),
                       ),
                       TextSpan(
@@ -337,7 +337,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         style: TextStyle(
                           color: const Color(0xFF0F0F0F),
                           fontSize: MyFontSize.size20,
-                          fontWeight: MyFontWeight.medium,
+                          fontWeight: MyFontWeight.semiBold,
                         ),
                       ),
                     ],
@@ -407,14 +407,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                           style: TextStyle(
                               color: const Color(0xFF0F0F0F),
                               fontSize: MyFontSize.size20,
-                              fontWeight: MyFontWeight.medium),
+                              fontWeight: MyFontWeight.semiBold),
                           children: [
                             TextSpan(
                               text: S.of(context).canceled,
                               style: TextStyle(
                                 color: const Color(0xFFFF3F48),
                                 fontSize: MyFontSize.size20,
-                                fontWeight: MyFontWeight.medium,
+                                fontWeight: MyFontWeight.semiBold,
                               ),
                             ),
                             TextSpan(
@@ -422,7 +422,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               style: TextStyle(
                                 color: const Color(0xFF0F0F0F),
                                 fontSize: MyFontSize.size20,
-                                fontWeight: MyFontWeight.medium,
+                                fontWeight: MyFontWeight.semiBold,
                               ),
                             ),
                           ],
@@ -1124,7 +1124,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         ),
                                         CustomContainer(
                                           width: 120,
-                                          height: 33,
+                                          height: 35,
                                           padding: onlyEdgeInsets(bottom: 0,top: 0),
                                           radiusCircular: 3,
                                           backgroundColor: AppColor.buttonGrey,
@@ -1148,7 +1148,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                               enabled: requestServicesProvider
                                                       .couponData ==
                                                   null,
-                                              padding: onlyEdgeInsets(bottom: 11,start: 5, top: 0),
+                                              height: 80,
+                                              padding: onlyEdgeInsets(bottom: 5,start: 5, top: 3),
                                             ),
                                           ),
                                         ),

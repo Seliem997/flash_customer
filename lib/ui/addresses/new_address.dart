@@ -214,6 +214,8 @@ class _NewAddressState extends State<NewAddress> {
                                       ),
                                     ),
                                   );
+                                  homeProvider.addMarkerLongPressed(
+                                      LatLng(position.latitude, position.longitude));
                                 }).catchError((e) {
                                   log("Error in accessing current location $e");
                                 });

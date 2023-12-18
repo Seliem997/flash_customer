@@ -343,8 +343,9 @@ class _WalletPaymentState extends State<WalletPayment> {
                               textInputAction: TextInputAction.done,
                               hintText: '0',
                               textColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
-                              padding: symmetricEdgeInsets(
-                                  vertical: 2, horizontal: 5),
+                              padding: onlyEdgeInsets(start: 10, bottom: 15),
+                              fontWeight: MyFontWeight.semiBold,
+                              textSize: MyFontSize.size16,
                             ),
                           ),
                         ),
