@@ -56,7 +56,6 @@ class _MyRequestsState extends State<MyRequests> {
   Widget build(BuildContext context) {
     final MyRequestsProvider myRequestsProvider =
         Provider.of<MyRequestsProvider>(context);
-
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).myRequests, onArrowPressed: (){
         navigateAndFinish(context, const HomeScreen());

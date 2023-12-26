@@ -201,7 +201,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                           ),
                           separatorBuilder: (context, index) =>
                               verticalSpace(4),
-                          itemCount: addressesProvider.addressesDataList.length,
+                          itemCount: addressesProvider.addressesDataList.length >= 5 ? 5 : addressesProvider.addressesDataList.length,
                         )),
                   GestureDetector(
                     onTap: () async {

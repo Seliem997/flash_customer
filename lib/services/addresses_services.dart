@@ -52,15 +52,17 @@ class AddressesService extends BaseService {
     return ResponseResult(status, addressesData, message: message);
   }
 
+  int? currentPage;
+  int? lastPage;
 
-  Future<ResponseResult> getAddresses() async {
+  Future<ResponseResult> getAddresses({int? page}) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
     List<AddressesData> addressesDataList = [];
     try {
       await requestFutureData(
-          api: Api.getAddresses,
+          api: Api.getAddresses(page: page),
           requestType: Request.get,
           headers: headers,
           jsonBody: true,
@@ -68,8 +70,9 @@ class AddressesService extends BaseService {
           onSuccess: (response) async {
             try {
               result = Status.success;
-              addressesDataList = AddressesModel.fromJson(response).data!;
-
+              currentPage= response["data"]["current_page"];
+              lastPage= response["data"]["last_page"];
+              addressesDataList = AddressesModel.fromJson(response).data!.addressesData!;
             } catch (e) {
               logger.e("Error getting response Addresses Data\n$e");
             }
@@ -99,10 +102,10 @@ class AddressesService extends BaseService {
           headers: headers,
           onSuccess: (response) async {
             try {
-              if (response["code"] == 200) {
+              if (response["status_code"] == 200) {
                 result = Status.success;
                 message = response["message"];
-              } else if (response["code"] == 400 || response["code"] == 401) {
+              } else if (response["status_code"] == 400 || response["status_code"] == 401) {
                 result = Status.codeNotCorrect;
                 message = response["message"];
               }

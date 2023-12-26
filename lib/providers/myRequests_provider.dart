@@ -21,17 +21,6 @@ class MyRequestsProvider with ChangeNotifier {
   String? filterDateText;
   String? filterDateStatus;
 
-/*
-
-  DateTime? _selectedDate;
-
-  DateTime? get selectedDate => _selectedDate;
-
-  set selectedDate(DateTime? value) {
-    _selectedDate = value;
-    getMyRequests();
-  }
-*/
   DateTime? _selectedDateFrom;
   DateTime? _selectedDateTo;
 

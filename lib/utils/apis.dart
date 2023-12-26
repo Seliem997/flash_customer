@@ -71,7 +71,7 @@ class Api {
 
   static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
-  static const String getAddresses = "$baseUrl/customer/my-addresses";
+  static  String getAddresses ({int? page}) => "$baseUrl/customer/my-addresses${page == null ? '': "?page=$page"}";
 
   static const String getVehicles =
       "$baseUrl/customer/vehicle_types/get/active";

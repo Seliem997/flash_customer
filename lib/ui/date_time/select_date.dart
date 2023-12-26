@@ -197,7 +197,8 @@ class _SelectDateState extends State<SelectDate> {
                                       .selectedServiceIndex!]
                                   .duration!
                                   .toDouble(),
-                              date: DateFormat(DFormat.mdy.key,('en-IN')).format(date), addressId: addressesProvider.addressDetailsData!.id!,
+                              date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
+                  addressId: addressesProvider.addressDetailsData!.id!,
                             )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false))
@@ -269,11 +270,11 @@ class _SelectDateState extends State<SelectDate> {
                                             value.slotsIds= [];
                                             value.selectedTimeSlot(
                                                 index: employeeIndex);
-                                            otherServicesProvider.selectedDate =
+                                            /*otherServicesProvider.selectedDate =
                                                 DateFormat(DFormat.ymd.key,('en-IN'))
                                                     .format(
                                                         requestServicesProvider
-                                                            .date);
+                                                            .date);*/
                                             value.slotsIds = value
                                                 .packageSlotsList[employeeIndex]
                                                 .map((e) => e.id)
@@ -389,13 +390,6 @@ class _SelectDateState extends State<SelectDate> {
                                                 value.slotsIds= [];
                                                 value.selectedTimeSlot(
                                                     index: employeeIndex);
-                                                otherServicesProvider
-                                                    .selectedDate =
-                                                    DateFormat(
-                                                        DFormat.ymd.key,('en-IN'))
-                                                    .format(
-                                                        requestServicesProvider
-                                                            .date);
                                                 value.slotsList[employeeIndex]
                                                     .forEach((v) {
                                                   value.slotsIds.add(v.id);

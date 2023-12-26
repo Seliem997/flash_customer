@@ -82,7 +82,7 @@ class _ContactUsState extends State<ContactUs> {
                 ),
                 verticalSpace(10),
                 CustomSizedBox(
-                  height: 40,
+                  // height: 40,
                   width: double.infinity,
                   child: DefaultFormField(
                     controller: aboutProvider.nameController,
@@ -90,8 +90,9 @@ class _ContactUsState extends State<ContactUs> {
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
-                    textSize: MyFontSize.size10,
+                    textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    padding: onlyEdgeInsets(bottom: 9,start: 10, top: 3),
                   ),
                 ),
                 verticalSpace(22),
@@ -120,8 +121,9 @@ class _ContactUsState extends State<ContactUs> {
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
-                    textSize: MyFontSize.size10,
+                    textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    padding: onlyEdgeInsets(bottom: 9,start: 10, top: 3),
                     validator: (value) {
                       if (!RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -150,8 +152,9 @@ class _ContactUsState extends State<ContactUs> {
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
-                    textSize: MyFontSize.size10,
+                    textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    padding: onlyEdgeInsets(bottom: 9,start: 10, top: 3),
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
 
@@ -188,8 +191,9 @@ class _ContactUsState extends State<ContactUs> {
                     fillColor: AppColor.borderGreyLight,
                     filled: true,
                     textColor: AppColor.textGrey,
-                    textSize: MyFontSize.size10,
+                    textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    padding: onlyEdgeInsets(start: 20, top: 15),
                     maxLines: 5,
                     textHeight: 1.5,
                     letterSpacing: 1,

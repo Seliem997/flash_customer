@@ -5,6 +5,7 @@ import 'package:flash_customer/utils/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../generated/l10n.dart';
 import '../main.dart';
 import '../models/profileModel.dart';
 import '../models/requestResult.dart';
@@ -168,9 +169,10 @@ class UserProvider extends ChangeNotifier {
         .updateProfilePicture(context,imagePath, phoneNumber: profileData!.phone)
         .then((imageUrl) {
       if (imageUrl.status == Status.success) {
-        CustomSnackBars.successSnackBar(context, "Updated Successfully");
+        CustomSnackBars.successSnackBar(context, S.of(context).updatedSuccessfully);
+        getUserData();
       } else {
-        CustomSnackBars.failureSnackBar(context, "Something went wrong");
+        CustomSnackBars.failureSnackBar(context, S.of(context).somethingWentWrong);
       }
     });
     notifyListeners();

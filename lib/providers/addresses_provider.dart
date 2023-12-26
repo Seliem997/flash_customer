@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 
 import '../models/addressesModel.dart';
@@ -40,16 +39,30 @@ class AddressesProvider with ChangeNotifier{
     return ResponseResult(state, addressDetailsData, message: message);
   }
 
+  int currentPage= 1;
+  int lastPage=1 ;
+
+
   List<AddressesData> addressesDataList = [];
-  Future getAddresses() async {
+  List<AddressesData> allAddressesDataList = [];
+  Future getAddresses({int? page}) async {
+    currentPage = addressesService.currentPage == null ? 1 : addressesService.currentPage!;
+    lastPage = addressesService.lastPage == null ? 1 : addressesService.lastPage!;
     setLoading(true);
-    await addressesService.getAddresses().then((value) {
+    if(page == null || page == 1){
+      addressesDataList= [];
+      allAddressesDataList = [];
+    }
+    await addressesService.getAddresses(page: page).then((value) {
       if (value.status == Status.success) {
         addressesDataList = value.data;
       }
     });
+    allAddressesDataList.addAll(addressesDataList.toList());
+
     notifyListeners();
   }
+
 
   Future deleteAddress({required int addressID}) async {
     isLoading = true;

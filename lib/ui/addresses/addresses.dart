@@ -3,7 +3,9 @@ import 'package:flash_customer/ui/widgets/custom_container.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
+import 'package:flash_customer/utils/app_loader.dart';
 import 'package:flash_customer/utils/font_styles.dart';
+import 'package:flash_customer/utils/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +39,8 @@ class _MyAddressesState extends State<MyAddresses> {
     super.initState();
   }
 
+
+
   void loadData() async {
     final AddressesProvider addressesProvider =
         Provider.of<AddressesProvider>(context, listen: false);
@@ -44,6 +48,7 @@ class _MyAddressesState extends State<MyAddresses> {
     await addressesProvider
         .getAddresses()
         .then((value) => addressesProvider.setLoading(false));
+    
   }
 
   @override
@@ -75,105 +80,142 @@ class _MyAddressesState extends State<MyAddresses> {
                                   padding: symmetricEdgeInsets(vertical: 30),
                                   child: ShowCaseWidget(builder: Builder(builder: (context){
                                     return ListView.separated(
-                                      itemCount:
-                                      addressesProvider.addressesDataList.length,
-                                      itemBuilder: (context, index) => Slidable(
-                                        key: ValueKey(index),
-                                        endActionPane: ActionPane(
-                                          motion: const ScrollMotion(),
-                                          children: [
-                                            SlidableAction(
-                                              flex: 1,
-                                              onPressed: (BuildContext context) {
-                                                addressesProvider.deleteAddress(
-                                                    addressID: addressesProvider
-                                                        .addressesDataList[index].id!).then((value) {
-                                                  if (value.status == Status.success) {
-                                                    CustomSnackBars.successSnackBar(
-                                                        _scaffoldKey.currentContext!, '${value.message}');
-                                                  } else {
-                                                    CustomSnackBars.failureSnackBar(_scaffoldKey.currentContext!, '${value.message}');
-                                                  }
-                                                });
-                                              },
-                                              backgroundColor: const Color(0xFFE74A2A),
-                                              foregroundColor: Colors.white,
-                                              icon: Icons.delete_forever_outlined,
-                                              label: S.of(context).delete,
-                                            ),
-                                          ],
-                                        ),
-                                        child: CustomContainer(
-                                          height: 64,
-                                          width: 345,
-                                          backgroundColor: const Color(0xFFE6EEFB),
-                                          child: Padding(
-                                            padding: symmetricEdgeInsets(
-                                                vertical: 7, horizontal: 7),
-                                            child: Row(
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: addressesProvider.addressesDataList.length + 1,
+                                      itemBuilder: (context, index) {
+                                        if(index < addressesProvider.addressesDataList.length){
+                                          return Slidable(
+                                            key: ValueKey(index),
+                                            endActionPane: ActionPane(
+                                              motion: const ScrollMotion(),
                                               children: [
-                                                CustomContainer(
-                                                  width: 50,
-                                                  height: 50,
-                                                  radiusCircular: 3,
-                                                  padding: EdgeInsets.zero,
-                                                  clipBehavior: Clip.hardEdge,
-                                                  backgroundColor: Colors.transparent,
-                                                  child: Image.network(
-                                                    addressesProvider
-                                                        .addressesDataList[index]
-                                                        .image!,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                horizontalSpace(12),
-                                                Expanded(
-                                                  child: CustomSizedBox(
-                                                    width: 157,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.spaceAround,
-                                                      children: [
-                                                        TextWidget(
-                                                          text: (Intl.getCurrentLocale() == 'ar' ?(addressesProvider
-                                                              .addressesDataList[index]
-                                                              .locationName ==
-                                                              'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
-                                                              ? '${addressesProvider.addressesDataList[index].type}'
-                                                              : addressesProvider
-                                                              .addressesDataList[index]
-                                                              .locationName) : addressesProvider
-                                                              .addressesDataList[index]
-                                                              .locationName ) ??
-                                                              '${addressesProvider.addressesDataList[index].type!}${S.of(context).location}',
-                                                          maxLines: 2,
-                                                          fontWeight: MyFontWeight.medium,
-                                                          textSize: MyFontSize.size10,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                horizontalSpace(20),
-                                                DefaultButton(
-                                                  text: addressesProvider
-                                                      .addressesDataList[index].type!,
-                                                  fontWeight: MyFontWeight.semiBold,
-                                                  fontSize: MyFontSize.size9,
-                                                  onPressed: () {},
-                                                  backgroundColor:
-                                                  const Color(0xFF66C0FF),
-                                                  height: 25,
+                                                SlidableAction(
+                                                  flex: 1,
+                                                  onPressed: (BuildContext context) {
+                                                    addressesProvider.deleteAddress(
+                                                        addressID: addressesProvider
+                                                            .addressesDataList[index].id!).then((value) {
+                                                      if (value.status == Status.success) {
+                                                        CustomSnackBars.successSnackBar(
+                                                            _scaffoldKey.currentContext!, '${value.message}');
+                                                      } else {
+                                                        CustomSnackBars.failureSnackBar(_scaffoldKey.currentContext!, '${value.message}');
+                                                      }
+                                                    });
+                                                  },
+                                                  backgroundColor: const Color(0xFFE74A2A),
+                                                  foregroundColor: Colors.white,
+                                                  icon: Icons.delete_forever_outlined,
+                                                  label: S.of(context).delete,
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                      separatorBuilder: (context, index) =>
-                                          verticalSpace(14),
+                                            child: CustomContainer(
+                                              height: 64,
+                                              width: 345,
+                                              backgroundColor: const Color(0xFFE6EEFB),
+                                              child: Padding(
+                                                padding: symmetricEdgeInsets(
+                                                    vertical: 7, horizontal: 7),
+                                                child: Row(
+                                                  children: [
+                                                    CustomContainer(
+                                                      width: 50,
+                                                      height: 50,
+                                                      radiusCircular: 3,
+                                                      padding: EdgeInsets.zero,
+                                                      clipBehavior: Clip.hardEdge,
+                                                      backgroundColor: Colors.transparent,
+                                                      child: Image.network(
+                                                        addressesProvider
+                                                            .addressesDataList[index]
+                                                            .image != null ? addressesProvider
+                                                            .addressesDataList[index]
+                                                            .image! : 'https://cdn.salla.sa/OnAOY/tD8aFkV8PRKh2ryXbFwigSEa7DAlKISoYXwwE11s.png',
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    horizontalSpace(12),
+                                                    Expanded(
+                                                      child: CustomSizedBox(
+                                                        width: 157,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment.spaceAround,
+                                                          children: [
+                                                            TextWidget(
+                                                              text:
+                                                              addressesProvider
+                                                                  .addressesDataList[index]
+                                                                  .locationName ==
+                                                                  'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
+                                                                  ? '${S.of(context).location} ${addressesProvider.addressesDataList[index].type!}'
+                                                                  : addressesProvider
+                                                                  .addressesDataList[index]
+                                                                  .locationName!,
+                                                              maxLines: 2,
+                                                              fontWeight: MyFontWeight.medium,
+                                                              textSize: MyFontSize.size10,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    horizontalSpace(20),
+                                                    DefaultButton(
+                                                      text: addressesProvider
+                                                          .addressesDataList[index].type!,
+                                                      fontWeight: MyFontWeight.semiBold,
+                                                      fontSize: MyFontSize.size9,
+                                                      onPressed: () {},
+                                                      backgroundColor:
+                                                      const Color(0xFF66C0FF),
+                                                      height: 25,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }else{
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                                            child: CustomContainer(
+                                              height: 40,
+                                              width: double.infinity,
+                                              backgroundColor: AppColor.lightBabyBlue,
+                                              backgroundColorDark: AppColor.lightGrey,
+                                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                                              child: ListView.separated(
+                                                scrollDirection: Axis.horizontal,
+                                                  itemBuilder: (context, index) => CustomContainer(
+                                                      height: 30,
+                                                      width: 35,
+                                                      borderRadius: BorderRadius.circular(2),
+                                                      borderColor: Colors.black,
+                                                    borderColorDark: Colors.black,
+                                                    child: Center(child: TextWidget(text: '${index+1}'),),
+                                                    onTap: (){
+                                                      addressesProvider.getAddresses(page: index+1).then((value) {
+                                                        addressesProvider.setLoading(false);
+                                                      });
+                                                    },
+                                                  ),
+                                                  separatorBuilder: (context, index) => horizontalSpace(20),
+                                                  itemCount: addressesProvider.lastPage ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      separatorBuilder: (context, index) {
+                                        if(index == addressesProvider.addressesDataList.length-1){
+                                          return verticalSpace(50);
+                                        }else{
+                                          return verticalSpace(14);
+                                        }
+                                      },
                                     );
                                   })),
                                 ),
