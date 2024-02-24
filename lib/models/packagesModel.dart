@@ -1,5 +1,5 @@
 class PackagesModel {
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
   List<PackagesData>? data;
 
@@ -28,13 +28,13 @@ class PackagesModel {
 }
 
 class PackagesData {
-  int? id;
+  dynamic  id;
   String? name;
   String? description;
-  int? washingQuantity;
+  dynamic  washingQuantity;
   String? per;
-  int? maxRequests;
-  int? duration;
+  dynamic  maxRequests;
+  dynamic duration;
   String? vehicleType;
   String? vehicleSubType;
   bool? isActive;
@@ -96,10 +96,10 @@ class PackagesData {
 }
 
 class Cities {
-  int? id;
+  dynamic  id;
   String? name;
-  int? minAmount;
-  int? status;
+  dynamic  minAmount;
+  dynamic  status;
   String? price;
 
   Cities({this.id, this.name, this.minAmount, this.status, this.price});

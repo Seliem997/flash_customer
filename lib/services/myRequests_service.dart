@@ -48,7 +48,7 @@ class MyRequestsService extends BaseService {
 
 
   Future<ResponseResult> updateRequestStatus({
-    required int requestId,
+    required requestId,
     required String status,
   }) async {
     Status result = Status.error;

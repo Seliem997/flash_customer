@@ -1,5 +1,5 @@
 class VehicleDetailsModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   VehicleDetailsData? data;
 
@@ -23,22 +23,22 @@ class VehicleDetailsModel {
 }
 
 class VehicleDetailsData {
-  int? id;
+  dynamic  id;
   String? name;
   String? numbers;
   String? letters;
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic  manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   Customer? customer;
 

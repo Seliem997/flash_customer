@@ -52,7 +52,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
   bool isShow = false;
 
-  startTimeout([int? milliseconds]) {
+  startTimeout([dynamic  milliseconds]) {
     final UserProvider userDataProvider =
         Provider.of<UserProvider>(context, listen: false);
 

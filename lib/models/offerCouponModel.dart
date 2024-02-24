@@ -1,5 +1,5 @@
 class OfferCouponModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   CouponData? data;
 
@@ -23,7 +23,7 @@ class OfferCouponModel {
 }
 
 class CouponData {
-  int? id;
+  dynamic  id;
   String? name;
   String? code;
   String? type;
@@ -32,7 +32,7 @@ class CouponData {
   String? endDate;
   String? endTime;
   num? discountAmount;
-  int? isActive;
+  dynamic isActive;
 
   CouponData(
       {this.id,

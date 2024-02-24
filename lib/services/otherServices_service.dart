@@ -14,7 +14,7 @@ import '../utils/enum/statuses.dart';
 class OtherServicesService extends BaseService {
 
   Future<ResponseResult> getOtherServices({
-    required int cityId,
+    required cityId,
 }) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
@@ -47,10 +47,10 @@ class OtherServicesService extends BaseService {
   }
 
   Future<ResponseResult> storeInitialOtherService({
-    required int cityId,
-    required int addressId,
-    required int otherServiceId,
-    required int numberOfUnits,
+    required cityId,
+    required addressId,
+    required otherServiceId,
+    required numberOfUnits,
 
   }) async {
     Status status = Status.error;

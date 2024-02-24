@@ -93,7 +93,7 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   bool isShow = false;
 
-  startTimeout([int? milliseconds]) {
+  startTimeout([dynamic  milliseconds]) {
     final UserProvider userDataProvider =
         Provider.of<UserProvider>(context, listen: false);
 
@@ -119,7 +119,7 @@ class _RequestDetailsState extends State<RequestDetails> {
   // configure SDK
   Future<void> configureSDK({
     double? amount,
-    int? requestId,
+    dynamic  requestId,
   }) async {
     // configure app
     configureApp();
@@ -146,7 +146,7 @@ class _RequestDetailsState extends State<RequestDetails> {
   // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
   Future<void> setupSDKSession({
     double? amount,
-    int? requestId,
+    dynamic  requestId,
   }) async {
     final UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);

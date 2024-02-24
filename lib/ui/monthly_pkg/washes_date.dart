@@ -31,7 +31,7 @@ class WashesDate extends StatelessWidget {
         Provider.of<PackageProvider>(context);
     final RequestServicesProvider requestServicesProvider =
     Provider.of<RequestServicesProvider>(context);
-    packageProvider.packageWashingQuantities = packagesData.washingQuantity;
+    packageProvider.packageWashingQuantities = int.parse(packagesData.washingQuantity);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).dateTime),
       body: Padding(
@@ -40,7 +40,7 @@ class WashesDate extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.separated(
-                itemCount: packagesData.washingQuantity!,
+                itemCount: int.parse(packagesData.washingQuantity!),
                 itemBuilder: (context, index) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

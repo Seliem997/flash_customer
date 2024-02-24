@@ -74,7 +74,7 @@ class PackageService extends BaseService {
   }
 
   Future<ResponseResult> getManufacturersOfType(
-      {required int vehicleTypeId}) async {
+      {required vehicleTypeId}) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
     List<ManufacturerData> manufacturerDataList = [];
@@ -101,7 +101,7 @@ class PackageService extends BaseService {
     return ResponseResult(result, manufacturerDataList);
   }
 
-  Future<ResponseResult> getVehiclesModels({required int manufactureId}) async {
+  Future<ResponseResult> getVehiclesModels({required manufactureId}) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
@@ -129,7 +129,7 @@ class PackageService extends BaseService {
     return ResponseResult(result, vehiclesModelsDataList);
   }
 
-  Future<ResponseResult> getPackages({required int vehicleTypeId, required int vehicleSubTypeId, required int cityId, }) async {
+  Future<ResponseResult> getPackages({required vehicleTypeId, required vehicleSubTypeId, required cityId, }) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
 
@@ -157,9 +157,9 @@ class PackageService extends BaseService {
   }
 
   Future<ResponseResult> getPackageTimeSlots({
-    required int cityId,
-    required int packageId,
-    required int packageDuration,
+    required cityId,
+    required packageId,
+    required packageDuration,
     required String date,
   }) async {
     Status result = Status.error;
@@ -194,9 +194,9 @@ class PackageService extends BaseService {
   }
 
   Future<ResponseResult> storeInitialPackageRequest({
-    required int cityId,
-    required int packageId,
-    required int vehicleId,
+    required cityId,
+    required packageId,
+    required vehicleId,
   }) async {
     Status result = Status.error;
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
@@ -238,7 +238,7 @@ class PackageService extends BaseService {
     return ResponseResult(result, detailsRequestData, message: message);
   }
 
-  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required int reqId}) async {
+  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required reqId}) async {
     Status result = Status.error;
 
     Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};

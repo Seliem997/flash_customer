@@ -1,6 +1,6 @@
 
 class VehicleModelsModel {
-  int? statusCode;
+  dynamic  statusCode;
   List<VehiclesModelsData>? data;
   String? message;
 
@@ -27,9 +27,9 @@ class VehicleModelsModel {
 }
 
 class VehiclesModelsData {
-  int? id;
+  dynamic  id;
   String? name;
-  int? manufacturerId;
+  dynamic manufacturerId;
   String? image;
 
   VehiclesModelsData(

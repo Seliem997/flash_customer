@@ -84,7 +84,7 @@ class AddressesService extends BaseService {
     return ResponseResult(result, addressesDataList);
   }
 
-  Future<ResponseResult> deleteAddress({required int addressID}) async {
+  Future<ResponseResult> deleteAddress({required addressID}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Accept': 'application/json',

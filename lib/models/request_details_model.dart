@@ -1,7 +1,7 @@
 import 'package:flash_customer/models/rateDetailsModel.dart';
 
 class DetailsRequestModel {
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
   DetailsRequestData? data;
 
@@ -25,13 +25,13 @@ class DetailsRequestModel {
 }
 
 class DetailsRequestData {
-  int? id;
+  dynamic  id;
   dynamic requestId;
   String? status;
   dynamic rate;
   String? payBy;
   dynamic feedback;
-  int? packageId;
+  dynamic  packageId;
   PackageDetails? packageDetails;
   String? amount;
   dynamic lateTime;
@@ -169,18 +169,18 @@ class DetailsRequestData {
 }
 
 class PackageDetails {
-  int? id;
+  dynamic  id;
   String? nameEn;
   String? nameAr;
   String? descriptionEn;
   String? descriptionAr;
-  int? washingQuantity;
+  dynamic  washingQuantity;
   String? per;
-  int? maxRequests;
-  int? currentRequest;
-  int? duration;
-  int? vehicleTypeId;
-  int? vehicleSubTypeId;
+  dynamic  maxRequests;
+  dynamic  currentRequest;
+  dynamic duration;
+  dynamic  vehicleTypeId;
+  dynamic  vehicleSubTypeId;
   bool? isActive;
   String? createdAt;
   String? updatedAt;
@@ -242,7 +242,7 @@ class PackageDetails {
 }
 
 class CustomerDetails {
-  int? id;
+  dynamic  id;
   String? fwid;
   String? phone;
   String? name;
@@ -288,13 +288,13 @@ class CustomerDetails {
 }
 
 class Location {
-  int? id;
+  dynamic  id;
   String? image;
   String? type;
   String? latitude;
   String? langitude;
   String? locationName;
-  int? customerId;
+  dynamic customerId;
 
   Location(
       {this.id,
@@ -329,22 +329,22 @@ class Location {
 }
 
 class Vehicle {
-  int? id;
+  dynamic  id;
   String? name;
   String? numbers;
   String? letters;
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic  manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic  vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic  vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic  subVehicleTypeId;
   String? subVehicleTypeName;
   CustomerDetails? customer;
 
@@ -465,8 +465,8 @@ class CustomerDetailsData {
 class City {
   int? id;
   String? name;
-  int? minAmount;
-  int? status;
+  dynamic minAmount;
+  dynamic status;
 
   City({this.id, this.name, this.minAmount, this.status});
 
@@ -512,10 +512,10 @@ class Services {
   String? image;
   String? info;
   String? type;
-  int? duration;
+  dynamic duration;
   bool? countable;
   String? requestServicePrice;
-  int? requestServiceCount;
+  dynamic requestServiceCount;
   String? requestServiceTotalPrice;
 
   Services(
@@ -567,15 +567,15 @@ class VehicleRequest {
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   CustomerDetails? customer;
 
@@ -648,47 +648,4 @@ class VehicleRequest {
   }
 }
 
-// class Slots {
-//   int? id;
-//   String? startAt;
-//   String? endAt;
-//   int? employeeId;
-//   int? shiftId;
-//   String? status;
-//   int? gapTime;
-//   String? createdAt;
-//
-//   Slots(
-//       {this.id,
-//         this.startAt,
-//         this.endAt,
-//         this.employeeId,
-//         this.shiftId,
-//         this.status,
-//         this.gapTime,
-//         this.createdAt});
-//
-//   Slots.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     startAt = json['start_at'];
-//     endAt = json['end_at'];
-//     employeeId = json['employee_id'];
-//     shiftId = json['shift_id'];
-//     status = json['status'];
-//     gapTime = json['gap_time'];
-//     createdAt = json['created_at'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['id'] = this.id;
-//     data['start_at'] = this.startAt;
-//     data['end_at'] = this.endAt;
-//     data['employee_id'] = this.employeeId;
-//     data['shift_id'] = this.shiftId;
-//     data['status'] = this.status;
-//     data['gap_time'] = this.gapTime;
-//     data['created_at'] = this.createdAt;
-//     return data;
-//   }
-// }
+

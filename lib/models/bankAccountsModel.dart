@@ -1,5 +1,5 @@
 class BankAccountsModel {
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
   List<BankAccountsData>? data;
 
@@ -28,13 +28,13 @@ class BankAccountsModel {
 }
 
 class BankAccountsData {
-  int? id;
+  dynamic  id;
   String? bankName;
   String? accountHolder;
   String? accountNumber;
   String? ibanNumber;
   String? image;
-  int? isActive;
+  dynamic isActive;
 
   BankAccountsData(
       {this.id,
@@ -70,7 +70,7 @@ class BankAccountsData {
 
 
 class BankTransferModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   BankTransferData? data;
 
@@ -96,8 +96,8 @@ class BankTransferModel {
 class BankTransferData {
   String? image;
   String? bankAccountId;
-  int? requestId;
-  int? customerId;
+  dynamic  requestId;
+  dynamic customerId;
   String? amount;
   String? by;
   String? status;
@@ -105,7 +105,7 @@ class BankTransferData {
   String? time;
   String? updatedAt;
   String? createdAt;
-  int? id;
+  dynamic  id;
   String? imagePath;
 
   BankTransferData(

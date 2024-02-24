@@ -1,5 +1,5 @@
 class VehiclesActiveTypesModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   List<VehiclesActiveTypesData>? data;
 
@@ -28,10 +28,10 @@ class VehiclesActiveTypesModel {
 }
 
 class VehiclesActiveTypesData {
-  int? id;
+  dynamic  id;
   String? name;
   String? image;
-  int? isActive;
+  dynamic isActive;
   List<SubTypes>? subTypes;
 
   VehiclesActiveTypesData({this.id, this.name, this.image, this.isActive, this.subTypes});
@@ -63,11 +63,11 @@ class VehiclesActiveTypesData {
 }
 
 class SubTypes {
-  int? id;
+  dynamic  id;
   String? name;
   String? image;
-  int? isActive;
-  int? vehicleTypeId;
+  dynamic isActive;
+  dynamic vehicleTypeId;
 
   SubTypes({this.id, this.name, this.image, this.isActive, this.vehicleTypeId});
 

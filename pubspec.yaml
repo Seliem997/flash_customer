@@ -43,7 +43,7 @@ dependencies:
 
   sizer: ^2.0.15
   flutter_svg: ^0.23.0
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.1
   dots_indicator: ^2.1.0
   fl_country_code_picker: ^0.0.4
   carousel_slider: ^4.1.1
@@ -57,7 +57,6 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_slidable: ^2.0.0
   showcaseview: ^2.0.3
-  gif: ^2.2.0
 
   calendar_timeline: ^1.1.2
   flutter_rating_bar: ^4.0.1

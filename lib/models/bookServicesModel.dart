@@ -1,5 +1,5 @@
 class BookServicesModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   BookServicesData? data;
 
@@ -21,7 +21,7 @@ class BookServicesModel {
 }
 
 class BookServicesData {
-  int? id;
+  dynamic  id;
   String? requestId;
   String? status;
   String? rate;
@@ -82,7 +82,7 @@ class Services {
   String? image;
   String? info;
   String? type;
-  int? duration;
+  dynamic duration;
   bool? countable;
 
   Services(

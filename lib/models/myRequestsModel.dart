@@ -8,7 +8,7 @@ class MyRequestsModel {
   List<MyRequestsData>? data;
   Links? links;
   Meta? meta;
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
 
   MyRequestsModel(
@@ -34,7 +34,7 @@ class MyRequestsData {
   String? requestId;
   String? status;
   String? statusArabic;
-  int? washNumber;
+  dynamic washNumber;
   dynamic rate;
   String? payBy;
   dynamic feedback;
@@ -176,8 +176,8 @@ class Customer {
 class City {
   int? id;
   String? name;
-  int? minAmount;
-  int? status;
+  dynamic minAmount;
+  dynamic status;
 
   City({this.id, this.name, this.minAmount, this.status});
 
@@ -219,10 +219,10 @@ class Services {
   String? image;
   String? info;
   String? type;
-  int? duration;
+  dynamic duration;
   bool? countable;
   String? requestServicePrice;
-  int? requestServiceCount;
+  dynamic requestServiceCount;
   String? requestServiceTotalPrice;
 
   Services(
@@ -274,15 +274,15 @@ class VehicleRequest {
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   Customer? customer;
 
@@ -357,14 +357,14 @@ class Links {
 }
 
 class Meta {
-  int? currentPage;
-  int? from;
-  int? lastPage;
+  dynamic currentPage;
+  dynamic from;
+  dynamic lastPage;
   List<Links>? links;
   String? path;
-  int? perPage;
-  int? to;
-  int? total;
+  dynamic perPage;
+  dynamic to;
+  dynamic total;
 
   Meta(
       {this.currentPage,

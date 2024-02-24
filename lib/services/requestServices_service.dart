@@ -23,8 +23,8 @@ import 'package:http/http.dart' as http;
 
 class RequestServicesService extends BaseService {
   Future<ResponseResult> getBasicServices({
-    required int cityId,
-    required int vehicleId,
+    required cityId,
+    required vehicleId,
   }) async {
     Status result = Status.error;
     Map<String, String> headers = {
@@ -56,7 +56,7 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> getExtraServices(
-      {required int cityId, required int vehicleId}) async {
+      {required cityId, required vehicleId}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -163,10 +163,10 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> bookServices({
-    required int cityId,
-    required int addressId,
-    required int vehicleId,
-    required int basicServiceId,
+    required cityId,
+    required addressId,
+    required vehicleId,
+    required basicServiceId,
     required List<ExtraServicesItem> selectedExtraServices,
   }) async {
     Status status = Status.error;
@@ -212,7 +212,7 @@ class RequestServicesService extends BaseService {
   Future<ResponseResult> assignEmployee({
     required List slotsIds,
     required String slotsDate,
-    required int id,
+    required id,
   }) async {
     Status status = Status.error;
     dynamic message;
@@ -252,7 +252,7 @@ class RequestServicesService extends BaseService {
     return ResponseResult(status, employeeDetailsData, message: message);
   }
 
-  Future<ResponseResult> getRequestDetails({required int requestId}) async {
+  Future<ResponseResult> getRequestDetails({required requestId}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> updateRequestSlots({
-    required int requestId,
+    required requestId,
     required String payBy,
     String? offerCode,
     dynamic employeeId,
@@ -329,12 +329,12 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> getTimeSlots({
-    required int cityId,
-    required int basicId,
+    required cityId,
+    required basicId,
     required double duration,
     String? service,
     required String date,
-    required int addressId,
+    required addressId,
   }) async {
     Status result = Status.error;
     Map<String, String> headers = {
@@ -373,7 +373,7 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> submitFinialRequest({
-    required int requestId,
+    required requestId,
     required String payBy,
     num? walletAmount,
   }) async {
@@ -448,8 +448,8 @@ class RequestServicesService extends BaseService {
   }
 
   Future<ResponseResult> rateRequest({
-    required int requestId,
-    required int rate,
+    required requestId,
+    required rate,
     required String feedBack,
   }) async {
     Status status = Status.error;
@@ -518,8 +518,8 @@ class RequestServicesService extends BaseService {
 
   Future<ResponseResult> uploadPaymentFile(
     String imagePath, {
-    required int bankAccountId,
-    required int requestId,
+    required bankAccountId,
+    required requestId,
   }) async {
     Status status = Status.error;
 

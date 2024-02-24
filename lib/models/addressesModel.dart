@@ -1,5 +1,5 @@
 class AddressDetailsModel {
-  int? statusCode;
+  dynamic  statusCode;
   AddressesData? data;
   String? message;
 
@@ -21,7 +21,7 @@ class AddressDetailsModel {
 }
 
 class AddressesModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   AddressesModelData? data;
 
@@ -36,10 +36,10 @@ class AddressesModel {
 }
 
 class AddressesModelData {
-  int? total;
-  int? perPage;
-  int? currentPage;
-  int? lastPage;
+  dynamic  total;
+  dynamic  perPage;
+  dynamic  currentPage;
+  dynamic  lastPage;
   List<AddressesData>? addressesData;
 
   AddressesModelData({this.total, this.perPage, this.currentPage, this.lastPage, this.addressesData});
@@ -60,14 +60,14 @@ class AddressesModelData {
 }
 
 class AddressesData {
-  int? id;
+  dynamic  id;
   String? image;
   String? typeEn;
   String? type;
   dynamic latitude;
   dynamic langitude;
   String? locationName;
-  int? customerId;
+  dynamic customerId;
 
   AddressesData(
       {this.id,
@@ -92,61 +92,3 @@ class AddressesData {
 
 }
 
-/*
-
-class AddressesModel {
-  int? statusCode;
-  List<AddressesData>? data;
-  String? message;
-
-  AddressesModel({this.statusCode, this.data, this.message});
-
-  AddressesModel.fromJson(Map<String, dynamic> json) {
-    statusCode = json['status_code'];
-    if (json['data']['data'] != null) {
-      data = <AddressesData>[];
-      json['data']['data'].forEach((v) {
-        data!.add(AddressesData.fromJson(v));
-      });
-    }
-    message = json['message'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status_code'] = statusCode;
-
-    data['message'] = message;
-    return data;
-  }
-}
-
-class AddressesData {
-  int? id;
-  String? image;
-  String? type;
-  dynamic latitude;
-  dynamic langitude;
-  String? locationName;
-  int? customerId;
-
-  AddressesData(
-      {this.id,
-      this.image,
-      this.type,
-      this.latitude,
-      this.langitude,
-      this.locationName,
-      this.customerId});
-
-  AddressesData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    image = json['image_path'];
-    type = json['type'];
-    latitude = json['latitude'];
-    langitude = json['langitude'];
-    locationName = json['location_name'];
-    customerId = json['customer_id'];
-  }
-}
-*/

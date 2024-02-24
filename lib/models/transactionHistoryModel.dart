@@ -1,5 +1,5 @@
 class TransactionHistoryModel {
-  int? statusCode;
+  dynamic  statusCode;
   TransactionData? data;
   String? message;
 
@@ -24,17 +24,17 @@ class TransactionHistoryModel {
 
 class TransactionData {
   List<TransactionCollection>? collection;
-  int? currentPage;
+  dynamic  currentPage;
   String? firstPageUrl;
-  int? from;
-  int? lastPage;
+  dynamic  from;
+  dynamic  lastPage;
   String? lastPageUrl;
   dynamic nextPageUrl;
   String? path;
-  int? perPage;
+  dynamic  perPage;
   dynamic prevPageUrl;
-  int? to;
-  int? total;
+  dynamic  to;
+  dynamic  total;
 
   TransactionData(
       {this.collection,
@@ -91,7 +91,7 @@ class TransactionData {
 }
 
 class TransactionCollection {
-  int? id;
+  dynamic  id;
   String? type;
   String? amount;
   String? createdAt;
@@ -116,7 +116,7 @@ class TransactionCollection {
 }
 
 class ChargeWalletModel {
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
   ChargeWalletUrl? data;
 
@@ -182,7 +182,7 @@ class RechargeWalletModel {
 class RechargeWalletData {
   String? chargeType;
   String? customerId;
-  int? newBalance;
+  dynamic newBalance;
 
   RechargeWalletData({this.chargeType, this.customerId, this.newBalance});
 

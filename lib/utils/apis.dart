@@ -37,17 +37,17 @@ class Api {
           double duration = 50,
           String? service,
           String date = "06/5/2023",
-            required int addressId
+            required addressId
           }) =>
       "$baseUrl/customer/slots?city_id=$cityId&services[0]=$basicId$service&date=$date&services_duration=$duration&address_id=$addressId";
 
-  static String rateRequest({required int requestId}) =>
+  static String rateRequest({required requestId}) =>
       "$baseUrl/customer/set-request-rate/$requestId";
 
   static String getPackageSlots({
-    int cityId = 2,
-    int packageId = 1,
-    int packageDuration = 10,
+     cityId = "2",
+     packageId = "1",
+    String packageDuration = "10",
     String date = "2/22/2222",
   }) =>
       "$baseUrl/customer/slots-package?city_id=$cityId&package_id=$packageId&date=$date&package_duration=$packageDuration";
@@ -57,7 +57,7 @@ class Api {
 
   static const String submitFinialRequest = "$baseUrl/customer/request";
 
-  static String updateRequestStatus({required int requestId}) => "$baseUrl/customer/update-request-status/$requestId";
+  static String updateRequestStatus({required requestId}) => "$baseUrl/customer/update-request-status/$requestId";
 
   static const String bookServices = "$baseUrl/customer/initial-request";
 
@@ -71,7 +71,7 @@ class Api {
 
   static const String assignEmployee = "$baseUrl/customer/request-employee-id";
 
-  static  String getAddresses ({int? page}) => "$baseUrl/customer/my-addresses${page == null ? '': "?page=$page"}";
+  static  String getAddresses ({dynamic  page}) => "$baseUrl/customer/my-addresses${page == null ? '': "?page=$page"}";
 
   static const String getVehicles =
       "$baseUrl/customer/vehicle_types/get/active";
@@ -97,7 +97,7 @@ class Api {
 
   static const String addNewVehicle = "$baseUrl/customer/vehicles";
 
-  static String updateVehicle({required int requestId}) =>
+  static String updateVehicle({required requestId}) =>
       "$baseUrl/update-vehicle/$requestId";
 
   static const String deleteVehicle = "$baseUrl/customer/vehicles/";

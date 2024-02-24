@@ -64,7 +64,7 @@ class AddressesProvider with ChangeNotifier{
   }
 
 
-  Future deleteAddress({required int addressID}) async {
+  Future deleteAddress({required addressID}) async {
     isLoading = true;
     notifyListeners();
     Status state = Status.error;

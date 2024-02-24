@@ -31,8 +31,8 @@ class RequestServicesProvider with ChangeNotifier {
   int selectedBasicServiceAmount = 0;
   int selectedBasicServiceDuration = 0;
   int selectedBasicServiceId = 0;
-  int? selectedBasicIndex;
-  int? selectedSlotIndex;
+  dynamic  selectedBasicIndex;
+  dynamic  selectedSlotIndex;
   bool isLoading = true;
   List<ExtraServicesItem> selectedExtraServices = [];
   bool selectedCashPayment = false;
@@ -56,7 +56,7 @@ class RequestServicesProvider with ChangeNotifier {
     if (selectedBasicIndex != null) {
       totalAmount +=
           (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!));
-      totalDuration += basicServicesList[selectedBasicIndex!].duration!;
+      totalDuration += (double.parse(basicServicesList[selectedBasicIndex!].duration!));
       totalTaxes = (basicServicesList[selectedBasicIndex!].tax!);
     }
 
@@ -67,14 +67,14 @@ class RequestServicesProvider with ChangeNotifier {
           totalAmount += (extraServicesList[i].quantity *
               double.parse(extraServicesList[i].selectedPrice!).toInt());
           totalDuration +=
-              (extraServicesList[i].quantity * extraServicesList[i].duration!);
+              (extraServicesList[i].quantity * double.parse(extraServicesList[i].duration!));
           totalTaxes +=
               (extraServicesList[i].quantity * extraServicesList[i].tax!);
         } else if (extraServicesList[i].isSelected) {
           totalAmount +=
               double.parse(extraServicesList[i].selectedPrice!).toInt();
           totalTaxes += extraServicesList[i].tax!;
-          totalDuration += extraServicesList[i].duration!;
+          totalDuration += double.parse(extraServicesList[i].duration!);
         }
       }
     }
@@ -112,8 +112,8 @@ class RequestServicesProvider with ChangeNotifier {
 
   List<ServiceData> basicServicesList = [];
   Future getBasicServices({
-    required int cityId,
-    required int vehicleId,
+    required cityId,
+    required vehicleId,
   }) async {
     await servicesService
         .getBasicServices(cityId: cityId, vehicleId: vehicleId)
@@ -127,7 +127,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   List<ServiceData> extraServicesList = [];
-  Future getExtraServices({required int cityId, required int vehicleId}) async {
+  Future getExtraServices({required cityId, required vehicleId}) async {
     await servicesService
         .getExtraServices(
       cityId: cityId,
@@ -142,7 +142,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   CouponData? couponData;
-  Future checkOfferCoupon(BuildContext context, {required int requestId,
+  Future checkOfferCoupon(BuildContext context, {required requestId,
     String? offerCode,
     dynamic employeeId,}) async {
     if (discountCodeController.text.isNotEmpty) {
@@ -203,10 +203,10 @@ class RequestServicesProvider with ChangeNotifier {
   BookServicesData? bookServicesData;
   Future<ResponseResult> bookServices(
     BuildContext context, {
-    required int cityId,
-    required int addressId,
-    required int vehicleId,
-    required int basicServiceId,
+    required cityId,
+    required addressId,
+    required vehicleId,
+    required basicServiceId,
   }) async {
     Status state = Status.error;
     dynamic message;
@@ -236,7 +236,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   DetailsRequestData? detailsRequestData;
-  Future getRequestDetails({required int requestId}) async {
+  Future getRequestDetails({required requestId}) async {
     setLoading(true);
     await servicesService.getRequestDetails(requestId: requestId).then((value) {
       if (value.status == Status.success) {
@@ -248,11 +248,11 @@ class RequestServicesProvider with ChangeNotifier {
 
   List<List<SlotData>> slotsList = [];
   Future getTimeSlots({
-    required int cityId,
-    required int basicId,
-    required double duration,
+    required cityId,
+    required basicId,
+    required duration,
     required String date,
-    required int addressId,
+    required addressId,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -284,7 +284,7 @@ class RequestServicesProvider with ChangeNotifier {
 
   RequestDetailsData? updatedRequestDetailsData;
   Future updateRequestSlots({
-    required int requestId,
+    required requestId,
     required String payBy,
     String? offerCode,
     dynamic employeeId,
@@ -314,7 +314,7 @@ class RequestServicesProvider with ChangeNotifier {
 
   PaymentUrlData? paymentUrlData;
   Future<ResponseResult> submitFinialRequest({
-    required int requestId,
+    required requestId,
     required String payBy,
     num? walletAmount,
   }) async {
@@ -359,8 +359,8 @@ class RequestServicesProvider with ChangeNotifier {
 
   RatingData? ratingData;
   Future<ResponseResult> rateRequest({
-    required int requestId,
-    required int rate,
+    required requestId,
+    required rate,
     required String feedBack,
   }) async {
     Status state = Status.error;
@@ -384,7 +384,7 @@ class RequestServicesProvider with ChangeNotifier {
   Future<ResponseResult> assignEmployee({
     required List slotsIds,
     required String slotsDate,
-    required int id,
+    required id,
   }) async {
     Status state = Status.error;
     dynamic message;
@@ -416,7 +416,7 @@ class RequestServicesProvider with ChangeNotifier {
   }
 
   Future<void> uploadPaymentFile(BuildContext context, String imagePath,
-      {required int bankAccountId, required int requestId}) async {
+      {required bankAccountId, required requestId}) async {
     AppLoader.showLoader(context);
     await servicesService
         .uploadPaymentFile(imagePath,

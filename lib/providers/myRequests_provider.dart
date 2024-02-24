@@ -60,7 +60,7 @@ class MyRequestsProvider with ChangeNotifier {
   }
 
   Future updateRequestStatus({
-    required int requestId,
+    required requestId,
     required String status,
 
   }) async {

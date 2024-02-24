@@ -185,27 +185,30 @@ class ExtraServicesWidget extends StatelessWidget {
                         ),
                       ],
                     )
-                  : CustomContainer(
-                      borderColorDark: Colors.transparent,
-                      onTap: () {
-                        extraService.isSelected = !extraService.isSelected;
-                        extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
-                        requestServicesProvider.notifyListeners();
-                        requestServicesProvider.calculateTotal();
-                      },
-                      radiusCircular: 5,
-                      backgroundColor: extraService.isSelected
-                          ? AppColor.primary
-                          : Colors.transparent,
-                      height: 17,
-                      width: 17,
-                      borderColor: extraService.isSelected
-                          ? AppColor.primary
-                          : AppColor.subTextGrey,
-                      child: extraService.isSelected
-                  ? Image.asset('assets/images/checkIcon.png')
-                          : Container(),
-                    ),
+                  : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: CustomContainer(
+                        borderColorDark: Colors.transparent,
+                        onTap: () {
+                          extraService.isSelected = !extraService.isSelected;
+                          extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
+                          requestServicesProvider.notifyListeners();
+                          requestServicesProvider.calculateTotal();
+                        },
+                        radiusCircular: 5,
+                        backgroundColor: extraService.isSelected
+                            ? AppColor.primary
+                            : Colors.transparent,
+                        height: 18,
+                        width: 17,
+                        borderColor: extraService.isSelected
+                            ? AppColor.primary
+                            : AppColor.subTextGrey,
+                        child: extraService.isSelected
+                    ? Image.asset('assets/images/checkIcon.png')
+                            : Container(),
+                      ),
+                  ),
             ),
           )
         ],

@@ -29,7 +29,7 @@ class VehicleInfo extends StatefulWidget {
   const VehicleInfo({Key? key, this.updateVehicle = false, this.index,}) : super(key: key);
 
   final bool updateVehicle;
-  final int? index;
+  final dynamic  index;
   @override
   State<VehicleInfo> createState() => _VehicleInfoState();
 }

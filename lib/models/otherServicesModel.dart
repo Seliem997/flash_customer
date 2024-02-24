@@ -1,5 +1,5 @@
 class OtherServicesModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   List<OtherServicesData>? data;
 
@@ -28,14 +28,14 @@ class OtherServicesModel {
 }
 
 class OtherServicesData {
-  int? id;
+  dynamic  id;
   String? title;
   String? image;
   String? info;
   String? type;
   String? costType;
   String? testAttribute;
-  int? duration;
+  dynamic duration;
   bool? countable;
   String? selectedPrice;
   int quantity = 0;
@@ -106,7 +106,7 @@ class OtherServicesData {
 }
 
 class ServicePrices {
-  int? id;
+  dynamic  id;
   String? name;
   Price? price;
 
@@ -132,8 +132,8 @@ class ServicePrices {
 class Price {
   String? value;
   String? unit;
-  int? vehicleType;
-  int? vehicleSubType;
+  dynamic  vehicleType;
+  dynamic  vehicleSubType;
 
   Price({this.value, this.unit, this.vehicleType, this.vehicleSubType});
 
@@ -155,14 +155,14 @@ class Price {
 }
 
 class ChildServices {
-  int? id;
+  dynamic  id;
   String? title;
   String? image;
   Null? info;
   String? type;
   String? costType;
   Null? testAttribute;
-  int? duration;
+  dynamic duration;
   bool? countable;
   String? selectedPrice;
   List<ServicePrices>? servicePrices;

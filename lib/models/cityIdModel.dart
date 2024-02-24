@@ -1,5 +1,5 @@
 class CityIdModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   CityIdData? data;
 
@@ -23,10 +23,10 @@ class CityIdModel {
 }
 
 class CityIdData {
-  int? id;
+  dynamic  id;
   String? name;
-  int? minAmount;
-  int? status;
+  dynamic minAmount;
+  dynamic status;
 
   CityIdData({this.id, this.name, this.minAmount, this.status});
 

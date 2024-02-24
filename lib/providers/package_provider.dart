@@ -33,7 +33,7 @@ class PackageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setVehicleTypeId({required int typeId}) {
+  void setVehicleTypeId({required typeId}) {
     vehicleTypeId = typeId;
     notifyListeners();
   }
@@ -70,7 +70,7 @@ class PackageProvider with ChangeNotifier {
   ManufacturerData? selectedManufacture;
 
   List<ManufacturerData> manufacturerDataList = [];
-  Future getManufacturersOfType({required int vehicleTypeId}) async {
+  Future getManufacturersOfType({required vehicleTypeId}) async {
     resetDropDownValues();
     await packageService
         .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
@@ -103,7 +103,7 @@ class PackageProvider with ChangeNotifier {
   VehiclesModelsData? selectedVehicleModel;
 
   List<VehiclesModelsData> vehiclesModelsDataList = [];
-  Future getVehiclesModels({context, required int manufactureId}) async {
+  Future getVehiclesModels({context, required manufactureId}) async {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context, listen: false);
     requestServicesProvider.isLoading = true;
@@ -120,9 +120,9 @@ class PackageProvider with ChangeNotifier {
   DetailsRequestData? detailsRequestData;
   Future<ResponseResult> storeInitialPackageRequest(
       BuildContext context, {
-        required int cityId,
-        required int packageId,
-        required int vehicleId,
+        required cityId,
+        required packageId,
+        required vehicleId,
       }) async {
     Status state = Status.error;
     dynamic message;
@@ -142,7 +142,7 @@ class PackageProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> mapBody={};
-  Future<ResponseResult> saveSlotsPackageRequest({required int requestId}) async {
+  Future<ResponseResult> saveSlotsPackageRequest({required requestId}) async {
     Status state = Status.error;
 
     dynamic message;
@@ -170,7 +170,7 @@ class PackageProvider with ChangeNotifier {
   }
 
 
-  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required int reqId}) async {
+  Future<ResponseResult> reserveRequestPackageSlots({required List slotsId, required String slotsDate, required reqId}) async {
     Status state = Status.error;
 
     dynamic message;
@@ -218,7 +218,7 @@ class PackageProvider with ChangeNotifier {
   }
 
   List<PackagesData> packagesDataList = [];
-  Future getPackages({required int vehicleTypeId, required int vehicleSubTypeId, required int cityId, }) async {
+  Future getPackages({required vehicleTypeId, required vehicleSubTypeId, required cityId, }) async {
     await packageService.getPackages(vehicleTypeId: vehicleTypeId, vehicleSubTypeId: vehicleSubTypeId, cityId: cityId).then((value) {
       if (value.status == Status.success) {
         packagesDataList = value.data;
@@ -239,9 +239,9 @@ class PackageProvider with ChangeNotifier {
   }
   List<List<SlotData>> packageSlotsList = [];
   Future getPackageTimeSlots({
-    required int cityId,
-    required int packageId,
-    required int packageDuration,
+    required cityId,
+    required packageId,
+    required packageDuration,
     required String date,
   }) async {
     isLoading = true;

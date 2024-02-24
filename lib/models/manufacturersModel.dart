@@ -1,5 +1,5 @@
 class ManufacturersModel {
-  int? statusCode;
+  dynamic  statusCode;
   List<ManufacturerData>? data;
   String? message;
 
@@ -19,12 +19,12 @@ class ManufacturersModel {
 }
 
 class ManufacturerData {
-  int? id;
+  dynamic  id;
   String? name;
   String? image;
-  int? vehicleTypeId;
-  int? subVehicleTypeId;
-  int? isActive;
+  dynamic vehicleTypeId;
+  dynamic subVehicleTypeId;
+  dynamic isActive;
 
   ManufacturerData(
       {this.id,

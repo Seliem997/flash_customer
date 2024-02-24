@@ -30,11 +30,11 @@ class MonthlyPlans extends StatefulWidget {
         this.vehicleSubTypeId, this.vehicleTypeId})
       : super(key: key);
 
-  final int? myVehicleIndex;
+  final dynamic  myVehicleIndex;
   final bool comeFromNewCar;
-  final int? vehicleId;
-  final int? vehicleTypeId;
-  final int? vehicleSubTypeId;
+  final dynamic vehicleId;
+  final dynamic vehicleTypeId;
+  final dynamic vehicleSubTypeId;
   @override
   State<MonthlyPlans> createState() => _MonthlyPlansState();
 }

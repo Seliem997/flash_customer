@@ -25,8 +25,8 @@ class ServicesScreen extends StatefulWidget {
   const ServicesScreen(
       {Key? key, required this.cityId, required this.vehicleId})
       : super(key: key);
-  final int cityId;
-  final int vehicleId;
+  final dynamic cityId;
+  final dynamic vehicleId;
 
   @override
   State<ServicesScreen> createState() => _ServicesScreenState();
@@ -519,7 +519,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.totalTaxes} ${S.of(context).sr}',
+                                          '${requestServicesProvider.totalTaxes.toStringAsFixed(1)} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),

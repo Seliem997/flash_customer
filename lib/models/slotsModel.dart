@@ -1,5 +1,5 @@
 class SlotsModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   List<List<SlotData>>? data;
 
@@ -22,13 +22,13 @@ class SlotsModel {
 }
 
 class SlotData {
-  int? id;
+  dynamic  id;
   String? startAt;
   String? endAt;
-  int? employeeId;
-  int? shiftId;
+  dynamic employeeId;
+  dynamic shiftId;
   String? status;
-  int? gapTime;
+  dynamic  gapTime;
 
   SlotData(
       {this.id,
@@ -51,7 +51,7 @@ class SlotData {
 }
 
 class EmployeeDetailsModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   EmployeeDetailsData? data;
 
@@ -75,7 +75,7 @@ class EmployeeDetailsModel {
 }
 
 class EmployeeDetailsData {
-  int? id;
+  dynamic  id;
   String? name;
 
   EmployeeDetailsData({this.id, this.name});

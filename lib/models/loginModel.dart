@@ -1,5 +1,5 @@
 class LoginModel {
-  int? statusCode;
+  dynamic  statusCode;
   Data? data;
   String? message;
 
@@ -44,7 +44,7 @@ class Data {
 }
 
 class UserData {
-  int? id;
+  dynamic  id;
   String? fwId;
   String? name;
   String? email;

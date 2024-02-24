@@ -36,7 +36,7 @@ class SelectDate extends StatefulWidget {
 
   final bool cameFromOtherServices;
   final bool cameFromPackage;
-  final int? index;
+  final dynamic  index;
   @override
   State<SelectDate> createState() => _SelectDateState();
 }
@@ -90,11 +90,10 @@ class _SelectDateState extends State<SelectDate> {
                 .getOtherServicesSlots(
                   cityId: requestServicesProvider.cityIdData!.id!,
                   serviceId: otherServicesProvider.selectedOtherServiceId,
-                  duration: otherServicesProvider
+                  duration: double.parse( otherServicesProvider
                       .otherServicesList[
-                          otherServicesProvider.selectedServiceIndex!]
-                      .duration!
-                      .toDouble(),
+                  otherServicesProvider.selectedServiceIndex!]
+                      .duration!),
                   date: DateFormat(DFormat.mdy.key,('en-IN'))
                       .format(requestServicesProvider.date),
       addressId: addressesProvider.addressDetailsData!.id!,)
@@ -192,11 +191,10 @@ class _SelectDateState extends State<SelectDate> {
                               cityId: requestServicesProvider.cityIdData!.id!,
                               serviceId:
                                   otherServicesProvider.selectedOtherServiceId,
-                              duration: otherServicesProvider
+                              duration: double.parse(otherServicesProvider
                                   .otherServicesList[otherServicesProvider
-                                      .selectedServiceIndex!]
-                                  .duration!
-                                  .toDouble(),
+                                  .selectedServiceIndex!]
+                                  .duration!),
                               date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
                   addressId: addressesProvider.addressDetailsData!.id!,
                             )

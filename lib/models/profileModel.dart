@@ -1,5 +1,5 @@
 class UpdateProfileModel {
-  int? statusCode;
+  dynamic  statusCode;
   ProfileData? data;
   String? message;
 
@@ -23,7 +23,7 @@ class UpdateProfileModel {
 }
 
 class ProfileData {
-  int? id;
+  dynamic  id;
   String? fwId;
   String? name;
   String? email;
@@ -68,7 +68,7 @@ class ProfileData {
 }
 
 class LoginProfileModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   ProfileLoginData? data;
 
@@ -113,7 +113,7 @@ class ProfileLoginData {
 }
 
 // class ProfileData {
-//   int? id;
+//   dynamic  id;
 //   String? fwId;
 //   String? name;
 //   String? email;
@@ -160,7 +160,7 @@ class ProfileLoginData {
 
 
 class SocialLinksModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   SocialLinksData? data;
 
@@ -184,7 +184,7 @@ class SocialLinksModel {
 }
 
 class SocialLinksData {
-  int? id;
+  dynamic  id;
   String? facebook;
   String? instagram;
   String? twitter;

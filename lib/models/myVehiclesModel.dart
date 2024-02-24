@@ -1,5 +1,5 @@
 class MyVehiclesModel {
-  int? statusCode;
+  dynamic  statusCode;
   MyVehiclesData? data;
   String? message;
 
@@ -15,17 +15,17 @@ class MyVehiclesModel {
 
 class MyVehiclesData {
   List<MyVehiclesCollection>? collection;
-  int? currentPage;
+  dynamic  currentPage;
   String? firstPageUrl;
-  int? from;
-  int? lastPage;
+  dynamic  from;
+  dynamic  lastPage;
   String? lastPageUrl;
   String? nextPageUrl;
   String? path;
-  int? perPage;
+  dynamic  perPage;
   String? prevPageUrl;
-  int? to;
-  int? total;
+  dynamic  to;
+  dynamic  total;
 
   MyVehiclesData(
       {this.collection,
@@ -64,7 +64,7 @@ class MyVehiclesData {
 }
 
 class MyVehiclesCollection {
-  int? id;
+  dynamic  id;
   String? name;
   String? numbers;
   String? letters;
@@ -72,15 +72,15 @@ class MyVehiclesCollection {
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   CustomerDetailsData? customer;
 
@@ -132,7 +132,7 @@ class MyVehiclesCollection {
 }
 
 class CustomerDetailsData {
-  int? id;
+  dynamic  id;
   String? fwId;
   String? name;
   String? email;

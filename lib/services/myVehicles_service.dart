@@ -14,9 +14,9 @@ import '../utils/enum/statuses.dart';
 class MyVehiclesService extends BaseService {
 
   Future<ResponseResult> addVehicle({
-    required int vehicleTypeId,
-    required int manufacture,
-    required int model,
+    required vehicleTypeId,
+    required manufacture,
+    required model,
     String? numbers,
     String? letters,
     String? color,
@@ -60,12 +60,12 @@ class MyVehiclesService extends BaseService {
   }
 
   Future<ResponseResult> updateVehicle({
-    required int vehicleId,
-    required int vehicleTypeId,
-    int? subVehicleTypeId,
-    required int manufacture,
-    required int model,
-    required int customerId,
+    required vehicleId,
+    required vehicleTypeId,
+     subVehicleTypeId,
+    required manufacture,
+    required model,
+    required customerId,
     String? numbers,
     String? letters,
     String? color,
@@ -143,7 +143,7 @@ class MyVehiclesService extends BaseService {
     return ResponseResult(result, myVehiclesData);
   }
 
-  Future<ResponseResult> deleteVehicle({required int vehicleID}) async {
+  Future<ResponseResult> deleteVehicle({required vehicleID}) async {
     Status result = Status.error;
     Map<String, String> headers = {
       'Accept': 'application/json',

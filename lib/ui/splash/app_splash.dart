@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gif/gif.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -18,16 +17,10 @@ class AppSplash extends StatefulWidget {
 }
 
 class _AppSplashState extends State<AppSplash> with TickerProviderStateMixin{
-  late GifController _controller;
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((value) => loadData());
-    _controller = GifController(vsync: this);
-    _controller.addListener(() {
-      if (_controller.isCompleted) {
-        setState(() {});
-      }
-    });
+
     super.initState();
   }
 
@@ -51,22 +44,12 @@ class _AppSplashState extends State<AppSplash> with TickerProviderStateMixin{
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _controller.isCompleted
-                  ? const CustomContainer(
+                  const CustomContainer(
                   height: 180,
                   image: DecorationImage(
-                      image: AssetImage('assets/images/logo.png')))
-                  : Gif(
-                height: 400,
-                image:
-                const AssetImage('assets/images/logo.png'),
-                controller:
-                _controller, // if duration and fps is null, original gif fps will be used.
-                autostart: Autostart.once,
-              ),
+                      image: AssetImage('assets/images/logo.png'))),
               verticalSpace(20),
               Visibility(
-                visible: _controller.isCompleted,
                 child: const SizedBox(
                   height: 20,
                   width: 20,

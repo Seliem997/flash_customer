@@ -1,5 +1,5 @@
 class RateDetailsModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   RatingData? data;
 
@@ -14,7 +14,7 @@ class RateDetailsModel {
 }
 
 class RatingData {
-  int? id;
+  dynamic  id;
   String? requestId;
   String? status;
   dynamic rate;
@@ -25,7 +25,7 @@ class RatingData {
   String? amount;
   String? lateTime;
   dynamic actualTime;
-  int? tax;
+  dynamic  tax;
   String? discountAmount;
   String? totalAmount;
   String? totalDuration;
@@ -119,7 +119,7 @@ class RatingData {
 }
 
 class Customer {
-  int? id;
+  dynamic  id;
   String? fwid;
   String? phone;
   String? image;
@@ -159,13 +159,13 @@ class Customer {
 }
 
 class Location {
-  int? id;
+  dynamic  id;
   String? image;
   String? type;
   String? latitude;
   String? langitude;
   String? locationName;
-  int? customerId;
+  dynamic customerId;
 
   Location(
       {this.id,
@@ -189,7 +189,7 @@ class Location {
 }
 
 class Vehicle {
-  int? id;
+  dynamic  id;
   String? name;
   String? numbers;
   String? letters;
@@ -197,15 +197,15 @@ class Vehicle {
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   Customer? customer;
 
@@ -257,7 +257,7 @@ class Vehicle {
 }
 
 class CustomerInfo {
-  int? id;
+  dynamic  id;
   String? fwId;
   String? name;
   String? email;
@@ -290,10 +290,10 @@ class CustomerInfo {
 }
 
 class City {
-  int? id;
+  dynamic  id;
   String? name;
-  int? minAmount;
-  int? status;
+  dynamic  minAmount;
+  dynamic  status;
 
   City({this.id, this.name, this.minAmount, this.status});
 
@@ -307,7 +307,7 @@ class City {
 }
 
 class Employee {
-  int? id;
+  dynamic  id;
   String? name;
   String? image;
 
@@ -322,15 +322,15 @@ class Employee {
 }
 
 class Services {
-  int? id;
+  dynamic  id;
   String? title;
   String? image;
   Null? info;
   String? type;
-  int? duration;
+  dynamic duration;
   bool? countable;
   String? requestServicePrice;
-  int? requestServiceCount;
+  dynamic  requestServiceCount;
   String? requestServiceTotalPrice;
 
   Services(
@@ -375,14 +375,14 @@ class Services {
 }
 
 class Slots {
-  int? id;
+  dynamic  id;
   String? startAt;
   String? endAt;
-  int? employeeId;
+  dynamic employeeId;
   String? employeeName;
-  int? shiftId;
+  dynamic shiftId;
   String? status;
-  int? gapTime;
+  dynamic  gapTime;
   String? date;
   String? createdAt;
 

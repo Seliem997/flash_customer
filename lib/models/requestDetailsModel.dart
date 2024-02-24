@@ -1,5 +1,5 @@
 class RequestDetailsModel {
-  int? statusCode;
+  dynamic  statusCode;
   String? message;
   RequestDetailsData? data;
 
@@ -25,7 +25,7 @@ class RequestDetailsModel {
 }
 
 class RequestDetailsData {
-  int? id;
+  dynamic  id;
   String? requestId;
   String? status;
   String? rate;
@@ -113,7 +113,7 @@ class RequestDetailsData {
 }
 
 class Employee {
-  int? id;
+  dynamic  id;
   String? name;
 
   Employee({this.id, this.name});
@@ -132,12 +132,12 @@ class Employee {
 }
 
 class Services {
-  int? id;
+  dynamic  id;
   String? title;
   String? image;
   String? info;
   String? type;
-  num? duration;
+  dynamic duration;
   bool? countable;
 
   Services(
@@ -173,7 +173,7 @@ class Services {
 }
 
 class CustomerData {
-  int? id;
+  dynamic  id;
   String? name;
   List<Vehicle>? vehicle;
 
@@ -202,22 +202,22 @@ class CustomerData {
 }
 
 class Vehicle {
-  int? id;
+  dynamic  id;
   String? name;
   String? numbers;
   String? letters;
   String? color;
   String? year;
   String? mainImage;
-  int? customerId;
-  int? manufacturerId;
+  dynamic customerId;
+  dynamic manufacturerId;
   String? manufacturerName;
   String? manufacturerLogo;
-  int? vehicleModelId;
+  dynamic vehicleModelId;
   String? vehicleModelName;
-  int? vehicleTypeId;
+  dynamic vehicleTypeId;
   String? vehicleTypeName;
-  int? subVehicleTypeId;
+  dynamic subVehicleTypeId;
   String? subVehicleTypeName;
   CustomerDetails? customerDetails;
 
@@ -291,7 +291,7 @@ class Vehicle {
 }
 
 class CustomerDetails {
-  int? id;
+  dynamic  id;
   String? fwId;
   String? name;
   String? email;
@@ -338,7 +338,7 @@ class CustomerDetails {
 
 
 class PaymentUrlModel {
-  int? statusCode;
+  dynamic  statusCode;
   dynamic message;
   PaymentUrlData? data;
 

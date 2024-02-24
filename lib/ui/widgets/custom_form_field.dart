@@ -39,7 +39,7 @@ class DefaultFormField extends StatelessWidget {
   final double radiusCircular;
   final double? letterSpacing, wordSpacing;
   final double? textHeight;
-  final int? maxLines;
+  final dynamic  maxLines;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;

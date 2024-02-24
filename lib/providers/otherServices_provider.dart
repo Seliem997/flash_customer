@@ -58,7 +58,7 @@ class OtherServicesProvider with ChangeNotifier{
 
   List<OtherServicesData> otherServicesList = [];
   Future getOtherServices({
-    required int cityId,
+    required cityId,
   }) async {
     isLoading = true;
     Status state = Status.error;
@@ -79,10 +79,10 @@ class OtherServicesProvider with ChangeNotifier{
   BookServicesData? storeServicesData;
   Future<ResponseResult> storeInitialOtherServices(
       BuildContext context, {
-        required int cityId,
-        required int addressId,
-        required int otherServiceId,
-        required int numberOfUnits,
+        required cityId,
+        required addressId,
+        required otherServiceId,
+        required numberOfUnits,
       }) async {
     Status state = Status.error;
     dynamic message;
@@ -104,11 +104,11 @@ class OtherServicesProvider with ChangeNotifier{
 
   List<List<SlotData>> slotsList = [];
   Future getOtherServicesSlots({
-    required int cityId,
-    required int serviceId,
+    required cityId,
+    required serviceId,
     required double duration,
     required String date,
-    required int addressId,
+    required addressId,
   }) async {
     isLoading = true;
     notifyListeners();

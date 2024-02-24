@@ -1,5 +1,5 @@
 class AboutModel {
-  int? statusCode;
+  dynamic  statusCode;
   List<AboutData>? data;
   Null? message;
 
@@ -28,7 +28,7 @@ class AboutModel {
 }
 
 class AboutData {
-  int? id;
+  dynamic  id;
   String? title;
   String? description;
 
@@ -50,7 +50,7 @@ class AboutData {
 }
 
 class AboutImagesModel {
-  int? statusCode;
+  dynamic  statusCode;
   List<AboutImagesData>? data;
   String? message;
 
@@ -79,7 +79,7 @@ class AboutImagesModel {
 }
 
 class AboutImagesData {
-  int? id;
+  dynamic  id;
   String? title;
   String? description;
   String? image;

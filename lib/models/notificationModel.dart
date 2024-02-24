@@ -1,5 +1,5 @@
 class NotificationModel {
-  int? statusCode;
+  dynamic  statusCode;
   Null? message;
   List<NotificationData>? data;
 
@@ -28,13 +28,13 @@ class NotificationModel {
 }
 
 class NotificationData {
-  int? id;
+  dynamic  id;
   String? title;
   String? content;
   String? date;
   String? time;
   String? type;
-  int? isShow;
+  dynamic  isShow;
 
   NotificationData(
       {this.id,
