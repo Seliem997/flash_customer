@@ -206,24 +206,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                   GestureDetector(
                     onTap: () async {
                       navigateTo(context, const NewAddress());
-
-                      /*AppLoader.showLoader(context);
-                      await addressesProvider
-                          .storeAddress(
-                        lat: homeProvider.currentPosition!.latitude,
-                        long: homeProvider.currentPosition!.longitude,
-                      )
-                          .then((value) {
-                        if (value.status == Status.success) {
-                          AppLoader.stopLoader();
-                          navigateAndFinish(context, const HomeScreen());
-                        } else {
-                          CustomSnackBars.failureSnackBar(
-                              context, '${value.message}');
-                          AppLoader.stopLoader();
-                        }
-                      });*/
-                    },
+                      },
                     child: Container(
                       padding: const EdgeInsets.all(5),
                       decoration: const BoxDecoration(

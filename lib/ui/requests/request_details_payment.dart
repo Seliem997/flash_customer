@@ -322,7 +322,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                     style: TextStyle(
                         color: const Color(0xFF0F0F0F),
                         fontSize: MyFontSize.size20,
-                        fontWeight: MyFontWeight.semiBold),
+                        fontWeight: MyFontWeight.semiBold,
+                        height: 1.5,
+                    ),
                     children: [
                       TextSpan(
                         text: S.of(context).canceled,
@@ -354,7 +356,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       DefaultButton(
                         width: 100,
                         height: 33,
-                        text: S.of(context).cancel,
+                        text: S.of(context).no,
                         textColor: AppColor.white,
                         onPressed: () {
                           Navigator.pop(context);
@@ -365,7 +367,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       DefaultButton(
                         width: 100,
                         height: 33,
-                        text: S.of(context).continu,
+                        text: S.of(context).yes,
                         textColor: AppColor.white,
                         onPressed: () {
                           userDataProvider.timer!.cancel();
@@ -407,7 +409,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                           style: TextStyle(
                               color: const Color(0xFF0F0F0F),
                               fontSize: MyFontSize.size20,
-                              fontWeight: MyFontWeight.semiBold),
+                              fontWeight: MyFontWeight.semiBold,
+                            height: 1.5
+                          ),
                           children: [
                             TextSpan(
                               text: S.of(context).canceled,
@@ -439,7 +443,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             DefaultButton(
                               width: 100,
                               height: 33,
-                              text: S.of(context).cancel,
+                              text: S.of(context).no,
                               textColor: AppColor.white,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -450,7 +454,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             DefaultButton(
                               width: 100,
                               height: 33,
-                              text: S.of(context).continu,
+                              text: S.of(context).yes,
                               textColor: AppColor.white,
                               onPressed: () {
                                 userDataProvider.timer!.cancel();
@@ -1107,7 +1111,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         const Spacer(),
                                         TextWidget(
                                           text:
-                                              "${requestServicesProvider.updatedRequestDetailsData!.tax!} ${S.of(context).sr}",
+                                              "${requestServicesProvider.updatedRequestDetailsData!.tax!.toStringAsFixed(2)} ${S.of(context).sr}",
                                           textSize: MyFontSize.size12,
                                           fontWeight: MyFontWeight.medium,
                                           color: const Color(0xFF383838),
@@ -1149,7 +1153,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                                       .couponData ==
                                                   null,
                                               height: 80,
-                                              padding: onlyEdgeInsets(bottom: 5,start: 5, top: 3),
+                                              padding: onlyEdgeInsets(bottom: 5,start: 5, top: 1),
                                             ),
                                           ),
                                         ),

@@ -284,7 +284,11 @@ class PackageService extends BaseService {
   Future<ResponseResult> saveSlotsPackageRequest({required Map<String, dynamic> mapBody}) async {
     Status result = Status.error;
 
-    Map<String, String> headers = {'Content-Type': 'application/json', 'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',};
+    Map<String, String> headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
     dynamic message;
     Map<String, dynamic> body = mapBody;
     try {
@@ -296,7 +300,6 @@ class PackageService extends BaseService {
           withToken: true,
           headers: headers,
           onSuccess: (response) async {
-
             try {
               if (response["status_code"] == 200) {
                 result = Status.success;

@@ -46,6 +46,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
   void loadData() async {
     final PackageProvider packageProvider =
         Provider.of<PackageProvider>(context, listen: false);
+    packageProvider.setLoading(true);
     final MyVehiclesProvider myVehiclesProvider =
         Provider.of<MyVehiclesProvider>(context, listen: false);
     final RequestServicesProvider requestServicesProvider =
@@ -59,7 +60,7 @@ class _VehicleTypesState extends State<VehicleTypes> {
     });
     requestServicesProvider.cityIdData = null;
     packageProvider.getVehiclesTypeActive();
-    packageProvider.getManufacturersOfType(vehicleTypeId: packageProvider.vehicleTypeId);
+    packageProvider.getManufacturersOfType(vehicleTypeId: packageProvider.vehicleTypeId).then((value) => packageProvider.setLoading(false));
     requestServicesProvider.getCityId(
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
@@ -121,20 +122,6 @@ class _VehicleTypesState extends State<VehicleTypes> {
                       ),
                     ],
                   ),
-                  // child: Center(
-                  //   child: TextWidget(
-                  //     text: S.of(context).myVehicles,
-                  //     fontWeight: packageProvider.myVehicleLabel
-                  //         ? MyFontWeight.semiBold
-                  //         : MyFontWeight.medium,
-                  //     textSize: packageProvider.myVehicleLabel
-                  //         ? MyFontSize.size16
-                  //         : MyFontSize.size14,
-                  //     color: packageProvider.myVehicleLabel
-                  //         ? AppColor.black
-                  //         : const Color(0xFF878787),
-                  //   ),
-                  // ),
                 ),
                 horizontalSpace(21),
                 CustomContainer(
@@ -170,30 +157,16 @@ class _VehicleTypesState extends State<VehicleTypes> {
                       )
                     ],
                   ),
-                  // child: Center(
-                  //   child: TextWidget(
-                  //     text: S.of(context).newVehicles,
-                  //     fontWeight: packageProvider.newVehicleLabel
-                  //         ? MyFontWeight.semiBold
-                  //         : MyFontWeight.medium,
-                  //     textSize: packageProvider.newVehicleLabel
-                  //         ? MyFontSize.size16
-                  //         : MyFontSize.size14,
-                  //     color: packageProvider.newVehicleLabel
-                  //         ? AppColor.black
-                  //         : const Color(0xFF878787),
-                  //   ),
-                  // ),
                 ),
               ],
             ),
             verticalSpace(20),
             packageProvider.newVehicleLabel
-                ? (packageProvider.vehiclesTypesDataList.isEmpty ||
+                ? packageProvider.isLoading ? const DataLoader(
+              useExpand: true,
+            ) : (packageProvider.vehiclesTypesDataList.isEmpty ||
                         packageProvider.manufacturerDataList.isEmpty)
-                    ? const DataLoader(
-                        useExpand: true,
-                      )
+                    ? const NoDataPlaceHolder()
                     : Expanded(
                         child: NewVehiclesScreenWidget(
                             packageProvider: packageProvider),

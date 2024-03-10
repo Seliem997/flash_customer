@@ -202,9 +202,11 @@ class _ContactUsState extends State<ContactUs> {
                 ),
                 verticalSpace(15),
                 DefaultButton(
-                  height: 37,
+                  height: 38,
                   width: 345,
                   text: S.of(context).send,
+                  fontSize: MyFontSize.size15,
+                  fontWeight: MyFontWeight.bold,
                   onPressed: () {
                     if(aboutProvider.emailController.text != ''){
                       if (aboutProvider.contactDataKey.currentState!.validate()) {
@@ -232,7 +234,6 @@ class _ContactUsState extends State<ContactUs> {
                         CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
                       }
                     }
-
                   },
                 ),
                 verticalSpace(24),

@@ -40,7 +40,7 @@ class BaseService {
               .post(Uri.parse(api),
                   body: jsonBody ? jsonEncode(body) : body,
                   headers: headerWithToken)
-              .timeout(const Duration(seconds: 15), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             mainEventBus.fire(NetworkFailEvent());
@@ -61,7 +61,7 @@ class BaseService {
         } else if (requestType == Request.get) {
           await http
               .get(Uri.parse(api), headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             // CustomSnackBars.somethingWentWrongSnackBar(context);
             logger.e("Request Timeout");
@@ -82,7 +82,7 @@ class BaseService {
         } else if (requestType == Request.delete) {
           await http
               .delete(Uri.parse(api), headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             // CustomSnackBars.somethingWentWrongSnackBar(context);
             logger.e("Request Timeout");
@@ -105,7 +105,7 @@ class BaseService {
               .patch(Uri.parse(api),
               body: jsonBody ? jsonEncode(body) : body,
               headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);
@@ -127,7 +127,7 @@ class BaseService {
               .put(Uri.parse(api),
               body: jsonBody ? jsonEncode(body) : body,
               headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);
@@ -152,7 +152,7 @@ class BaseService {
           await http
               .post(Uri.parse(api),
                   body: jsonBody ? jsonEncode(body) : body, headers: headers)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);
@@ -172,7 +172,7 @@ class BaseService {
         } else if (requestType == Request.get) {
           await http
               .get(Uri.parse(api), headers: headers)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);
@@ -192,7 +192,7 @@ class BaseService {
         } else if (requestType == Request.delete) {
           await http
               .delete(Uri.parse(api), headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             // CustomSnackBars.somethingWentWrongSnackBar(context);
             logger.e("Request Timeout");
@@ -214,7 +214,7 @@ class BaseService {
           await http
               .patch(Uri.parse(api),
               body: jsonBody ? jsonEncode(body) : body, headers: headers)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);
@@ -236,7 +236,7 @@ class BaseService {
               .put(Uri.parse(api),
               body: jsonBody ? jsonEncode(body) : body,
               headers: headerWithToken)
-              .timeout(const Duration(seconds: 10), onTimeout: () {
+              .timeout(const Duration(seconds: 25), onTimeout: () {
             AppLoader.stopLoader();
             logger.e("Request Timeout");
             return http.Response('Request Timeout', 408);

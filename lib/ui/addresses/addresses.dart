@@ -67,7 +67,7 @@ class _MyAddressesState extends State<MyAddresses> {
               padding: symmetricEdgeInsets(horizontal: 24),
               child: Column(
                 children: [
-                  addressesProvider.addressesDataList.isEmpty
+                  addressesProvider.allAddressesDataList.isEmpty
                       ? Expanded(
                           child: Center(
                               child: TextWidget(
@@ -81,9 +81,9 @@ class _MyAddressesState extends State<MyAddresses> {
                                   child: ShowCaseWidget(builder: Builder(builder: (context){
                                     return ListView.separated(
                                       physics: const BouncingScrollPhysics(),
-                                      itemCount: addressesProvider.addressesDataList.length + 1,
+                                      itemCount: addressesProvider.allAddressesDataList.length + 1,
                                       itemBuilder: (context, index) {
-                                        if(index < addressesProvider.addressesDataList.length){
+                                        if(index < addressesProvider.allAddressesDataList.length){
                                           return Slidable(
                                             key: ValueKey(index),
                                             endActionPane: ActionPane(
@@ -94,7 +94,7 @@ class _MyAddressesState extends State<MyAddresses> {
                                                   onPressed: (BuildContext context) {
                                                     addressesProvider.deleteAddress(
                                                         addressID: addressesProvider
-                                                            .addressesDataList[index].id!).then((value) {
+                                                            .allAddressesDataList[index].id!).then((value) {
                                                       if (value.status == Status.success) {
                                                         CustomSnackBars.successSnackBar(
                                                             _scaffoldKey.currentContext!, '${value.message}');
@@ -128,9 +128,9 @@ class _MyAddressesState extends State<MyAddresses> {
                                                       backgroundColor: Colors.transparent,
                                                       child: Image.network(
                                                         addressesProvider
-                                                            .addressesDataList[index]
+                                                            .allAddressesDataList[index]
                                                             .image != null ? addressesProvider
-                                                            .addressesDataList[index]
+                                                            .allAddressesDataList[index]
                                                             .image! : 'https://cdn.salla.sa/OnAOY/tD8aFkV8PRKh2ryXbFwigSEa7DAlKISoYXwwE11s.png',
                                                         fit: BoxFit.cover,
                                                       ),
@@ -148,12 +148,12 @@ class _MyAddressesState extends State<MyAddresses> {
                                                             TextWidget(
                                                               text:
                                                               addressesProvider
-                                                                  .addressesDataList[index]
+                                                                  .allAddressesDataList[index]
                                                                   .locationName ==
-                                                                  'Location Name' || addressesProvider.addressesDataList[index].locationName == 'Not Selected'
-                                                                  ? '${S.of(context).location} ${addressesProvider.addressesDataList[index].type!}'
+                                                                  'Location Name' || addressesProvider.allAddressesDataList[index].locationName == 'Not Selected'
+                                                                  ? '${S.of(context).location} ${addressesProvider.allAddressesDataList[index].type!}'
                                                                   : addressesProvider
-                                                                  .addressesDataList[index]
+                                                                  .allAddressesDataList[index]
                                                                   .locationName!,
                                                               maxLines: 2,
                                                               fontWeight: MyFontWeight.medium,
@@ -166,7 +166,7 @@ class _MyAddressesState extends State<MyAddresses> {
                                                     horizontalSpace(20),
                                                     DefaultButton(
                                                       text: addressesProvider
-                                                          .addressesDataList[index].type!,
+                                                          .allAddressesDataList[index].type!,
                                                       fontWeight: MyFontWeight.semiBold,
                                                       fontSize: MyFontSize.size9,
                                                       onPressed: () {},
@@ -180,6 +180,20 @@ class _MyAddressesState extends State<MyAddresses> {
                                             ),
                                           );
                                         }else{
+                                          return addressesProvider.currentPage >= addressesProvider.lastPage ? SizedBox() : Padding(
+                                            padding: symmetricEdgeInsets(horizontal: 50),
+                                            child: DefaultButton(
+                                              text: S.of(context).showMoreAddresses,
+                                              textColor: Colors.black,
+                                              backgroundColor: const Color(0xFFE6EEFB),
+                                              onPressed: (){
+                                                addressesProvider.getAddresses(page: (1+addressesProvider.currentPage)).then((value) {
+                                                  addressesProvider.setLoading(false);
+                                                });
+                                              },
+                                            ),
+                                          );
+/*
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 30),
                                             child: CustomContainer(
@@ -207,10 +221,11 @@ class _MyAddressesState extends State<MyAddresses> {
                                                   itemCount: addressesProvider.lastPage ),
                                             ),
                                           );
+*/
                                         }
                                       },
                                       separatorBuilder: (context, index) {
-                                        if(index == addressesProvider.addressesDataList.length-1){
+                                        if(index == addressesProvider.allAddressesDataList.length-1){
                                           return verticalSpace(50);
                                         }else{
                                           return verticalSpace(14);

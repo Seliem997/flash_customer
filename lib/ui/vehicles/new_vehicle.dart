@@ -47,7 +47,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
         Provider.of<PackageProvider>(context, listen: false);
     final MyVehiclesProvider myVehiclesProvider =
     Provider.of<MyVehiclesProvider>(context, listen: false);
-    await packageProvider.getManufacturers();
+    await packageProvider.getManufacturers(carId: 1);
     myVehiclesProvider.plateCharacters = '';
     if(widget.updateVehicle){
       var vehicleData= myVehiclesProvider.myVehiclesData!.collection![widget.index!];

@@ -81,7 +81,6 @@ class SummaryRequestDetails extends StatelessWidget {
                       TextWidget(
                         text:
                             "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.time}",
-                            // "${requestServicesProvider.detailsRequestData!.slotsDate!} - ${requestServicesProvider.detailsRequestData!.slots![0].startAt}",
                         textSize: MyFontSize.size15,
                         fontWeight: MyFontWeight.regular,
                         color: AppColor.subTextGrey,
@@ -123,14 +122,16 @@ class SummaryRequestDetails extends StatelessWidget {
                             fontWeight: MyFontWeight.regular,
                             color: AppColor.subTextGrey,
 
-                          ) : TextWidget(
-                            text: '${requestServicesProvider
-                                .detailsRequestData!.services![index].requestServiceCount} ${S.of(context).from} ${requestServicesProvider
-                                .detailsRequestData!.services![index].title!}',
-                            textSize: MyFontSize.size15,
-                            fontWeight: MyFontWeight.regular,
-                            color: AppColor.subTextGrey,
-
+                          ) : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: TextWidget(
+                              text: '${requestServicesProvider
+                                  .detailsRequestData!.services![index].requestServiceCount} ${S.of(context).from} ${requestServicesProvider
+                                  .detailsRequestData!.services![index].title!}',
+                              textSize: MyFontSize.size15,
+                              fontWeight: MyFontWeight.regular,
+                              color: AppColor.subTextGrey,
+                            ),
                           );
                         }
                         return Container();
@@ -169,6 +170,7 @@ class SummaryRequestDetails extends StatelessWidget {
                                       .title!}',
                                   textSize: MyFontSize.size15,
                                   fontWeight: MyFontWeight.regular,
+                                  height: 1.4,
                                   color: AppColor.subTextGrey,
                                 );
                               }

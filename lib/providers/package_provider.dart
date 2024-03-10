@@ -82,10 +82,10 @@ class PackageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getManufacturers() async {
+  Future getManufacturers({int? carId}) async {
     resetDropDownValues();
     await packageService
-        .getManufacturersOfType(vehicleTypeId: vehicleTypeId)
+        .getManufacturersOfType(vehicleTypeId: carId ?? vehicleTypeId)
         .then((value) {
       if (value.status == Status.success) {
         manufacturerDataList = value.data;

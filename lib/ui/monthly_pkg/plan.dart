@@ -54,7 +54,7 @@ class _MonthlyPlansState extends State<MonthlyPlans> {
         Provider.of<RequestServicesProvider>(context, listen: false);
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
-
+    packageProvider.selectedPackageIndex = null;
     await requestServicesProvider.getCityId(
       lat: homeProvider.currentPosition!.latitude,
       long: homeProvider.currentPosition!.longitude,
@@ -239,6 +239,7 @@ class PackageCard extends StatelessWidget {
                             fontSize: MyFontSize.size10,
                             fontWeight: MyFontWeight.medium),
                         children: [
+/*
                           TextSpan(
                             text:
                                 ' ${S.of(context).per} ${packageProvider.packagesDataList[index].per}',
@@ -248,6 +249,7 @@ class PackageCard extends StatelessWidget {
                               fontWeight: MyFontWeight.medium,
                             ),
                           ),
+*/
                         ],
                       ),
                     ),

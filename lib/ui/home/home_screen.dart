@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -215,10 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () async{
+                        AppLoader.showLoader(context);
                         try {
-                          AppLoader.showLoader(context);
                           await Geolocator.getCurrentPosition().then((Position position) async {
-                            AppLoader.stopLoader();
                             homeProvider.mapController.animateCamera(
                               CameraUpdate.newCameraPosition(
                                 CameraPosition(
@@ -237,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         } catch (e) {
                           log("Error in catch accessing current location $e");
                         }
+                        AppLoader.stopLoader();
                       },
                       child: Padding(
                         padding: onlyEdgeInsets(end: 2,),
@@ -346,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       navigateTo(context, const RegisterPhoneNumber());
                           },
                     fontWeight: MyFontWeight.medium,
-                    fontSize: MyFontSize.size14,
+                    fontSize: Intl.getCurrentLocale() == 'ar' ? MyFontSize.size14 : MyFontSize.size12,
                   ),
                 ],
               ),

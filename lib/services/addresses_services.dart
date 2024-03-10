@@ -52,8 +52,8 @@ class AddressesService extends BaseService {
     return ResponseResult(status, addressesData, message: message);
   }
 
-  int? currentPage;
-  int? lastPage;
+  int? currentPage=1;
+  int? lastPage=1;
 
   Future<ResponseResult> getAddresses({int? page}) async {
     Status result = Status.error;

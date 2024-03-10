@@ -46,8 +46,7 @@ class AddressesProvider with ChangeNotifier{
   List<AddressesData> addressesDataList = [];
   List<AddressesData> allAddressesDataList = [];
   Future getAddresses({int? page}) async {
-    currentPage = addressesService.currentPage == null ? 1 : addressesService.currentPage!;
-    lastPage = addressesService.lastPage == null ? 1 : addressesService.lastPage!;
+
     setLoading(true);
     if(page == null || page == 1){
       addressesDataList= [];
@@ -56,9 +55,11 @@ class AddressesProvider with ChangeNotifier{
     await addressesService.getAddresses(page: page).then((value) {
       if (value.status == Status.success) {
         addressesDataList = value.data;
+        allAddressesDataList.addAll(addressesDataList.toList());
       }
+      currentPage = addressesService.currentPage == null ? 1 : addressesService.currentPage!;
+      lastPage = addressesService.lastPage == null ? 1 : addressesService.lastPage!;
     });
-    allAddressesDataList.addAll(addressesDataList.toList());
 
     notifyListeners();
   }
