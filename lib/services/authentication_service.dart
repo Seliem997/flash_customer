@@ -28,7 +28,6 @@ class AuthenticationService extends BaseService {
       'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
     };
     dynamic message;
-    // TODO: add fcm_token field after its done in backend
     Map<String, dynamic> body = {
       "phone": phoneNumber,
       "otp": otp,
@@ -37,6 +36,8 @@ class AuthenticationService extends BaseService {
     };
     ProfileData? profileData;
     try {
+      print('firebase token is for customer ${await FirebaseService.getDeviceToken()}');
+
       await requestFutureData(
           api: Api.checkCode,
           body: body,

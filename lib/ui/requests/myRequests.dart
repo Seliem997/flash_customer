@@ -3,6 +3,8 @@ import 'package:flash_customer/ui/requests/requestDetails_screen.dart';
 import 'package:flash_customer/ui/requests/widgets/request_item.dart';
 import 'package:flash_customer/ui/requests/widgets/status_dialog.dart';
 import 'package:flash_customer/ui/widgets/navigate.dart';
+import 'package:flash_customer/utils/app_loader.dart';
+import 'package:flash_customer/utils/enum/status_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +16,7 @@ import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../providers/myRequests_provider.dart';
 import '../../utils/font_styles.dart';
+import '../../utils/snack_bars.dart';
 import '../../utils/styles/colors.dart';
 import '../widgets/custom_bar_widget.dart';
 import '../widgets/custom_button.dart';
@@ -140,177 +143,188 @@ class _MyRequestsState extends State<MyRequests> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Showcase(
-                              key: listKey,
-                              description: S.of(context).swipeAnyOrderToCancel,
-                              child: CustomContainer(
-                                width: double.infinity,
-                                height: 560,
-                                borderColorDark: Colors.transparent,
-                                child: ShowCaseWidget(
-                                    builder: Builder(builder: (context) {
-                                  return ListView.separated(
-                                    itemCount: myRequestsProvider
-                                        .myRequestsDataList.length,
-                                    itemBuilder: (context, index) {
-                                      if (myRequestsProvider
-                                              .myRequestsDataList[index]
-                                              .status ==
-                                          "Canceled"
-                                          || myRequestsProvider.myRequestsDataList[index].status == "Complete") {
-                                        return RequestItem(
-                                          myRequestData: myRequestsProvider
-                                              .myRequestsDataList[index],
-                                          onTap: () {
-                                            navigateTo(
-                                                context,
-                                                RequestDetailsScreen(
-                                                  requestId: myRequestsProvider
-                                                      .myRequestsDataList[index]
-                                                      .id!,
-                                                ));
-                                          },
-                                        );
-                                      } else if ( myRequestsProvider.myRequestsDataList[index].washNumber != null &&  myRequestsProvider.myRequestsDataList[index].washNumber != 1) {
-                                        return RequestItem(
-                                          myRequestData: myRequestsProvider
-                                              .myRequestsDataList[index],
-                                          onTap: () {
-                                            navigateTo(
-                                                context,
-                                                RequestDetailsScreen(
-                                                  requestId: myRequestsProvider
-                                                      .myRequestsDataList[index]
-                                                      .id!,
-                                                ));
-                                          },
-                                        );
-                                      } else {
-                                        return Slidable(
-                                          key: ValueKey(index),
-                                          useTextDirection: true,
-                                          endActionPane: ActionPane(
-                                            motion: const ScrollMotion(),
-                                            children: [
-                                              SlidableAction(
-                                                flex: 1,
-                                                onPressed:
-                                                    (BuildContext context) {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        content: Padding(
-                                                          padding:
-                                                              onlyEdgeInsets(
-                                                                  top: 40,
-                                                                  bottom: 32,
-                                                                  end: 38,
-                                                                  start: 38),
-                                                          child: TextWidget(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            text: S
-                                                                .of(context)
-                                                                .areYouSureToCancel,
-                                                            textSize: MyFontSize
-                                                                .size17,
-                                                            fontWeight:
-                                                                MyFontWeight
-                                                                    .semiBold,
-                                                            colorDark:
-                                                                Colors.black,
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          Padding(
-                                                            padding:
-                                                                symmetricEdgeInsets(
-                                                                    vertical:
-                                                                        5),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                DefaultButton(
-                                                                  width: 90,
-                                                                  height: 30,
-                                                                  text: S
-                                                                      .of(context)
-                                                                      .no,
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  backgroundColor:
-                                                                      AppColor
-                                                                          .lightRed,
-                                                                ),
-                                                                horizontalSpace(
-                                                                    20),
-                                                                DefaultButton(
-                                                                  width: 100,
-                                                                  height: 30,
-                                                                  text: S
-                                                                      .of(context)
-                                                                      .yes,
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                    myRequestsProvider
-                                                                        .updateRequestStatus(
-                                                                            requestId:
-                                                                                myRequestsProvider.myRequestsDataList[index].id!,
-                                                                            status: 'canceled')
-                                                                        .then((value) {});
-                                                                  },
-                                                                  backgroundColor:
-                                                                      AppColor
-                                                                          .primary,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                backgroundColor:
-                                                    const Color(0xFFE74A2A),
-                                                foregroundColor: Colors.white,
-                                                icon: Icons
-                                                    .delete_forever_outlined,
-                                                label: S.of(context).cancel,
-                                              ),
-                                            ],
-                                          ),
-                                          child: RequestItem(
+                            RefreshIndicator(
+                              edgeOffset: 0,
+                              displacement: 0,
+                              onRefresh: () async {
+                                loadData();
+                              },
+                              child: Showcase(
+                                key: listKey,
+                                description: S.of(context).swipeAnyOrderToCancel,
+                                child: CustomContainer(
+                                  width: double.infinity,
+                                  height: 560,
+                                  borderColorDark: Colors.transparent,
+                                  child: ShowCaseWidget(
+                                      builder: Builder(builder: (context) {
+                                    return ListView.separated(
+                                      itemCount: myRequestsProvider
+                                          .myRequestsDataList.length,
+                                      itemBuilder: (context, index) {
+                                        if (myRequestsProvider
+                                                .myRequestsDataList[index]
+                                                .status ==
+                                            StatusType.canceled.key
+                                            || myRequestsProvider.myRequestsDataList[index].status == StatusType.completed.key
+                                            || myRequestsProvider.myRequestsDataList[index].status == StatusType.onTheWay.key
+                                            || myRequestsProvider.myRequestsDataList[index].status == StatusType.arrived.key) {
+                                          return RequestItem(
                                             myRequestData: myRequestsProvider
                                                 .myRequestsDataList[index],
                                             onTap: () {
                                               navigateTo(
                                                   context,
                                                   RequestDetailsScreen(
-                                                    requestId:
-                                                        myRequestsProvider
-                                                            .myRequestsDataList[
-                                                                index]
-                                                            .id!,
+                                                    requestId: myRequestsProvider
+                                                        .myRequestsDataList[index]
+                                                        .id!,
                                                   ));
                                             },
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    separatorBuilder: (context, index) =>
-                                        verticalSpace(14),
-                                  );
-                                })),
+                                          );
+                                        } else if ( myRequestsProvider.myRequestsDataList[index].washNumber != null &&  myRequestsProvider.myRequestsDataList[index].washNumber != 1) {
+                                          return RequestItem(
+                                            myRequestData: myRequestsProvider
+                                                .myRequestsDataList[index],
+                                            onTap: () {
+                                              navigateTo(
+                                                  context,
+                                                  RequestDetailsScreen(
+                                                    requestId: myRequestsProvider
+                                                        .myRequestsDataList[index]
+                                                        .id!,
+                                                  ));
+                                            },
+                                          );
+                                        } else {
+                                          return Slidable(
+                                            key: ValueKey(index),
+                                            useTextDirection: true,
+                                            endActionPane: ActionPane(
+                                              motion: const ScrollMotion(),
+                                              children: [
+                                                SlidableAction(
+                                                  flex: 1,
+                                                  onPressed:
+                                                      (BuildContext context) {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (BuildContext context) {
+                                                        return AlertDialog(
+                                                          content: Padding(
+                                                            padding:
+                                                                onlyEdgeInsets(
+                                                                    top: 40,
+                                                                    bottom: 32,
+                                                                    end: 38,
+                                                                    start: 38),
+                                                            child: TextWidget(
+                                                              textAlign: TextAlign
+                                                                  .center,
+                                                              text: S
+                                                                  .of(context)
+                                                                  .areYouSureToCancel,
+                                                              textSize: MyFontSize
+                                                                  .size17,
+                                                              fontWeight:
+                                                                  MyFontWeight
+                                                                      .semiBold,
+                                                              colorDark:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            Padding(
+                                                              padding:
+                                                                  symmetricEdgeInsets(
+                                                                      vertical:
+                                                                          5),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  DefaultButton(
+                                                                    width: 90,
+                                                                    height: 30,
+                                                                    text: S
+                                                                        .of(context)
+                                                                        .no,
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    backgroundColor:
+                                                                        AppColor
+                                                                            .lightRed,
+                                                                  ),
+                                                                  horizontalSpace(
+                                                                      20),
+                                                                  DefaultButton(
+                                                                    width: 100,
+                                                                    height: 30,
+                                                                    text: S
+                                                                        .of(context)
+                                                                        .yes,
+                                                                    onPressed:
+                                                                        () {
+                                                                      AppLoader.showLoader(context);
+                                                                       myRequestsProvider
+                                                                          .updateRequestStatus(
+                                                                              requestId:
+                                                                                  myRequestsProvider.myRequestsDataList[index].id!,
+                                                                              status: 'canceled').then((value) {
+                                                                        CustomSnackBars.successSnackBar(context, '${myRequestsProvider.cancellationMessage}');
+                                                                        Navigator.pop(context);
+                                                                        AppLoader.stopLoader();
+                                                                      });
+                                                                    },
+                                                                    backgroundColor:
+                                                                        AppColor
+                                                                            .primary,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  backgroundColor:
+                                                      const Color(0xFFE74A2A),
+                                                  foregroundColor: Colors.white,
+                                                  icon: Icons
+                                                      .delete_forever_outlined,
+                                                  label: S.of(context).cancel,
+                                                ),
+                                              ],
+                                            ),
+                                            child: RequestItem(
+                                              myRequestData: myRequestsProvider
+                                                  .myRequestsDataList[index],
+                                              onTap: () {
+                                                navigateTo(
+                                                    context,
+                                                    RequestDetailsScreen(
+                                                      requestId:
+                                                          myRequestsProvider
+                                                              .myRequestsDataList[
+                                                                  index]
+                                                              .id!,
+                                                    ));
+                                              },
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          verticalSpace(14),
+                                    );
+                                  })),
+                                ),
                               ),
                             ),
                           ],

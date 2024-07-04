@@ -49,7 +49,7 @@ class LogOutDialog extends StatelessWidget {
                   fontSize: MyFontSize.size14,
                   height: 33,
                   width: 155,
-                  backgroundColor: const Color(0xFF616161),
+                  backgroundColor: AppColor.textRed,
                   onPressed: () {
                     AuthenticationService auth = AuthenticationService();
                     auth.signOut();
@@ -60,10 +60,10 @@ class LogOutDialog extends StatelessWidget {
                 DefaultButton(
                   text: S.of(context).cancel,
                   fontWeight: MyFontWeight.bold,
-                  fontSize: MyFontSize.size14,
+                  fontSize: MyFontSize.size12,
                   height: 33,
-                  width: 96,
-                  backgroundColor: AppColor.textRed,
+                  width: 100,
+                  backgroundColor: const Color(0xFF616161),
                   onPressed: () {
                     Navigator.pop(context);
                   },

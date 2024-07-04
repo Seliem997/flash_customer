@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/servicesModel.dart';
@@ -72,13 +73,13 @@ class BasicServicesWidget extends StatelessWidget {
             ),
             child: servicesProvider.selectedBasicIndex == index
                 ? Image.asset('assets/images/checkIcon.png')
-                : const CustomContainer(
+                : SvgPicture.asset('assets/svg/checkBox.svg',)/*const CustomContainer(
                     radiusCircular: 5,
                     backgroundColor: Colors.transparent,
                     height: 17,
                     width: 17,
                     borderColor: AppColor.subTextGrey,
-                  ),
+                  )*/,
           )
         ],
       ),
@@ -139,7 +140,7 @@ class ExtraServicesWidget extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: onlyEdgeInsets(end: 10),
+              padding: extraService.isSelected ? onlyEdgeInsets(end: 0,start: 27) : onlyEdgeInsets(end: 10),
               child: extraService.countable!
                   ? Row(
                       children: [
@@ -185,9 +186,18 @@ class ExtraServicesWidget extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: CustomContainer(
+                  : extraService.isSelected
+                  ? Image.asset('assets/images/checkIcon.png')
+                  :Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(50, 0, 10, 0),
+                    child: GestureDetector(
+                      onTap: (){
+    extraService.isSelected = !extraService.isSelected;
+    extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
+    requestServicesProvider.notifyListeners();
+    requestServicesProvider.calculateTotal();
+    },
+                        child: SvgPicture.asset('assets/svg/checkBox.svg',))/*CustomContainer(
                         borderColorDark: Colors.transparent,
                         onTap: () {
                           extraService.isSelected = !extraService.isSelected;
@@ -199,15 +209,12 @@ class ExtraServicesWidget extends StatelessWidget {
                         backgroundColor: extraService.isSelected
                             ? AppColor.primary
                             : Colors.transparent,
-                        height: 18,
+                        height: 17,
                         width: 17,
                         borderColor: extraService.isSelected
                             ? AppColor.primary
                             : AppColor.subTextGrey,
-                        child: extraService.isSelected
-                    ? Image.asset('assets/images/checkIcon.png')
-                            : Container(),
-                      ),
+                      )*/,
                   ),
             ),
           )

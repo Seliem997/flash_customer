@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flash_customer/providers/user_provider.dart';
 import 'package:flash_customer/ui/payment/tap_loader/awesome_loader.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -143,7 +144,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     );
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.   requestServicesProvider.updatedRequestDetailsData!.amount!
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> setupSDKSession({
     double? amount,
     dynamic  requestId,
@@ -206,7 +207,7 @@ class _RequestDetailsState extends State<RequestDetails> {
           applePayMerchantID: "merchant.applePayMerchantID",
           allowsToSaveSameCardMoreThanOnce: true,
           // pass the card holder name to the SDK
-          cardHolderName: "Card Holder NAME",
+          cardHolderName: userProvider.profileData?.name ?? 'Card Holder NAME',
           // disable changing the card holder name by the user
           allowsToEditCardHolderName: true,
           // select payments you need to show [Default is all, and you can choose between WEB-CARD-APPLEPAY ]
@@ -305,81 +306,13 @@ class _RequestDetailsState extends State<RequestDetails> {
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
         Provider.of<RequestServicesProvider>(context);
-    final UserProvider userDataProvider = Provider.of<UserProvider>(
-      context,
-    );
+    final UserProvider userDataProvider = Provider.of<UserProvider>(context,);
     return WillPopScope(
       onWillPop: () async{
         final shouldPop = await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              content: Padding(
-                padding: symmetricEdgeInsets(horizontal: 36, vertical: 0),
-                child: RichText(
-                  text: TextSpan(
-                    text: S.of(context).theRequestWillBe,
-                    style: TextStyle(
-                        color: const Color(0xFF0F0F0F),
-                        fontSize: MyFontSize.size20,
-                        fontWeight: MyFontWeight.semiBold,
-                        height: 1.5,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: S.of(context).canceled,
-                        style: TextStyle(
-                          color: const Color(0xFFFF3F48),
-                          fontSize: MyFontSize.size20,
-                          fontWeight: MyFontWeight.semiBold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: S.of(context).areYouSureToGoBack,
-                        style: TextStyle(
-                          color: const Color(0xFF0F0F0F),
-                          fontSize: MyFontSize.size20,
-                          fontWeight: MyFontWeight.semiBold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                Padding(
-                  padding:
-                  symmetricEdgeInsets(vertical: 21, horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      DefaultButton(
-                        width: 100,
-                        height: 33,
-                        text: S.of(context).no,
-                        textColor: AppColor.white,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        backgroundColor: AppColor.textRed,
-                      ),
-                      horizontalSpace(21),
-                      DefaultButton(
-                        width: 100,
-                        height: 33,
-                        text: S.of(context).yes,
-                        textColor: AppColor.white,
-                        onPressed: () {
-                          userDataProvider.timer!.cancel();
-                          navigateAndFinish(context, const HomeScreen());
-                        },
-                        backgroundColor: AppColor.boldGreen,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
+            return BackAlertDialog(userDataProvider: userDataProvider);
           },
         );
         return shouldPop!;
@@ -458,6 +391,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               textColor: AppColor.white,
                               onPressed: () {
                                 userDataProvider.timer!.cancel();
+                                requestServicesProvider.cancelRequestStatus(requestId: widget.requestId);
                                 navigateAndFinish(context, const HomeScreen());
                               },
                               backgroundColor: AppColor.boldGreen,
@@ -618,196 +552,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         ],
                                       ),
                                     ),
-/*
-                                  Visibility(
-                                    visible: requestServicesProvider
-                                        .selectedCreditCardPayment,
-                                    child: CustomContainer(
-                                      backgroundColor: const Color(0xFFF4FFFA),
-                                      borderColor: AppColor.borderGreyBold,
-                                      radiusCircular: 7,
-                                      padding: symmetricEdgeInsets(
-                                          vertical: 16, horizontal: 14),
-                                      margin: onlyEdgeInsets(top: 12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextWidget(
-                                            text: S.of(context).cardNumber,
-                                            textSize: MyFontSize.size12,
-                                            fontWeight: MyFontWeight.medium,
-                                            color: const Color(0xFF272727),
-                                          ),
-                                          verticalSpace(8),
-                                          CustomContainer(
-                                            height: 28,
-                                            backgroundColor: AppColor.white,
-                                            borderColor: AppColor.borderGreyBold,
-                                            radiusCircular: 3,
-                                            padding: symmetricEdgeInsets(
-                                                vertical: 6, horizontal: 10),
-                                            child: Row(
-                                              children: [
-                                                TextWidget(
-                                                  text: '*********8729',
-                                                  textSize: MyFontSize.size8,
-                                                  fontWeight:
-                                                      MyFontWeight.regular,
-                                                ),
-                                                const Spacer(),
-                                                CustomSizedBox(
-                                                  height: 16,
-                                                  width: 16,
-                                                  child: Image.asset(
-                                                    'assets/images/card.png',
-                                                    fit: BoxFit.fitWidth,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          verticalSpace(11),
-                                          TextWidget(
-                                            text: S.of(context).cardholderName,
-                                            textSize: MyFontSize.size12,
-                                            fontWeight: MyFontWeight.medium,
-                                            color: const Color(0xFF272727),
-                                          ),
-                                          verticalSpace(8),
-                                          CustomContainer(
-                                            height: 28,
-                                            backgroundColor: AppColor.white,
-                                            borderColor: AppColor.borderGreyBold,
-                                            radiusCircular: 3,
-                                            padding: symmetricEdgeInsets(
-                                                vertical: 6, horizontal: 10),
-                                            child: TextWidget(
-                                              text: '*********8729',
-                                              textSize: MyFontSize.size8,
-                                              fontWeight: MyFontWeight.regular,
-                                            ),
-                                          ),
-                                          verticalSpace(16),
-                                          Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  TextWidget(
-                                                    text:
-                                                        S.of(context).expiryDate,
-                                                    textSize: MyFontSize.size12,
-                                                    fontWeight:
-                                                        MyFontWeight.medium,
-                                                    color:
-                                                        const Color(0xFF272727),
-                                                  ),
-                                                  verticalSpace(8),
-                                                  CustomContainer(
-                                                    height: 28,
-                                                    width: 117,
-                                                    backgroundColor:
-                                                        AppColor.white,
-                                                    borderColor:
-                                                        AppColor.borderGreyBold,
-                                                    radiusCircular: 3,
-                                                    padding: symmetricEdgeInsets(
-                                                        vertical: 6,
-                                                        horizontal: 10),
-                                                    child: Row(
-                                                      children: [
-                                                        TextWidget(
-                                                          text: 'MM/YY',
-                                                          textSize:
-                                                              MyFontSize.size8,
-                                                          fontWeight: MyFontWeight
-                                                              .regular,
-                                                        ),
-                                                        const Spacer(),
-                                                        CustomSizedBox(
-                                                          height: 16,
-                                                          width: 16,
-                                                          child: Image.asset(
-                                                            'assets/images/calendar.png',
-                                                            fit: BoxFit.fitWidth,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              horizontalSpace(50),
-                                              Column(
-                                                children: [
-                                                  TextWidget(
-                                                    text: 'CVV/CVC',
-                                                    textSize: MyFontSize.size12,
-                                                    fontWeight:
-                                                        MyFontWeight.medium,
-                                                    color:
-                                                        const Color(0xFF272727),
-                                                  ),
-                                                  verticalSpace(8),
-                                                  CustomContainer(
-                                                    height: 28,
-                                                    width: 97,
-                                                    backgroundColor:
-                                                        AppColor.white,
-                                                    borderColor:
-                                                        AppColor.borderGreyBold,
-                                                    radiusCircular: 3,
-                                                    padding: symmetricEdgeInsets(
-                                                        vertical: 6,
-                                                        horizontal: 10),
-                                                    child: Row(
-                                                      children: [
-                                                        TextWidget(
-                                                          text: '***',
-                                                          textSize:
-                                                              MyFontSize.size8,
-                                                          fontWeight: MyFontWeight
-                                                              .regular,
-                                                        ),
-                                                        const Spacer(),
-                                                        CustomSizedBox(
-                                                          height: 16,
-                                                          width: 16,
-                                                          child: Image.asset(
-                                                              'assets/images/info-circle.png'),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          verticalSpace(16),
-                                          Row(
-                                            children: [
-                                              CustomSizedBox(
-                                                height: 16,
-                                                width: 16,
-                                                child: Image.asset(
-                                                    'assets/images/empty_circle.png'),
-                                              ),
-                                              horizontalSpace(8),
-                                              TextWidget(
-                                                text: S.of(context).saveCard,
-                                                textSize: MyFontSize.size12,
-                                                fontWeight: MyFontWeight.semiBold,
-                                                color: AppColor.black,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-*/
                                     Visibility(
                                       visible: Platform.isIOS,
                                       child: Column(
@@ -846,64 +590,42 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         ],
                                       ),
                                     ),
-                                    /* verticalSpace(12),
-                                  CustomContainer(
-                                    height: 34,
-                                    backgroundColor: AppColor.white,
-                                    borderColor: AppColor.borderGreyBold,
-                                    radiusCircular: 4,
-                                    padding: symmetricEdgeInsets(
-                                        vertical: 5, horizontal: 12),
-                                    child: Row(
-                                      children: [
-                                        CustomSizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: Image.asset(
-                                              'assets/images/stc.png'),
-                                        ),
-                                        horizontalSpace(10),
-                                        TextWidget(
-                                          text: S.of(context).stcPay,
-                                          textSize: MyFontSize.size12,
-                                          fontWeight: MyFontWeight.semiBold,
-                                        ),
-                                      ],
-                                    ),
-                                  ),*/
                                     verticalSpace(12),
-                                    CustomContainer(
-                                      height: 34,
-                                      backgroundColor: AppColor.white,
-                                      borderColor: AppColor.borderGreyBold,
-                                      radiusCircular: 4,
-                                      padding: symmetricEdgeInsets(
-                                          vertical: 5, horizontal: 12),
-                                      onTap: () {
-                                        navigateTo(
-                                          context,
-                                          const BankTransferMethod(),
-                                        );
-                                      },
-                                      child: Row(
-                                        children: [
-                                          CustomSizedBox(
-                                            height: 24,
-                                            width: 24,
-                                            child: Image.asset(
-                                              'assets/images/bank.png',
-                                              color: MyApp.themeMode(context)
-                                                  ? Colors.white
-                                                  : Colors.black,
+                                    Visibility(
+                                      visible: !requestServicesProvider.selectedWalletPayment,
+                                      child: CustomContainer(
+                                        height: 34,
+                                        backgroundColor: AppColor.white,
+                                        borderColor: AppColor.borderGreyBold,
+                                        radiusCircular: 4,
+                                        padding: symmetricEdgeInsets(
+                                            vertical: 5, horizontal: 12),
+                                        onTap: () {
+                                          navigateTo(
+                                            context,
+                                            const BankTransferMethod(),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            CustomSizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: Image.asset(
+                                                'assets/images/bank.png',
+                                                color: MyApp.themeMode(context)
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                          horizontalSpace(10),
-                                          TextWidget(
-                                            text: S.of(context).bankTransfer,
-                                            textSize: MyFontSize.size12,
-                                            fontWeight: MyFontWeight.semiBold,
-                                          ),
-                                        ],
+                                            horizontalSpace(10),
+                                            TextWidget(
+                                              text: S.of(context).bankTransfer,
+                                              textSize: MyFontSize.size12,
+                                              fontWeight: MyFontWeight.semiBold,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -929,54 +651,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                                     color: const Color(0xFF0084DF),
                                   ),
                                   horizontalSpace(10),
-/*
-                                  GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              content: Padding(
-                                                padding: onlyEdgeInsets(
-                                                    top: 40,
-                                                    bottom: 32,
-                                                    end: 38,
-                                                    start: 38),
-                                                child: TextWidget(
-                                                  textAlign: TextAlign.center,
-                                                  text: S
-                                                      .of(context)
-                                                      .thisAmountWillDecreaseFromYourWallet,
-                                                  textSize: MyFontSize.size17,
-                                                  fontWeight:
-                                                      MyFontWeight.semiBold,
-                                                  colorDark: Colors.black,
-                                                ),
-                                              ),
-                                              actions: [
-                                                Padding(
-                                                  padding: onlyEdgeInsets(
-                                                      top: 0,
-                                                      bottom: 40,
-                                                      end: 48,
-                                                      start: 48),
-                                                  child: DefaultButton(
-                                                    width: 225,
-                                                    height: 32,
-                                                    text: S.of(context).ok,
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Image.asset(
-                                          'assets/images/info-circle.png')),
-*/
                                   const Spacer(),
                                   CustomContainer(
                                     height: 20,
@@ -1025,6 +699,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                                                     .selectWalletPayment(
                                                                         !requestServicesProvider
                                                                             .selectedWalletPayment);
+                                                                requestServicesProvider.selectCashPayment(true);
                                                                 Navigator.pop(context);
                                                               },
                                                             ),
@@ -1755,6 +1430,86 @@ class _RequestDetailsState extends State<RequestDetails> {
           fontWeight: MyFontWeight.bold,
         ),
       ),
+    );
+  }
+}
+
+class BackAlertDialog extends StatelessWidget {
+  const BackAlertDialog({
+    super.key,
+    required this.userDataProvider,
+  });
+
+  final UserProvider userDataProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Padding(
+        padding: symmetricEdgeInsets(horizontal: 36, vertical: 0),
+        child: RichText(
+          text: TextSpan(
+            text: S.of(context).theRequestWillBe,
+            style: TextStyle(
+                color: const Color(0xFF0F0F0F),
+                fontSize: MyFontSize.size20,
+                fontWeight: MyFontWeight.semiBold,
+                height: 1.5,
+            ),
+            children: [
+              TextSpan(
+                text: S.of(context).canceled,
+                style: TextStyle(
+                  color: const Color(0xFFFF3F48),
+                  fontSize: MyFontSize.size20,
+                  fontWeight: MyFontWeight.semiBold,
+                ),
+              ),
+              TextSpan(
+                text: S.of(context).areYouSureToGoBack,
+                style: TextStyle(
+                  color: const Color(0xFF0F0F0F),
+                  fontSize: MyFontSize.size20,
+                  fontWeight: MyFontWeight.semiBold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        Padding(
+          padding:
+          symmetricEdgeInsets(vertical: 21, horizontal: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DefaultButton(
+                width: 100,
+                height: 33,
+                text: S.of(context).no,
+                textColor: AppColor.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                backgroundColor: AppColor.textRed,
+              ),
+              horizontalSpace(21),
+              DefaultButton(
+                width: 100,
+                height: 33,
+                text: S.of(context).yes,
+                textColor: AppColor.white,
+                onPressed: () {
+                  userDataProvider.timer!.cancel();
+                  navigateAndFinish(context, const HomeScreen());
+                },
+                backgroundColor: AppColor.boldGreen,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

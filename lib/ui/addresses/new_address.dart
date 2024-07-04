@@ -23,10 +23,9 @@ import '../widgets/spaces.dart';
 import 'location_dialog.dart';
 
 class NewAddress extends StatefulWidget {
-  const NewAddress({Key? key, this.cameFromHomeScreen = false})
+  const NewAddress({Key? key,})
       : super(key: key);
 
-  final bool cameFromHomeScreen;
   @override
   State<NewAddress> createState() => _NewAddressState();
 }
@@ -71,29 +70,29 @@ class _NewAddressState extends State<NewAddress> {
 
   void loadData() async {
     _loadMapStyles();
-    final AddressesProvider addressesProvider =
-        Provider.of<AddressesProvider>(context, listen: false);
-    final HomeProvider homeProvider =
-        Provider.of<HomeProvider>(context, listen: false);
-
-    widget.cameFromHomeScreen
-        ? await addressesProvider
-            .getAddresses()
-            .then((value) => addressesProvider.setLoading(false))
-        : null;
-    addressesProvider.addressesDataList.forEach((element) async {
-      await homeProvider.markers.add(Marker(
-          markerId: MarkerId('startCoordinatesString'),
-          position: LatLng(
-              double.parse(element.latitude), double.parse(element.langitude)),
-          infoWindow: InfoWindow(
-            title: "${element.locationName}",
-            // snippet: _startAddress,
-          ),
-          icon: await BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueBlue)));
-    });
-    addressesProvider.setLoading(false);
+    // final AddressesProvider addressesProvider =
+    //     Provider.of<AddressesProvider>(context, listen: false);
+    // final HomeProvider homeProvider =
+    //     Provider.of<HomeProvider>(context, listen: false);
+    //
+    // widget.cameFromHomeScreen
+    //     ? await addressesProvider
+    //         .getAddresses()
+    //         .then((value) => addressesProvider.setLoading(false))
+    //     : null;
+    // addressesProvider.addressesDataList.forEach((element) async {
+    //   await homeProvider.markers.add(Marker(
+    //       markerId: MarkerId('startCoordinatesString'),
+    //       position: LatLng(
+    //           double.parse(element.latitude), double.parse(element.langitude)),
+    //       infoWindow: InfoWindow(
+    //         title: "${element.locationName}",
+    //         // snippet: _startAddress,
+    //       ),
+    //       icon: await BitmapDescriptor.defaultMarkerWithHue(
+    //           BitmapDescriptor.hueBlue)));
+    // });
+    // addressesProvider.setLoading(false);
 
     await _handleLocationPermission();
     await _getCurrentLocation();
@@ -102,12 +101,14 @@ class _NewAddressState extends State<NewAddress> {
   _getCurrentLocation() async {
     final HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.markers.clear();
     homeProvider.resetMap();
     try {
       AppLoader.showLoader(context);
       await Geolocator.getCurrentPosition().then((Position position) async {
         AppLoader.stopLoader();
         homeProvider.currentPosition = position;
+        homeProvider.startMarker();
         homeProvider.mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -175,7 +176,6 @@ class _NewAddressState extends State<NewAddress> {
                   zoomGesturesEnabled: true,
                   zoomControlsEnabled: false,
                   polylines: Set<Polyline>.of(homeProvider.polylines.values),
-
                   onLongPress: (latlang) {
                     homeProvider.addMarkerLongPressed(latlang);
                   },

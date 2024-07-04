@@ -22,6 +22,7 @@ import '../../../utils/styles/colors.dart';
 import '../../addresses/new_address.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_container.dart';
+import '../../widgets/data_loader.dart';
 import '../../widgets/expanded_container.dart';
 import '../../widgets/text_widget.dart';
 
@@ -55,7 +56,8 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
               ),
               child: Column(
                 children: [
-                  addressesProvider.addressesDataList.isEmpty
+                  addressesProvider.isLoading ? const DataLoader(useExpand: true,) :
+                  addressesProvider.allAddressesDataList.isEmpty
                       ? Expanded(
                           child: Center(
                               child: Padding(
@@ -70,139 +72,144 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                           ),
                         )))
                       : Expanded(
-                          child: ListView.separated(
-                          shrinkWrap: true,
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) =>
-                              DefaultButtonWithIcon(
-                            width: 187,
-                            height: 34,
-                            padding: symmetricEdgeInsets(horizontal: 28),
-                            borderRadius: BorderRadius.circular(8),
-                            backgroundButton: AppColor.white,
-                            icon: CustomSizedBox(
-                              height: 20,
-                              width: 20,
-                              child: addressesProvider
-                                          .addressesDataList[index].type! ==
-                                      S.of(context).home
-                                  ? Image.asset(
-                                      'assets/images/home_light.png',
-                                      color: MyApp.themeMode(context)
-                                          ? Colors.white
-                                          : Colors.black,
-                                    )
-                                  : addressesProvider
-                                              .addressesDataList[index].type! ==
-                                          S.of(context).work
-                                      ? SvgPicture.asset(
-                                          'assets/svg/work.svg',
-                                          color: MyApp.themeMode(context)
-                                              ? Colors.white
-                                              : Colors.black,
-                                        )
-                                      : addressesProvider
-                                                  .addressesDataList[index]
-                                                  .type! ==
-                                              S.of(context).school
-                                          ? SvgPicture.asset(
-                                              'assets/svg/school.svg',
-                                              color: MyApp.themeMode(context)
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            )
-                                          : addressesProvider
-                                                          .addressesDataList[
-                                                              index]
-                                                          .type! ==
-                                                      S.of(context).shop ||
-                                                  addressesProvider
-                                                          .addressesDataList[
-                                                              index]
-                                                          .image ==
-                                                      null
-                                              ? SvgPicture.asset(
-                                                  'assets/svg/shopping_light.svg',
-                                                  color:
-                                                      MyApp.themeMode(context)
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                )
-                                              : CachedNetworkImage(
-                                                  imageUrl: addressesProvider
-                                                          .addressesDataList[
-                                                              index]
-                                                          .image ??
-                                                      ""),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                expandLocationFlag = !expandLocationFlag;
-                              });
-                              homeProvider.mapController.animateCamera(
-                                  CameraUpdate.newCameraPosition(CameraPosition(
-                                      zoom: 13.5,
-                                      target: LatLng(
-                                          double.parse(addressesProvider
-                                              .addressesDataList[index]
-                                              .latitude),
-                                          double.parse(addressesProvider
-                                              .addressesDataList[index]
-                                              .langitude)))));
-
-                              homeProvider.currentPosition = Position(
-                                latitude: double.parse(addressesProvider
-                                    .addressesDataList[index].latitude),
-                                longitude: double.parse(addressesProvider
-                                    .addressesDataList[index].langitude),
-                                timestamp:
-                                    homeProvider.currentPosition!.timestamp,
-                                accuracy:
-                                    homeProvider.currentPosition!.accuracy,
-                                altitude:
-                                    homeProvider.currentPosition!.altitude,
-                                heading: homeProvider.currentPosition!.heading,
-                                speed: homeProvider.currentPosition!.speed,
-                                speedAccuracy:
-                                    homeProvider.currentPosition!.speedAccuracy,
-                              );
-
-                              homeProvider.markers.clear();
-                              homeProvider.resetMap();
-                              Marker marker = Marker(
-                                markerId: const MarkerId("Saved_Location"),
-                                draggable: true,
-                                position: LatLng(
-                                    double.parse(addressesProvider
-                                        .addressesDataList[index].latitude),
-                                    double.parse(addressesProvider
-                                        .addressesDataList[index].langitude)),
-                                icon: BitmapDescriptor.defaultMarker,
-                              );
-                              homeProvider.markers.add(marker);
-                            },
-                            labelText: (Intl.getCurrentLocale() == 'ar'
-                                    ? (addressesProvider
-                                                    .addressesDataList[index]
-                                                    .locationName ==
-                                                'Location Name' ||
-                                            addressesProvider
-                                                    .addressesDataList[index]
-                                                    .locationName ==
-                                                'Not Selected'
-                                        ? '${addressesProvider.addressesDataList[index].type}'
+                          child: Padding(
+                            padding: onlyEdgeInsets(top: 10),
+                            child: ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                                DefaultButtonWithIcon(
+                              width: 187,
+                              height: 34,
+                              padding: symmetricEdgeInsets(horizontal: 28),
+                              borderRadius: BorderRadius.circular(8),
+                              backgroundButton: AppColor.white,
+                              icon: CustomSizedBox(
+                                height: 20,
+                                width: 20,
+                                child: addressesProvider
+                                            .allAddressesDataList[index].type! ==
+                                        S.of(context).home
+                                    ? Image.asset(
+                                        'assets/images/home_light.png',
+                                        color: MyApp.themeMode(context)
+                                            ? Colors.white
+                                            : Colors.black,
+                                      )
+                                    : addressesProvider
+                                                .allAddressesDataList[index].type! ==
+                                            S.of(context).work
+                                        ? SvgPicture.asset(
+                                            'assets/svg/work.svg',
+                                            color: MyApp.themeMode(context)
+                                                ? Colors.white
+                                                : Colors.black,
+                                          )
                                         : addressesProvider
-                                            .addressesDataList[index]
-                                            .locationName)
-                                    : addressesProvider.addressesDataList[index]
-                                        .locationName) ??
-                                '${addressesProvider.addressesDataList[index].type} ${S.of(context).location}',
-                            textColor: AppColor.black,
-                          ),
-                          separatorBuilder: (context, index) =>
-                              verticalSpace(4),
-                          itemCount: addressesProvider.addressesDataList.length >= 5 ? 5 : addressesProvider.addressesDataList.length,
-                        )),
+                                                    .allAddressesDataList[index]
+                                                    .type! ==
+                                                S.of(context).school
+                                            ? SvgPicture.asset(
+                                                'assets/svg/school.svg',
+                                                color: MyApp.themeMode(context)
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              )
+                                            : addressesProvider
+                                                            .allAddressesDataList[
+                                                                index]
+                                                            .type! ==
+                                                        S.of(context).shop ||
+                                                    addressesProvider
+                                                            .allAddressesDataList[
+                                                                index]
+                                                            .image ==
+                                                        null
+                                                ? SvgPicture.asset(
+                                                    'assets/svg/shopping_light.svg',
+                                                    color:
+                                                        MyApp.themeMode(context)
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                  )
+                                                : CachedNetworkImage(
+                                                    imageUrl: addressesProvider
+                                                            .allAddressesDataList[
+                                                                index]
+                                                            .image ??
+                                                        ""),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  expandLocationFlag = !expandLocationFlag;
+                                });
+                                homeProvider.mapController.animateCamera(
+                                    CameraUpdate.newCameraPosition(CameraPosition(
+                                        zoom: 13.5,
+                                        target: LatLng(
+                                            double.parse(addressesProvider
+                                                .allAddressesDataList[index]
+                                                .latitude),
+                                            double.parse(addressesProvider
+                                                .allAddressesDataList[index]
+                                                .langitude)))));
+
+                                homeProvider.currentPosition = Position(
+                                  latitude: double.parse(addressesProvider
+                                      .allAddressesDataList[index].latitude),
+                                  longitude: double.parse(addressesProvider
+                                      .allAddressesDataList[index].langitude),
+                                  timestamp:
+                                      homeProvider.currentPosition!.timestamp,
+                                  accuracy:
+                                      homeProvider.currentPosition!.accuracy,
+                                  altitude:
+                                      homeProvider.currentPosition!.altitude,
+                                  heading: homeProvider.currentPosition!.heading,
+                                  speed: homeProvider.currentPosition!.speed,
+                                  speedAccuracy:
+                                      homeProvider.currentPosition!.speedAccuracy,
+                                );
+
+                                homeProvider.markers.clear();
+                                homeProvider.resetMap();
+                                Marker marker = Marker(
+                                  markerId: const MarkerId("Saved_Location"),
+                                  draggable: true,
+                                  position: LatLng(
+                                      double.parse(addressesProvider
+                                          .allAddressesDataList[index].latitude),
+                                      double.parse(addressesProvider
+                                          .allAddressesDataList[index].langitude)),
+                                  icon: BitmapDescriptor.defaultMarker,
+                                );
+                                homeProvider.markers.add(marker);
+                              },
+                                  labelText: addressesProvider.allAddressesDataList[index].locationName =='Location Name'
+    || addressesProvider.allAddressesDataList[index].locationName =='Not Selected'
+    || addressesProvider.allAddressesDataList[index].locationName == null ? '${addressesProvider.allAddressesDataList[index].type}'
+                                      : '${addressesProvider.allAddressesDataList[index].locationName}',
+                              /*labelText: (Intl.getCurrentLocale() == 'ar'
+                                      ? (addressesProvider
+                                                      .allAddressesDataList[index]
+                                                      .locationName ==
+                                                  'Location Name' ||
+                                              addressesProvider
+                                                      .allAddressesDataList[index]
+                                                      .locationName ==
+                                                  'Not Selected'
+                                          ? '${addressesProvider.allAddressesDataList[index].type}'
+                                          : addressesProvider
+                                              .allAddressesDataList[index]
+                                              .locationName)
+                                      : addressesProvider.allAddressesDataList[index].locationName) ??
+                                  '${addressesProvider.allAddressesDataList[index].type} ${S.of(context).location}',*/
+                              textColor: AppColor.black,
+                            ),
+                            separatorBuilder: (context, index) =>
+                                verticalSpace(4),
+                            itemCount: addressesProvider.allAddressesDataList.length >= 5 ? 5 : addressesProvider.allAddressesDataList.length,
+                                                    ),
+                          )),
                   GestureDetector(
                     onTap: () async {
                       navigateTo(context, const NewAddress());

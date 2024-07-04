@@ -343,7 +343,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                               textInputAction: TextInputAction.done,
                               hintText: '0',
                               textColor: MyApp.themeMode(context) ? Colors.white : Colors.black,
-                              padding: onlyEdgeInsets(start: 10, bottom: 9),
+                              padding: onlyEdgeInsets(start: 10, bottom: 7),
                               fontWeight: MyFontWeight.semiBold,
                               textSize: MyFontSize.size16,
                             ),
@@ -415,7 +415,10 @@ class _WalletPaymentState extends State<WalletPayment> {
                               padding: symmetricEdgeInsets(
                                   horizontal: 16, vertical: 12),
                               backgroundColorDark: AppColor.acceptGreen.withOpacity(0.3),
-                              backgroundColor: AppColor.acceptGreen,
+                              backgroundColor:
+                              transactionHistoryProvider.transactionData!.collection![index].type! == 'Refunds'
+                                  ||transactionHistoryProvider.transactionData!.collection![index].type! == 'رسوم الغاء'
+                                  ? AppColor.canceledRed : AppColor.acceptGreen,
                               child: Center(
                                 child: Row(
                                   children: [
@@ -442,28 +445,28 @@ class _WalletPaymentState extends State<WalletPayment> {
                                             ),
                                             horizontalSpace(4),
                                             TextWidget(
-                                              text: DateFormat(DFormat.dmy.key)
+                                              text: /*DateFormat(DFormat.dmy.key)
                                                   .format(DateTime.parse(
                                                       transactionHistoryProvider
                                                           .transactionData!
                                                           .collection![index]
-                                                          .createdAt!)),
+                                                          .createdAt!))*/"${transactionHistoryProvider.transactionData!.collection![index].createdAt}",
                                               textSize: MyFontSize.size14,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
                                             ),
-                                            horizontalSpace(10),
+                                            /*horizontalSpace(10),
                                             TextWidget(
-                                              text: DateFormat(DFormat.hm.key)
+                                              text: *//*DateFormat(DFormat.hm.key)
                                                   .format(DateTime.parse(
                                                       transactionHistoryProvider
                                                           .transactionData!
                                                           .collection![index]
-                                                          .createdAt!)),
+                                                          .createdAt!))*//*"dd ${DateFormat(DFormat.ymd_hm_a.key).parse('2024-03-08 05:37 pm', true).toLocal()}",
                                               textSize: MyFontSize.size10,
                                               fontWeight: MyFontWeight.regular,
                                               color: AppColor.subTitleGrey,
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       ],

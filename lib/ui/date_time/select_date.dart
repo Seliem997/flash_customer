@@ -1,4 +1,5 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flash_customer/generated/l10n.dart';
 import 'package:flash_customer/providers/otherServices_provider.dart';
 import 'package:flash_customer/providers/package_provider.dart';
@@ -111,6 +112,9 @@ class _SelectDateState extends State<SelectDate> {
                 .then((value) => requestServicesProvider.setLoading(false));
   }
 
+  final EasyInfiniteDateTimelineController _controller = EasyInfiniteDateTimelineController();
+  DateTime? _focusDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     final RequestServicesProvider requestServicesProvider =
@@ -132,7 +136,13 @@ class _SelectDateState extends State<SelectDate> {
           otherServicesProvider.clearServices();
         },
         onArrowPressed: (){
-          packageProvider.reserveRequestPackageSlots(slotsId: packageProvider.slotsIds, slotsDate: packageProvider.washesDate[widget.index] , reqId: packageProvider.detailsRequestData!.id!);
+          if(widget.cameFromPackage){
+            packageProvider.reserveRequestPackageSlots(
+              slotsId: packageProvider.slotsIds,
+              slotsDate: packageProvider.washesDate[widget.index] ,
+              reqId: packageProvider.detailsRequestData!.id!,
+            );
+          }
           Navigator.pop(context);
         },
       ),
@@ -141,16 +151,17 @@ class _SelectDateState extends State<SelectDate> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                TextWidget(
-                  text: S.of(context).selectDate,
-                  fontWeight: MyFontWeight.semiBold,
-                  textSize: MyFontSize.size15,
-                ),
-              ],
-            ),
-            verticalSpace(20),
+            // Row(
+            //   children: [
+            //     TextWidget(
+            //       text: S.of(context).selectDate,
+            //       fontWeight: MyFontWeight.semiBold,
+            //       textSize: MyFontSize.size15,
+            //     ),
+            //   ],
+            // ),
+            // verticalSpace(20),
+/*
             CalendarTimeline(
               initialDate: requestServicesProvider.date,
               firstDate: requestServicesProvider.date,
@@ -162,7 +173,9 @@ class _SelectDateState extends State<SelectDate> {
                 requestServicesProvider.selectedSlotIndex = null;
                 otherServicesProvider.selectedTimeSlot();
                 packageProvider.selectedSlotIndex = null;
-
+                setState(() {
+                  requestServicesProvider.focusDate = date;
+                });
                 widget.cameFromPackage
                     ? packageProvider.washesDate[widget.index] =
                         DateFormat(DFormat.ymd.key,('en-IN')).format(date)
@@ -211,7 +224,8 @@ class _SelectDateState extends State<SelectDate> {
                 )
                             .then((value) =>
                                 requestServicesProvider.setLoading(false));
-              }, //,color: MyApp.themeMode(context) ? Colors.white : Colors.black,
+              },
+              //,color: MyApp.themeMode(context) ? Colors.white : Colors.black,
               leftMargin: Intl.getCurrentLocale() == 'ar' ? 0 : 20,
               showYears: true,
               monthColor: MyApp.themeMode(context) ? Colors.white : const Color(0xFF565656),
@@ -220,7 +234,78 @@ class _SelectDateState extends State<SelectDate> {
               activeBackgroundDayColor: AppColor.borderBlue,
               dotsColor: const Color(0xFF333A47),
               // selectableDayPredicate: (date) => date.day != 23,
-              locale: 'en_ISO',
+              locale: 'ar',
+            ),
+*/
+            EasyInfiniteDateTimeLine(
+              controller: _controller,
+              firstDate: requestServicesProvider.date,
+              lastDate: DateTime(
+                  requestServicesProvider.date.year + 1,
+                  requestServicesProvider.date.month,
+                  requestServicesProvider.date.day),
+              focusDate: _focusDate,
+              onDateChange: (date) async {
+                requestServicesProvider.selectedSlotIndex = null;
+                otherServicesProvider.selectedTimeSlot();
+                packageProvider.selectedSlotIndex = null;
+                setState(() {
+                  _focusDate = date;
+                });
+                _controller.animateToDate(date);
+                widget.cameFromPackage
+                    ? packageProvider.washesDate[widget.index] =
+                    DateFormat(DFormat.ymd.key,('en-IN')).format(date)
+                    : widget.cameFromOtherServices
+                    ? otherServicesProvider.selectedDate =
+                    DateFormat(DFormat.ymd.key,('en-IN')).format(date)
+                    : requestServicesProvider.selectedDate =
+                    DateFormat(DFormat.ymd.key,('en-IN')).format(date);
+
+                widget.cameFromPackage
+                    ? await packageProvider.getPackageTimeSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  packageId: packageProvider
+                      .packagesDataList[
+                  packageProvider.selectedPackageIndex!]
+                      .id!,
+                  packageDuration: packageProvider
+                      .packagesDataList[
+                  packageProvider.selectedPackageIndex!]
+                      .duration!,
+                  date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
+                )
+                    : widget.cameFromOtherServices
+                    ? await otherServicesProvider
+                    .getOtherServicesSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  serviceId:
+                  otherServicesProvider.selectedOtherServiceId,
+                  duration: double.parse(otherServicesProvider
+                      .otherServicesList[otherServicesProvider
+                      .selectedServiceIndex!]
+                      .duration!),
+                  date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
+                  addressId: addressesProvider.addressDetailsData!.id!,
+                )
+                    .then((value) =>
+                    requestServicesProvider.setLoading(false))
+                    : await requestServicesProvider
+                    .getTimeSlots(
+                  cityId: requestServicesProvider.cityIdData!.id!,
+                  basicId: requestServicesProvider
+                      .selectedBasicServiceId,
+                  duration: requestServicesProvider.totalDuration,
+                  date: DateFormat(DFormat.mdy.key,('en-IN')).format(date),
+                  addressId: addressesProvider.addressDetailsData!.id!,
+                )
+                    .then((value) =>
+                    requestServicesProvider.setLoading(false));
+              },
+              activeColor: AppColor.borderBlue,
+              disabledDates: [],
+              // headerBuilder: ,
+              locale: Intl.getCurrentLocale(),
             ),
             verticalSpace(20),
             TextWidget(

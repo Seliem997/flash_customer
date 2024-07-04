@@ -10,13 +10,9 @@ class AddressesProvider with ChangeNotifier{
 
   TextEditingController otherTextController = TextEditingController();
 
-  bool isLoading = true;
   AddressesService addressesService = AddressesService();
 
-  void setLoading(bool value) {
-    isLoading = value;
-    notifyListeners();
-  }
+  bool isLoading = true;
 
   AddressesData? addressDetailsData;
   Future<ResponseResult> storeAddress({
@@ -46,8 +42,8 @@ class AddressesProvider with ChangeNotifier{
   List<AddressesData> addressesDataList = [];
   List<AddressesData> allAddressesDataList = [];
   Future getAddresses({int? page}) async {
-
-    setLoading(true);
+    isLoading = true;
+    notifyListeners();
     if(page == null || page == 1){
       addressesDataList= [];
       allAddressesDataList = [];
@@ -60,7 +56,7 @@ class AddressesProvider with ChangeNotifier{
       currentPage = addressesService.currentPage == null ? 1 : addressesService.currentPage!;
       lastPage = addressesService.lastPage == null ? 1 : addressesService.lastPage!;
     });
-
+    isLoading = false;
     notifyListeners();
   }
 
@@ -79,7 +75,7 @@ class AddressesProvider with ChangeNotifier{
         message = value.message;
       }
     });
-    getAddresses().then((value) => isLoading = false);
+    getAddresses();
     notifyListeners();
     return ResponseResult(state, '',message: message);
   }

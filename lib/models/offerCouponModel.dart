@@ -31,7 +31,7 @@ class CouponData {
   String? startTime;
   String? endDate;
   String? endTime;
-  num? discountAmount;
+  String? discountAmount;
   dynamic isActive;
 
   CouponData(

@@ -325,7 +325,7 @@ class Services {
   dynamic  id;
   String? title;
   String? image;
-  Null? info;
+  String? info;
   String? type;
   dynamic duration;
   bool? countable;

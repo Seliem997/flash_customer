@@ -8,8 +8,7 @@ enum StatusType {
   completed('Complete'),
   completed2('completed'),
   initial('Initial'),
-  canceled('Canceled'),
-  canceled2('canceled');
+  canceled('Canceled');
 
   const StatusType(this.key);
   final String key;

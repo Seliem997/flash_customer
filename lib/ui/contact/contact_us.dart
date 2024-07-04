@@ -43,8 +43,8 @@ class _ContactUsState extends State<ContactUs> {
 
     aboutProvider.contactDataKey = GlobalKey<FormState>();
     if(userProvider.profileData != null){
-      aboutProvider.emailController.text= userProvider.profileData!.email!;
-      aboutProvider.nameController.text= userProvider.profileData!.name!;
+      aboutProvider.emailController.text= userProvider.profileData!.email ?? "";
+      aboutProvider.nameController.text= userProvider.profileData!.name ?? "";
       aboutProvider.phoneController.text= userProvider.profileData!.phone!;
     }
     await aboutProvider.getSocialLinks();
@@ -92,6 +92,7 @@ class _ContactUsState extends State<ContactUs> {
                     textColor: AppColor.textGrey,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    textInputAction: TextInputAction.next,
                     padding: onlyEdgeInsets(bottom: 9,start: 10, top: 3),
                   ),
                 ),
@@ -123,12 +124,15 @@ class _ContactUsState extends State<ContactUs> {
                     textColor: AppColor.textGrey,
                     textSize: MyFontSize.size14,
                     fontWeight: MyFontWeight.regular,
+                    textInputAction: TextInputAction.next,
                     padding: onlyEdgeInsets(bottom: 9,start: 10, top: 3),
                     validator: (value) {
                       if (!RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value!)) {
-                        return S.of(context).pleaseEnterValidEmailAddress;
+
+                        return CustomSnackBars.failureSnackBar(
+                          context, S.of(context).pleaseEnterValidEmailAddress,);
                       } else if (value.isEmpty) {
                         return S.of(context).pleaseEnterYourEmailAddress;
                       }
@@ -164,14 +168,14 @@ class _ContactUsState extends State<ContactUs> {
                     ],
                     validator: (v) {
                       if (v!.isEmpty) {
-                        CustomSnackBars.failureSnackBar(context,
+
+                        return CustomSnackBars.failureSnackBar(context,
                             S.of(context).phoneNumberCannotBeEmpty);
-                        return "";
                       } else if (v.length < 7) {
-                        CustomSnackBars.failureSnackBar(
+
+                        return CustomSnackBars.failureSnackBar(
                             context,
                             S.of(context).phoneNumberLengthCanNotBeLessThan7Digits);
-                        return "";
                       }
                     },
                   ),
@@ -207,9 +211,22 @@ class _ContactUsState extends State<ContactUs> {
                   text: S.of(context).send,
                   fontSize: MyFontSize.size15,
                   fontWeight: MyFontWeight.bold,
-                  onPressed: () {
+                  onPressed: ()
+                  {
+                    if(aboutProvider.phoneController.text != '' && aboutProvider.messageController.text != ''){
+                      AppLoader.showLoader(context);
+                      aboutProvider.contactUs().then((value) {
+                        AppLoader.stopLoader();
+                        aboutProvider.resetFields();
+                        navigateAndFinish(context, const HomeScreen());
+                      });
+                    }else {
+                      CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
+                    }
+                  }
+                  /*{
                     if(aboutProvider.emailController.text != ''){
-                      if (aboutProvider.contactDataKey.currentState!.validate()) {
+                      // if (aboutProvider.contactDataKey.currentState!.validate()) {
                         if(aboutProvider.phoneController.text != '' && aboutProvider.messageController.text != ''){
                           AppLoader.showLoader(context);
                           aboutProvider.contactUs().then((value) {
@@ -220,7 +237,7 @@ class _ContactUsState extends State<ContactUs> {
                         }else {
                           CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
                         }
-                      }
+                      // }
 
                     }else{
                       if(aboutProvider.phoneController.text != '' && aboutProvider.messageController.text != ''){
@@ -234,7 +251,7 @@ class _ContactUsState extends State<ContactUs> {
                         CustomSnackBars.failureSnackBar(context, S.of(context).pleaseFillRequiredFields,);
                       }
                     }
-                  },
+                  }*/,
                 ),
                 verticalSpace(24),
                 Padding(
@@ -267,17 +284,7 @@ class _ContactUsState extends State<ContactUs> {
                               CustomSnackBars.failureSnackBar(context, "Unable to open whatsapp",);
                             }
                             if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
-
-                          /*  var whatsappUrl =
-                                "whatsapp://send?phone=+955${aboutProvider.socialLinksData!.data!.phone1}" +
-                                    "&text=${Uri.encodeComponent("I need help in ")}";
-                            try {
-                              launch(whatsappUrl);
-                            } catch (e) {
-                              //To handle error and display error message
-                             CustomSnackBars.failureSnackBar(context, "Unable to open whatsapp",);
-                            }*/
-                          },
+                            },
                         ),
                         horizontalSpace(14),
                         CustomContainer(
@@ -322,6 +329,14 @@ class _ContactUsState extends State<ContactUs> {
                         CustomContainer(
                           width: 30,
                           child: Image.asset('assets/images/telegram.png'),
+                            onTap: () async{
+                              try {
+                                await launchUrlString('${aboutProvider.socialLinksData!.data!.telegram}', mode: LaunchMode.externalApplication);
+                              } catch (e) {
+                                print(e);
+                                await launchUrlString('${aboutProvider.socialLinksData!.data!.telegram}', mode: LaunchMode.platformDefault);
+                              }
+                            }
                         ),
                         horizontalSpace(14),
                         CustomContainer(

@@ -58,6 +58,7 @@ class Api {
   static const String submitFinialRequest = "$baseUrl/customer/request";
 
   static String updateRequestStatus({required requestId}) => "$baseUrl/customer/update-request-status/$requestId";
+  static String cancelRequestStatus({required requestId}) => "$baseUrl/customer/cancel-request/$requestId";
 
   static const String bookServices = "$baseUrl/customer/initial-request";
 

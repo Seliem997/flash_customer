@@ -219,7 +219,7 @@
     "youNeedToSelectOnlyCreditOrWallet": "You need to select only Credit Or Wallet",
     "pleaseEnterAValidAmount": "Please Enter a valid Amount",
     "pleaseInsertAnAmount": "Please Insert an Amount",
-    "holdPressToChangeYourLocation": "Hold Press to change your Location"
-
-
+    "holdPressToChangeYourLocation": "Hold Press to change your Location",
+  "requestCanceledSuccessfully": "Request Canceled Successfully",
+  "requestRatedSuccessfully": "Request Rated Successfully"
 }

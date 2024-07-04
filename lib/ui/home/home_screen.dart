@@ -54,8 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
-    _lightMapStyle = MyApp.themeMode(context) ? await rootBundle.loadString('assets/map_styles/dark.json') :
-        await rootBundle.loadString('assets/map_styles/light.json');
+    if (MyApp.themeMode(context)) {
+      _lightMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
+    } else {
+      _lightMapStyle = await rootBundle.loadString('assets/map_styles/light.json');
+    }
     if(MyApp.themeMode(context)){
       AppLoader.showLoader(context);
       await Future.delayed(const Duration(seconds: 1));
@@ -184,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
             zoomGesturesEnabled: true,
             zoomControlsEnabled: false,
             polylines: Set<Polyline>.of(homeProvider.polylines.values),
-            onLongPress: (latlang) {
+            onTap: (latlang) {
               homeProvider.markers.clear();
               homeProvider.resetMap();
               homeProvider.addMarkerLongPressed(
@@ -250,17 +253,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ),
               verticalSpace(32),
-              CustomContainer(
-                borderColor: Colors.red,
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.all(8),
-                child: TextWidget(
-                  text: S.of(context).holdPressToChangeYourLocation,
-                  color: Colors.red,
-                  colorDark: Colors.red,
-                  textSize: MyFontSize.size12,
-                ),
-              ),
+              // CustomContainer(
+              //   borderColor: Colors.red,
+              //   padding: const EdgeInsets.all(8),
+              //   margin: const EdgeInsets.all(8),
+              //   child: TextWidget(
+              //     text: S.of(context).holdPressToChangeYourLocation,
+              //     color: Colors.red,
+              //     colorDark: Colors.red,
+              //     textSize: MyFontSize.size12,
+              //   ),
+              // ),
               DefaultButton(
                 width: 294,
                 height: 56,

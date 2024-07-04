@@ -70,7 +70,7 @@ class MyRequestsService extends BaseService {
             try {
               if (response["status_code"] == 200) {
                 result = Status.success;
-
+                message = Intl.getCurrentLocale() == 'ar' ? response["data"]["ar_message"] : response["data"]["en_message"];
               } else if (response["status_code"] == 422 || response["status_code"] == 400) {
                 result = Status.codeNotCorrect;
                 message = response["message"];
@@ -82,6 +82,43 @@ class MyRequestsService extends BaseService {
     } catch (e) {
       result = Status.error;
       log("Error in getting update Request status Data$e");
+    }
+    return ResponseResult(result, '', message: message);
+  }
+
+  Future<ResponseResult> cancelRequestStatus({
+    required requestId,
+  }) async {
+    Status result = Status.error;
+    dynamic message;
+    Map<String, dynamic> body = {"status": "canceled"};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'lang': Intl.getCurrentLocale() == 'ar' ? 'ar' : 'en',
+    };
+    try {
+      await requestFutureData(
+          api: Api.cancelRequestStatus(requestId: requestId),
+          requestType: Request.patch,
+          jsonBody: true,
+          withToken: true,
+          headers: headers,
+          body: body,
+          onSuccess: (response) async {
+            try {
+              if (response["status_code"] == 200) {
+                result = Status.success;
+              } else if (response["status_code"] == 422 || response["status_code"] == 400) {
+                result = Status.codeNotCorrect;
+                message = response["message"];
+              }
+            } catch (e) {
+              logger.e("Error getting response cancel Request status Data\n$e");
+            }
+          });
+    } catch (e) {
+      result = Status.error;
+      log("Error in getting cancel Request status Data$e");
     }
     return ResponseResult(result, '', message: message);
   }

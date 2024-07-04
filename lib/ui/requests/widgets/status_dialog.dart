@@ -154,7 +154,7 @@ class _StatusDialogState extends State<StatusDialog> {
                 setState(() {
                   statusType = value.toString();
                   myRequestsProvider.filterDateStatus= S.of(context).canceled;
-                  myRequestsProvider.getMyRequests(status: StatusType.canceled2.key);
+                  myRequestsProvider.getMyRequests(status: StatusType.canceled.key);
                   Navigator.pop(context);
                 });
               },

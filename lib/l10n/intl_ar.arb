@@ -84,7 +84,7 @@
  "chooseAvailableCityFirst": "لا يوجد خدمة متاحة لهذة المدينة",
  "thisCityNotAvailable": "لا يوجد خدمة متاحة لهذة المدينة",
   "noEmployee": "لا موظف",
-  "rate": "تقييم :",
+  "rate": "تقييم ",
   "custom": "اساسى",
   "accent": "فرعي",
   "amount": "السعر :",
@@ -209,17 +209,17 @@
     "swipeAnyVehicleLeftToEdit": "اسحب السيارة جهة اليمين للتعديل",
     "swipeAnyAddressLeftToDelete": "اسحب العنوان جهة اليمين للحذف",
     "bankTransferMethod": "طرق التحويل البنكي",
-    "bankTransferMethod": "اختر احد البنوك",
+    "choseOneOfOurBanks": "اختر احد البنوك",
     "bankName": "اسم البنك",
     "bankAccountNumber": "رقم الحساب البنكي",
     "minutes": "دقيقة",
     "submitRequestSuccess": "تم ارسال الطلب بنجاح",
-    "youNeedToSelectCashWithWallet": "تحتاج إلى تحديد النقد مع المحفظة",
+    "youNeedToSelectCashWithWallet": "تحتاج إلى تحديد نقدي مع المحفظة",
     "youNeedToSelectOnlyCashOrWallet": "تحتاج إلى تحديد نقدًا أو محفظة فقط",
     "pleaseEnterAValidAmount": "فضلا ادخل قيمة صالحة",
     "pleaseInsertAnAmount": "فضلا ادخل قيمة أولا",
     "youNeedToSelectOnlyCreditOrWallet": "تحتاج إلى تحديد كارت أو محفظة فقط",
-    "holdPressToChangeYourLocation": "اضغط مطولا لتغير مكانك"
-
-
+    "holdPressToChangeYourLocation": "اضغط مطولا لتغير مكانك",
+  "requestCanceledSuccessfully": "تم الغاء الطلب بنجاح",
+  "requestRatedSuccessfully": "تم تقييم الطلب بنجاح"
 }

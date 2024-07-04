@@ -208,7 +208,7 @@ class RequestItem extends StatelessWidget {
                           ),
                           separatorBuilder: (context, index) =>
                               horizontalSpace(4),
-                          itemCount: myRequestData.rate,
+                          itemCount: int.parse(myRequestData.rate.toString()),
                         ),
                 ),
                 horizontalSpace(6),

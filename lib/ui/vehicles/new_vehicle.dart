@@ -314,10 +314,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     setState(
                         () {
                           myVehiclesProvider.screenPickerColor = color;
-                          print('object color screen picker ${myVehiclesProvider.screenPickerColor}');
                           myVehiclesProvider.vehicleColor = '#${color.value.toRadixString(16)}';
                           // myVehiclesProvider.vehicleColor = color.value.toString();
-                          print('object myVehiclesProvider.vehicleColor ${myVehiclesProvider.vehicleColor}');
                         });
 
                         // ColorTools.nameThatColor(color);
@@ -423,7 +421,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
               Align(
                 alignment: Alignment.center,
                 child: CustomSizedBox(
-
                   width: 250,
                   child: Row(
                     children: [

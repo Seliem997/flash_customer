@@ -1,7 +1,6 @@
 import 'package:flash_customer/main.dart';
 import 'package:flash_customer/ui/services/widgets/services_widgets.dart';
 import 'package:flash_customer/ui/widgets/custom_container.dart';
-import 'package:flash_customer/ui/widgets/custom_form_field.dart';
 import 'package:flash_customer/ui/widgets/spaces.dart';
 import 'package:flash_customer/ui/widgets/text_widget.dart';
 import 'package:flash_customer/utils/app_loader.dart';
@@ -246,216 +245,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     itemCount: requestServicesProvider
                                         .extraServicesList.length,
                                   ),
-                                  /*child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        CustomContainer(
-                          height: 59,
-                          width: 313,
-                          backgroundColor: const Color(0xFFE1ECFF),
-                          radiusCircular: 4,
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional.topStart,
-                                child: IconButton(
-                                  icon: const Icon(Icons.info,
-                                      size: 20, color: AppColor.primary),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              CustomSizedBox(
-                                  height: 35,
-                                  width: 35,
-                                  child: Image.asset(
-                                      'assets/images/chair_image.png')),
-                              horizontalSpace(12),
-                              TextWidget(
-                                text: 'One chair Wash',
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.semiBold,
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: onlyEdgeInsets(
-                                  end: 20,
-                                  bottom: 20,
-                                  top: 20,
-                                ),
-                                child: Row(
-                                  children: [
-                                    CustomSizedBox(
-                                      width: 18,
-                                      height: 23,
-                                      child: Image.asset(
-                                          'assets/images/minus.png'),
-                                    ),
-                                    horizontalSpace(9),
-                                    TextWidget(
-                                      text: '1',
-                                      fontWeight: MyFontWeight.bold,
-                                      textSize: MyFontSize.size12,
-                                    ),
-                                    horizontalSpace(9),
-                                    CustomSizedBox(
-                                      width: 18,
-                                      height: 23,
-                                      child:
-                                          Image.asset('assets/images/plus.png'),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        verticalSpace(14),
-                        CustomContainer(
-                          height: 59,
-                          width: 313,
-                          backgroundColor: const Color(0xFFD1D1D1),
-                          radiusCircular: 4,
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional.topStart,
-                                child: IconButton(
-                                  icon: const Icon(Icons.info,
-                                      size: 20, color: AppColor.primary),
-                                  onPressed: () {},
-                                ),
-                                // child: Icon(Icons.info, size: 20, color: AppColor.primary),
-                              ),
-                              CustomSizedBox(
-                                height: 35,
-                                width: 35,
-                                child: Image.asset(
-                                    'assets/images/extraServices_image.png'),
-                              ),
-                              horizontalSpace(12),
-                              TextWidget(
-                                text: 'All chair Wash',
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.medium,
-                                color: AppColor.dark,
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: onlyEdgeInsets(
-                                  end: 20,
-                                  bottom: 20,
-                                  top: 20,
-                                ),
-                                child: const CustomContainer(
-                                  radiusCircular: 5,
-                                  backgroundColor: Colors.transparent,
-                                  height: 19,
-                                  width: 20,
-                                  borderColor: AppColor.subTextGrey,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        verticalSpace(14),
-                        CustomContainer(
-                          height: 59,
-                          width: 313,
-                          backgroundColor: const Color(0xFFD1D1D1),
-                          radiusCircular: 4,
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional.topStart,
-                                child: IconButton(
-                                  icon: const Icon(Icons.info,
-                                      size: 20, color: AppColor.primary),
-                                  onPressed: () {},
-                                ),
-                                // child: Icon(Icons.info, size: 20, color: AppColor.primary),
-                              ),
-                              CustomSizedBox(
-                                height: 35,
-                                width: 35,
-                                child: Image.asset(
-                                    'assets/images/basicServices_image.png'),
-                              ),
-                              horizontalSpace(12),
-                              TextWidget(
-                                text: 'Inside Only Wash',
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.medium,
-                                color: AppColor.dark,
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: onlyEdgeInsets(
-                                  end: 20,
-                                  bottom: 20,
-                                  top: 20,
-                                ),
-                                child: const CustomContainer(
-                                  radiusCircular: 5,
-                                  backgroundColor: Colors.transparent,
-                                  height: 19,
-                                  width: 20,
-                                  borderColor: AppColor.subTextGrey,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        verticalSpace(14),
-                        CustomContainer(
-                          height: 59,
-                          width: 313,
-                          backgroundColor: const Color(0xFFD1D1D1),
-                          radiusCircular: 4,
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional.topStart,
-                                child: IconButton(
-                                  icon: const Icon(Icons.info,
-                                      size: 20, color: AppColor.primary),
-                                  onPressed: () {},
-                                ),
-                                // child: Icon(Icons.info, size: 20, color: AppColor.primary),
-                              ),
-                              CustomSizedBox(
-                                height: 35,
-                                width: 35,
-                                child: Image.asset(
-                                    'assets/images/basicServices_image.png'),
-                              ),
-                              horizontalSpace(12),
-                              TextWidget(
-                                text: 'Inside Only Wash',
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.medium,
-                                color: AppColor.dark,
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: onlyEdgeInsets(
-                                  end: 20,
-                                  bottom: 20,
-                                  top: 20,
-                                ),
-                                child: const CustomContainer(
-                                  radiusCircular: 5,
-                                  backgroundColor: Colors.transparent,
-                                  height: 19,
-                                  width: 20,
-                                  borderColor: AppColor.subTextGrey,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                                 ),
                         ),
                         verticalSpace(25),
@@ -500,8 +289,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.totalAmount} ${S.of(context).sr}',
-                                      // text: '${requestServicesProvider.basicAmount + requestServicesProvider.extraAmount} SR',
+                                          '${requestServicesProvider.totalAmount.toStringAsFixed(2)} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -519,7 +307,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${requestServicesProvider.totalTaxes.toStringAsFixed(1)} ${S.of(context).sr}',
+                                          '${requestServicesProvider.totalTaxes.toStringAsFixed(2)} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),
@@ -542,7 +330,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     const Spacer(),
                                     TextWidget(
                                       text:
-                                          '${(requestServicesProvider.totalAmount + requestServicesProvider.totalTaxes)} ${S.of(context).sr}',
+                                          '${(requestServicesProvider.totalAmount + requestServicesProvider.totalTaxes).toStringAsFixed(2)} ${S.of(context).sr}',
                                       textSize: MyFontSize.size12,
                                       fontWeight: MyFontWeight.medium,
                                       color: const Color(0xFF383838),

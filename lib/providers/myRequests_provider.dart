@@ -9,6 +9,7 @@ import '../services/myRequests_service.dart';
 import '../services/myVehicles_service.dart';
 import '../utils/enum/date_formats.dart';
 import '../utils/enum/statuses.dart';
+import '../utils/snack_bars.dart';
 
 class MyRequestsProvider with ChangeNotifier {
 
@@ -17,6 +18,7 @@ class MyRequestsProvider with ChangeNotifier {
   bool loadingMyRequests = true;
 
   List<MyRequestsData> myRequestsDataList=[];
+  String? cancellationMessage;
 
   String? filterDateText;
   String? filterDateStatus;
@@ -50,10 +52,8 @@ class MyRequestsProvider with ChangeNotifier {
         ? DateFormat(DFormat.ymd.key,('en-IN')).format(_selectedDateTo!)
         : null, status: status).then((value) {
       if (value.status == Status.success) {
-
         myRequestsDataList = value.data;
         loadingMyRequests = false;
-
       }
     });
     notifyListeners();
@@ -62,24 +62,51 @@ class MyRequestsProvider with ChangeNotifier {
   Future updateRequestStatus({
     required requestId,
     required String status,
-
+    context
   }) async {
     Status state = Status.error;
     dynamic message;
+    setLoading(true);
     await myRequestsService
         .updateRequestStatus(requestId: requestId, status: status).then((value) {
-          setLoading(true);
       if (value.status == Status.success) {
         state = Status.success;
+        message = value.message;
+        cancellationMessage = value.message;
         getMyRequests();
       } else {
         setLoading(false);
         message = value.message;
+        cancellationMessage = value.message;
+
       }
     });
     notifyListeners();
     return ResponseResult(state, '', message: message);
   }
+  //
+  // Future cancelRequestStatus({
+  //   required requestId,
+  //   context
+  // }) async {
+  //   Status state = Status.error;
+  //   dynamic message;
+  //   setLoading(true);
+  //   await myRequestsService
+  //       .cancelRequestStatus(requestId: requestId,).then((value) {
+  //     if (value.status == Status.success) {
+  //       state = Status.success;
+  //       message = value.message;
+  //       cancellationMessage = value.message;
+  //     } else {
+  //       setLoading(false);
+  //       message = value.message;
+  //       cancellationMessage = value.message;
+  //     }
+  //   });
+  //   notifyListeners();
+  //   return ResponseResult(state, '', message: message);
+  // }
 
   void setLoading(bool value){
     loadingMyRequests = value;

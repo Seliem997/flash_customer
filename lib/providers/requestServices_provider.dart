@@ -12,6 +12,7 @@ import '../models/requestResult.dart';
 import '../models/request_details_model.dart';
 import '../models/servicesModel.dart';
 import '../models/slotsModel.dart';
+import '../services/myRequests_service.dart';
 import '../services/requestServices_service.dart';
 import '../utils/enum/statuses.dart';
 import '../utils/snack_bars.dart';
@@ -122,7 +123,6 @@ class RequestServicesProvider with ChangeNotifier {
         basicServicesList = value.data;
       }
     });
-    print('basic ${basicServicesList[0].tax}');
     notifyListeners();
   }
 
@@ -152,27 +152,23 @@ class RequestServicesProvider with ChangeNotifier {
           .then((value) async{
         if (value.status == Status.success) {
           couponData = value.data;
-          if (couponData!.isActive == 1) {
+          if (couponData!.isActive == '1') {
             CustomSnackBars.successSnackBar(
                 context, S.of(context).offerAppliedSuccessfully);
             await updateRequestSlots(requestId: requestId, payBy: 'cash', employeeId: employeeId, offerCode: offerCode);
             AppLoader.stopLoader();
             totalAmountAfterDiscount = updatedRequestDetailsData!.totalAmount;
-            /*discountAmount = couponData!.discountAmount!;
-            totalAmountAfterDiscount =
-                updatedRequestDetailsData!.totalAmount! - discountAmount;*/
             if(totalAmountAfterDiscount! <= 0){
               totalAmountAfterDiscount =0;
             }
 
           } else {
             AppLoader.stopLoader();
-            CustomSnackBars.successSnackBar(
+            CustomSnackBars.failureSnackBar(
                 context, S.of(context).codeNotAccepted);
           }
         } else {
           AppLoader.stopLoader();
-          // CustomSnackBars.failureSnackBar(context, S.of(context).codeIsInvalid);
           CustomSnackBars.failureSnackBar(context, value.message);
         }
       });
@@ -311,6 +307,29 @@ class RequestServicesProvider with ChangeNotifier {
     return ResponseResult(state, updatedRequestDetailsData, message: message);
   }
 
+
+  Future cancelRequestStatus({
+    required requestId,
+    context
+  }) async {
+    Status state = Status.error;
+    MyRequestsService myRequestsService = MyRequestsService();
+
+    dynamic message;
+    setLoading(true);
+    await myRequestsService
+        .cancelRequestStatus(requestId: requestId,).then((value) {
+      if (value.status == Status.success) {
+        state = Status.success;
+        message = value.message;
+      } else {
+        setLoading(false);
+        message = value.message;
+      }
+    });
+    notifyListeners();
+    return ResponseResult(state, '', message: message);
+  }
 
   PaymentUrlData? paymentUrlData;
   Future<ResponseResult> submitFinialRequest({

@@ -164,7 +164,7 @@ class _RatingDialogState extends State<RatingDialog> {
                             AppLoader.stopLoader();
                             if(value.status == Status.success){
                               CustomSnackBars.successSnackBar(
-                                  context, 'Request Rated Successfully');
+                                  context, S.of(context).requestRatedSuccessfully);
                               navigateAndFinish(context, const HomeScreen(cameFromNewRequest: true,));
                             }else{
                               CustomSnackBars.failureSnackBar(context, '${value.message}');
