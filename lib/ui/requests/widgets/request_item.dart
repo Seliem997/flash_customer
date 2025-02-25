@@ -83,30 +83,6 @@ class RequestItem extends StatelessWidget {
                           fontWeight: MyFontWeight.medium,
                           color: AppColor.grey,
                         )
-                        /*myRequestData.slots != null
-                            ? myRequestData.slots!.isNotEmpty
-                                ? TextWidget(
-                                    text: '${myRequestData.slots![0].startAt}',
-                                    textSize: MyFontSize.size12,
-                                    fontWeight: MyFontWeight.medium,
-                                    color: AppColor.grey,
-                                  )
-                                : TextWidget(
-                                    text: Intl.getCurrentLocale() == 'ar'
-                                        ? '${myRequestData.packageDetails?.nameAr}'
-                                        : '${myRequestData.packageDetails?.nameEn}',
-                                    textSize: MyFontSize.size12,
-                                    fontWeight: MyFontWeight.medium,
-                                    color: AppColor.grey,
-                                  )
-                            : TextWidget(
-                                text: Intl.getCurrentLocale() == 'ar'
-                                    ? '${myRequestData.packageDetails?.nameAr}'
-                                    : '${myRequestData.packageDetails?.nameEn}',
-                                textSize: MyFontSize.size12,
-                                fontWeight: MyFontWeight.medium,
-                                color: AppColor.grey,
-                              ),*/
                       ],
                     )
                   : Row(

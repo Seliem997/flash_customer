@@ -102,6 +102,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   BasicServicesWidget(
                                 title: requestServicesProvider
                                     .basicServicesList[index].title!,
+                                price: requestServicesProvider
+                                    .basicServicesList[index].selectedPrice!.toString(),
                                 imageName: requestServicesProvider
                                     .basicServicesList[index].image!,
                                 onTap: () {

@@ -31,7 +31,7 @@ class RequestDetailsData {
   String? rate;
   String? payBy;
   String? feedback;
-  String? amount;
+  dynamic amount;
   dynamic tax;
   dynamic discountAmount;
   dynamic totalAmount;

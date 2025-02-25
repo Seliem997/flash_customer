@@ -108,9 +108,6 @@ class _MyAppState extends State<MyApp> {
     if (CacheHelper.returnData(key: CacheKey.showOnBoarding) != null) {
       showOnBoarding = CacheHelper.returnData(key: CacheKey.showOnBoarding);
     }
-    // if (CacheHelper.returnData(key: CacheKey.darkMode) != null) {
-    //   isDarkMode = CacheHelper.returnData(key: CacheKey.darkMode);
-    // }
   }
 
   @override

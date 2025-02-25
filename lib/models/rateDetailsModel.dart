@@ -22,7 +22,7 @@ class RatingData {
   String? feedback;
   dynamic packageId;
   dynamic packageDetails;
-  String? amount;
+  dynamic amount;
   String? lateTime;
   dynamic actualTime;
   dynamic  tax;

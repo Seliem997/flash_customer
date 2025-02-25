@@ -81,10 +81,10 @@ class _WalletPaymentState extends State<WalletPayment> {
       bundleId: Platform.isAndroid
           ? "com.flash.customerapp.flash_customer"
           : "com.flash.customerapp.flashCustomer",
-      productionSecreteKey: Platform.isAndroid
+      productionSecretKey: Platform.isAndroid
           ? "sk_live_F8936xNMvjtIQLwle25zGqRC"
           : "sk_live_RudbTJM5larYPVzy8eKxhQ9B",
-      sandBoxsecretKey: Platform.isAndroid
+      sandBoxSecretKey: Platform.isAndroid
           ? "sk_test_hz9y0FNreufbwZA4kHMUCaLB"
           : "sk_test_6U4oxDwJlzAr5LPdisZ2ycXv",
       lang: "en",
@@ -99,7 +99,7 @@ class _WalletPaymentState extends State<WalletPayment> {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
           transactionCurrency: "SAR",
-          amount: '$amount',
+          amount: amount,
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer

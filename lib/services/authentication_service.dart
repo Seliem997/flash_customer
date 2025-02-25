@@ -144,13 +144,7 @@ class AuthenticationService extends BaseService {
           onSuccess: (response) async {
             if (response["status_code"] == 200) {
               status = Status.success;
-
               message = response["message"];
-/*
-              await CacheHelper.saveData(
-                  key: CacheKey.phoneNumber, value: phoneNumber);
-              await CacheHelper.saveData(
-                  key: CacheKey.countryCode, value: countryCode);*/
             } else if (response["status_code"] == 400) {
               status = Status.invalidEmailOrPass;
               message = response["message"];
@@ -259,7 +253,6 @@ class AuthenticationService extends BaseService {
         await http.Response.fromStream(stream).then((value) {
           AppLoader.showLoader(context);
           final response = jsonDecode(value.body);
-          // userDataResponse = UpdateProfileModel.fromJson(response);
           logger.i("Response: $response");
           if (response['status_code'] == 200) {
             log("Successss");

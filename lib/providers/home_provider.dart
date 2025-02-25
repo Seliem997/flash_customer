@@ -64,7 +64,7 @@ class HomeProvider with ChangeNotifier {
       altitude: currentPosition!.altitude,
       heading: currentPosition!.heading,
       speed: currentPosition!.speed,
-      speedAccuracy: currentPosition!.speedAccuracy,
+      speedAccuracy: currentPosition!.speedAccuracy, altitudeAccuracy: latlang.latitude, headingAccuracy: currentPosition!.accuracy,
     );
 
 

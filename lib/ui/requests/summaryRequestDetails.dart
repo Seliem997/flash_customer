@@ -59,7 +59,7 @@ class SummaryRequestDetails extends StatelessWidget {
                   verticalSpace(10),
                   TextWidget(
                     text:
-                        '${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].manufacturerName!} - ${requestServicesProvider.detailsRequestData!.customer!.vehicle![0].vehicleModelName!}',
+                        '${requestServicesProvider.detailsRequestData!.vehicleRequest!.manufacturerName} - ${requestServicesProvider.detailsRequestData!.vehicleRequest!.vehicleModelName}',
                     textSize: MyFontSize.size15,
                     fontWeight: MyFontWeight.regular,
                     color: AppColor.subTextGrey,

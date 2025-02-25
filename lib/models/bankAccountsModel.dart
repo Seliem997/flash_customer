@@ -98,7 +98,7 @@ class BankTransferData {
   String? bankAccountId;
   dynamic  requestId;
   dynamic customerId;
-  String? amount;
+  dynamic amount;
   String? by;
   String? status;
   String? date;

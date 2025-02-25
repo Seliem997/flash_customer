@@ -93,7 +93,7 @@ class TransactionData {
 class TransactionCollection {
   dynamic  id;
   String? type;
-  String? amount;
+  dynamic amount;
   String? createdAt;
 
   TransactionCollection({this.id, this.type, this.amount, this.createdAt});

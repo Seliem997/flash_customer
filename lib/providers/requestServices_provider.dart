@@ -56,8 +56,8 @@ class RequestServicesProvider with ChangeNotifier {
     totalTaxes = 0;
     if (selectedBasicIndex != null) {
       totalAmount +=
-          (double.parse(basicServicesList[selectedBasicIndex!].selectedPrice!));
-      totalDuration += (double.parse(basicServicesList[selectedBasicIndex!].duration!));
+          (basicServicesList[selectedBasicIndex!].selectedPriceNoTax!);
+      totalDuration += (basicServicesList[selectedBasicIndex!].duration!);
       totalTaxes = (basicServicesList[selectedBasicIndex!].tax!);
     }
 
@@ -66,16 +66,16 @@ class RequestServicesProvider with ChangeNotifier {
           extraServicesList[i].isSelected) {
         if (extraServicesList[i].countable!) {
           totalAmount += (extraServicesList[i].quantity *
-              double.parse(extraServicesList[i].selectedPrice!).toInt());
+              extraServicesList[i].selectedPriceNoTax!);
           totalDuration +=
-              (extraServicesList[i].quantity * double.parse(extraServicesList[i].duration!));
+              (extraServicesList[i].quantity * extraServicesList[i].duration!);
           totalTaxes +=
               (extraServicesList[i].quantity * extraServicesList[i].tax!);
         } else if (extraServicesList[i].isSelected) {
           totalAmount +=
-              double.parse(extraServicesList[i].selectedPrice!).toInt();
+              extraServicesList[i].selectedPriceNoTax!;
           totalTaxes += extraServicesList[i].tax!;
-          totalDuration += double.parse(extraServicesList[i].duration!);
+          totalDuration += extraServicesList[i].duration!;
         }
       }
     }
@@ -449,7 +449,7 @@ class RequestServicesProvider with ChangeNotifier {
   void resetCoupon() {
     couponData = null;
     discountCodeController = TextEditingController(text: '');
-    updatedRequestDetailsData != null ? totalAmountAfterDiscount = double.parse(updatedRequestDetailsData!.amount!) + double.parse(updatedRequestDetailsData!.tax!.toString()) : null;
+    updatedRequestDetailsData != null ? totalAmountAfterDiscount = double.parse('${updatedRequestDetailsData!.amount}') + double.parse(updatedRequestDetailsData!.tax!.toString()) : null;
     notifyListeners();
   }
 

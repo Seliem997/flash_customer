@@ -154,6 +154,8 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                                 .langitude)))));
 
                                 homeProvider.currentPosition = Position(
+                                  altitudeAccuracy: double.parse(addressesProvider
+                                      .allAddressesDataList[index].latitude),
                                   latitude: double.parse(addressesProvider
                                       .allAddressesDataList[index].latitude),
                                   longitude: double.parse(addressesProvider
@@ -168,6 +170,7 @@ class _SavedLocationExpandedState extends State<SavedLocationExpanded> {
                                   speed: homeProvider.currentPosition!.speed,
                                   speedAccuracy:
                                       homeProvider.currentPosition!.speedAccuracy,
+                                  headingAccuracy: homeProvider.currentPosition!.accuracy,
                                 );
 
                                 homeProvider.markers.clear();

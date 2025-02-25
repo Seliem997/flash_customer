@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
@@ -62,12 +61,12 @@ ThemeData darkTheme= ThemeData(
       color: AppColor.darkScaffoldColor,
       iconTheme: IconThemeData(color: Colors.white)),
   textTheme: const TextTheme(
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
-      subtitle1: TextStyle(
+      titleMedium: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w500,
       ),

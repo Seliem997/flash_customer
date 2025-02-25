@@ -40,7 +40,7 @@ class MyRequestsData {
   dynamic feedback;
   dynamic packageId;
   PackageDetails? packageDetails;
-  String? amount;
+  dynamic amount;
   dynamic lateTime;
   dynamic actualTime;
   dynamic tax;

@@ -134,10 +134,10 @@ class _RequestDetailsState extends State<RequestDetails> {
       bundleId: Platform.isAndroid
           ? "com.flash.customerapp.flash_customer"
           : "com.flash.customerapp.flashCustomer",
-      productionSecreteKey: Platform.isAndroid
+      productionSecretKey: Platform.isAndroid
           ? "sk_live_F8936xNMvjtIQLwle25zGqRC"
           : "sk_live_RudbTJM5larYPVzy8eKxhQ9B",
-      sandBoxsecretKey: Platform.isAndroid
+      sandBoxSecretKey: Platform.isAndroid
           ? "sk_test_hz9y0FNreufbwZA4kHMUCaLB"
           : "sk_test_6U4oxDwJlzAr5LPdisZ2ycXv",
       lang: "en",
@@ -155,7 +155,7 @@ class _RequestDetailsState extends State<RequestDetails> {
       GoSellSdkFlutter.sessionConfigurations(
           trxMode: TransactionMode.PURCHASE,
           transactionCurrency: "SAR",
-          amount: '$amount',
+          amount: amount ?? 0.00,
           customer: Customer(
               customerId: "",
               // customer id is important to retrieve cards saved for this customer
@@ -628,126 +628,127 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            verticalSpace(22),
-                            Padding(
-                              padding: symmetricEdgeInsets(horizontal: 24),
-                              child: Row(
-                                children: [
-                                  TextWidget(
-                                    text: S.of(context).wallet,
-                                    textSize: MyFontSize.size15,
-                                    fontWeight: MyFontWeight.semiBold,
-                                  ),
-                                  horizontalSpace(12),
-                                  TextWidget(
-                                    text:
-                                        '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails?.balance} ${S.of(context).sr}',
-                                    textSize: MyFontSize.size14,
-                                    fontWeight: MyFontWeight.semiBold,
-                                    color: const Color(0xFF0084DF),
-                                  ),
-                                  horizontalSpace(10),
-                                  const Spacer(),
-                                  CustomContainer(
-                                    height: 20,
-                                    onTap: () {
-                                      double.parse(requestServicesProvider
+                                    verticalSpace(12),
+                                    Padding(
+                                      padding: symmetricEdgeInsets(horizontal: 24),
+                                      child: Row(
+                                        children: [
+                                          TextWidget(
+                                            text: S.of(context).wallet,
+                                            textSize: MyFontSize.size15,
+                                            fontWeight: MyFontWeight.semiBold,
+                                          ),
+                                          horizontalSpace(12),
+                                          TextWidget(
+                                            text:
+                                            '${requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails?.balance} ${S.of(context).sr}',
+                                            textSize: MyFontSize.size14,
+                                            fontWeight: MyFontWeight.semiBold,
+                                            color: const Color(0xFF0084DF),
+                                          ),
+                                          horizontalSpace(10),
+                                          const Spacer(),
+                                          CustomContainer(
+                                            height: 20,
+                                            onTap: () {
+                                              double.parse(requestServicesProvider
                                                   .updatedRequestDetailsData!
                                                   .customer!
                                                   .vehicle![0]
                                                   .customerDetails!
                                                   .balance!) <=
-                                              requestServicesProvider
-                                                  .totalAmountAfterDiscount!
-                                          ? showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Padding(
-                                                    padding: onlyEdgeInsets(
-                                                        top: 40,
-                                                        bottom: 5,
-                                                        end: 38,
-                                                        start: 38),
-                                                    child: TextWidget(
-                                                      textAlign: TextAlign.center,
-                                                      text:
-                                                          '${S.of(context).youNeedToPay} ${(requestServicesProvider.totalAmountAfterDiscount! - double.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!)).toStringAsFixed(2)} ${S.of(context).cashOrChooseAnotherPayment}',
-                                                      textSize: MyFontSize.size15,
-                                                      height: 1.5,
-                                                      fontWeight:
-                                                          MyFontWeight.semiBold,
-                                                      colorDark: Colors.black,
-                                                    ),
-                                                  ),
-                                                  actions: [
-                                                    Padding(
-                                                      padding: symmetricEdgeInsets(horizontal: 5,vertical: 20) ,
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: DefaultButton(
-                                                              height: 32,
-                                                              text: S.of(context).ok,
-                                                              fontSize: MyFontSize.size15,
-                                                              onPressed: () {
-                                                                requestServicesProvider
-                                                                    .selectWalletPayment(
-                                                                        !requestServicesProvider
-                                                                            .selectedWalletPayment);
-                                                                requestServicesProvider.selectCashPayment(true);
-                                                                Navigator.pop(context);
-                                                              },
-                                                            ),
-                                                          ),
-                                                          horizontalSpace(10),
-                                                          Expanded(
-                                                            child: DefaultButton(
-                                                              height: 32,
-                                                              fontSize: MyFontSize.size14,
-                                                              text:
-                                                                  S.of(context).cancel,
-                                                              onPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              backgroundColor: AppColor.textRed,
-                                                            ),
-                                                          ),
-                                                        ],
+                                                  requestServicesProvider
+                                                      .totalAmountAfterDiscount!
+                                                  ? showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    content: Padding(
+                                                      padding: onlyEdgeInsets(
+                                                          top: 40,
+                                                          bottom: 5,
+                                                          end: 38,
+                                                          start: 38),
+                                                      child: TextWidget(
+                                                        textAlign: TextAlign.center,
+                                                        text:
+                                                        '${S.of(context).youNeedToPay} ${(requestServicesProvider.totalAmountAfterDiscount! - double.parse(requestServicesProvider.updatedRequestDetailsData!.customer!.vehicle![0].customerDetails!.balance!)).toStringAsFixed(2)} ${S.of(context).cashOrChooseAnotherPayment}',
+                                                        textSize: MyFontSize.size15,
+                                                        height: 1.5,
+                                                        fontWeight:
+                                                        MyFontWeight.semiBold,
+                                                        colorDark: Colors.black,
                                                       ),
                                                     ),
-                                                  ],
-                                                );
-                                              },
-                                            )
-                                          : requestServicesProvider
-                                              .selectWalletPayment(
+                                                    actions: [
+                                                      Padding(
+                                                        padding: symmetricEdgeInsets(horizontal: 5,vertical: 20) ,
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: DefaultButton(
+                                                                height: 32,
+                                                                text: S.of(context).ok,
+                                                                fontSize: MyFontSize.size15,
+                                                                onPressed: () {
+                                                                  requestServicesProvider
+                                                                      .selectWalletPayment(
+                                                                      !requestServicesProvider
+                                                                          .selectedWalletPayment);
+                                                                  requestServicesProvider.selectCashPayment(true);
+                                                                  Navigator.pop(context);
+                                                                },
+                                                              ),
+                                                            ),
+                                                            horizontalSpace(10),
+                                                            Expanded(
+                                                              child: DefaultButton(
+                                                                height: 32,
+                                                                fontSize: MyFontSize.size14,
+                                                                text:
+                                                                S.of(context).cancel,
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                backgroundColor: AppColor.textRed,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              )
+                                                  : requestServicesProvider
+                                                  .selectWalletPayment(
                                                   !requestServicesProvider
                                                       .selectedWalletPayment);
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor: const Color(0xFF007FD8),
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 8,
-                                        child: CircleAvatar(
-                                          backgroundColor: requestServicesProvider
-                                                  .selectedWalletPayment
-                                              ? const Color(0xFF007FD8)
-                                              : AppColor.white,
-                                          radius: 6,
-                                        ),
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 10,
+                                              backgroundColor: const Color(0xFF007FD8),
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.white,
+                                                radius: 8,
+                                                child: CircleAvatar(
+                                                  backgroundColor: requestServicesProvider
+                                                      .selectedWalletPayment
+                                                      ? const Color(0xFF007FD8)
+                                                      : AppColor.white,
+                                                  radius: 6,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
+
                             verticalSpace(22),
                             CustomContainer(
                               width: 345,
@@ -960,6 +961,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 ),
                               ),
                             ),
+
                             verticalSpace(40),
                             DefaultButton(
                               height: 48,

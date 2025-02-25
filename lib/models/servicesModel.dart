@@ -1,3 +1,4 @@
+
 class ServicesModel {
   int? statusCode;
   String? message;
@@ -28,7 +29,8 @@ class ServiceData {
   bool? countable;
   bool isSelected = false;
   int quantity = 0;
-  String? selectedPrice;
+  dynamic selectedPrice;
+  dynamic selectedPriceNoTax;
   num? tax;
   List<ServicePrices>? servicePrices;
 
@@ -43,6 +45,7 @@ class ServiceData {
         this.duration,
         this.countable,
         this.selectedPrice,
+        this.selectedPriceNoTax,
         this.tax,
         this.servicePrices,
        });
@@ -57,30 +60,32 @@ class ServiceData {
     duration = json['duration'];
     countable = json['countable'];
     selectedPrice = json['selected_price'];
+    selectedPriceNoTax = json['selected_price_no_tax'];
     tax = json['tax'];
     if (json['service_prices'] != null) {
       servicePrices = <ServicePrices>[];
       json['service_prices'].forEach((v) {
-        servicePrices!.add(new ServicePrices.fromJson(v));
+        servicePrices!.add(ServicePrices.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['image'] = this.image;
-    data['info'] = this.info;
-    data['type'] = this.type;
-    data['test_attribute'] = this.testAttribute;
-    data['duration'] = this.duration;
-    data['countable'] = this.countable;
-    data['selected_price'] = this.selectedPrice;
-    data['tax'] = this.tax;
-    if (this.servicePrices != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['image'] = image;
+    data['info'] = info;
+    data['type'] = type;
+    data['test_attribute'] = testAttribute;
+    data['duration'] = duration;
+    data['countable'] = countable;
+    data['selected_price'] = selectedPrice;
+    data['selected_price_no_tax'] = selectedPriceNoTax;
+    data['tax'] = tax;
+    if (servicePrices != null) {
       data['service_prices'] =
-          this.servicePrices!.map((v) => v.toJson()).toList();
+          servicePrices!.map((v) => v.toJson()).toList();
     }
 
     return data;
@@ -97,22 +102,22 @@ class ServicePrices {
   ServicePrices.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price = json['price'] != null ? new Price.fromJson(json['price']) : null;
+    price = json['price'] != null ? Price.fromJson(json['price']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    if (this.price != null) {
-      data['price'] = this.price!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    if (price != null) {
+      data['price'] = price!.toJson();
     }
     return data;
   }
 }
 
 class Price {
-  String? value;
+  dynamic value;
   String? unit;
   dynamic vehicleType;
   dynamic vehicleSubType;
@@ -127,11 +132,11 @@ class Price {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['value'] = this.value;
-    data['unit'] = this.unit;
-    data['vehicle_type'] = this.vehicleType;
-    data['vehicle_sub_type'] = this.vehicleSubType;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['unit'] = unit;
+    data['vehicle_type'] = vehicleType;
+    data['vehicle_sub_type'] = vehicleSubType;
     return data;
   }
 }

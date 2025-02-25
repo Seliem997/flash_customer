@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../models/servicesModel.dart';
 import '../../../providers/requestServices_provider.dart';
 import '../../../utils/font_styles.dart';
@@ -18,10 +19,11 @@ class BasicServicesWidget extends StatelessWidget {
     required this.imageName,
     this.onTap,
     required this.index,
+    required this.price,
   });
 
   final VoidCallback? infoOnPressed;
-  final String title, imageName;
+  final String title, imageName, price;
   final int index;
   final GestureTapCallback? onTap;
 
@@ -56,12 +58,25 @@ class BasicServicesWidget extends StatelessWidget {
           ),
           horizontalSpace(12),
           Expanded(
-            child: TextWidget(
-              text: title,
-              maxLines: 2,
-              textSize: MyFontSize.size10,
-              fontWeight: MyFontWeight.semiBold,
-              colorDark: servicesProvider.selectedBasicIndex == index ? Colors.black : Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextWidget(
+                  text: title,
+                  maxLines: 2,
+                  textSize: MyFontSize.size10,
+                  fontWeight: MyFontWeight.semiBold,
+                  colorDark: servicesProvider.selectedBasicIndex == index ? Colors.black : Colors.white,
+                ),
+                verticalSpace(5),
+                TextWidget(
+                  text: '${double.parse(price).toStringAsFixed(2)} ${S.of(context).sr}',
+                  maxLines: 2,
+                  textSize: MyFontSize.size10,
+                  fontWeight: MyFontWeight.semiBold,
+                  colorDark: servicesProvider.selectedBasicIndex == index ? Colors.black : Colors.white,
+                ),
+              ],
             ),
           ),
           // const Spacer(),
@@ -116,7 +131,7 @@ class ExtraServicesWidget extends StatelessWidget {
                 child: infoOnPressed != null ? IconButton(
                   icon: const Icon(Icons.info, size: 20, color: AppColor.primary),
                   onPressed: infoOnPressed,
-                ) : SizedBox(width: 45,),
+                ) : const SizedBox(width: 45,),
               ),
               CustomSizedBox(
                 height: 30,
@@ -127,13 +142,28 @@ class ExtraServicesWidget extends StatelessWidget {
               CustomContainer(
                 width: 125,
                 borderColorDark: Colors.transparent,
-                child: TextWidget(
-                  text: extraService.title!,
-                  textSize: MyFontSize.size10,
-                  fontWeight: MyFontWeight.semiBold,
-                  maxLines: 2,
-                  colorDark: extraService.isSelected || extraService.quantity > 0
-                      ? Colors.black : Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextWidget(
+                      text: extraService.title!,
+                      textSize: MyFontSize.size10,
+                      fontWeight: MyFontWeight.semiBold,
+                      maxLines: 2,
+                      colorDark: extraService.isSelected || extraService.quantity > 0
+                          ? Colors.black : Colors.white,
+                    ),
+                    verticalSpace(5),
+                    TextWidget(
+                      text: '${extraService.selectedPrice!.toStringAsFixed(2)} ${S.of(context).sr}',
+                      textSize: MyFontSize.size10,
+                      fontWeight: MyFontWeight.semiBold,
+                      maxLines: 2,
+                      colorDark: extraService.isSelected || extraService.quantity > 0
+                          ? Colors.black : Colors.white,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -192,11 +222,11 @@ class ExtraServicesWidget extends StatelessWidget {
                     padding: const EdgeInsetsDirectional.fromSTEB(50, 0, 10, 0),
                     child: GestureDetector(
                       onTap: (){
-    extraService.isSelected = !extraService.isSelected;
-    extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
-    requestServicesProvider.notifyListeners();
-    requestServicesProvider.calculateTotal();
-    },
+                        extraService.isSelected = !extraService.isSelected;
+                        extraService.isSelected ? extraService.quantity = 1 : extraService.quantity = 0;
+                        requestServicesProvider.notifyListeners();
+                        requestServicesProvider.calculateTotal();
+                        },
                         child: SvgPicture.asset('assets/svg/checkBox.svg',))/*CustomContainer(
                         borderColorDark: Colors.transparent,
                         onTap: () {
